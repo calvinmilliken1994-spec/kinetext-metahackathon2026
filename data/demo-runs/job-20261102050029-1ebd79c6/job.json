@@ -1,0 +1,47 @@
+{
+  "jobId": "job-20261102050029-1ebd79c6",
+  "sourceId": "usgs-volcano-hazards",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-11-02T05:00:29.584Z",
+  "flow": "lesson",
+  "model": "muse-spark-1.3",
+  "provider": "meta-api",
+  "providerModel": "muse-spark-1.3",
+  "totalCostUSD": 0.235458,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 42564,
+    "startedAt": "2026-11-02T05:00:29.584Z"
+  },
+  "access": "judge",
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 3,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "label-diagram-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "LD-06"
+      ],
+      "fixed": [
+        "LD-06"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-11-02T05:03:23.017Z"
+}

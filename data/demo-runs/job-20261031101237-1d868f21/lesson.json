@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031101237-1d868f21",
+  "analysisRef": "job-20261031101237-1d868f21/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101237-1d868f21:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Struggle for womens voting rights and constitutional ratification",
+    "sources": [
+      {
+        "id": "nara-19th-amendment",
+        "title": "19th Amendment to the U.S. Constitution: Women's Right to Vote (1920) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/19th-amendment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, '19th Amendment to the U.S. Constitution: Women's Right to Vote (1920)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "c9c5fa8ba7209052fb8e76015b935547fdda5ec295a972e802ec5f99ca24effd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3f54c0522fb24a068cd2199dadd15800",
+      "runId": "job-20261031101237-1d868f21",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:14:00.249Z"
+    },
+    "seed": 750304375,
+    "headline": "Struggle for womens voting rights and constitutional ratification",
+    "keyPoints": [
+      {
+        "id": "amendment-guarantee",
+        "point": "The 19th amendment legally guarantees American women the right to vote after decades of struggle.",
+        "sourceId": "nara-19th-amendment",
+        "quote": "The 19th amendment legally guarantees American women the right to vote."
+      },
+      {
+        "id": "varied-strategies",
+        "point": "Suffragists pursued a strategy of passing suffrage acts in western states before a federal amendment succeeded.",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Some pursued a strategy of passing suffrage acts in each state—nine western states adopted woman suffrage legislation by 1912."
+      },
+      {
+        "id": "political-shift",
+        "point": "Political balance began to shift after New York adopted woman suffrage in 1917 and President Wilson changed to support an amendment in 1918.",
+        "sourceId": "nara-19th-amendment",
+        "quote": "the political balance began to shift"
+      },
+      {
+        "id": "ratification-requirement",
+        "point": "The amendment met its final hurdle when Tennessee became the 36th state and the agreement of three-fourths of the states was obtained.",
+        "sourceId": "nara-19th-amendment",
+        "quote": "the amendment passed its final hurdle of obtaining the agreement of three-fourths of the states"
+      },
+      {
+        "id": "incomplete-enfranchisement",
+        "point": "Many women remained unable to vote long into the 20th century because discriminatory state laws continued to limit voting.",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Many women remained unable to vote long into the 20th century because of discriminatory state voting laws."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "suffrage-term",
+        "term": "suffrage",
+        "gloss": "Right to vote sought through state legislation and western campaigns",
+        "sourceId": "nara-19th-amendment",
+        "quote": "nine western states adopted woman suffrage legislation by 1912"
+      },
+      {
+        "id": "amendment-term",
+        "term": "amendment",
+        "gloss": "Formal constitutional change to guarantee voting rights",
+        "sourceId": "nara-19th-amendment",
+        "quote": "By 1916, almost all of the major suffrage organizations were united behind the goal of a constitutional amendment."
+      },
+      {
+        "id": "ratification-term",
+        "term": "ratification",
+        "gloss": "Certified approval by states after required agreement",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Secretary of State Bainbridge Colby certified the ratification on August 26, 1920"
+      },
+      {
+        "id": "enfranchisement-term",
+        "term": "enfranchisement",
+        "gloss": "Full voting rights that ratification alone did not ensure",
+        "sourceId": "nara-19th-amendment",
+        "quote": "yet ratification did not ensure full enfranchisement"
+      },
+      {
+        "id": "civil-disobedience-term",
+        "term": "civil disobedience",
+        "gloss": "Nonviolent protest to achieve radical change in law",
+        "sourceId": "nara-19th-amendment",
+        "quote": "practiced civil disobedience to achieve what many Americans considered a radical change of the Constitution"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031101237-1d868f21:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101237-1d868f21:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

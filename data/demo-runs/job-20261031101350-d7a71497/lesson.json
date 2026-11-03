@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031101350-d7a71497",
+  "analysisRef": "job-20261031101350-d7a71497/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101350-d7a71497:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Early confederation government and its replacement",
+    "sources": [
+      {
+        "id": "nara-articles-of-confederation",
+        "title": "Articles of Confederation (1777) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/articles-of-confederation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Articles of Confederation (1777)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d8532c027b494186abda3325e9695940",
+      "runId": "job-20261031101350-d7a71497",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:14:22.253Z"
+    },
+    "seed": 380269969,
+    "headline": "Early confederation government and its replacement",
+    "keyPoints": [
+      {
+        "id": "articles-adopted-1777",
+        "point": "Students learn the Articles of Confederation were adopted by the Continental Congress on November 15, 1777 and served as the first constitution until 1789.",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "The Articles of Confederation were adopted by the Continental Congress on November 15, 1777."
+      },
+      {
+        "id": "dickinson-principal-writer",
+        "point": "Students learn John Dickinson was the principal writer for the committee formed to determine the form of confederation.",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "John Dickinson, a delegate from Delaware, was the principal writer."
+      },
+      {
+        "id": "one-vote-congress",
+        "point": "Students learn the Confederation outlined a Congress with representation not based on population where each state would have one vote.",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "The Articles of Confederation also outlined a Congress with representation not based on population – each state would have one vote in Congress."
+      },
+      {
+        "id": "maryland-ratification-1781",
+        "point": "Students learn when Maryland ratified on March 1, 1781 the Congress of the Confederation came into being after delays over western lands.",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "When Maryland ratified it on March 1, 1781, the Congress of the Confederation came into being."
+      },
+      {
+        "id": "central-government-impotent",
+        "point": "Students learn the central government had insufficient power to regulate commerce, could not tax, and faced depleted treasury and extraordinary inflation.",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "With the states retaining considerable power, the central government had insufficient power to regulate commerce."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "articles-of-confederation",
+        "term": "Articles of Confederation",
+        "gloss": "first constitution adopted by Continental Congress in 1777",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "The Articles of Confederation were adopted by the Continental Congress on November 15, 1777."
+      },
+      {
+        "id": "continental-congress",
+        "term": "Continental Congress",
+        "gloss": "body that appointed committees to design confederation plan",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "the Second Continental Congress appointed three committees on June 11, 1776."
+      },
+      {
+        "id": "john-dickinson",
+        "term": "John Dickinson",
+        "gloss": "delegate from Delaware who was principal writer of draft",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "John Dickinson, a delegate from Delaware, was the principal writer."
+      },
+      {
+        "id": "league-of-friendship",
+        "term": "league of friendship",
+        "gloss": "established alliance for sovereign and independent states",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "This \"first constitution of the United States\" established a \"league of friendship\" for the 13 sovereign and independent states."
+      },
+      {
+        "id": "ratification",
+        "term": "Ratification",
+        "gloss": "necessary approval by all states to set Confederation into motion",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "Ratification by all 13 states was necessary to set the Confederation into motion."
+      },
+      {
+        "id": "constitutional-convention",
+        "term": "Constitutional Convention",
+        "gloss": "assembled in Philadelphia in May 1787 to revise Articles",
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-articles-of-confederation-job-20261031101350-d7a71497",
+      "status": "failed",
+      "reason": "timeline.date-grounded, repair.no-weakening: event \"e5\" (1789): date not grounded — quote \"It was in force from March 1, 1781, until 1789 when the pres\" contains no COMPLETE source date expression stating 1789 as ONE connected expression in a CLEAN context — the quote contains \"March 1, 1781\" (the preceding word \"from\" is an approximati, \"1789",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101350-d7a71497:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

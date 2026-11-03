@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031100106-81faeefe",
+  "analysisRef": "job-20261031100106-81faeefe/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100106-81faeefe:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How total mortgage payment builds from principal and interest plus escrow",
+    "sources": [
+      {
+        "id": "cfpb-mortgage-total-monthly-payment",
+        "title": "On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/on-a-mortgage-whats-the-difference-between-my-principal-and-interest-payment-and-my-total-monthly-payment-en-1941/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "54e2133fc95a619dc83b68fb7b37f0db5f648e72b4ecb95056ce80de11963d02"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "cb61302228ba4e8ebfe6750909d72bc6",
+      "runId": "job-20261031100106-81faeefe",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:01:52.888Z"
+    },
+    "seed": 2487068872,
+    "headline": "How total mortgage payment builds from principal and interest plus escrow",
+    "keyPoints": [
+      {
+        "id": "principal-and-interest-defined",
+        "point": "Students learn that principal is the amount borrowed and interest is the charge the lender applies for lending money.",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+      },
+      {
+        "id": "total-includes-additional-costs",
+        "point": "Total monthly payment includes additional costs such as homeowners insurance and taxes beyond principal and interest.",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your total monthly payment usually includes additional costs like homeowners insurance, taxes, and possibly mortgage insurance"
+      },
+      {
+        "id": "escrow-holds-and-pays",
+        "point": "Escrow account holds money until insurance and tax bills are due and then pays them on behalf of borrower.",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Your mortgage company typically holds the money in the escrow account until those insurance and tax bills are due, and then pays them on your behalf"
+      },
+      {
+        "id": "payment-stability-and-change",
+        "point": "Principal and interest generally remain same while escrow payment can change when property taxes increase.",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your principal and interest payment will generally remain the same as long as you make regular payments on time"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "principal",
+        "term": "principal",
+        "gloss": "Amount borrowed that must be paid back over time",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+      },
+      {
+        "id": "interest",
+        "term": "interest",
+        "gloss": "Charge from lender for borrowing money",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "interest is what the lender charges for lending you the money"
+      },
+      {
+        "id": "escrow",
+        "term": "escrow",
+        "gloss": "Account that holds funds for taxes and insurance bills",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "If you have an escrow account, you pay a set amount with every mortgage payment for these expenses"
+      },
+      {
+        "id": "mortgage-insurance",
+        "term": "mortgage insurance",
+        "gloss": "Insurance premium that may be added to monthly payment when required",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment"
+      },
+      {
+        "id": "total-monthly-payment",
+        "term": "total monthly payment",
+        "gloss": "Combined amount that includes escrow and insurance costs each month",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your total monthly payment usually includes additional costs like homeowners insurance, taxes, and possibly mortgage insurance"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031100106-81faeefe:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100106-81faeefe:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: locate-total-payment (Q-06).",
+      "revision": 1
+    }
+  ]
+}

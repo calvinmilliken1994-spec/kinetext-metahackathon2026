@@ -1,0 +1,223 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Why delegates created a new plan for government",
+    "cards": [
+      {
+        "id": "card-compromise-model",
+        "stem": "How does the page describe the constitution as a result of many people working together?",
+        "options": [
+          "a model of cooperative statesmanship and the art of compromise",
+          "a failed plan forced by a single leader",
+          "a temporary deal to end a war quickly"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The work of many minds, the Constitution stands as a model of cooperative statesmanship and the art of compromise",
+        "hint": "Look for how the page praises teamwork at the end"
+      },
+      {
+        "id": "card-quorum-wait",
+        "stem": "What did delegates have to wait for before they could start their work?",
+        "options": [
+          "a quorum of seven states",
+          "a letter from the central government",
+          "a vote by the people directly"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "hint": "Think about the number of states needed to start"
+      },
+      {
+        "id": "card-new-frame",
+        "stem": "What did the convention decide to do instead of just changing the old articles?",
+        "options": [
+          "an entirely new frame of government",
+          "a minor edit to the state house rules",
+          "an immediate election by state legislators"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "hint": "Recall the choice between amending and starting fresh"
+      },
+      {
+        "id": "card-secret-drafting",
+        "stem": "How was the drafting of the constitution carried out during that summer?",
+        "options": [
+          "Drafted in secret",
+          "Approved by a public vote",
+          "Written in open public sessions"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "hint": "Consider where and how delegates met that summer"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101452-7d18d0fa:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f4cbf46659534d9e8390abbad08bfa0a",
+    "usage": {
+      "promptTokens": 4042,
+      "completionTokens": 2045,
+      "reasoningTokens": 1650,
+      "cachedTokens": 0
+    },
+    "latencyMs": 10765,
+    "estCostUSD": 0.01374375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101452-7d18d0fa:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Why delegates created a new plan for government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f4cbf46659534d9e8390abbad08bfa0a",
+      "runId": "job-20261031101452-7d18d0fa",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:16:51.561Z"
+    },
+    "seed": 2722215123,
+    "cards": [
+      {
+        "id": "card-compromise-model",
+        "stem": "How does the page describe the constitution as a result of many people working together?",
+        "options": [
+          "a model of cooperative statesmanship and the art of compromise",
+          "a failed plan forced by a single leader",
+          "a temporary deal to end a war quickly"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "The work of many minds, the Constitution stands as a model of cooperative statesmanship and the art of compromise",
+        "hint": "Look for how the page praises teamwork at the end"
+      },
+      {
+        "id": "card-quorum-wait",
+        "stem": "What did delegates have to wait for before they could start their work?",
+        "options": [
+          "a quorum of seven states",
+          "a letter from the central government",
+          "a vote by the people directly"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25",
+        "hint": "Think about the number of states needed to start"
+      },
+      {
+        "id": "card-new-frame",
+        "stem": "What did the convention decide to do instead of just changing the old articles?",
+        "options": [
+          "an entirely new frame of government",
+          "a minor edit to the state house rules",
+          "an immediate election by state legislators"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government",
+        "hint": "Recall the choice between amending and starting fresh"
+      },
+      {
+        "id": "card-secret-drafting",
+        "stem": "How was the drafting of the constitution carried out during that summer?",
+        "options": [
+          "Drafted in secret",
+          "Approved by a public vote",
+          "Written in open public sessions"
+        ],
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787",
+        "hint": "Consider where and how delegates met that summer"
+      }
+    ]
+  }
+}

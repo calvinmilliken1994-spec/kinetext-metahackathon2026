@@ -1,0 +1,220 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing AI research areas and their uses",
+    "attributes": [
+      "Core capability",
+      "Typical application"
+    ],
+    "rows": [
+      {
+        "entity": "Computer vision",
+        "values": [
+          {
+            "value": "learn to see and interpret simple patterns and objects",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "Computer vision emerged in the early 1960s as researchers began exploring whether machines could learn to see and interpret simple patterns and objects."
+          },
+          {
+            "value": "detect edges in images",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "By the mid-1960s, NSF-funded researchers were developing tools to detect edges in images and algorithms to recognize lines, shapes and simple patterns."
+          }
+        ]
+      },
+      {
+        "entity": "Deep learning systems",
+        "values": [
+          {
+            "value": "train and test deep learning systems",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "Researchers use large, high-quality image datasets to train and test deep learning systems, helping them compare and improve computer vision models."
+          },
+          {
+            "value": "compare and improve computer vision models",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "helping them compare and improve computer vision models."
+          }
+        ]
+      },
+      {
+        "entity": "Stochastic modeling",
+        "values": [
+          {
+            "value": "capturing real-world randomness mathematically",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "stochastic modeling is the idea of capturing real-world randomness mathematically."
+          },
+          {
+            "value": "GPS traffic routing",
+            "sourceId": "nsf-building-foundations-of-ai",
+            "quote": "Today, stochastic modeling underpins technologies like GPS traffic routing, internet congestion management and speech recognition systems."
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110138-07eabea7:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].values[0]: quote \"Computer vision emerged in the early 1960s as researchers be\" is 152 characters, expected <= 150; rows[0].values[1]: quote \"By the mid-1960s, NSF-funded researchers were developing too\" is 151 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/rows/0/values/0/quote",
+        "affected": [
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/quote"
+        ]
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"Core capability\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "821ea97cd5de49179f50eb0d1ed7112b",
+    "usage": {
+      "promptTokens": 3634,
+      "completionTokens": 16394,
+      "reasoningTokens": 16071,
+      "cachedTokens": 0
+    },
+    "latencyMs": 115106,
+    "estCostUSD": 0.074217,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110138-07eabea7:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Comparing AI research areas and their uses",
+    "sources": [
+      {
+        "id": "nsf-building-foundations-of-ai",
+        "title": "Building the Foundations of Artificial Intelligence — U.S. National Science Foundation, NSF Impacts",
+        "locator": "https://www.nsf.gov/impacts/ai",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. National Science Foundation, NSF Impacts, 'Building the Foundations of Artificial Intelligence'. Courtesy: U.S. National Science Foundation. Per the NSF Web Policies, 'Most text appearing on NSF webpages was either prepared by employees of the U.S. government as part of their official duties and therefore not subject to copyright or prepared under contracts that gave NSF the right to place the text into the public domain. … You may freely copy that material and, at your discretion, credit NSF with a \"Courtesy: U.S. National Science Foundation\" notation.' The U.S. National Science Foundation has not reviewed, approved or endorsed this activity.",
+        "sha256": "567b4f973b2805f389f8f63701026bd750e17c11eb4ae3bea26d3aeab2cd4f52"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "821ea97cd5de49179f50eb0d1ed7112b",
+      "runId": "job-20261031110138-07eabea7",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:05:14.388Z"
+    },
+    "seed": 3881611508,
+    "entities": [
+      "Computer vision",
+      "Deep learning systems",
+      "Stochastic modeling"
+    ],
+    "attributes": [
+      "Core capability",
+      "Typical application"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "learn to see and interpret simple patterns and objects",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Computer vision emerged in the early 1960s as researchers began exploring whether machines could learn to see and interpret simple patterns and objects."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "detect edges in images",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "By the mid-1960s, NSF-funded researchers were developing tools to detect edges in images and algorithms to recognize lines, shapes and simple patterns."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "train and test deep learning systems",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Researchers use large, high-quality image datasets to train and test deep learning systems, helping them compare and improve computer vision models."
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "compare and improve computer vision models",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "helping them compare and improve computer vision models."
+      },
+      {
+        "id": "cell-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "capturing real-world randomness mathematically",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "stochastic modeling is the idea of capturing real-world randomness mathematically."
+      },
+      {
+        "id": "cell-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "GPS traffic routing",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Today, stochastic modeling underpins technologies like GPS traffic routing, internet congestion management and speech recognition systems."
+      }
+    ]
+  }
+}

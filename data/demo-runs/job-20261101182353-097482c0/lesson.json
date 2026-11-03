@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261101182353-097482c0",
+  "analysisRef": "job-20261101182353-097482c0/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101182353-097482c0:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "DNA stores hereditary information in a double helix",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1985a-db4e-7625-9496-e829b83b4a64",
+      "runId": "job-20261101182353-097482c0",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T18:24:13.773Z"
+    },
+    "seed": 230871417,
+    "headline": "DNA stores hereditary information in a double helix",
+    "keyPoints": [
+      {
+        "id": "dna-hereditary-material",
+        "point": "Students learn that DNA is the hereditary material found in humans and almost all other organisms.",
+        "quote": "DNA, or deoxyribonucleic acid, is the hereditary material in humans and almost all other organisms.",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "dna-location-nucleus",
+        "point": "Students learn that most DNA is located in the cell nucleus as nuclear DNA.",
+        "quote": "Most DNA is located in the cell nucleus (where it is called nuclear DNA)",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "dna-code-four-bases",
+        "point": "Students learn that information in DNA is stored as a code made up of four chemical bases.",
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "dna-base-pairing",
+        "point": "Students learn how DNA bases pair to form units called base pairs for the ladder structure.",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "DNA located in the cell nucleus that holds most hereditary information",
+        "id": "nuclear-dna",
+        "quote": "Most DNA is located in the cell nucleus (where it is called nuclear DNA)",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "nuclear DNA"
+      },
+      {
+        "gloss": "Small amount of DNA found in mitochondria that helps convert energy from food",
+        "id": "mitochondrial-dna",
+        "quote": "but a small amount of DNA can also be found in the mitochondria (where it is called mitochondrial DNA or mtDNA).",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "mitochondrial DNA"
+      },
+      {
+        "gloss": "Units formed when adenine pairs with thymine and cytosine pairs with guanine",
+        "id": "base-pairs",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "base pairs"
+      },
+      {
+        "gloss": "Structure made from a base, sugar and phosphate linked together",
+        "id": "nucleotide",
+        "quote": "Together, a base, sugar, and phosphate are called a nucleotide.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "nucleotide"
+      },
+      {
+        "gloss": "Spiral shape formed by two long strands of nucleotides",
+        "id": "double-helix",
+        "quote": "Nucleotides are arranged in two long strands that form a spiral called a double helix.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "double helix"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101182353-097482c0:label-diagram-v1:r3",
+      "status": "failed",
+      "reason": "LD-04, LD-07, LD-11: parts[3]: the point (650, 523) lies on a printed word of the figure (image pixel 390, 314); the point must sit on the drawn part itself, never on printed text; parts[4]: the point (830, 523) lies on a printed word of the figure (image pixel 498, 314); the point must sit on the drawn part itself, nev",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261101182353-097482c0:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031100754-1bd583d4",
+  "analysisRef": "job-20261031100754-1bd583d4/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100754-1bd583d4:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How gene copies and chromosome location shape inheritance patterns",
+    "sources": [
+      {
+        "id": "medlineplus-inheritance-patterns",
+        "title": "What are the different ways a genetic condition can be inherited? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "6c3e0ea6ffae78fec81ece6e4f2fb86ebcc073655e940de575de6d5cb59318e4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "72c49fc61157484bb0f6bfb7a7041f08",
+      "runId": "job-20261031100754-1bd583d4",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:08:37.271Z"
+    },
+    "seed": 1974728965,
+    "headline": "How gene copies and chromosome location shape inheritance patterns",
+    "keyPoints": [
+      {
+        "id": "dominant-single-copy",
+        "point": "Students learn that autosomal dominant conditions need only one altered copy in each cell to affect a person.",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "One altered copy of the gene in each cell is sufficient for a person to be affected by an autosomal dominant disorder."
+      },
+      {
+        "id": "recessive-both-copies",
+        "point": "Students learn that autosomal recessive inheritance requires variants in both copies of the gene and typically shows unaffected carrier parents.",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "In autosomal recessive inheritance, variants occur in both copies of the gene in each cell."
+      },
+      {
+        "id": "mitochondrial-maternal",
+        "point": "Students learn that mitochondrial variants are passed only by females because egg cells contribute mitochondria to the developing embryo.",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "Because only egg cells contribute mitochondria to the developing embryo, only females can pass on mitochondrial variants to their children."
+      },
+      {
+        "id": "xlinked-no-male-transmission",
+        "point": "Students learn that X-linked inheritance shows no male-to-male transmission because fathers cannot pass X-linked traits to their sons.",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "A characteristic of X-linked inheritance is that fathers cannot pass X-linked traits to their sons (no male-to-male transmission)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "autosomal-dominant",
+        "term": "autosomal dominant",
+        "gloss": "inheritance where one altered copy in each cell is sufficient to cause disorder",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "One altered copy of the gene in each cell is sufficient for a person to be affected by an autosomal dominant disorder."
+      },
+      {
+        "id": "autosomal-recessive",
+        "term": "autosomal recessive",
+        "gloss": "inheritance where variants occur in both copies of the gene without symptoms in carriers",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "In autosomal recessive inheritance, variants occur in both copies of the gene in each cell."
+      },
+      {
+        "id": "xlinked-recessive",
+        "term": "X-linked recessive",
+        "gloss": "pattern where variants in genes on the X chromosome affect males more frequently than females",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "X-linked recessive disorders are also caused by variants in genes on the X chromosome."
+      },
+      {
+        "id": "mitochondrial-inheritance",
+        "term": "Mitochondrial inheritance",
+        "gloss": "maternal pattern where genes in mitochondrial DNA pass only through egg cells to children",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "Mitochondrial inheritance, also known as maternal inheritance, applies to genes in mitochondrial DNA."
+      },
+      {
+        "id": "y-linked",
+        "term": "Y-linked",
+        "gloss": "pattern where an altered gene on the Y chromosome passes only from father to son",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "A condition is considered Y-linked if the altered gene that causes the disorder is located on the Y chromosome"
+      },
+      {
+        "id": "codominant",
+        "term": "codominant",
+        "gloss": "inheritance where two alleles are both expressed and make slightly different proteins",
+        "sourceId": "medlineplus-inheritance-patterns",
+        "quote": "In codominant inheritance, two different versions (alleles) of a gene are expressed, and each version makes a slightly different protein."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031100754-1bd583d4:algorithm-trace-v1:r3",
+      "status": "failed",
+      "reason": "ALG-02: algorithmName \"bubble sort\" does not occur as a whole phrase in the quote \"In codominant inheritance, two different versions (alleles) \" — the quote must contain the page's own name for the algorithm (algorithm-named-in-quote)",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100754-1bd583d4:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

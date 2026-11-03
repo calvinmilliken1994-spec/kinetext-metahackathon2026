@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031103835-e53d9d11",
+  "analysisRef": "job-20261031103835-e53d9d11/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103835-e53d9d11:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Specific heat, enthalpy and the gas constant relation for gases",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "bda1df3241f046f08c1cb9df806a1db8",
+      "runId": "job-20261031103835-e53d9d11",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:40:06.619Z"
+    },
+    "seed": 2174998782,
+    "headline": "Specific heat, enthalpy and the gas constant relation for gases",
+    "keyPoints": [
+      {
+        "id": "specific-state-variable",
+        "point": "Students learn that a specific state variable means the value of the variable divided by the mass of the substance.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "For a scientist, a “specific” state variable means the value of the variable divided by the mass of the substance."
+      },
+      {
+        "id": "heat-capacity-state-variable",
+        "point": "Students learn that heat capacity is not a state variable and depends on process and material.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Heat capacity is not a state variable."
+      },
+      {
+        "id": "specific-heat-relation",
+        "point": "Students learn that the specific heat constants for constant pressure and constant volume processes are related to the gas constant.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The specific heat constants for constant pressure and constant volume processes are related to the gas constant for a given gas."
+      },
+      {
+        "id": "gamma-ratio",
+        "point": "Students learn that gamma is the specific heat ratio equal to cp divided by cv and for air the value is 1.4 under standard conditions.",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "“Gamma” is just a number whose value depends on the state of the gas. For air, gamma = 1.4 for standard day conditions."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "enthalpy",
+        "term": "enthalpy",
+        "gloss": "Internal energy combined with pressure times specific volume for a gas",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where h in the specific enthalpy, p is the pressure, v is the specific volume, and e is the specific internal energy."
+      },
+      {
+        "id": "specific-heat-capacity",
+        "term": "specific heat capacity",
+        "gloss": "Constant indicating heat added per unit temperature rise for a material",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "where delta T (ΔT) is the change of temperature of the gas during the process, and c is the specific heat capacity."
+      },
+      {
+        "id": "gas-constant",
+        "term": "gas constant",
+        "gloss": "Unique value for each gas linking pressure and volume with temperature in the equation of state",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The equation of state of a gas relates the temperature, pressure, and volume through a gas constant R."
+      },
+      {
+        "id": "gamma",
+        "term": "gamma",
+        "gloss": "Ratio of specific heats denoted by gamma for a gas state",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "gamma = cp / cv"
+      },
+      {
+        "id": "equation-of-state",
+        "term": "equation of state",
+        "gloss": "Relation linking pressure, volume and temperature for a gas through the gas constant",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "The equation of state of a gas relates the temperature, pressure, and volume through a gas constant R."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031103835-e53d9d11:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031103835-e53d9d11:formula-explorer-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031102313-2df3a0dc",
+  "analysisRef": "job-20261031102313-2df3a0dc/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102313-2df3a0dc:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How the electoral college process elects the president and counts votes",
+    "sources": [
+      {
+        "id": "nara-what-is-the-electoral-college",
+        "title": "What is the Electoral College? — National Archives, U.S. Electoral College",
+        "locator": "https://www.archives.gov/electoral-college/about",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'What is the Electoral College?'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "4b1141642b66f6e4b5dc8e1085b321d5e51d41c348d845433b13bce147d2bd88"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "51666b47dd74451fa2e32292d354a940",
+      "runId": "job-20261031102313-2df3a0dc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:23:57.649Z"
+    },
+    "seed": 3309611898,
+    "headline": "How the electoral college process elects the president and counts votes",
+    "keyPoints": [
+      {
+        "id": "electoral-process-compromise",
+        "point": "Students learn the electoral college is a process established as a compromise between congressional and popular election.",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The Electoral College is a process, not a place."
+      },
+      {
+        "id": "electors-allocation",
+        "point": "The college consists of 538 electors and requires a majority of 270 electoral votes to elect the president.",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The Electoral College consists of 538 electors."
+      },
+      {
+        "id": "winner-take-all-rule",
+        "point": "Most states use winner take all to award electors while Maine and Nebraska use a proportional system.",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Most States have a “winner-take-all” system that awards all electors to the Presidential candidate who wins the State's popular vote."
+      },
+      {
+        "id": "counting-and-inauguration",
+        "point": "Electoral votes are counted in a joint session of congress on January 6 and the president is sworn in on January 20.",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Each State’s electoral votes are counted in a joint session of Congress on the 6th of January in the year following the meeting of the electors."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "electors",
+        "term": "electors",
+        "gloss": "appointed individuals who cast electoral votes for president and vice president in their state",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The Electoral College consists of 538 electors."
+      },
+      {
+        "id": "slate",
+        "term": "slate",
+        "gloss": "group of electors linked to one presidential candidate and chosen by the party",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Each candidate running for President in your State has their own group of electors (known as a slate)."
+      },
+      {
+        "id": "certificate-of-ascertainment",
+        "term": "Certificate of Ascertainment",
+        "gloss": "document prepared by the state executive listing appointed electors and votes received",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "your State's Executive prepares a Certificate of Ascertainment listing the names of all the individuals on the slates for each candidate."
+      },
+      {
+        "id": "winner-take-all-term",
+        "term": "winner-take-all",
+        "gloss": "system that awards all of a state's electors to the candidate who wins the popular vote",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Most States have a “winner-take-all” system that awards all electors to the Presidential candidate who wins the State's popular vote."
+      },
+      {
+        "id": "congressional-delegation",
+        "term": "Congressional delegation",
+        "gloss": "elected members in a state's congressional delegation serving in the house and senate",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Your State has the same number of electors as it does Members in its Congressional delegation"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102313-2df3a0dc:sequence-v1:r1",
+      "status": "passed",
+      "reason": "2 steps were left out because they could not be verified against the page: state-certifies-electors (SEQ-01), president-inaugurated-january (SEQ-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "threshold-v1",
+      "specId": "job-20261031102313-2df3a0dc:threshold-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031102849-e50efdfc",
+  "analysisRef": "job-20261031102849-e50efdfc/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102849-e50efdfc:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Large-scale and molecular views of gas motion and flow effects",
+    "sources": [
+      {
+        "id": "nasa-grc-gas-properties-definitions",
+        "title": "Gas Properties Definitions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/gas-properties-definitions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d996769acf644cd6f6e0c861e1328045e77a19a762ed2807c893e7451e3a79b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "37c26cece5114145b6e08a4b64117609",
+      "runId": "job-20261031102849-e50efdfc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:30:17.591Z"
+    },
+    "seed": 1504312712,
+    "headline": "Large-scale and molecular views of gas motion and flow effects",
+    "keyPoints": [
+      {
+        "id": "macro-micro-scale",
+        "point": "Students learn that large scale motion defines the macro scale while individual molecular motions define the micro scale.",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Scientists refer to the large-scale motion of the gas as the macro scale and the individual molecular motions as the micro scale."
+      },
+      {
+        "id": "density-definition",
+        "point": "Students learn that density is mass per volume of a substance.",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Density is the mass per volume of a substance."
+      },
+      {
+        "id": "diffusion-process",
+        "point": "Students learn that diffusion occurs when properties are transported by random motion.",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "If the properties are transported by the random motion, the process is called diffusion."
+      },
+      {
+        "id": "viscosity-boundary-layer",
+        "point": "Students learn that viscosity makes gas molecules stick to a surface and form a boundary layer.",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Gas molecules stick to any surface, creating a layer of air near the surface (called a boundary layer)"
+      },
+      {
+        "id": "compressibility-shock",
+        "point": "Students learn that beyond the speed of sound at about 700 mph shock waves affect lift and drag.",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Near and beyond the speed of sound (about 700 mph), shock waves are produced that affect both the lift and drag of an object."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "macro-scale",
+        "term": "macro scale",
+        "gloss": "Large-scale motion of gas that is averaged and measured as velocity, pressure, or temperature",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Scientists refer to the large-scale motion of the gas as the macro scale and the individual molecular motions as the micro scale."
+      },
+      {
+        "id": "micro-scale",
+        "term": "micro scale",
+        "gloss": "Model using kinetic theory to describe tiny molecules in constant random motion",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "On the micro scale, a gas is modeled by the kinetic theory."
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "Measure of mass per volume for molecules that move freely",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Because the molecules are free to move about in a gas, the mass of the gas is normally characterized by the density."
+      },
+      {
+        "id": "diffusion",
+        "term": "diffusion",
+        "gloss": "Properties carried by random motion of molecules",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "If the properties are transported by the random motion, the process is called diffusion."
+      },
+      {
+        "id": "convection",
+        "term": "convection",
+        "gloss": "Properties carried by ordered motion of the bulk fluid",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "If the properties are transported by the ordered motion, the process is called convection."
+      },
+      {
+        "id": "viscosity",
+        "term": "viscosity",
+        "gloss": "Stickiness of gas that causes molecules to cling to surfaces and form layers",
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "As an object moves through a gas, the viscosity (stickiness) of the gas becomes very important."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031102849-e50efdfc:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031102849-e50efdfc:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

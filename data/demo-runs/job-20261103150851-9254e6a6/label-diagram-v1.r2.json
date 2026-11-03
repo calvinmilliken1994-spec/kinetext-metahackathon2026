@@ -1,0 +1,871 @@
+{
+  "gen": {
+    "figureId": "usgs-volcano-hazards-1",
+    "hint": "Find the cloud at the top, the dome near the vent and the flows underground and on the slopes.",
+    "parts": [
+      {
+        "areaX1": 10,
+        "areaX2": 717,
+        "areaY1": 32,
+        "areaY2": 230,
+        "id": "eruption-cloud",
+        "labelX1": 115,
+        "labelX2": 290,
+        "labelY1": 78,
+        "labelY2": 102,
+        "name": "eruption cloud",
+        "quote": "Eruption columns can grow rapidly and reach more than 12 miles above a volcano in less than 30 minutes, forming an eruption cloud.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 480,
+        "y": 115
+      },
+      {
+        "areaX1": 656,
+        "areaX2": 835,
+        "areaY1": 325,
+        "areaY2": 471,
+        "id": "landslide",
+        "labelX1": 726,
+        "labelX2": 836,
+        "labelY1": 176,
+        "labelY2": 204,
+        "name": "landslide",
+        "quote": "A landslide or debris avalanche is a rapid downhill movement of rocky material, snow, and (or) ice.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 710,
+        "y": 430
+      },
+      {
+        "areaX1": 461,
+        "areaX2": 512,
+        "areaY1": 336,
+        "areaY2": 370,
+        "id": "lava-dome",
+        "labelX1": 393,
+        "labelX2": 523,
+        "labelY1": 293,
+        "labelY2": 318,
+        "name": "lava dome",
+        "quote": "Between 1980 and 1986, a dacite lava dome at Mount St. Helens grew to about 1,000 feet high and 3,500 feet across.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 476,
+        "y": 352
+      },
+      {
+        "areaX1": 738,
+        "areaX2": 990,
+        "areaY1": 486,
+        "areaY2": 577,
+        "id": "ground-water",
+        "labelX1": 793,
+        "labelX2": 876,
+        "labelY1": 511,
+        "labelY2": 556,
+        "name": "ground water",
+        "quote": "most of which is heated ground water (underground water from rainfall and streams).",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 878,
+        "y": 548
+      },
+      {
+        "areaX1": 562,
+        "areaX2": 681,
+        "areaY1": 300,
+        "areaY2": 916,
+        "id": "magma",
+        "labelX1": 616,
+        "labelX2": 692,
+        "labelY1": 883,
+        "labelY2": 907,
+        "name": "magma",
+        "quote": "Molten rock (magma) that pours or oozes onto the Earth’s surface is called lava and forms lava flows.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 613,
+        "y": 729
+      }
+    ],
+    "schemaVersion": "label-diagram-v1",
+    "title": "Label the volcano cross-section"
+  },
+  "report": {
+    "artifactId": "job-20261103150851-9254e6a6:label-diagram-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every label-diagram title, part id and part name shape is within the frozen limits"
+      },
+      {
+        "id": "LD-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 part quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LD-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every one of the 5 part name(s) occurs as a whole phrase in its own quote, case-insensitive, and is the printed word of its slot where the figure's printed labels are stored (name-in-quote)"
+      },
+      {
+        "id": "LD-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "figureId \"usgs-volcano-hazards-1\" is one of the source's 1 library figure(s) (figure-valid)"
+      },
+      {
+        "id": "LD-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 part point(s) are integers within 0..1000, every area box (where given) is well-formed and holds its point, and no point lies inside any printed-label box (points-valid)"
+      },
+      {
+        "id": "LD-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every label box is the all-zero sentinel or well-formed inside 0..1000, no two boxes overlap, and 5 part(s) carry a box (the figure prints its labels; at least 3 required) (label-boxes-valid)"
+      },
+      {
+        "id": "LD-06",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "segmentation found exactly one region for each of the 5 parts, every region contains its part's point at image pixels, and every region covers between 0.05% and 50% of the image (regions-found)"
+      },
+      {
+        "id": "LD-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 10 region pair(s) are distinct: the largest pairwise IoU is 0.08, at most 0.6 (regions-distinct)"
+      },
+      {
+        "id": "LD-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the AI-written title and hint appears on the page (N-01); part names are bound to their quotes by LD-02 (numbers-checkable)"
+      },
+      {
+        "id": "LD-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "5 parts (within 3-8) with distinct ids and distinct names (counts-valid)"
+      },
+      {
+        "id": "LD-10",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 printed label(s) of the figure that the page text names are claimed by a part (labels-covered)"
+      },
+      {
+        "id": "LD-11",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "SAM was at least 0.5 sure of all 5 region(s) that carry a confidence (regions-confident)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "label-diagram-v1: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1a1f7-7655-703e-9c99-13fce5bad8c6",
+    "usage": {
+      "promptTokens": 8150,
+      "completionTokens": 2537,
+      "reasoningTokens": 1940,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17460,
+    "estCostUSD": 0.02096975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "regions": [
+    {
+      "partId": "eruption-cloud",
+      "x1": 18,
+      "y1": 28,
+      "x2": 496,
+      "y2": 191,
+      "confidence": 0.9296875,
+      "outline": "M385 28.5L394.5 29L398.5 32L401.5 32L406.5 28L427.5 29L434 32.5L438.5 43L455.5 45L465.5 49L484 69.5L489 78.5L489 84.5L487 89.5L490 95.5L497 101.5L497 109.5L489 123.5L484.5 127L476.5 129L470.5 137L466.5 135L464.5 139L464 136.5L460.5 134L455.5 138L449.5 138L447.5 140L438.5 142L435.5 141L431 144.5L431 146.5L428 149.5L428 152.5L439.5 151L440.5 155L441.5 151L446.5 148L458.5 145L462.5 139L464.5 141L467.5 140L470 145.5L468.5 150L458.5 151L457 154.5L454.5 156L452.5 156L452 153.5L449.5 152L447 153.5L447 156.5L450.5 156L451 159.5L446 164.5L444 174.5L433.5 192L430.5 189L426.5 191L418.5 191L417.5 188L409.5 187L405.5 182L402 180.5L401.5 177L394.5 178L390 167.5L385.5 165L383 161.5L384 153.5L382.5 151L375.5 155L366.5 155L357 149.5L357 142.5L350.5 136L314.5 135L306.5 139L297.5 138L289 131.5L285 119.5L277.5 112L271.5 116L265.5 116L256.5 110L250.5 111L244.5 108L234.5 107L223.5 98L209.5 98L200.5 93L191.5 93L187.5 95L172.5 97L154.5 94L141.5 94L136.5 91L126.5 98L93.5 98L65.5 84L58.5 79L46.5 76L43.5 73L37.5 73L35.5 71L20.5 70L18 67.5L18.5 66L20.5 66L25.5 69L27 67.5L26.5 61L30 62.5L30.5 67L31 61.5L33.5 59L35.5 59L37.5 62L39.5 60L60.5 56L66.5 53L69.5 54L76.5 47L79.5 48L81.5 46L88.5 46L97.5 43L101.5 44L115.5 40L146.5 41L149.5 44L151.5 43L153.5 45L156.5 42L173.5 43L181.5 46L191.5 46L198.5 52L199.5 49L203.5 50L213.5 48L229.5 41L243.5 41L247.5 44L252.5 44L255 41.5L256.5 35L258.5 40L261.5 32L265.5 32L270.5 29L283.5 32L296.5 38L301.5 42L311.5 42L318.5 39L337.5 41L341.5 43L348.5 51L355 45.5L357.5 41L360.5 40L368.5 32L379.5 32ZM428 156.5L430.5 156L436.5 159L438 162.5L432.5 165L428.5 164L427 162.5Z",
+      "ground": {
+        "x1": 7,
+        "y1": 26,
+        "x2": 501,
+        "y2": 188
+      }
+    },
+    {
+      "partId": "landslide",
+      "x1": 448,
+      "y1": 261,
+      "x2": 606,
+      "y2": 403,
+      "confidence": 0.66796875,
+      "outline": "M450 261.5L452.5 263L453.5 261L456.5 261L465.5 267L479.5 273L489.5 279L501.5 291L507 293.5L507 305.5L504 316.5L501 320.5L501 327.5L502.5 330L504.5 330L506.5 327L509 327.5L507 324.5L509 322.5L508 312.5L514 311.5L516 307.5L515 303.5L516.5 303L519 305.5L519 308.5L522.5 311L525.5 309L530.5 314L538 316.5L535.5 319L530.5 318L531 321.5L534.5 325L537.5 325L540 329.5L550.5 338L560.5 343L564.5 342L569.5 344L575 349.5L579.5 358L582.5 357L583.5 355L587.5 358L591.5 358L596 361.5L596 375.5L592.5 374L588 375.5L593.5 376L596 383.5L592 386.5L592 393.5L587 397.5L584.5 402L580.5 400L578.5 402L571.5 404L571.5 400L569.5 402L567.5 400L564.5 402L563 398.5L560.5 397L554.5 397L553.5 399L551.5 399L547.5 394L544.5 396L540.5 395L523.5 387L515 378.5L508 368.5L491 350.5L489 345.5L484 340.5L479 329.5L464 319.5L462 311.5L462 296.5L454 284.5L452 278.5L453 273.5L450.5 274L448 270.5L449 266.5L451 265.5L449 262.5ZM581 360.5L586.5 360L587 362.5L592 366.5L590.5 368L588.5 366L581.5 372L578.5 371L577 369.5L580 367.5L579 363.5ZM603 374.5L606 374.5L607 380.5L603.5 384Z",
+      "ground": {
+        "x1": 459,
+        "y1": 265,
+        "x2": 584,
+        "y2": 384
+      }
+    },
+    {
+      "partId": "lava-dome",
+      "x1": 323,
+      "y1": 277,
+      "x2": 356,
+      "y2": 305,
+      "confidence": 0.90625,
+      "outline": "M347 277.5L349.5 277L357 281.5L357 285.5L354 290.5L341.5 300L323.5 306L323 290.5L325 286.5L333.5 280L338.5 278Z",
+      "ground": {
+        "x1": 322,
+        "y1": 274,
+        "x2": 358,
+        "y2": 302
+      }
+    },
+    {
+      "partId": "ground-water",
+      "x1": 520,
+      "y1": 400,
+      "x2": 695,
+      "y2": 476,
+      "confidence": 0.75390625,
+      "outline": "M520 400.5L538.5 405L549.5 410L555.5 411L557.5 413L559.5 412L564.5 416L571.5 416L582.5 421L593.5 422L595.5 420L596.5 424L609.5 429L623.5 428L625.5 426L624.5 430L627.5 428L632.5 428L634.5 431L635 426.5L637.5 425L639.5 431L641 426.5L644.5 425L645 427.5L643 429.5L646.5 434L666.5 439L671.5 434L673.5 435L675 433.5L675 429.5L676.5 429L681 434.5L680.5 438L683.5 437L685.5 439L691.5 439L692.5 437L694 437.5L695 440.5L691 443.5L692.5 447L696 446.5L696 452.5L692 460.5L692 464.5L694 466.5L690.5 474L680.5 475L678.5 468L666.5 469L666.5 466L658.5 466L655.5 465L654.5 462L653 462.5L654 465.5L649.5 467L650 462.5L652.5 462L653 459.5L656 457.5L652.5 457L645.5 460L641.5 459L637.5 464L634.5 462L632.5 464L624.5 463L624.5 467L622.5 466L617.5 468L616 463.5L623 453.5L626 451.5L622.5 449L622 452.5L615.5 460L613 460.5L609 467.5L603 471.5L602.5 475L597.5 477L581.5 474L565.5 467L557 459.5L530 422.5L526 413.5L522 409.5ZM634 432.5L636.5 432L637 434.5L635 436.5L635 440.5L633 441.5L633 443.5L630.5 444Z",
+      "ground": {
+        "x1": 516,
+        "y1": 397,
+        "x2": 692,
+        "y2": 471
+      }
+    },
+    {
+      "partId": "magma",
+      "x1": 396,
+      "y1": 262,
+      "x2": 483,
+      "y2": 747,
+      "confidence": 0.890625,
+      "outline": "M423 262.5L426 262.5L426 267.5L424 270.5L426 272.5L427 285.5L426 338.5L428 372.5L427 376.5L428.5 378L431 376.5L437 366.5L438 358.5L442.5 358L448 351.5L448 355.5L432 381.5L427 394.5L429 409.5L429 428.5L432 435.5L432 452.5L428 464.5L427 501.5L429 512.5L428 517.5L433 519.5L428 526.5L430 542.5L430 576.5L428 599.5L428 627.5L430 653.5L433.5 658L439.5 661L447.5 670L449.5 668L452.5 668L457.5 671L459 666.5L464 661.5L465 658.5L467.5 657L469 658.5L463 667.5L460 675.5L461 683.5L469 697.5L470 704.5L477 712.5L478 735.5L476.5 737L472.5 737L452.5 731L447.5 727L444.5 728L440.5 725L432.5 724L423.5 720L399.5 748L396 737.5L396 731.5L399 722.5L398 702.5L401 692.5L406 684.5L406 681.5L417 667.5L419 654.5L419 623.5L415 615.5L415 607.5L418 594.5L418 517.5L415 511.5L414 502.5L415 489.5L419 484.5L416 447.5L418 434.5L420 430.5L419 423.5L421 418.5L419 280.5L420 276.5L418 273.5L422 270.5L421 267.5L423 265.5ZM481 482.5L483.5 482L484 483.5L480.5 487L442 513.5L442 511.5L445.5 508L455.5 502L465.5 493L479.5 485Z",
+      "ground": {
+        "x1": 393,
+        "y1": 245,
+        "x2": 476,
+        "y2": 747
+      }
+    }
+  ],
+  "grounding": {
+    "ok": true,
+    "located": 5,
+    "of": 5,
+    "receipt": {
+      "purpose": "test-live",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1a1f7-db25-762a-b886-5206f9700ee6",
+      "usage": {
+        "promptTokens": 969,
+        "completionTokens": 2612,
+        "reasoningTokens": 2343,
+        "cachedTokens": 875
+      },
+      "latencyMs": 25783,
+      "estCostUSD": 0.01134975,
+      "reservedUnknownUSD": 0,
+      "finishReason": "stop",
+      "attempts": 1,
+      "costBasis": "usage",
+      "provider": "meta-api",
+      "model": "muse-spark-1.3",
+      "providerModel": "muse-spark-1.3",
+      "cachedUnknown": false
+    },
+    "parts": [
+      {
+        "partId": "eruption-cloud",
+        "ground": {
+          "x1": 10,
+          "y1": 32,
+          "x2": 717,
+          "y2": 230
+        }
+      },
+      {
+        "partId": "landslide",
+        "ground": {
+          "x1": 656,
+          "y1": 325,
+          "x2": 835,
+          "y2": 471
+        }
+      },
+      {
+        "partId": "lava-dome",
+        "ground": {
+          "x1": 461,
+          "y1": 336,
+          "x2": 512,
+          "y2": 370
+        }
+      },
+      {
+        "partId": "ground-water",
+        "ground": {
+          "x1": 738,
+          "y1": 486,
+          "x2": 990,
+          "y2": 577
+        }
+      },
+      {
+        "partId": "magma",
+        "ground": {
+          "x1": 562,
+          "y1": 300,
+          "x2": 681,
+          "y2": 916
+        }
+      }
+    ]
+  },
+  "genPositions": [
+    {
+      "partId": "eruption-cloud",
+      "x": 480,
+      "y": 115,
+      "areaX1": 12,
+      "areaY1": 36,
+      "areaX2": 677,
+      "areaY2": 175
+    },
+    {
+      "partId": "landslide",
+      "x": 710,
+      "y": 430,
+      "areaX1": 653,
+      "areaY1": 348,
+      "areaX2": 835,
+      "areaY2": 539
+    },
+    {
+      "partId": "lava-dome",
+      "x": 476,
+      "y": 352,
+      "areaX1": 465,
+      "areaY1": 352,
+      "areaX2": 514,
+      "areaY2": 388
+    },
+    {
+      "partId": "ground-water",
+      "x": 932,
+      "y": 579,
+      "areaX1": 745,
+      "areaY1": 522,
+      "areaX2": 997,
+      "areaY2": 616
+    },
+    {
+      "partId": "magma",
+      "x": 614,
+      "y": 720,
+      "areaX1": 600,
+      "areaY1": 310,
+      "areaX2": 688,
+      "areaY2": 945
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261103150851-9254e6a6:label-diagram-v1:r2",
+    "componentId": "label-diagram-v1",
+    "title": "Label the volcano cross-section",
+    "sources": [
+      {
+        "id": "usgs-volcano-hazards",
+        "title": "What Are Volcano Hazards? — U.S. Geological Survey Fact Sheet 002-97 (revised March 2008)",
+        "locator": "https://pubs.usgs.gov/fs/fs002-97/old%20html%20files/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey Fact Sheet 002-97, 'What Are Volcano Hazards?' (revised March 2008), by Bobbie Myers, Steven R. Brantley, Peter Stauffer, and James W. Hendley II; graphics by Bobbie Myers, Sara Boore, and Susan Mayfield. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "ab12208bf12992727711ca9e3334f16cb5af2f4287bb669e5b7a34f8c45e1af8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1a1f7-7655-703e-9c99-13fce5bad8c6",
+      "runId": "job-20261103150851-9254e6a6",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-11-03T15:12:20.375Z"
+    },
+    "seed": 682145068,
+    "figureId": "usgs-volcano-hazards-1",
+    "parts": [
+      {
+        "areaX1": 10,
+        "areaX2": 717,
+        "areaY1": 32,
+        "areaY2": 230,
+        "id": "eruption-cloud",
+        "labelX1": 115,
+        "labelX2": 290,
+        "labelY1": 78,
+        "labelY2": 102,
+        "name": "eruption cloud",
+        "quote": "Eruption columns can grow rapidly and reach more than 12 miles above a volcano in less than 30 minutes, forming an eruption cloud.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 480,
+        "y": 115
+      },
+      {
+        "areaX1": 656,
+        "areaX2": 835,
+        "areaY1": 325,
+        "areaY2": 471,
+        "id": "landslide",
+        "labelX1": 726,
+        "labelX2": 836,
+        "labelY1": 176,
+        "labelY2": 204,
+        "name": "landslide",
+        "quote": "A landslide or debris avalanche is a rapid downhill movement of rocky material, snow, and (or) ice.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 710,
+        "y": 430
+      },
+      {
+        "areaX1": 461,
+        "areaX2": 512,
+        "areaY1": 336,
+        "areaY2": 370,
+        "id": "lava-dome",
+        "labelX1": 393,
+        "labelX2": 523,
+        "labelY1": 293,
+        "labelY2": 318,
+        "name": "lava dome",
+        "quote": "Between 1980 and 1986, a dacite lava dome at Mount St. Helens grew to about 1,000 feet high and 3,500 feet across.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 476,
+        "y": 352
+      },
+      {
+        "areaX1": 738,
+        "areaX2": 990,
+        "areaY1": 486,
+        "areaY2": 577,
+        "id": "ground-water",
+        "labelX1": 793,
+        "labelX2": 876,
+        "labelY1": 511,
+        "labelY2": 556,
+        "name": "ground water",
+        "quote": "most of which is heated ground water (underground water from rainfall and streams).",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 878,
+        "y": 548
+      },
+      {
+        "areaX1": 562,
+        "areaX2": 681,
+        "areaY1": 300,
+        "areaY2": 916,
+        "id": "magma",
+        "labelX1": 616,
+        "labelX2": 692,
+        "labelY1": 883,
+        "labelY2": 907,
+        "name": "magma",
+        "quote": "Molten rock (magma) that pours or oozes onto the Earth’s surface is called lava and forms lava flows.",
+        "sourceId": "usgs-volcano-hazards",
+        "x": 613,
+        "y": 729
+      }
+    ],
+    "hint": "Find the cloud at the top, the dome near the vent and the flows underground and on the slopes.",
+    "figure": {
+      "id": "usgs-volcano-hazards-1",
+      "width": 699,
+      "height": 816,
+      "caption": "Volcanoes produce a wide variety of natural hazards that can kill people and destroy property. This simplified sketch shows a volcano typical of those found in the Western United States and Alaska, but many of these hazards also pose risks at other volcanoes, such as those in Hawaii. Some hazards, such as lahars and landslides, can occur even when a volcano is not erupting. (Hazards and terms in this diagram are highlighted in bold where they are discussed in the text below.)",
+      "credit": "U.S. Geological Survey/graphic by Bobbie Myers",
+      "license": "U.S. Government work (U.S. Geological Survey Fact Sheet 002-97), U.S. Public Domain; credit U.S. Geological Survey; no USGS identifier, logo or third-party copyright mark in the figure",
+      "labelsInImage": true,
+      "labelBoxes": [
+        {
+          "x1": 81,
+          "y1": 56,
+          "x2": 200,
+          "y2": 77,
+          "text": "Eruption Cloud",
+          "group": 1
+        },
+        {
+          "x1": 564,
+          "y1": 58,
+          "x2": 674,
+          "y2": 78,
+          "text": "Prevailing Wind",
+          "group": 2
+        },
+        {
+          "x1": 521,
+          "y1": 111,
+          "x2": 655,
+          "y2": 133,
+          "text": "Eruption Column",
+          "group": 3
+        },
+        {
+          "x1": 44,
+          "y1": 120,
+          "x2": 174,
+          "y2": 141,
+          "text": "Ash (Tephra) Fall",
+          "group": 4
+        },
+        {
+          "x1": 507,
+          "y1": 148,
+          "x2": 586,
+          "y2": 167,
+          "text": "Landslide",
+          "group": 5
+        },
+        {
+          "x1": 507,
+          "y1": 166,
+          "x2": 655,
+          "y2": 187,
+          "group": 5
+        },
+        {
+          "x1": 47,
+          "y1": 173,
+          "x2": 123,
+          "y2": 192,
+          "text": "Acid Rain",
+          "group": 6
+        },
+        {
+          "x1": 283,
+          "y1": 185,
+          "x2": 341,
+          "y2": 204,
+          "text": "Bombs",
+          "group": 7
+        },
+        {
+          "x1": 545,
+          "y1": 212,
+          "x2": 672,
+          "y2": 234,
+          "text": "Pyroclastic Flow",
+          "group": 8
+        },
+        {
+          "x1": 440,
+          "y1": 214,
+          "x2": 481,
+          "y2": 232,
+          "text": "Vent",
+          "group": 9
+        },
+        {
+          "x1": 83,
+          "y1": 228,
+          "x2": 242,
+          "y2": 249,
+          "text": "Lava Dome Collapse",
+          "group": 10
+        },
+        {
+          "x1": 276,
+          "y1": 236,
+          "x2": 367,
+          "y2": 254,
+          "text": "Lava Dome",
+          "group": 11
+        },
+        {
+          "x1": 77,
+          "y1": 258,
+          "x2": 204,
+          "y2": 280,
+          "text": "Pyroclastic Flow",
+          "group": 12
+        },
+        {
+          "x1": 603,
+          "y1": 283,
+          "x2": 687,
+          "y2": 302,
+          "text": "Fumaroles",
+          "group": 13
+        },
+        {
+          "x1": 3,
+          "y1": 298,
+          "x2": 212,
+          "y2": 319,
+          "text": "Lahar (Mud or Debris Flow)",
+          "group": 14
+        },
+        {
+          "x1": 15,
+          "y1": 341,
+          "x2": 96,
+          "y2": 360,
+          "text": "Lava Flow",
+          "group": 15
+        },
+        {
+          "x1": 552,
+          "y1": 428,
+          "x2": 616,
+          "y2": 447,
+          "text": "Ground",
+          "group": 16
+        },
+        {
+          "x1": 558,
+          "y1": 448,
+          "x2": 610,
+          "y2": 466,
+          "text": "Water",
+          "group": 16
+        },
+        {
+          "x1": 70,
+          "y1": 485,
+          "x2": 151,
+          "y2": 505,
+          "text": "Silica (SiO2)",
+          "group": 17
+        },
+        {
+          "x1": 91,
+          "y1": 501,
+          "x2": 152,
+          "y2": 517,
+          "text": "Content",
+          "group": 17
+        },
+        {
+          "x1": 207,
+          "y1": 486,
+          "x2": 263,
+          "y2": 504,
+          "text": "Magma",
+          "group": 18
+        },
+        {
+          "x1": 206,
+          "y1": 501,
+          "x2": 245,
+          "y2": 520,
+          "text": "Type",
+          "group": 18
+        },
+        {
+          "x1": 109,
+          "y1": 521,
+          "x2": 153,
+          "y2": 538,
+          "text": "100%",
+          "group": 19
+        },
+        {
+          "x1": 553,
+          "y1": 580,
+          "x2": 601,
+          "y2": 599,
+          "text": "Crack",
+          "group": 20
+        },
+        {
+          "x1": 206,
+          "y1": 588,
+          "x2": 263,
+          "y2": 607,
+          "text": "Rhyolite",
+          "group": 21
+        },
+        {
+          "x1": 129,
+          "y1": 595,
+          "x2": 152,
+          "y2": 612,
+          "text": "68",
+          "group": 22
+        },
+        {
+          "x1": 206,
+          "y1": 604,
+          "x2": 252,
+          "y2": 620,
+          "text": "Dacite",
+          "group": 23
+        },
+        {
+          "x1": 129,
+          "y1": 613,
+          "x2": 152,
+          "y2": 630,
+          "text": "63",
+          "group": 24
+        },
+        {
+          "x1": 206,
+          "y1": 621,
+          "x2": 268,
+          "y2": 637,
+          "text": "Andesite",
+          "group": 25
+        },
+        {
+          "x1": 130,
+          "y1": 634,
+          "x2": 152,
+          "y2": 651,
+          "text": "53",
+          "group": 26
+        },
+        {
+          "x1": 206,
+          "y1": 644,
+          "x2": 249,
+          "y2": 660,
+          "text": "Basalt",
+          "group": 27
+        },
+        {
+          "x1": 401,
+          "y1": 697,
+          "x2": 464,
+          "y2": 718,
+          "text": "Magma",
+          "group": 28
+        },
+        {
+          "x1": 138,
+          "y1": 767,
+          "x2": 152,
+          "y2": 784,
+          "text": "0",
+          "group": 29
+        }
+      ],
+      "partLabelGroups": [
+        1,
+        5,
+        11,
+        16,
+        28
+      ]
+    },
+    "regions": [
+      {
+        "partId": "eruption-cloud",
+        "x1": 18,
+        "y1": 28,
+        "x2": 496,
+        "y2": 191,
+        "confidence": 0.9296875,
+        "outline": "M385 28.5L394.5 29L398.5 32L401.5 32L406.5 28L427.5 29L434 32.5L438.5 43L455.5 45L465.5 49L484 69.5L489 78.5L489 84.5L487 89.5L490 95.5L497 101.5L497 109.5L489 123.5L484.5 127L476.5 129L470.5 137L466.5 135L464.5 139L464 136.5L460.5 134L455.5 138L449.5 138L447.5 140L438.5 142L435.5 141L431 144.5L431 146.5L428 149.5L428 152.5L439.5 151L440.5 155L441.5 151L446.5 148L458.5 145L462.5 139L464.5 141L467.5 140L470 145.5L468.5 150L458.5 151L457 154.5L454.5 156L452.5 156L452 153.5L449.5 152L447 153.5L447 156.5L450.5 156L451 159.5L446 164.5L444 174.5L433.5 192L430.5 189L426.5 191L418.5 191L417.5 188L409.5 187L405.5 182L402 180.5L401.5 177L394.5 178L390 167.5L385.5 165L383 161.5L384 153.5L382.5 151L375.5 155L366.5 155L357 149.5L357 142.5L350.5 136L314.5 135L306.5 139L297.5 138L289 131.5L285 119.5L277.5 112L271.5 116L265.5 116L256.5 110L250.5 111L244.5 108L234.5 107L223.5 98L209.5 98L200.5 93L191.5 93L187.5 95L172.5 97L154.5 94L141.5 94L136.5 91L126.5 98L93.5 98L65.5 84L58.5 79L46.5 76L43.5 73L37.5 73L35.5 71L20.5 70L18 67.5L18.5 66L20.5 66L25.5 69L27 67.5L26.5 61L30 62.5L30.5 67L31 61.5L33.5 59L35.5 59L37.5 62L39.5 60L60.5 56L66.5 53L69.5 54L76.5 47L79.5 48L81.5 46L88.5 46L97.5 43L101.5 44L115.5 40L146.5 41L149.5 44L151.5 43L153.5 45L156.5 42L173.5 43L181.5 46L191.5 46L198.5 52L199.5 49L203.5 50L213.5 48L229.5 41L243.5 41L247.5 44L252.5 44L255 41.5L256.5 35L258.5 40L261.5 32L265.5 32L270.5 29L283.5 32L296.5 38L301.5 42L311.5 42L318.5 39L337.5 41L341.5 43L348.5 51L355 45.5L357.5 41L360.5 40L368.5 32L379.5 32ZM428 156.5L430.5 156L436.5 159L438 162.5L432.5 165L428.5 164L427 162.5Z",
+        "ground": {
+          "x1": 7,
+          "y1": 26,
+          "x2": 501,
+          "y2": 188
+        }
+      },
+      {
+        "partId": "landslide",
+        "x1": 448,
+        "y1": 261,
+        "x2": 606,
+        "y2": 403,
+        "confidence": 0.66796875,
+        "outline": "M450 261.5L452.5 263L453.5 261L456.5 261L465.5 267L479.5 273L489.5 279L501.5 291L507 293.5L507 305.5L504 316.5L501 320.5L501 327.5L502.5 330L504.5 330L506.5 327L509 327.5L507 324.5L509 322.5L508 312.5L514 311.5L516 307.5L515 303.5L516.5 303L519 305.5L519 308.5L522.5 311L525.5 309L530.5 314L538 316.5L535.5 319L530.5 318L531 321.5L534.5 325L537.5 325L540 329.5L550.5 338L560.5 343L564.5 342L569.5 344L575 349.5L579.5 358L582.5 357L583.5 355L587.5 358L591.5 358L596 361.5L596 375.5L592.5 374L588 375.5L593.5 376L596 383.5L592 386.5L592 393.5L587 397.5L584.5 402L580.5 400L578.5 402L571.5 404L571.5 400L569.5 402L567.5 400L564.5 402L563 398.5L560.5 397L554.5 397L553.5 399L551.5 399L547.5 394L544.5 396L540.5 395L523.5 387L515 378.5L508 368.5L491 350.5L489 345.5L484 340.5L479 329.5L464 319.5L462 311.5L462 296.5L454 284.5L452 278.5L453 273.5L450.5 274L448 270.5L449 266.5L451 265.5L449 262.5ZM581 360.5L586.5 360L587 362.5L592 366.5L590.5 368L588.5 366L581.5 372L578.5 371L577 369.5L580 367.5L579 363.5ZM603 374.5L606 374.5L607 380.5L603.5 384Z",
+        "ground": {
+          "x1": 459,
+          "y1": 265,
+          "x2": 584,
+          "y2": 384
+        }
+      },
+      {
+        "partId": "lava-dome",
+        "x1": 323,
+        "y1": 277,
+        "x2": 356,
+        "y2": 305,
+        "confidence": 0.90625,
+        "outline": "M347 277.5L349.5 277L357 281.5L357 285.5L354 290.5L341.5 300L323.5 306L323 290.5L325 286.5L333.5 280L338.5 278Z",
+        "ground": {
+          "x1": 322,
+          "y1": 274,
+          "x2": 358,
+          "y2": 302
+        }
+      },
+      {
+        "partId": "ground-water",
+        "x1": 520,
+        "y1": 400,
+        "x2": 695,
+        "y2": 476,
+        "confidence": 0.75390625,
+        "outline": "M520 400.5L538.5 405L549.5 410L555.5 411L557.5 413L559.5 412L564.5 416L571.5 416L582.5 421L593.5 422L595.5 420L596.5 424L609.5 429L623.5 428L625.5 426L624.5 430L627.5 428L632.5 428L634.5 431L635 426.5L637.5 425L639.5 431L641 426.5L644.5 425L645 427.5L643 429.5L646.5 434L666.5 439L671.5 434L673.5 435L675 433.5L675 429.5L676.5 429L681 434.5L680.5 438L683.5 437L685.5 439L691.5 439L692.5 437L694 437.5L695 440.5L691 443.5L692.5 447L696 446.5L696 452.5L692 460.5L692 464.5L694 466.5L690.5 474L680.5 475L678.5 468L666.5 469L666.5 466L658.5 466L655.5 465L654.5 462L653 462.5L654 465.5L649.5 467L650 462.5L652.5 462L653 459.5L656 457.5L652.5 457L645.5 460L641.5 459L637.5 464L634.5 462L632.5 464L624.5 463L624.5 467L622.5 466L617.5 468L616 463.5L623 453.5L626 451.5L622.5 449L622 452.5L615.5 460L613 460.5L609 467.5L603 471.5L602.5 475L597.5 477L581.5 474L565.5 467L557 459.5L530 422.5L526 413.5L522 409.5ZM634 432.5L636.5 432L637 434.5L635 436.5L635 440.5L633 441.5L633 443.5L630.5 444Z",
+        "ground": {
+          "x1": 516,
+          "y1": 397,
+          "x2": 692,
+          "y2": 471
+        }
+      },
+      {
+        "partId": "magma",
+        "x1": 396,
+        "y1": 262,
+        "x2": 483,
+        "y2": 747,
+        "confidence": 0.890625,
+        "outline": "M423 262.5L426 262.5L426 267.5L424 270.5L426 272.5L427 285.5L426 338.5L428 372.5L427 376.5L428.5 378L431 376.5L437 366.5L438 358.5L442.5 358L448 351.5L448 355.5L432 381.5L427 394.5L429 409.5L429 428.5L432 435.5L432 452.5L428 464.5L427 501.5L429 512.5L428 517.5L433 519.5L428 526.5L430 542.5L430 576.5L428 599.5L428 627.5L430 653.5L433.5 658L439.5 661L447.5 670L449.5 668L452.5 668L457.5 671L459 666.5L464 661.5L465 658.5L467.5 657L469 658.5L463 667.5L460 675.5L461 683.5L469 697.5L470 704.5L477 712.5L478 735.5L476.5 737L472.5 737L452.5 731L447.5 727L444.5 728L440.5 725L432.5 724L423.5 720L399.5 748L396 737.5L396 731.5L399 722.5L398 702.5L401 692.5L406 684.5L406 681.5L417 667.5L419 654.5L419 623.5L415 615.5L415 607.5L418 594.5L418 517.5L415 511.5L414 502.5L415 489.5L419 484.5L416 447.5L418 434.5L420 430.5L419 423.5L421 418.5L419 280.5L420 276.5L418 273.5L422 270.5L421 267.5L423 265.5ZM481 482.5L483.5 482L484 483.5L480.5 487L442 513.5L442 511.5L445.5 508L455.5 502L465.5 493L479.5 485Z",
+        "ground": {
+          "x1": 393,
+          "y1": 245,
+          "x2": 476,
+          "y2": 747
+        }
+      }
+    ]
+  }
+}

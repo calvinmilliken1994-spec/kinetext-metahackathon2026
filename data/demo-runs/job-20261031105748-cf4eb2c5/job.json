@@ -1,0 +1,48 @@
+{
+  "jobId": "job-20261031105748-cf4eb2c5",
+  "sourceId": "noaa-jetstream-layers-of-atmosphere",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:57:48.353Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.175206,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:57:48.353Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-31T11:00:24.821Z"
+}

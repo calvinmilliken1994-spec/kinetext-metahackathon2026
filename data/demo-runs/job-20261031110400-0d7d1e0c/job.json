@@ -1,0 +1,44 @@
+{
+  "jobId": "job-20261031110400-0d7d1e0c",
+  "sourceId": "usagov-how-laws-are-made",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T11:04:00.688Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.133331,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "OV-06"
+      ],
+      "fixed": [
+        "OV-06"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T11:04:00.688Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-31T11:05:42.997Z"
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031102921-0f080193",
+  "analysisRef": "job-20261031102921-0f080193/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102921-0f080193:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Glider glide angle and force balance to find lift and drag",
+    "sources": [
+      {
+        "id": "nasa-grc-glider-trajectory-problem",
+        "title": "Glider Trajectory Problem — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/glider-trajectory-problem/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "66e6cfc191fb83e9cfff3bc323a0394b392cbb4e0278aba87b367f3203c3c1e2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ecf6c6e8a9db46f2a09a2867c1ee46ab",
+      "runId": "job-20261031102921-0f080193",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:30:08.275Z"
+    },
+    "seed": 92277396,
+    "headline": "Glider glide angle and force balance to find lift and drag",
+    "keyPoints": [
+      {
+        "id": "steady-descent",
+        "point": "A glider in steady descent at constant velocity loses altitude as it travels.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "If a glider is in a steady (constant velocity and no acceleration) descent, it loses altitude as it travels."
+      },
+      {
+        "id": "glide-angle-definition",
+        "point": "The glide angle is the angle where the flight path intersects the ground.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle."
+      },
+      {
+        "id": "tangent-relation",
+        "point": "The tangent of the glide angle is equal to height divided by distance flown.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The tangent tan of the glide angle a is equal to the change in height h divided by the distance flown d:"
+      },
+      {
+        "id": "force-balance",
+        "point": "Lift and drag components combine with glide angle to balance weight in steady flight.",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "glider",
+        "term": "glider",
+        "gloss": "Aircraft with no engine that stays aloft by gliding",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "A glider is a special kind of aircraft that has no engine."
+      },
+      {
+        "id": "glide-angle",
+        "term": "glide angle",
+        "gloss": "Angle where flight path meets ground",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The flight path intersects the ground at an angle a called the glide angle."
+      },
+      {
+        "id": "lift",
+        "term": "lift",
+        "gloss": "Upward force linked to glide angle and drag balance",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift times the sine of the glide angle is equal to the drag times the cosine of the glide angle."
+      },
+      {
+        "id": "drag",
+        "term": "drag",
+        "gloss": "Resistive force component combined with lift to balance weight",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "The lift L times the cosine cos of the glide angle plus the drag D times the sine sin of the glide angle is equal to the weight W:"
+      },
+      {
+        "id": "weight",
+        "term": "weight",
+        "gloss": "Downward force measured to solve remaining equations",
+        "sourceId": "nasa-grc-glider-trajectory-problem",
+        "quote": "With the glide angle known and a measurement of the weight, we have two remaining equations in two unknowns"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031102921-0f080193:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102921-0f080193:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

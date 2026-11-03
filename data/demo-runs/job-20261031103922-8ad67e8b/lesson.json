@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031103922-8ad67e8b",
+  "analysisRef": "job-20261031103922-8ad67e8b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103922-8ad67e8b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How gas properties and temperature set the speed of sound",
+    "sources": [
+      {
+        "id": "nasa-grc-speed-of-sound",
+        "title": "Speed of Sound Interactive — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "7ebd6e4acd15582d57fbdf4cdea82b7d4748c231e5aea039c2c8756214c8e02a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5f986f13a1364297920e72182777620d",
+      "runId": "job-20261031103922-8ad67e8b",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:40:14.463Z"
+    },
+    "seed": 3481067058,
+    "headline": "How gas properties and temperature set the speed of sound",
+    "keyPoints": [
+      {
+        "id": "isentropic-transmission",
+        "point": "The transmission of a small disturbance through a gas is an isentropic process where conditions return after passage.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "The transmission of a small disturbance through a gas is an isentropic process."
+      },
+      {
+        "id": "sound-speed-formula",
+        "point": "The speed of sound equals sqrt of gamma times gas constant times temperature.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "a = sqrt(gamma * R * T)"
+      },
+      {
+        "id": "absolute-temperature",
+        "point": "Temperature for the speed formula must be on an absolute scale such as Kelvin or Rankine.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "Notice that the temperature must be specified on an absolute scale (Kelvin or Rankine)."
+      },
+      {
+        "id": "mach-definition",
+        "point": "Aeronautical engineers define Mach number as the ratio of aircraft speed to speed of sound.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "Aeronautical engineers call the ratio of the aircraft’s speed to the speed of sound the Mach number, M."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "speed-of-sound",
+        "term": "speed of sound",
+        "gloss": "Speed at which a disturbance travels through gas, set by temperature and gas type.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "the speed of sound a is equal to the square root of the ratio of specific heat gamma (γ) times the gas constant R times the temperature T."
+      },
+      {
+        "id": "isentropic-process",
+        "term": "isentropic process",
+        "gloss": "Process where gas returns to original conditions after a disturbance passes.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "The transmission of a small disturbance through a gas is an isentropic process."
+      },
+      {
+        "id": "absolute-scale",
+        "term": "absolute scale",
+        "gloss": "Temperature scale that starts at absolute zero, such as Kelvin or Rankine.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "Notice that the temperature must be specified on an absolute scale (Kelvin or Rankine)."
+      },
+      {
+        "id": "mach-number",
+        "term": "Mach number",
+        "gloss": "Ratio of aircraft speed to the local speed of sound.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "Aeronautical engineers call the ratio of the aircraft’s speed to the speed of sound the Mach number, M."
+      },
+      {
+        "id": "gamma",
+        "term": "gamma",
+        "gloss": "Gamma is the ratio of specific heats for a gas type.",
+        "sourceId": "nasa-grc-speed-of-sound",
+        "quote": "a = sqrt(gamma * R * T)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "speed-of-sound-v1",
+      "specId": "nasa-grc-speed-of-sound-job-20261031103922-8ad67e8b",
+      "status": "passed",
+      "reason": "",
+      "revision": 3
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031103922-8ad67e8b:compare-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

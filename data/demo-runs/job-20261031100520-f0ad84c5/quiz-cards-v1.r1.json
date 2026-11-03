@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recognising core tools for guiding short term rates",
+    "cards": [
+      {
+        "id": "omo-definition",
+        "stem": "What does the text describe as the purpose of these market operations?",
+        "options": [
+          "the purchase and sale of securities in the open market by a central bank",
+          "the direct lending of funds to households for mortgages",
+          "the printing of paper currency for daily circulation",
+          "the collection of taxes for government revenue"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Open market operations (OMOs)--the purchase and sale of securities in the open market by a central bank--are a key tool",
+        "hint": "Focus on how the text defines the central bank action."
+      },
+      {
+        "id": "federal-funds-rate-def",
+        "stem": "How is the overnight interbank rate defined in the passage?",
+        "options": [
+          "the interest rate at which depository institutions lend reserve balances",
+          "the interest rate charged on long term government bonds",
+          "the fee for processing consumer checking accounts",
+          "the return paid on corporate equity investments"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "the federal funds rate--the interest rate at which depository institutions lend reserve balances to other depository institutions overnight",
+        "hint": "Look for the overnight lending description."
+      },
+      {
+        "id": "on-rrp-role",
+        "stem": "What role does the text assign to overnight reverse repurchase agreements?",
+        "options": [
+          "a supplementary policy tool",
+          "a permanent replacement for open market operations",
+          "a tax for funding government spending",
+          "a loan program for small businesses"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "overnight reverse repurchase agreements (ON RRPs)--a type of OMO--as a supplementary policy tool",
+        "hint": "Check how the passage labels this agreement type."
+      },
+      {
+        "id": "srp-ceiling-effect",
+        "stem": "What effect do standing repo operations have on rates according to the text?",
+        "options": [
+          "provide a ceiling on rates",
+          "eliminate the need for reserve balances",
+          "set a fixed price for long term securities",
+          "replace overnight lending between banks"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "SRP operations limit upward pressure and help provide a ceiling on rates to support the monetary policy implementation",
+        "hint": "Note what the text says about upward pressure."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100520-f0ad84c5:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "bf38edd8241147979a843df99b01da3c",
+    "usage": {
+      "promptTokens": 4160,
+      "completionTokens": 9531,
+      "reasoningTokens": 9071,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37704,
+    "estCostUSD": 0.04570675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100520-f0ad84c5:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Recognising core tools for guiding short term rates",
+    "sources": [
+      {
+        "id": "federalreserve-open-market-operations",
+        "title": "Open Market Operations — Board of Governors of the Federal Reserve System, Monetary Policy",
+        "locator": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Board of Governors of the Federal Reserve System, 'Open Market Operations'. Credit: Board of Governors of the Federal Reserve System. Per the Board's website Disclaimer, 'Unless otherwise indicated, information on Board's website is in the public domain and may be copied and distributed without permission. Please cite to the Board as the source of the information.' The Board of Governors of the Federal Reserve System has not reviewed, approved or endorsed this activity.",
+        "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "bf38edd8241147979a843df99b01da3c",
+      "runId": "job-20261031100520-f0ad84c5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:06:34.077Z"
+    },
+    "seed": 4025541413,
+    "cards": [
+      {
+        "id": "omo-definition",
+        "stem": "What does the text describe as the purpose of these market operations?",
+        "options": [
+          "the purchase and sale of securities in the open market by a central bank",
+          "the direct lending of funds to households for mortgages",
+          "the printing of paper currency for daily circulation",
+          "the collection of taxes for government revenue"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Open market operations (OMOs)--the purchase and sale of securities in the open market by a central bank--are a key tool",
+        "hint": "Focus on how the text defines the central bank action."
+      },
+      {
+        "id": "federal-funds-rate-def",
+        "stem": "How is the overnight interbank rate defined in the passage?",
+        "options": [
+          "the interest rate at which depository institutions lend reserve balances",
+          "the interest rate charged on long term government bonds",
+          "the fee for processing consumer checking accounts",
+          "the return paid on corporate equity investments"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "the federal funds rate--the interest rate at which depository institutions lend reserve balances to other depository institutions overnight",
+        "hint": "Look for the overnight lending description."
+      },
+      {
+        "id": "on-rrp-role",
+        "stem": "What role does the text assign to overnight reverse repurchase agreements?",
+        "options": [
+          "a supplementary policy tool",
+          "a permanent replacement for open market operations",
+          "a tax for funding government spending",
+          "a loan program for small businesses"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "overnight reverse repurchase agreements (ON RRPs)--a type of OMO--as a supplementary policy tool",
+        "hint": "Check how the passage labels this agreement type."
+      },
+      {
+        "id": "srp-ceiling-effect",
+        "stem": "What effect do standing repo operations have on rates according to the text?",
+        "options": [
+          "provide a ceiling on rates",
+          "eliminate the need for reserve balances",
+          "set a fixed price for long term securities",
+          "replace overnight lending between banks"
+        ],
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "SRP operations limit upward pressure and help provide a ceiling on rates to support the monetary policy implementation",
+        "hint": "Note what the text says about upward pressure."
+      }
+    ]
+  }
+}

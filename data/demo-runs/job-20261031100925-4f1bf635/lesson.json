@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031100925-4f1bf635",
+  "analysisRef": "job-20261031100925-4f1bf635/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100925-4f1bf635:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Gene expression uses transcription and translation to make proteins",
+    "sources": [
+      {
+        "id": "medlineplus-protein-production",
+        "title": "How do genes direct the production of proteins? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/howgeneswork/makingprotein/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "c477ae45c51062d816f0a0359713d0ba6c996d2278003e7209e3b7b222b0639b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "212c51f0a5da437295abca8b38ad0883",
+      "runId": "job-20261031100925-4f1bf635",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:10:11.529Z"
+    },
+    "seed": 761644893,
+    "headline": "Gene expression uses transcription and translation to make proteins",
+    "keyPoints": [
+      {
+        "id": "genes-to-proteins",
+        "point": "Most genes contain information needed to make functional proteins for the cell.",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Most genes contain the information needed to make functional molecules called proteins."
+      },
+      {
+        "id": "transcription-in-nucleus",
+        "point": "Transcription passes information stored in DNA to messenger RNA inside the nucleus.",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "During the process of transcription, the information stored in a gene's DNA is passed to a similar molecule called RNA"
+      },
+      {
+        "id": "translation-in-cytoplasm",
+        "point": "Translation in the cytoplasm uses ribosomes to read codons that code for amino acids.",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm."
+      },
+      {
+        "id": "central-dogma-flow",
+        "point": "The flow of information from DNA to RNA to proteins is known as the central dogma.",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "The flow of information from DNA to RNA to proteins is one of the fundamental principles of molecular biology."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "transcription",
+        "term": "transcription",
+        "gloss": "Process that passes information stored in DNA to RNA in the nucleus",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "During the process of transcription, the information stored in a gene's DNA is passed to a similar molecule called RNA"
+      },
+      {
+        "id": "translation",
+        "term": "translation",
+        "gloss": "Second step that takes place in the cytoplasm to build a protein",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm."
+      },
+      {
+        "id": "messenger-rna",
+        "term": "messenger RNA",
+        "gloss": "Type of RNA that carries information from DNA out of the nucleus to make a protein",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "is called messenger RNA (mRNA) because it carries the information"
+      },
+      {
+        "id": "codon",
+        "term": "codon",
+        "gloss": "Sequence of three nucleotides that codes for one particular amino acid",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Each sequence of three nucleotides, called a codon, usually codes for one particular amino acid."
+      },
+      {
+        "id": "ribosome",
+        "term": "ribosome",
+        "gloss": "Specialized complex that reads the sequence of messenger RNA nucleotides",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "The mRNA interacts with a specialized complex called a ribosome, which \"reads\" the sequence of mRNA nucleotides."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031100925-4f1bf635:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100925-4f1bf635:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

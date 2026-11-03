@@ -1,0 +1,211 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Checking hash table definitions and behavior",
+    "cards": [
+      {
+        "id": "card-collision-term",
+        "stem": "What term describes two keys mapping to the same position?",
+        "options": [
+          "collision",
+          "cluster",
+          "probe",
+          "bucket"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area.",
+        "hint": ""
+      },
+      {
+        "id": "card-complexity-behavior",
+        "stem": "How may hash table complexity behave if the table is big enough or grows?",
+        "options": [
+          "constant (Θ(1))",
+          "logarithmic",
+          "quadratic",
+          "exponential"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Complexity depends on the hash function and collision resolution scheme, but may be constant (Θ(1)) if the table is big enough or grows.",
+        "hint": ""
+      },
+      {
+        "id": "card-resolution-division",
+        "stem": "Which of these is listed as one of the three main divisions for resolution schemes?",
+        "options": [
+          "open addressing",
+          "binary search",
+          "merge sort",
+          "perfect hashing"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105127-502cd8c1:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9ae3b438fb8a459c9415e6ffd147bd36",
+    "usage": {
+      "promptTokens": 2879,
+      "completionTokens": 13532,
+      "reasoningTokens": 13204,
+      "cachedTokens": 0
+    },
+    "latencyMs": 72815,
+    "estCostUSD": 0.06110975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "card-dictionary-mapping",
+      "reason": "card failed Q-02, Q-05",
+      "checks": [
+        "Q-02",
+        "Q-05"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105127-502cd8c1:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Checking hash table definitions and behavior",
+    "sources": [
+      {
+        "id": "nist-dads-hash-table",
+        "title": "hash table — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/hashtab.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4af72aded8e18f670421243f39c32d314f524160bba1353a10d0271dc6e8e31"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9ae3b438fb8a459c9415e6ffd147bd36",
+      "runId": "job-20261031105127-502cd8c1",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:53:31.836Z"
+    },
+    "seed": 1791635301,
+    "cards": [
+      {
+        "id": "card-collision-term",
+        "stem": "What term describes two keys mapping to the same position?",
+        "options": [
+          "collision",
+          "cluster",
+          "probe",
+          "bucket"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area.",
+        "hint": ""
+      },
+      {
+        "id": "card-complexity-behavior",
+        "stem": "How may hash table complexity behave if the table is big enough or grows?",
+        "options": [
+          "constant (Θ(1))",
+          "logarithmic",
+          "quadratic",
+          "exponential"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Complexity depends on the hash function and collision resolution scheme, but may be constant (Θ(1)) if the table is big enough or grows.",
+        "hint": ""
+      },
+      {
+        "id": "card-resolution-division",
+        "stem": "Which of these is listed as one of the three main divisions for resolution schemes?",
+        "options": [
+          "open addressing",
+          "binary search",
+          "merge sort",
+          "perfect hashing"
+        ],
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area.",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,440 @@
+{
+  "gen": {
+    "figureId": "medlineplus-dna-structure-1",
+    "hint": "Match each label to the coloured part it names in the diagram.",
+    "parts": [
+      {
+        "id": "base-pairs",
+        "labelX1": 350,
+        "labelX2": 532,
+        "labelY1": 308,
+        "labelY2": 340,
+        "name": "Base pairs",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 250,
+        "y": 500
+      },
+      {
+        "id": "sugar-phosphate-backbone",
+        "labelX1": 462,
+        "labelX2": 738,
+        "labelY1": 714,
+        "labelY2": 778,
+        "name": "Sugar-phosphate backbone",
+        "quote": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 395,
+        "y": 720
+      },
+      {
+        "id": "adenine",
+        "labelX1": 548,
+        "labelX2": 662,
+        "labelY1": 392,
+        "labelY2": 421,
+        "name": "Adenine",
+        "quote": "stored as a code made up of four chemical bases: adenine (A), guanine (G),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 642,
+        "y": 321
+      },
+      {
+        "id": "thymine",
+        "labelX1": 713,
+        "labelX2": 830,
+        "labelY1": 392,
+        "labelY2": 421,
+        "name": "Thymine",
+        "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 800,
+        "y": 321
+      },
+      {
+        "id": "guanine",
+        "labelX1": 548,
+        "labelX2": 668,
+        "labelY1": 553,
+        "labelY2": 582,
+        "name": "Guanine",
+        "quote": "made up of four chemical bases: adenine (A), guanine (G), cytosine (C),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 640,
+        "y": 502
+      },
+      {
+        "id": "cytosine",
+        "labelX1": 713,
+        "labelX2": 830,
+        "labelY1": 553,
+        "labelY2": 582,
+        "name": "Cytosine",
+        "quote": "chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 800,
+        "y": 502
+      }
+    ],
+    "schemaVersion": "label-diagram-v1",
+    "title": "Parts of the DNA double helix"
+  },
+  "report": {
+    "artifactId": "job-20261031081105-21355f66:label-diagram-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every label-diagram title, part id and part name shape is within the frozen limits"
+      },
+      {
+        "id": "LD-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 part quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LD-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every one of the 6 part name(s) occurs as a whole phrase in its own quote, case-insensitive (name-in-quote)"
+      },
+      {
+        "id": "LD-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "figureId \"medlineplus-dna-structure-1\" is one of the source's 1 library figure(s) (figure-valid)"
+      },
+      {
+        "id": "LD-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 6 part point(s) are integers within 0..1000 and none lies inside any printed-label box (points-valid)"
+      },
+      {
+        "id": "LD-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every label box is the all-zero sentinel or well-formed inside 0..1000, no two boxes overlap, and 6 part(s) carry a box (the figure prints its labels; at least 3 required) (label-boxes-valid)"
+      },
+      {
+        "id": "LD-06",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "segmentation found exactly one region for each of the 6 parts, every region contains its part's point at image pixels, and every region covers between 0.05% and 50% of the image (regions-found)"
+      },
+      {
+        "id": "LD-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 15 region pair(s) are distinct: the largest pairwise IoU is 0.57, at most 0.6 (regions-distinct)"
+      },
+      {
+        "id": "LD-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the AI-written title and hint appears on the page (N-01); part names are bound to their quotes by LD-02 (numbers-checkable)"
+      },
+      {
+        "id": "LD-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "6 parts (within 3-8) with distinct ids and distinct names (counts-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "label-diagram-v1: no weakening — every one of the 7 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a19104-8003-720e-a814-78b64c80c3d6",
+    "usage": {
+      "promptTokens": 5842,
+      "completionTokens": 4201,
+      "reasoningTokens": 3665,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17843,
+    "estCostUSD": 0.02515675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "regions": [
+    {
+      "partId": "base-pairs",
+      "x1": 84,
+      "y1": 51,
+      "x2": 238,
+      "y2": 560,
+      "confidence": 0.734375
+    },
+    {
+      "partId": "sugar-phosphate-backbone",
+      "x1": 19,
+      "y1": 68,
+      "x2": 302,
+      "y2": 566,
+      "confidence": 0.1484375
+    },
+    {
+      "partId": "adenine",
+      "x1": 347,
+      "y1": 181,
+      "x2": 524,
+      "y2": 199,
+      "confidence": 0.9375
+    },
+    {
+      "partId": "thymine",
+      "x1": 347,
+      "y1": 184,
+      "x2": 469,
+      "y2": 199,
+      "confidence": 0.91015625
+    },
+    {
+      "partId": "guanine",
+      "x1": 351,
+      "y1": 292,
+      "x2": 528,
+      "y2": 309,
+      "confidence": 0.25390625
+    },
+    {
+      "partId": "cytosine",
+      "x1": 346,
+      "y1": 277,
+      "x2": 525,
+      "y2": 298,
+      "confidence": 0.2197265625
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031081105-21355f66:label-diagram-v1:r2",
+    "componentId": "label-diagram-v1",
+    "title": "Parts of the DNA double helix",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19104-8003-720e-a814-78b64c80c3d6",
+      "runId": "job-20261031081105-21355f66",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T08:12:36.196Z"
+    },
+    "seed": 1238016993,
+    "figureId": "medlineplus-dna-structure-1",
+    "parts": [
+      {
+        "id": "base-pairs",
+        "labelX1": 350,
+        "labelX2": 532,
+        "labelY1": 308,
+        "labelY2": 340,
+        "name": "Base pairs",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 250,
+        "y": 500
+      },
+      {
+        "id": "sugar-phosphate-backbone",
+        "labelX1": 462,
+        "labelX2": 738,
+        "labelY1": 714,
+        "labelY2": 778,
+        "name": "Sugar-phosphate backbone",
+        "quote": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 395,
+        "y": 720
+      },
+      {
+        "id": "adenine",
+        "labelX1": 548,
+        "labelX2": 662,
+        "labelY1": 392,
+        "labelY2": 421,
+        "name": "Adenine",
+        "quote": "stored as a code made up of four chemical bases: adenine (A), guanine (G),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 642,
+        "y": 321
+      },
+      {
+        "id": "thymine",
+        "labelX1": 713,
+        "labelX2": 830,
+        "labelY1": 392,
+        "labelY2": 421,
+        "name": "Thymine",
+        "quote": "four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 800,
+        "y": 321
+      },
+      {
+        "id": "guanine",
+        "labelX1": 548,
+        "labelX2": 668,
+        "labelY1": 553,
+        "labelY2": 582,
+        "name": "Guanine",
+        "quote": "made up of four chemical bases: adenine (A), guanine (G), cytosine (C),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 640,
+        "y": 502
+      },
+      {
+        "id": "cytosine",
+        "labelX1": 713,
+        "labelX2": 830,
+        "labelY1": 553,
+        "labelY2": 582,
+        "name": "Cytosine",
+        "quote": "chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 800,
+        "y": 502
+      }
+    ],
+    "hint": "Match each label to the coloured part it names in the diagram.",
+    "figure": {
+      "id": "medlineplus-dna-structure-1",
+      "width": 600,
+      "height": 600,
+      "caption": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+      "credit": "Credit: U.S. National Library of Medicine",
+      "license": "U.S. Government work (U.S. National Library of Medicine), public domain",
+      "labelsInImage": true,
+      "labelBoxes": [
+        {
+          "x1": 235,
+          "y1": 180,
+          "x2": 327,
+          "y2": 203
+        },
+        {
+          "x1": 454,
+          "y1": 209,
+          "x2": 528,
+          "y2": 233
+        },
+        {
+          "x1": 354,
+          "y1": 210,
+          "x2": 426,
+          "y2": 230
+        },
+        {
+          "x1": 354,
+          "y1": 304,
+          "x2": 427,
+          "y2": 324
+        },
+        {
+          "x1": 454,
+          "y1": 304,
+          "x2": 530,
+          "y2": 327
+        },
+        {
+          "x1": 304,
+          "y1": 401,
+          "x2": 448,
+          "y2": 441
+        },
+        {
+          "x1": 304,
+          "y1": 421,
+          "x2": 387,
+          "y2": 440
+        }
+      ]
+    },
+    "regions": [
+      {
+        "partId": "base-pairs",
+        "x1": 84,
+        "y1": 51,
+        "x2": 238,
+        "y2": 560,
+        "confidence": 0.734375
+      },
+      {
+        "partId": "sugar-phosphate-backbone",
+        "x1": 19,
+        "y1": 68,
+        "x2": 302,
+        "y2": 566,
+        "confidence": 0.1484375
+      },
+      {
+        "partId": "adenine",
+        "x1": 347,
+        "y1": 181,
+        "x2": 524,
+        "y2": 199,
+        "confidence": 0.9375
+      },
+      {
+        "partId": "thymine",
+        "x1": 347,
+        "y1": 184,
+        "x2": 469,
+        "y2": 199,
+        "confidence": 0.91015625
+      },
+      {
+        "partId": "guanine",
+        "x1": 351,
+        "y1": 292,
+        "x2": 528,
+        "y2": 309,
+        "confidence": 0.25390625
+      },
+      {
+        "partId": "cytosine",
+        "x1": 346,
+        "y1": 277,
+        "x2": 525,
+        "y2": 298,
+        "confidence": 0.2197265625
+      }
+    ]
+  }
+}

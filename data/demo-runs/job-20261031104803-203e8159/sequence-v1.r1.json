@@ -1,0 +1,196 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Order the framework functions",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the life cycle order shown in the framework core",
+    "steps": [
+      {
+        "id": "govern-step",
+        "label": "Establish governance for decisions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "with added emphasis on governance as well as supply chains",
+        "orderHint": "Start with strategy then move through protection to recovery"
+      },
+      {
+        "id": "identify-step",
+        "label": "Identify organizational assets and risks",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "six key functions: Identify,",
+        "orderHint": ""
+      },
+      {
+        "id": "protect-step",
+        "label": "Protect critical systems and data",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Protect,",
+        "orderHint": ""
+      },
+      {
+        "id": "respond-step",
+        "label": "Respond to detected incidents",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Respond and",
+        "orderHint": ""
+      },
+      {
+        "id": "recover-step",
+        "label": "Recover services after disruption",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Recover, along with CSF 2.0’s newly added Govern function",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104803-203e8159:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ce0414c0a8cd4aaa950f9e9eafb3e81d",
+    "usage": {
+      "promptTokens": 3641,
+      "completionTokens": 12034,
+      "reasoningTokens": 11751,
+      "cachedTokens": 0
+    },
+    "latencyMs": 72135,
+    "estCostUSD": 0.05569575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "detect-step",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104803-203e8159:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Order the framework functions",
+    "sources": [
+      {
+        "id": "nist-csf-2-0-release",
+        "title": "NIST Releases Version 2.0 of Landmark Cybersecurity Framework — NIST News",
+        "locator": "https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, 'NIST Releases Version 2.0 of Landmark Cybersecurity Framework' (NIST News). Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4c7ce2ca7d3c035aeb3f9dac0d3c8d25b6931ef97d0f90e3896e16d384eb6ee"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ce0414c0a8cd4aaa950f9e9eafb3e81d",
+      "runId": "job-20261031104803-203e8159",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:50:54.198Z"
+    },
+    "seed": 805905208,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the life cycle order shown in the framework core",
+    "steps": [
+      {
+        "id": "govern-step",
+        "label": "Establish governance for decisions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "with added emphasis on governance as well as supply chains",
+        "orderHint": "Start with strategy then move through protection to recovery"
+      },
+      {
+        "id": "identify-step",
+        "label": "Identify organizational assets and risks",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "six key functions: Identify,",
+        "orderHint": ""
+      },
+      {
+        "id": "protect-step",
+        "label": "Protect critical systems and data",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Protect,",
+        "orderHint": ""
+      },
+      {
+        "id": "respond-step",
+        "label": "Respond to detected incidents",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Respond and",
+        "orderHint": ""
+      },
+      {
+        "id": "recover-step",
+        "label": "Recover services after disruption",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "Recover, along with CSF 2.0’s newly added Govern function",
+        "orderHint": ""
+      }
+    ]
+  }
+}

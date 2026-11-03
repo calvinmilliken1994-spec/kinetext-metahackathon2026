@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105222-c352b4a3",
+  "analysisRef": "job-20261031105222-c352b4a3/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105222-c352b4a3:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Merge sort uses divide and conquer to sort in theta n log n time",
+    "sources": [
+      {
+        "id": "nist-dads-merge-sort",
+        "title": "merge sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/mergesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'merge sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "88d2f5db27bedc35273a07953f6abb257479cb61e9b5a25e95adde4c55970b46"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "376bcd02e11740479936a229743bb614",
+      "runId": "job-20261031105222-c352b4a3",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:53:29.822Z"
+    },
+    "seed": 3890692410,
+    "headline": "Merge sort uses divide and conquer to sort in theta n log n time",
+    "keyPoints": [
+      {
+        "id": "definition-and-merge",
+        "point": "Merge sort splits items into two groups, recursively sorts each group, and merges them into a final sorted sequence.",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "A sort algorithm that splits the items to be sorted into two groups, recursively sorts each group, and merges them into a final, sorted sequence."
+      },
+      {
+        "id": "runtime-theta",
+        "point": "Merge sort recursively merges groups into a sorted sequence and its run time is Theta n log n.",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "recursively sorts each group, and merges them into a final, sorted sequence. Run time is Θ(n log n)."
+      },
+      {
+        "id": "divide-and-conquer-relation",
+        "point": "Merge sort is an aggregate child that uses the divide and conquer approach as part of its design.",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Aggregate child (... is a part of or used in me.) divide and conquer."
+      },
+      {
+        "id": "specialization-variants",
+        "point": "Specializations of merge sort include balanced k-way merge sort and polyphase merge sort variants.",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Specialization (... is a kind of me.) k-way merge sort, balanced k-way merge sort, polyphase merge sort."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "merge-sort",
+        "term": "merge sort",
+        "gloss": "sort algorithm that can merge sorted groups together",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Specialization (... is a kind of me.) k-way merge sort, balanced k-way merge sort, polyphase merge sort."
+      },
+      {
+        "id": "run-time",
+        "term": "Run time",
+        "gloss": "amount of time used that grows as theta n log n",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Run time is Θ(n log n)."
+      },
+      {
+        "id": "divide-and-conquer",
+        "term": "divide and conquer",
+        "gloss": "general strategy where a problem is divide and conquer by splitting into parts",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Aggregate child (... is a part of or used in me.) divide and conquer."
+      },
+      {
+        "id": "k-way-merge-sort",
+        "term": "k-way merge sort",
+        "gloss": "variant that can merge several sorted groups at once",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Specialization (... is a kind of me.) k-way merge sort, balanced k-way merge sort, polyphase merge sort."
+      },
+      {
+        "id": "sort-algorithm",
+        "term": "sort algorithm",
+        "gloss": "procedure that splits items to be sorted into groups and sorts them",
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "A sort algorithm that splits the items to be sorted into two groups, recursively sorts each group, and merges them into a final, sorted sequence."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031105222-c352b4a3:algorithm-trace-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105222-c352b4a3:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: card-runtime-theta (Q-06).",
+      "revision": 1
+    }
+  ]
+}

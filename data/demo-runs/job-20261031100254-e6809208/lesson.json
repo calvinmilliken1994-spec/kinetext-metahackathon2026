@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031100254-e6809208",
+  "analysisRef": "job-20261031100254-e6809208/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100254-e6809208:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Building emergency savings and learning the benefit of starting early",
+    "sources": [
+      {
+        "id": "cfpb-teenagers-and-saving",
+        "title": "Teenagers and saving — Consumer Financial Protection Bureau, Money as You Grow",
+        "locator": "https://www.consumerfinance.gov/consumer-tools/money-as-you-grow/teen-young-adult/explore-saving/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Money as You Grow, 'Teenagers and saving'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "a438468abdb47ce3f3afb4ed9e5c4bafa5ebf39e76f40973647383ef8df00b58"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9c10ad8c78984560aec0ccdb083305ec",
+      "runId": "job-20261031100254-e6809208",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:04:12.896Z"
+    },
+    "seed": 1781769844,
+    "headline": "Building emergency savings and learning the benefit of starting early",
+    "keyPoints": [
+      {
+        "id": "saving-ten-percent-rule",
+        "point": "Students learn a good rule is to save 10 percent of earnings and keep three months of living expenses for emergencies.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "A good rule to live by is to save 10 percent of what you earn"
+      },
+      {
+        "id": "track-spending-estimate",
+        "point": "Teens learn to track what they spend in a month to estimate living expenses and plan savings from each paycheck.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Help your teen track what they actually spend in a month."
+      },
+      {
+        "id": "compound-interest-earns-interest",
+        "point": "Students learn compound interest means earning interest on both saved money and previously earned interest, which grows faster when started early.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+      },
+      {
+        "id": "early-start-hundred-dollars",
+        "point": "Setting aside $100 every year starting at age 14 can grow to about $23,000 by age 65 at 5 percent, more than starting at age 35.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "If they set aside $100 every year starting at age 14, they'd have about $23,000 at age 65."
+      },
+      {
+        "id": "employer-matching-contributions",
+        "point": "Some employers provide matching contributions for a 401(k) and it is smart to save enough to receive the maximum matching contribution.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Some employers provide matching contributions as an incentive to save, so it’s smart to save at least enough for the maximum matching contribution."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "savings-account",
+        "term": "savings account",
+        "gloss": "Account where money is kept readily available for emergency expenses and can avoid high interest debt.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Having money in a savings account can help your child avoid having to rely on credit cards"
+      },
+      {
+        "id": "compound-interest",
+        "term": "compound interest",
+        "gloss": "Interest earned on both the money saved and the interest previously earned.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Compound interest is when your child earns interest on both the money they save and the interest they earn."
+      },
+      {
+        "id": "living-expenses",
+        "term": "living expenses",
+        "gloss": "Money needed for monthly living expenses that determines the size of emergency savings.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "have at least three months’ worth of living expenses saved up in case of an emergency"
+      },
+      {
+        "id": "401k",
+        "term": "401(k)",
+        "gloss": "Workplace retirement account where employers sometimes offer matching contributions as an incentive to save.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Explain to your child that once they start a job, they may be offered a retirement account at work called a 401(k)."
+      },
+      {
+        "id": "federally-insured",
+        "term": "federally insured",
+        "gloss": "Protection for money kept in a bank or credit union that is federally insured as a safe place.",
+        "sourceId": "cfpb-teenagers-and-saving",
+        "quote": "Talk about how to keep money in a safe place, like a federally insured bank or credit union."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100254-e6809208:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: card-10-percent-rule (Q-01, Q-06).",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031100254-e6809208:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

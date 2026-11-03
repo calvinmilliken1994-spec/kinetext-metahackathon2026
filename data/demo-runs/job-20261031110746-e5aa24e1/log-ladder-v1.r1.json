@@ -1,0 +1,177 @@
+{
+  "gen": {
+    "schemaVersion": "log-ladder-v1",
+    "title": "Understanding magnitude and amplitude",
+    "quantity": "magnitude",
+    "factor": 10,
+    "factorText": "tenfold",
+    "effectPhrase": "measured amplitude",
+    "increasing": true,
+    "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+    "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude as measured on a seismogram.",
+    "rungs": [
+      {
+        "id": "rung-magnitude-5-3",
+        "label": "Magnitude 5.3 moderate earthquake",
+        "value": 5.3,
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "a magnitude 5.3 is a moderate earthquake"
+      },
+      {
+        "id": "rung-magnitude-6-3",
+        "label": "Magnitude 6.3 strong earthquake",
+        "value": 6.3,
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "a 6.3 is a strong earthquake"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-5-3-to-6-3",
+        "fromValue": 5.3,
+        "toValue": 6.3
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110746-e5aa24e1:log-ladder-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every log-ladder title, page-word field, rung/case count, id and label shape is within the frozen limits"
+      },
+      {
+        "id": "LOG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LOG-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote states the factor in the page's own words: \"tenfold\" occurs in the quote and means 10 per whole step (factor-stated)"
+      },
+      {
+        "id": "LOG-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote names the scale \"magnitude\" as a whole phrase (quantity-in-quote)"
+      },
+      {
+        "id": "LOG-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 rung value(s) occur in their own quote as the same whole number, in the form the page prints (rung-values-in-quote)"
+      },
+      {
+        "id": "LOG-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 2 rung values are distinct points on the scale (rungs-distinct)"
+      },
+      {
+        "id": "LOG-06",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 1 case(s) move between distinct values inside the rung range 5.3 to 6.3, and every ratio our engine computes (5.3 → 6.3 is 10 times) stays within 1000000000000 (cases-valid)"
+      },
+      {
+        "id": "LOG-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the scale name, the factor wording, the effect phrase and the rung labels appears on the cited page as that whole number (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "aa7d7560d56c4f469521181b3d2d8725",
+    "usage": {
+      "promptTokens": 4520,
+      "completionTokens": 8409,
+      "reasoningTokens": 8190,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51760,
+    "estCostUSD": 0.04138825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110746-e5aa24e1:log-ladder-v1:r1",
+    "componentId": "log-ladder-v1",
+    "title": "Understanding magnitude and amplitude",
+    "sources": [
+      {
+        "id": "usgs-earthquake-magnitude-energy-intensity",
+        "title": "Earthquake Magnitude, Energy Release, and Shaking Intensity — USGS Earthquake Hazards Program",
+        "locator": "https://www.usgs.gov/programs/earthquake-hazards/earthquake-magnitude-energy-release-and-shaking-intensity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Earthquake Hazards Program, 'Earthquake Magnitude, Energy Release, and Shaking Intensity'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "aa7d7560d56c4f469521181b3d2d8725",
+      "runId": "job-20261031110746-e5aa24e1",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:09:51.773Z"
+    },
+    "seed": 648411425,
+    "quantity": "magnitude",
+    "factor": 10,
+    "factorText": "tenfold",
+    "effectPhrase": "measured amplitude",
+    "increasing": true,
+    "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+    "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude as measured on a seismogram.",
+    "rungs": [
+      {
+        "id": "rung-magnitude-5-3",
+        "label": "Magnitude 5.3 moderate earthquake",
+        "value": 5.3,
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "a magnitude 5.3 is a moderate earthquake"
+      },
+      {
+        "id": "rung-magnitude-6-3",
+        "label": "Magnitude 6.3 strong earthquake",
+        "value": 6.3,
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "a 6.3 is a strong earthquake"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-5-3-to-6-3",
+        "fromValue": 5.3,
+        "toValue": 6.3
+      }
+    ]
+  }
+}

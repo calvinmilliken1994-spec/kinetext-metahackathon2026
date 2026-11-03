@@ -1,0 +1,255 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort credentials by authentication factor",
+    "groups": [
+      {
+        "id": "something-you-know",
+        "label": "something you know"
+      },
+      {
+        "id": "something-you-have",
+        "label": "something you have"
+      },
+      {
+        "id": "something-you-are",
+        "label": "something you are"
+      }
+    ],
+    "items": [
+      {
+        "id": "passcode",
+        "label": "passcode",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "pin",
+        "label": "PIN",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "answer-to-security-question",
+        "label": "answer to a security question",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "one-time-verification-passcode",
+        "label": "one-time verification passcode",
+        "groupId": "something-you-have",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you have — like a one-time verification passcode you get by text, email, or from an authenticator app; or a security key"
+      },
+      {
+        "id": "security-key",
+        "label": "security key",
+        "groupId": "something-you-have",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you have — like a one-time verification passcode you get by text, email, or from an authenticator app; or a security key"
+      },
+      {
+        "id": "fingerprint",
+        "label": "fingerprint",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      },
+      {
+        "id": "retina",
+        "label": "retina",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      },
+      {
+        "id": "face",
+        "label": "face",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100603-3a2687b8:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3f782e27e8864876a7296fb646799e27",
+    "usage": {
+      "promptTokens": 3400,
+      "completionTokens": 5953,
+      "reasoningTokens": 5468,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25931,
+    "estCostUSD": 0.02955025,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100603-3a2687b8:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort credentials by authentication factor",
+    "sources": [
+      {
+        "id": "ftc-phishing-scams",
+        "title": "How To Recognize and Avoid Phishing Scams — FTC Consumer Advice",
+        "locator": "https://consumer.ftc.gov/articles/how-recognize-avoid-phishing-scams",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: FTC Consumer Advice, 'How To Recognize and Avoid Phishing Scams'. Source: United States Federal Trade Commission, www.ftc.gov. Per the FTC Website Policy, 'Most material on the FTC's website is considered work of the United States Government, meaning that the material is in the public domain and is not subject to copyright restrictions (17 U.S.C. 105). The use, duplication, or redistribution of such material should be accompanied by appropriate attribution, where feasible.' The Federal Trade Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "00f4ee7c44edc99f06bb6aa3167c8aed6947b565d62c5d776486741caa206b0c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3f782e27e8864876a7296fb646799e27",
+      "runId": "job-20261031100603-3a2687b8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:07:22.210Z"
+    },
+    "seed": 4022872578,
+    "groups": [
+      {
+        "id": "something-you-know",
+        "label": "something you know"
+      },
+      {
+        "id": "something-you-have",
+        "label": "something you have"
+      },
+      {
+        "id": "something-you-are",
+        "label": "something you are"
+      }
+    ],
+    "items": [
+      {
+        "id": "passcode",
+        "label": "passcode",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "pin",
+        "label": "PIN",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "answer-to-security-question",
+        "label": "answer to a security question",
+        "groupId": "something-you-know",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you know — like a passcode, a PIN, or the answer to a security question."
+      },
+      {
+        "id": "one-time-verification-passcode",
+        "label": "one-time verification passcode",
+        "groupId": "something-you-have",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you have — like a one-time verification passcode you get by text, email, or from an authenticator app; or a security key"
+      },
+      {
+        "id": "security-key",
+        "label": "security key",
+        "groupId": "something-you-have",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you have — like a one-time verification passcode you get by text, email, or from an authenticator app; or a security key"
+      },
+      {
+        "id": "fingerprint",
+        "label": "fingerprint",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      },
+      {
+        "id": "retina",
+        "label": "retina",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      },
+      {
+        "id": "face",
+        "label": "face",
+        "groupId": "something-you-are",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "something you are — like a scan of your fingerprint, your retina, or your face"
+      }
+    ]
+  }
+}

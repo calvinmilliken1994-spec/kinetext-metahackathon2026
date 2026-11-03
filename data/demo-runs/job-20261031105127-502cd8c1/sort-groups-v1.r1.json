@@ -1,0 +1,275 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort hashing variants and resolution techniques",
+    "groups": [
+      {
+        "id": "specialization",
+        "label": "Specialization"
+      },
+      {
+        "id": "aggregate-child",
+        "label": "Aggregate child"
+      }
+    ],
+    "items": [
+      {
+        "id": "perfect-hashing",
+        "label": "perfect hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "dynamic-hashing",
+        "label": "dynamic hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "2-left-hashing",
+        "label": "2-left hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "cuckoo-hashing",
+        "label": "cuckoo hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "2-choice-hashing",
+        "label": "2-choice hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "hashbelt",
+        "label": "hashbelt",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "coalesced-chaining",
+        "label": "coalesced chaining",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "linear-probing",
+        "label": "linear probing",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "double-hashing",
+        "label": "double hashing",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "separate-chaining",
+        "label": "separate chaining",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "separate chaining, direct chaining, clustering."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105127-502cd8c1:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 10 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "82271f364e874c20a3249109c9ceb032",
+    "usage": {
+      "promptTokens": 2848,
+      "completionTokens": 10271,
+      "reasoningTokens": 9726,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52049,
+    "estCostUSD": 0.04721175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105127-502cd8c1:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort hashing variants and resolution techniques",
+    "sources": [
+      {
+        "id": "nist-dads-hash-table",
+        "title": "hash table — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/hashtab.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4af72aded8e18f670421243f39c32d314f524160bba1353a10d0271dc6e8e31"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "82271f364e874c20a3249109c9ceb032",
+      "runId": "job-20261031105127-502cd8c1",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:53:11.092Z"
+    },
+    "seed": 605796349,
+    "groups": [
+      {
+        "id": "specialization",
+        "label": "Specialization"
+      },
+      {
+        "id": "aggregate-child",
+        "label": "Aggregate child"
+      }
+    ],
+    "items": [
+      {
+        "id": "perfect-hashing",
+        "label": "perfect hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "dynamic-hashing",
+        "label": "dynamic hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "2-left-hashing",
+        "label": "2-left hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "cuckoo-hashing",
+        "label": "cuckoo hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "2-choice-hashing",
+        "label": "2-choice hashing",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "hashbelt",
+        "label": "hashbelt",
+        "groupId": "specialization",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt."
+      },
+      {
+        "id": "coalesced-chaining",
+        "label": "coalesced chaining",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "linear-probing",
+        "label": "linear probing",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "double-hashing",
+        "label": "double hashing",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "coalesced chaining, linear probing, double hashing, quadratic probing"
+      },
+      {
+        "id": "separate-chaining",
+        "label": "separate chaining",
+        "groupId": "aggregate-child",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "separate chaining, direct chaining, clustering."
+      }
+    ]
+  }
+}

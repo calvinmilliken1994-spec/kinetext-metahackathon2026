@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-electoral-college-key-dates-job-20261031101734-fca565b7",
+  "title": "Electoral College: From Election Day to Inauguration",
+  "learningObjectives": [
+    "Explain how the popular vote is used to appoint electors who later vote for President and Vice President.",
+    "Describe the sequence of certification, elector voting, and transmission of electoral votes.",
+    "Identify the role of Congress in counting electoral votes and the final transfer of office on Inauguration Day."
+  ],
+  "sources": [
+    {
+      "id": "nara-electoral-college-key-dates",
+      "title": "Electoral College Timeline of Events — National Archives, U.S. Electoral College",
+      "locator": "https://www.archives.gov/electoral-college/key-dates",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'Electoral College Timeline of Events'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "9ac1912fead4e5f46874047ee700d8f03c22e505cb77aad9d7230aaf85f4bb98"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Voters do not directly elect the President; the popular vote determines which electors a State will appoint.",
+      "evidence": [
+        {
+          "sourceId": "nara-electoral-college-key-dates",
+          "quote": "The States use these general election results (also known as the popular vote) to appoint their electors."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Electors meet in their States to cast separate ballots for President and Vice President, and Congress later counts the votes in joint session.",
+      "evidence": [
+        {
+          "sourceId": "nara-electoral-college-key-dates",
+          "quote": "The electors meet in their respective States and vote for President and Vice President on separate ballots."
+        },
+        {
+          "sourceId": "nara-electoral-college-key-dates",
+          "quote": "Congress meets in joint session to count the electoral votes."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Election Day – Voters Help Determine Electors",
+        "year": 2024,
+        "month": 11,
+        "day": 5,
+        "evidence": [
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "November 5, 2024—Election Day"
+          },
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "During the general election your vote helps determine your State's electors."
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Electors Vote in Their States",
+        "year": 2024,
+        "month": 12,
+        "day": 17,
+        "evidence": [
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "December 17, 2024—electors vote in their States"
+          },
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "The electors meet in their respective States and vote for President and Vice President on separate ballots."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Electoral Votes Arrive",
+        "year": 2024,
+        "month": 12,
+        "day": 25,
+        "evidence": [
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "December 25, 2024—electoral votes arrive"
+          },
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "Electoral votes must be received by the President of the Senate and the Archivist no later than the fourth Wednesday in December."
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Congress Counts the Electoral Votes",
+        "year": 2025,
+        "month": 1,
+        "day": 6,
+        "evidence": [
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "January 6, 2025—Congress counts the electoral votes"
+          },
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "Congress meets in joint session to count the electoral votes."
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Inauguration Day – Oath of Office",
+        "year": 2025,
+        "month": 1,
+        "day": 20,
+        "evidence": [
+          {
+            "sourceId": "nara-electoral-college-key-dates",
+            "quote": "January 20, 2025 at Noon—Inauguration Day"
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Electoral College Process",
+      "settingLabel": "United States, 2024–2025"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Election before electors vote",
+      "earlierEventId": "e1",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Certificates issued before votes arrive",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Electors vote before Congress counts",
+      "earlierEventId": "e3",
+      "laterEventId": "e5"
+    },
+    {
+      "name": "Congress count before inauguration",
+      "earlierEventId": "e5",
+      "laterEventId": "e6"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Election Day or Congress counting the electoral votes?",
+      "earlierEventId": "e1",
+      "laterEventId": "e5"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: electors voting in their States or Inauguration Day?",
+      "earlierEventId": "e3",
+      "laterEventId": "e6"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: electoral votes arriving or Inauguration Day?",
+      "earlierEventId": "e4",
+      "laterEventId": "e6"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4467eea077f547b69c6d01368dc5b188",
+    "runId": "job-20261031101734-fca565b7",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:19:41.412Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

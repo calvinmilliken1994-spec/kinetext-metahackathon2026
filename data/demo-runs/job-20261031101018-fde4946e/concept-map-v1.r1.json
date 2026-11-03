@@ -1,0 +1,208 @@
+{
+  "gen": {
+    "schemaVersion": "concept-map-v1",
+    "title": "How the endoplasmic reticulum and Golgi apparatus work together",
+    "nodes": [
+      {
+        "id": "cell",
+        "label": "Cell"
+      },
+      {
+        "id": "endoplasmic-reticulum",
+        "label": "Endoplasmic reticulum"
+      },
+      {
+        "id": "golgi-apparatus",
+        "label": "Golgi apparatus"
+      },
+      {
+        "id": "ribosomes",
+        "label": "Ribosomes"
+      }
+    ],
+    "links": [
+      {
+        "id": "golgi-follows-er",
+        "fromId": "golgi-apparatus",
+        "toId": "endoplasmic-reticulum",
+        "relation": "follows",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The Golgi apparatus packages molecules processed by the endoplasmic reticulum to be transported out of the cell."
+      },
+      {
+        "id": "er-transports-cell",
+        "fromId": "endoplasmic-reticulum",
+        "toId": "cell",
+        "relation": "uses",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The endoplasmic reticulum also transports these molecules to their specific destinations either inside or outside the cell."
+      },
+      {
+        "id": "ribosomes-linked-er",
+        "fromId": "ribosomes",
+        "toId": "endoplasmic-reticulum",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "These organelles can float freely in the cytoplasm or be connected to the endoplasmic reticulum (see above)."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101018-fde4946e:concept-map-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every link has one endpoint label in its quote and the other in the quote or the same source paragraph (endpoints-in-quote; paragraph-level co-mention without a stated link is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "links[0] (golgi-follows-er): the relation \"follows\" is not grounded — neither the relation phrase nor one of its trigger words (follow, follows, followed, following, after, next, ...) occurs in the quote or its source sentence (relation-in-quote); links[1] (er-transports-cell): the relation \"uses\" is not grounded — neither the relation phrase nor one of its trigger words (use, uses, used, using, times, multiplied, ...) occurs in the quote or its source sentence (relation-in-quote); links[2] (ribosomes-linked-er): the relation \"is part of\" is not grounded — neither the relation phrase nor one of its trigger words (part of, parts of, member of, includes, include, including, ...) occurs in the quote or its source sentence (relation-in-quote)",
+        "path": "/links/0/relation",
+        "affected": [
+          "/links/0/relation",
+          "/links/0/quote",
+          "/links/1/relation",
+          "/links/1/quote",
+          "/links/2/relation",
+          "/links/2/quote"
+        ]
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 4 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 4 (4-8) and links 3 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "72041e3d7cd243049c687eb79e05ad42",
+    "usage": {
+      "promptTokens": 2912,
+      "completionTokens": 10332,
+      "reasoningTokens": 10042,
+      "cachedTokens": 0
+    },
+    "latencyMs": 53778,
+    "estCostUSD": 0.047551,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101018-fde4946e:concept-map-v1:r1",
+    "componentId": "concept-map-v1",
+    "title": "How the endoplasmic reticulum and Golgi apparatus work together",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-cell",
+        "title": "What is a cell? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/cell/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "e1e13e682d36c67bceb40f4665d1bb179174796619028f4cd49b9ec874b4f2b3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "72041e3d7cd243049c687eb79e05ad42",
+      "runId": "job-20261031101018-fde4946e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:59.295Z"
+    },
+    "seed": 3080039570,
+    "nodes": [
+      {
+        "id": "cell",
+        "label": "Cell"
+      },
+      {
+        "id": "endoplasmic-reticulum",
+        "label": "Endoplasmic reticulum"
+      },
+      {
+        "id": "golgi-apparatus",
+        "label": "Golgi apparatus"
+      },
+      {
+        "id": "ribosomes",
+        "label": "Ribosomes"
+      }
+    ],
+    "links": [
+      {
+        "id": "golgi-follows-er",
+        "fromId": "golgi-apparatus",
+        "toId": "endoplasmic-reticulum",
+        "relation": "follows",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The Golgi apparatus packages molecules processed by the endoplasmic reticulum to be transported out of the cell."
+      },
+      {
+        "id": "er-transports-cell",
+        "fromId": "endoplasmic-reticulum",
+        "toId": "cell",
+        "relation": "uses",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The endoplasmic reticulum also transports these molecules to their specific destinations either inside or outside the cell."
+      },
+      {
+        "id": "ribosomes-linked-er",
+        "fromId": "ribosomes",
+        "toId": "endoplasmic-reticulum",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "These organelles can float freely in the cytoplasm or be connected to the endoplasmic reticulum (see above)."
+      }
+    ]
+  }
+}

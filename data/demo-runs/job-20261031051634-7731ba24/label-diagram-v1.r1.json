@@ -1,0 +1,390 @@
+{
+  "gen": {
+    "figureId": "noaa-hydrologic-cycle-1",
+    "hint": "Place each water cycle name on the part of the diagram where that process happens",
+    "parts": [
+      {
+        "id": "evaporation",
+        "labelX1": 196,
+        "labelX2": 392,
+        "labelY1": 585,
+        "labelY2": 616,
+        "name": "Evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 295,
+        "y": 710
+      },
+      {
+        "id": "transpiration",
+        "labelX1": 11,
+        "labelX2": 233,
+        "labelY1": 440,
+        "labelY2": 473,
+        "name": "Transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 115,
+        "y": 570
+      },
+      {
+        "id": "condensation",
+        "labelX1": 292,
+        "labelX2": 570,
+        "labelY1": 112,
+        "labelY2": 147,
+        "name": "Condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 505,
+        "y": 255
+      },
+      {
+        "id": "clouds",
+        "labelX1": 0,
+        "labelX2": 0,
+        "labelY1": 0,
+        "labelY2": 0,
+        "name": "clouds",
+        "quote": "In the atmosphere, condensation may appear as clouds or dew.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 775,
+        "y": 220
+      },
+      {
+        "id": "precipitation",
+        "labelX1": 696,
+        "labelX2": 910,
+        "labelY1": 353,
+        "labelY2": 390,
+        "name": "Precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 740,
+        "y": 320
+      },
+      {
+        "id": "runoff",
+        "labelX1": 692,
+        "labelX2": 812,
+        "labelY1": 672,
+        "labelY2": 708,
+        "name": "Runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 460,
+        "y": 825
+      }
+    ],
+    "schemaVersion": "label-diagram-v1",
+    "title": "Label the water cycle"
+  },
+  "report": {
+    "artifactId": "job-20261031051634-7731ba24:label-diagram-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every label-diagram title, part id and part name shape is within the frozen limits"
+      },
+      {
+        "id": "LD-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 part quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LD-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every one of the 6 part name(s) occurs as a whole phrase in its own quote, case-insensitive (name-in-quote)"
+      },
+      {
+        "id": "LD-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "figureId \"noaa-hydrologic-cycle-1\" is one of the source's 1 library figure(s) (figure-valid)"
+      },
+      {
+        "id": "LD-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 6 part point(s) are integers within 0..1000 and none lies inside any printed-label box (points-valid)"
+      },
+      {
+        "id": "LD-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every label box is the all-zero sentinel or well-formed inside 0..1000, no two boxes overlap, and 5 part(s) carry a box (the figure prints its labels; at least 3 required) (label-boxes-valid)"
+      },
+      {
+        "id": "LD-06",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "segmentation found exactly one region for each of the 6 parts, every region contains its part's point at image pixels, and every region covers between 0.05% and 50% of the image (regions-found)"
+      },
+      {
+        "id": "LD-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 15 region pair(s) are distinct: the largest pairwise IoU is 0.01, at most 0.6 (regions-distinct)"
+      },
+      {
+        "id": "LD-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the AI-written title and hint appears on the page (N-01); part names are bound to their quotes by LD-02 (numbers-checkable)"
+      },
+      {
+        "id": "LD-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "6 parts (within 3-8) with distinct ids and distinct names (counts-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a19065-0d73-7474-ab14-4bbedea711f4",
+    "usage": {
+      "promptTokens": 4166,
+      "completionTokens": 7330,
+      "reasoningTokens": 6837,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37869,
+    "estCostUSD": 0.03636,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "regions": [
+    {
+      "partId": "evaporation",
+      "x1": 163,
+      "y1": 323,
+      "x2": 171,
+      "y2": 426,
+      "confidence": 0.8046875
+    },
+    {
+      "partId": "transpiration",
+      "x1": 61,
+      "y1": 227,
+      "x2": 69,
+      "y2": 331,
+      "confidence": 0.828125
+    },
+    {
+      "partId": "condensation",
+      "x1": 251,
+      "y1": 84,
+      "x2": 324,
+      "y2": 146,
+      "confidence": 0.84765625
+    },
+    {
+      "partId": "clouds",
+      "x1": 400,
+      "y1": 95,
+      "x2": 473,
+      "y2": 148,
+      "confidence": 0.9375
+    },
+    {
+      "partId": "precipitation",
+      "x1": 375,
+      "y1": 147,
+      "x2": 520,
+      "y2": 239,
+      "confidence": 0.53515625
+    },
+    {
+      "partId": "runoff",
+      "x1": 119,
+      "y1": 342,
+      "x2": 462,
+      "y2": 482,
+      "confidence": 0.80859375
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031051634-7731ba24:label-diagram-v1:r1",
+    "componentId": "label-diagram-v1",
+    "title": "Label the water cycle",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19065-0d73-7474-ab14-4bbedea711f4",
+      "runId": "job-20261031051634-7731ba24",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T05:18:26.092Z"
+    },
+    "seed": 878307904,
+    "figureId": "noaa-hydrologic-cycle-1",
+    "parts": [
+      {
+        "id": "evaporation",
+        "labelX1": 196,
+        "labelX2": 392,
+        "labelY1": 585,
+        "labelY2": 616,
+        "name": "Evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 295,
+        "y": 710
+      },
+      {
+        "id": "transpiration",
+        "labelX1": 11,
+        "labelX2": 233,
+        "labelY1": 440,
+        "labelY2": 473,
+        "name": "Transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 115,
+        "y": 570
+      },
+      {
+        "id": "condensation",
+        "labelX1": 292,
+        "labelX2": 570,
+        "labelY1": 112,
+        "labelY2": 147,
+        "name": "Condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 505,
+        "y": 255
+      },
+      {
+        "id": "clouds",
+        "labelX1": 0,
+        "labelX2": 0,
+        "labelY1": 0,
+        "labelY2": 0,
+        "name": "clouds",
+        "quote": "In the atmosphere, condensation may appear as clouds or dew.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 775,
+        "y": 220
+      },
+      {
+        "id": "precipitation",
+        "labelX1": 696,
+        "labelX2": 910,
+        "labelY1": 353,
+        "labelY2": 390,
+        "name": "Precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 740,
+        "y": 320
+      },
+      {
+        "id": "runoff",
+        "labelX1": 692,
+        "labelX2": 812,
+        "labelY1": 672,
+        "labelY2": 708,
+        "name": "Runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 460,
+        "y": 825
+      }
+    ],
+    "hint": "Place each water cycle name on the part of the diagram where that process happens",
+    "figure": {
+      "id": "noaa-hydrologic-cycle-1",
+      "width": 572,
+      "height": 504,
+      "caption": "The basic hydrologic (water) cycle",
+      "credit": "",
+      "license": "U.S. Government work (NOAA National Weather Service, JetStream), public domain; credit NOAA; AI edits must be disclosed",
+      "labelsInImage": true
+    },
+    "regions": [
+      {
+        "partId": "evaporation",
+        "x1": 163,
+        "y1": 323,
+        "x2": 171,
+        "y2": 426,
+        "confidence": 0.8046875
+      },
+      {
+        "partId": "transpiration",
+        "x1": 61,
+        "y1": 227,
+        "x2": 69,
+        "y2": 331,
+        "confidence": 0.828125
+      },
+      {
+        "partId": "condensation",
+        "x1": 251,
+        "y1": 84,
+        "x2": 324,
+        "y2": 146,
+        "confidence": 0.84765625
+      },
+      {
+        "partId": "clouds",
+        "x1": 400,
+        "y1": 95,
+        "x2": 473,
+        "y2": 148,
+        "confidence": 0.9375
+      },
+      {
+        "partId": "precipitation",
+        "x1": 375,
+        "y1": 147,
+        "x2": 520,
+        "y2": 239,
+        "confidence": 0.53515625
+      },
+      {
+        "partId": "runoff",
+        "x1": 119,
+        "y1": 342,
+        "x2": 462,
+        "y2": 482,
+        "confidence": 0.80859375
+      }
+    ]
+  }
+}

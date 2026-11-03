@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031102439-7be7a74e",
+  "analysisRef": "job-20261031102439-7be7a74e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102439-7be7a74e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Wright engine four-stroke combustion raises temperature and pressure at constant volume",
+    "sources": [
+      {
+        "id": "nasa-grc-combustion-process",
+        "title": "Combustion Process — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/combustion-process/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "52579f531d16a59a0faaa30000970771b2ce5fd24f478dbaa9459442fb522e4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1f8530f230124a4986c309ce896e475d",
+      "runId": "job-20261031102439-7be7a74e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:25:26.557Z"
+    },
+    "seed": 3696071914,
+    "headline": "Wright engine four-stroke combustion raises temperature and pressure at constant volume",
+    "keyPoints": [
+      {
+        "id": "wright-four-cylinders",
+        "point": "The Wright engine consisted of four cylinders with pistons connected to a common crankshaft to produce thrust.",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "four cylinders like the one shown above, with each piston connected to a common crankshaft which turns the propellers to produce thrust."
+      },
+      {
+        "id": "four-stroke-cycle",
+        "point": "A four-stroke engine completes four movements of the piston before the firing sequence is repeated.",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "there are four movements (strokes) of the piston before the entire engine firing sequence is repeated."
+      },
+      {
+        "id": "constant-volume-combustion",
+        "point": "Combustion proceeds so quickly that the piston is considered motionless and volume of the combustion chamber stays constant.",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion proceeds so quickly that we can consider the piston to be motionless and the volume of the combustion chamber to be a constant."
+      },
+      {
+        "id": "temperature-pressure-rise",
+        "point": "Temperature and pressure in the combustion chamber both increase during the combustion process as heat is released.",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "Temperature and pressure in the combustion chamber both increase during the combustion process."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "combustion-chamber",
+        "term": "combustion chamber",
+        "gloss": "enclosed chamber where volume stays constant while combustion raises temperature",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "the volume of the combustion chamber to be a constant."
+      },
+      {
+        "id": "four-stroke-engine",
+        "term": "four-stroke engine",
+        "gloss": "engine type where four piston movements complete one firing sequence",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "called a four-stroke engine because there are four movements (strokes) of the piston"
+      },
+      {
+        "id": "crankshaft",
+        "term": "crankshaft",
+        "gloss": "common shaft connected to pistons that turns to produce thrust for propellers",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "with each piston connected to a common crankshaft which turns the propellers to produce thrust."
+      },
+      {
+        "id": "otto-cycle",
+        "term": "Otto cycle",
+        "gloss": "engine cycle that designates conditions as Stage 3 and Stage 4",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "we designate this condition as Stage 3 of the Otto cycle."
+      },
+      {
+        "id": "specific-heat",
+        "term": "specific heat",
+        "gloss": "heat capacity at constant volume that controls temperature rise for a given heat release",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "and cv is the specific heat at constant volume, and T is the temperature."
+      },
+      {
+        "id": "exhaust-gases",
+        "term": "exhaust gases",
+        "gloss": "gases produced by combustion whose temperature increases in the chamber",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion increases the temperature of the exhaust gases, any residual air in the combustion chamber, and the combustion chamber itself."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102439-7be7a74e:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031102439-7be7a74e:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

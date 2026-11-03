@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Macro scale derivation of Bernoulli equation",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "conservation-energy-start",
+        "label": "Begin from conservation of energy",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We shall derive Bernoulli’s equation by starting with the conservation of energy equation.",
+        "orderHint": ""
+      },
+      {
+        "id": "steady-inviscid-enthalpy",
+        "label": "Simplify for steady inviscid enthalpy form",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming a steady, inviscid flow we have a simplified conservation of energy equation in terms of the enthalpy of the fluid:",
+        "orderHint": ""
+      },
+      {
+        "id": "no-heat-no-work",
+        "label": "Remove heat transfer and work",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming no heat transfer into the fluid, and no work done by the fluid, we have:",
+        "orderHint": ""
+      },
+      {
+        "id": "pressure-work-kinetic",
+        "label": "Retain pressure work and kinetic terms",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(pv)2 + (V^2 / 2)2 = (pv)1 + (V^2 / 2)1",
+        "orderHint": ""
+      },
+      {
+        "id": "inverse-density-form",
+        "label": "Express specific volume as inverse density",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "orderHint": ""
+      },
+      {
+        "id": "incompressible-total-pressure",
+        "label": "Apply incompressible assumption for total pressure",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102423-cc6aa5e8:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ca8129606a7e45acb760722924090a03",
+    "usage": {
+      "promptTokens": 4302,
+      "completionTokens": 7924,
+      "reasoningTokens": 7499,
+      "cachedTokens": 0
+    },
+    "latencyMs": 50952,
+    "estCostUSD": 0.0390545,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102423-cc6aa5e8:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Macro scale derivation of Bernoulli equation",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ca8129606a7e45acb760722924090a03",
+      "runId": "job-20261031102423-cc6aa5e8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:26:32.892Z"
+    },
+    "seed": 1239725414,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "conservation-energy-start",
+        "label": "Begin from conservation of energy",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We shall derive Bernoulli’s equation by starting with the conservation of energy equation.",
+        "orderHint": ""
+      },
+      {
+        "id": "steady-inviscid-enthalpy",
+        "label": "Simplify for steady inviscid enthalpy form",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming a steady, inviscid flow we have a simplified conservation of energy equation in terms of the enthalpy of the fluid:",
+        "orderHint": ""
+      },
+      {
+        "id": "no-heat-no-work",
+        "label": "Remove heat transfer and work",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "Assuming no heat transfer into the fluid, and no work done by the fluid, we have:",
+        "orderHint": ""
+      },
+      {
+        "id": "pressure-work-kinetic",
+        "label": "Retain pressure work and kinetic terms",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(pv)2 + (V^2 / 2)2 = (pv)1 + (V^2 / 2)1",
+        "orderHint": ""
+      },
+      {
+        "id": "inverse-density-form",
+        "label": "Express specific volume as inverse density",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(p / rho)2 + (V^2 / 2)2 = (p / rho)1 + (V^2 / 2)1",
+        "orderHint": ""
+      },
+      {
+        "id": "incompressible-total-pressure",
+        "label": "Apply incompressible assumption for total pressure",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "(ps)2 + (rho * V^2 / 2)2 = (ps)1 + (rho * V^2 / 2)1 = a constant = pt",
+        "orderHint": ""
+      }
+    ]
+  }
+}

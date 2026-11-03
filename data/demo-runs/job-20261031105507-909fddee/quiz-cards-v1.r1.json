@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Checking temperature and moisture limits for climate zones",
+    "cards": [
+      {
+        "id": "continental-warmest-threshold",
+        "stem": "What temperature must the warmest month exceed in moist continental mid-latitude climates?",
+        "options": [
+          "greater than 50°F (10°C)",
+          "greater than 64°F (18°C)",
+          "greater than 59°",
+          "less than 15° to 25° latitude"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The average temperature of the warmest month is greater than 50°F (10°C), while the coldest month average temperature is less than 27°F (-3°C).",
+        "hint": ""
+      },
+      {
+        "id": "tropical-monthly-temp",
+        "stem": "What temperature stays true for every month in tropical climates?",
+        "options": [
+          "greater than 64°F (18°C)",
+          "greater than 50°F (10°C)",
+          "less than 50°F (10°C)",
+          "less than 27°F (-3°C)"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59\".",
+        "hint": ""
+      },
+      {
+        "id": "polar-warmest-limit",
+        "stem": "What describes the warmest month in polar climates?",
+        "options": [
+          "less than 50°F (10°C)",
+          "greater than 64°F (18°C)",
+          "greater than 50°F (10°C)",
+          "less than 27°F (-3°C)"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C).",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105507-909fddee:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "463e1fbfc03547ecaf29ff36eb48ac5b",
+    "usage": {
+      "promptTokens": 3000,
+      "completionTokens": 3818,
+      "reasoningTokens": 3370,
+      "cachedTokens": 0
+    },
+    "latencyMs": 21570,
+    "estCostUSD": 0.0199765,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "dry-moisture-balance",
+      "reason": "card failed Q-01",
+      "checks": [
+        "Q-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105507-909fddee:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Checking temperature and moisture limits for climate zones",
+    "sources": [
+      {
+        "id": "noaa-jetstream-climate-zones",
+        "title": "Climate Zones — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/global/climate-zones",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Climate Zones'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9e8263f9fb048729c92d00c7603e536c248951e07afdff0ba85b66b6fcbff04d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "463e1fbfc03547ecaf29ff36eb48ac5b",
+      "runId": "job-20261031105507-909fddee",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:56:27.435Z"
+    },
+    "seed": 3357508755,
+    "cards": [
+      {
+        "id": "continental-warmest-threshold",
+        "stem": "What temperature must the warmest month exceed in moist continental mid-latitude climates?",
+        "options": [
+          "greater than 50°F (10°C)",
+          "greater than 64°F (18°C)",
+          "greater than 59°",
+          "less than 15° to 25° latitude"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The average temperature of the warmest month is greater than 50°F (10°C), while the coldest month average temperature is less than 27°F (-3°C).",
+        "hint": ""
+      },
+      {
+        "id": "tropical-monthly-temp",
+        "stem": "What temperature stays true for every month in tropical climates?",
+        "options": [
+          "greater than 64°F (18°C)",
+          "greater than 50°F (10°C)",
+          "less than 50°F (10°C)",
+          "less than 27°F (-3°C)"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59\".",
+        "hint": ""
+      },
+      {
+        "id": "polar-warmest-limit",
+        "stem": "What describes the warmest month in polar climates?",
+        "options": [
+          "less than 50°F (10°C)",
+          "greater than 64°F (18°C)",
+          "greater than 50°F (10°C)",
+          "less than 27°F (-3°C)"
+        ],
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C).",
+        "hint": ""
+      }
+    ]
+  }
+}

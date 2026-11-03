@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031104523-16155d0d",
+  "analysisRef": "job-20261031104523-16155d0d/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104523-16155d0d:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How allele frequencies change and how human populations are described",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "64e8c53ac291432fae430cee42c67c54",
+      "runId": "job-20261031104523-16155d0d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:45:59.929Z"
+    },
+    "seed": 2706203246,
+    "headline": "How allele frequencies change and how human populations are described",
+    "keyPoints": [
+      {
+        "id": "kp-distribution-change",
+        "point": "Population genetics studies the distribution and change in allele frequencies under the influence of evolutionary forces.",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "kp-descriptive-stats",
+        "point": "Descriptive statistics summarize a collection of population data in a clear and concise manner.",
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner"
+      },
+      {
+        "id": "kp-biological-population",
+        "point": "In biology a population denotes a group whose members breed primarily or solely among themselves.",
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves"
+      },
+      {
+        "id": "kp-racial-classification",
+        "point": "Research shows racial classifications are inadequate descriptors of genetic variation in the human species.",
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-population-genetics",
+        "term": "Population genetics",
+        "gloss": "study of distribution and change in allele frequencies influenced by evolutionary forces",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "kt-allele-frequencies",
+        "term": "allele frequencies",
+        "gloss": "distribution of gene variants and how their frequencies change within a population",
+        "sourceId": "nij-population-genetics",
+        "quote": "Population genetics is the study of the distribution of and change in allele frequencies under the influence of the four evolutionary forces"
+      },
+      {
+        "id": "kt-natural-selection",
+        "term": "natural selection",
+        "gloss": "evolutionary force that changes allele frequencies through differential survival and reproduction",
+        "sourceId": "nij-population-genetics",
+        "quote": "four evolutionary forces: natural selection, genetic drift, mutation, and migration"
+      },
+      {
+        "id": "kt-descriptive-statistics",
+        "term": "descriptive statistics",
+        "gloss": "methods to summarize a collection of population data in a clear and concise manner",
+        "sourceId": "nij-population-genetics",
+        "quote": "Descriptive statistics are used to summarize a collection of population data in a clear and concise manner"
+      },
+      {
+        "id": "kt-ethnicity",
+        "term": "ethnicity",
+        "gloss": "alternative grouping for classifying human populations when race categories are inadequate",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031104523-16155d0d:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031104523-16155d0d:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104523-16155d0d:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

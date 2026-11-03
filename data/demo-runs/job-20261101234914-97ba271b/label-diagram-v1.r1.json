@@ -1,0 +1,673 @@
+{
+  "gen": {
+    "figureId": "noaa-hydrologic-cycle-1",
+    "hint": "Find evaporation, transpiration, condensation, precipitation and runoff in the diagram.",
+    "parts": [
+      {
+        "areaX1": 389,
+        "areaX2": 570,
+        "areaY1": 198,
+        "areaY2": 315,
+        "id": "condensation",
+        "labelX1": 343,
+        "labelX2": 620,
+        "labelY1": 99,
+        "labelY2": 129,
+        "name": "Condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 523,
+        "y": 210
+      },
+      {
+        "areaX1": 642,
+        "areaX2": 913,
+        "areaY1": 326,
+        "areaY2": 441,
+        "id": "precipitation",
+        "labelX1": 698,
+        "labelX2": 913,
+        "labelY1": 290,
+        "labelY2": 318,
+        "name": "Precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 793,
+        "y": 360
+      },
+      {
+        "areaX1": 59,
+        "areaX2": 172,
+        "areaY1": 476,
+        "areaY2": 677,
+        "id": "transpiration",
+        "labelX1": 11,
+        "labelX2": 231,
+        "labelY1": 340,
+        "labelY2": 367,
+        "name": "Transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 113,
+        "y": 537
+      },
+      {
+        "areaX1": 238,
+        "areaX2": 350,
+        "areaY1": 622,
+        "areaY2": 825,
+        "id": "evaporation",
+        "labelX1": 193,
+        "labelX2": 392,
+        "labelY1": 563,
+        "labelY2": 592,
+        "name": "Evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 293,
+        "y": 731
+      },
+      {
+        "areaX1": 560,
+        "areaX2": 616,
+        "areaY1": 678,
+        "areaY2": 747,
+        "id": "runoff",
+        "labelX1": 740,
+        "labelX2": 861,
+        "labelY1": 711,
+        "labelY2": 739,
+        "name": "Runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 587,
+        "y": 691
+      }
+    ],
+    "schemaVersion": "label-diagram-v1",
+    "title": "Label the water cycle processes"
+  },
+  "report": {
+    "artifactId": "job-20261101234914-97ba271b:label-diagram-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every label-diagram title, part id and part name shape is within the frozen limits"
+      },
+      {
+        "id": "LD-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 part quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LD-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every one of the 5 part name(s) occurs as a whole phrase in its own quote, case-insensitive, and is the printed word of its slot where the figure's printed labels are stored (name-in-quote)"
+      },
+      {
+        "id": "LD-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "figureId \"noaa-hydrologic-cycle-1\" is one of the source's 1 library figure(s) (figure-valid)"
+      },
+      {
+        "id": "LD-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 part point(s) are integers within 0..1000, every area box (where given) is well-formed and holds its point, and no point lies inside any printed-label box (points-valid)"
+      },
+      {
+        "id": "LD-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every label box is the all-zero sentinel or well-formed inside 0..1000, no two boxes overlap, and 5 part(s) carry a box (the figure prints its labels; at least 3 required) (label-boxes-valid)"
+      },
+      {
+        "id": "LD-06",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "SAM's region for parts[0] (\"Condensation\"), (223,85)-(325,146), spilled outside what Muse located for it, (223,100)-(326,159) widened by 25% (at least 12 px) per side; the two models disagree about where the part is",
+        "path": "/parts/0/x",
+        "affected": [
+          "/parts/0/x",
+          "/parts/0/y",
+          "/parts/0/areaX1",
+          "/parts/0/areaY1",
+          "/parts/0/areaX2",
+          "/parts/0/areaY2"
+        ]
+      },
+      {
+        "id": "LD-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 10 region pair(s) are distinct: the largest pairwise IoU is 0.00, at most 0.6 (regions-distinct)"
+      },
+      {
+        "id": "LD-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the AI-written title and hint appears on the page (N-01); part names are bound to their quotes by LD-02 (numbers-checkable)"
+      },
+      {
+        "id": "LD-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "5 parts (within 3-8) with distinct ids and distinct names (counts-valid)"
+      },
+      {
+        "id": "LD-10",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 printed label(s) of the figure that the page text names are claimed by a part (labels-covered)"
+      },
+      {
+        "id": "LD-11",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "SAM was at least 0.5 sure of all 5 region(s) that carry a confidence (regions-confident)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a19985-90e4-74a2-8333-ccf833d6fdc8",
+    "usage": {
+      "promptTokens": 4463,
+      "completionTokens": 8166,
+      "reasoningTokens": 7621,
+      "cachedTokens": 0
+    },
+    "latencyMs": 36306,
+    "estCostUSD": 0.04028425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "regions": [
+    {
+      "partId": "condensation",
+      "x1": 223,
+      "y1": 85,
+      "x2": 325,
+      "y2": 146,
+      "confidence": 0.75,
+      "outline": "M264 85.5L269.5 87L278.5 85L283.5 87L286 88.5L288 94.5L291.5 98L299.5 100L304 104.5L306 111.5L316.5 119L323 126.5L326 134.5L324 143.5L316.5 147L247.5 147L226.5 145L224 142.5L223 138.5L224 134.5L232 124.5L237 108.5L239.5 107L248.5 107L254 98.5L256 88.5L259.5 86Z",
+      "ground": {
+        "x1": 223,
+        "y1": 100,
+        "x2": 326,
+        "y2": 159
+      }
+    },
+    {
+      "partId": "precipitation",
+      "x1": 386,
+      "y1": 160,
+      "x2": 518,
+      "y2": 219,
+      "confidence": 0.65625,
+      "outline": "M401 160.5L406.5 162L407.5 161L411.5 164L436.5 164L440.5 162L451.5 164L452.5 162L468.5 162L470.5 164L480.5 164L487.5 162L495.5 164L501.5 163L504.5 165L513.5 164L519 166.5L517 169.5L519 173.5L517.5 175L508.5 176L501.5 175L503 181.5L500 185.5L501 191.5L499 196.5L491.5 201L489 198.5L489 195.5L491 193.5L488.5 191L483.5 193L476.5 189L475.5 187L469.5 185L461 192.5L461 194.5L458 196.5L455 202.5L457.5 205L461.5 204L461.5 206L459.5 205L456.5 208L453.5 207L452.5 209L449.5 209L444.5 215L438.5 216L436.5 219L433.5 220L430 217.5L423 193.5L417 181.5L412 176.5L412 174.5L408.5 173L404.5 175L399.5 175L397.5 171L397 174.5L395 174.5L396 172.5L394 170.5L393 163.5L396.5 161L398.5 162ZM386 170.5L389.5 170L391 171.5L393 174.5L392 177.5L394 178.5L393.5 180L391 179.5L391 176.5L388 175.5L389 174.5ZM449 168.5L459 169.5L456.5 171L443.5 171L442 169.5ZM499 168.5L505.5 168L507 169.5L503.5 172L499.5 172L498 169.5ZM471 203.5L471.5 208L467.5 208L464 204.5ZM461 168.5L468.5 168L469 169.5L467.5 171L463.5 171L460.5 170ZM461 209.5L472 210.5L469.5 212L461.5 212ZM410 168.5L419 169.5L416.5 171L407 170.5Z",
+      "ground": {
+        "x1": 367,
+        "y1": 164,
+        "x2": 522,
+        "y2": 222
+      }
+    },
+    {
+      "partId": "transpiration",
+      "x1": 61,
+      "y1": 227,
+      "x2": 69,
+      "y2": 330,
+      "confidence": 0.82421875,
+      "outline": "M64 227.5L67 227.5L70 239.5L70 260.5L66 276.5L66 285.5L70 301.5L70 315.5L67 329.5L65.5 331L63 328.5L65 302.5L61 285.5L62 268.5L65 260.5L65 250.5L61 242.5Z",
+      "ground": {
+        "x1": 34,
+        "y1": 240,
+        "x2": 98,
+        "y2": 341
+      }
+    },
+    {
+      "partId": "evaporation",
+      "x1": 136,
+      "y1": 310,
+      "x2": 197,
+      "y2": 426,
+      "confidence": 0.73828125,
+      "outline": "M140 323.5L141.5 323L143 325.5L146 336.5L144 340.5L146 344.5L145 360.5L142 370.5L142 382.5L145 391.5L146 410.5L144 414.5L144 422.5L141.5 426L139 425.5L140 398.5L136 380.5L136 372.5L140 355.5L140 342.5L137 339.5L137 331.5ZM179 310.5L182 311.5L185 321.5L186 335.5L181 358.5L181 370.5L186 382.5L184 395.5L185 403.5L181.5 413L178 411.5L180 389.5L175 366.5L175 359.5L178 352.5L177 351.5L180 341.5L180 332.5L179 328.5L176 325.5ZM193 322.5L195 324.5L198 334.5L198 356.5L194 371.5L194 381.5L198 396.5L198 411.5L195.5 426L191 424.5L193 398.5L188 378.5L189 368.5L194 352.5L192 341.5L189 338.5L189 333.5ZM153 310.5L155 310.5L159 322.5L159 342.5L154 360.5L159 385.5L158 401.5L156 404.5L155.5 412L152 411.5L152 401.5L154 394.5L152 389.5L153 382.5L149 368.5L150 354.5L154 339.5L153 329.5L150 325.5ZM166 324.5L169 325.5L172 336.5L170 342.5L171 358.5L168 375.5L172 406.5L170 412.5L170 421.5L167.5 427L165 425.5L167 397.5L164 392.5L162 378.5L163 365.5L167 353.5L167 345.5L163 338.5L164 327.5Z",
+      "ground": {
+        "x1": 136,
+        "y1": 313,
+        "x2": 200,
+        "y2": 416
+      }
+    },
+    {
+      "partId": "runoff",
+      "x1": 322,
+      "y1": 332,
+      "x2": 351,
+      "y2": 362,
+      "confidence": 0.8984375,
+      "outline": "M342 332.5L346.5 333L352 338.5L350 342.5L339 353.5L339 358.5L337.5 360L322.5 363L322 355.5L324 346.5L329.5 346Z",
+      "ground": {
+        "x1": 320,
+        "y1": 342,
+        "x2": 352,
+        "y2": 376
+      }
+    }
+  ],
+  "grounding": {
+    "ok": true,
+    "located": 5,
+    "of": 5,
+    "receipt": {
+      "purpose": "test-live",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19985-de80-7590-8c17-02331b04926f",
+      "usage": {
+        "promptTokens": 604,
+        "completionTokens": 4405,
+        "reasoningTokens": 3912,
+        "cachedTokens": 0
+      },
+      "latencyMs": 19836,
+      "estCostUSD": 0.01947625,
+      "reservedUnknownUSD": 0,
+      "finishReason": "stop",
+      "attempts": 1,
+      "costBasis": "usage",
+      "provider": "meta-api",
+      "model": "muse-spark-1.3",
+      "providerModel": "muse-spark-1.3",
+      "cachedUnknown": false
+    },
+    "parts": [
+      {
+        "partId": "condensation",
+        "ground": {
+          "x1": 389,
+          "y1": 198,
+          "x2": 570,
+          "y2": 315
+        }
+      },
+      {
+        "partId": "precipitation",
+        "ground": {
+          "x1": 642,
+          "y1": 326,
+          "x2": 913,
+          "y2": 441
+        }
+      },
+      {
+        "partId": "transpiration",
+        "ground": {
+          "x1": 59,
+          "y1": 476,
+          "x2": 172,
+          "y2": 677
+        }
+      },
+      {
+        "partId": "evaporation",
+        "ground": {
+          "x1": 238,
+          "y1": 622,
+          "x2": 350,
+          "y2": 825
+        }
+      },
+      {
+        "partId": "runoff",
+        "ground": {
+          "x1": 560,
+          "y1": 678,
+          "x2": 616,
+          "y2": 747
+        }
+      }
+    ]
+  },
+  "genPositions": [
+    {
+      "partId": "condensation",
+      "x": 523,
+      "y": 210,
+      "areaX1": 438,
+      "areaY1": 148,
+      "areaX2": 621,
+      "areaY2": 265
+    },
+    {
+      "partId": "precipitation",
+      "x": 785,
+      "y": 335,
+      "areaX1": 695,
+      "areaY1": 260,
+      "areaX2": 876,
+      "areaY2": 365
+    },
+    {
+      "partId": "transpiration",
+      "x": 113,
+      "y": 537,
+      "areaX1": 55,
+      "areaY1": 382,
+      "areaX2": 176,
+      "areaY2": 640
+    },
+    {
+      "partId": "evaporation",
+      "x": 298,
+      "y": 732,
+      "areaX1": 235,
+      "areaY1": 603,
+      "areaX2": 357,
+      "areaY2": 812
+    },
+    {
+      "partId": "runoff",
+      "x": 586,
+      "y": 721,
+      "areaX1": 559,
+      "areaY1": 688,
+      "areaX2": 618,
+      "areaY2": 749
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101234914-97ba271b:label-diagram-v1:r1",
+    "componentId": "label-diagram-v1",
+    "title": "Label the water cycle processes",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19985-90e4-74a2-8333-ccf833d6fdc8",
+      "runId": "job-20261101234914-97ba271b",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T23:50:53.245Z"
+    },
+    "seed": 3502224648,
+    "figureId": "noaa-hydrologic-cycle-1",
+    "parts": [
+      {
+        "areaX1": 389,
+        "areaX2": 570,
+        "areaY1": 198,
+        "areaY2": 315,
+        "id": "condensation",
+        "labelX1": 343,
+        "labelX2": 620,
+        "labelY1": 99,
+        "labelY2": 129,
+        "name": "Condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 523,
+        "y": 210
+      },
+      {
+        "areaX1": 642,
+        "areaX2": 913,
+        "areaY1": 326,
+        "areaY2": 441,
+        "id": "precipitation",
+        "labelX1": 698,
+        "labelX2": 913,
+        "labelY1": 290,
+        "labelY2": 318,
+        "name": "Precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 793,
+        "y": 360
+      },
+      {
+        "areaX1": 59,
+        "areaX2": 172,
+        "areaY1": 476,
+        "areaY2": 677,
+        "id": "transpiration",
+        "labelX1": 11,
+        "labelX2": 231,
+        "labelY1": 340,
+        "labelY2": 367,
+        "name": "Transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 113,
+        "y": 537
+      },
+      {
+        "areaX1": 238,
+        "areaX2": 350,
+        "areaY1": 622,
+        "areaY2": 825,
+        "id": "evaporation",
+        "labelX1": 193,
+        "labelX2": 392,
+        "labelY1": 563,
+        "labelY2": 592,
+        "name": "Evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 293,
+        "y": 731
+      },
+      {
+        "areaX1": 560,
+        "areaX2": 616,
+        "areaY1": 678,
+        "areaY2": 747,
+        "id": "runoff",
+        "labelX1": 740,
+        "labelX2": 861,
+        "labelY1": 711,
+        "labelY2": 739,
+        "name": "Runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "x": 587,
+        "y": 691
+      }
+    ],
+    "hint": "Find evaporation, transpiration, condensation, precipitation and runoff in the diagram.",
+    "figure": {
+      "id": "noaa-hydrologic-cycle-1",
+      "width": 572,
+      "height": 504,
+      "caption": "The basic hydrologic (water) cycle",
+      "credit": "",
+      "license": "U.S. Government work (NOAA National Weather Service, JetStream), public domain; credit NOAA; AI edits must be disclosed",
+      "labelsInImage": true,
+      "labelBoxes": [
+        {
+          "x1": 194,
+          "y1": 54,
+          "x2": 327,
+          "y2": 73,
+          "text": "Condensation",
+          "group": 1
+        },
+        {
+          "x1": 397,
+          "y1": 159,
+          "x2": 522,
+          "y2": 181,
+          "text": "Precipitation",
+          "group": 2
+        },
+        {
+          "x1": 3,
+          "y1": 190,
+          "x2": 133,
+          "y2": 211,
+          "text": "Transpiration",
+          "group": 3
+        },
+        {
+          "x1": 118,
+          "y1": 194,
+          "x2": 132,
+          "y2": 208,
+          "group": 3
+        },
+        {
+          "x1": 267,
+          "y1": 243,
+          "x2": 432,
+          "y2": 262,
+          "text": "Snowmelt Runoff",
+          "group": 4
+        },
+        {
+          "x1": 109,
+          "y1": 285,
+          "x2": 227,
+          "y2": 307,
+          "text": "Evaporation",
+          "group": 5
+        },
+        {
+          "x1": 351,
+          "y1": 340,
+          "x2": 495,
+          "y2": 360,
+          "text": "Surface Runoff",
+          "group": 6
+        },
+        {
+          "x1": 351,
+          "y1": 341,
+          "x2": 379,
+          "y2": 359,
+          "group": 6
+        }
+      ],
+      "partLabelGroups": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ]
+    },
+    "regions": [
+      {
+        "partId": "condensation",
+        "x1": 223,
+        "y1": 85,
+        "x2": 325,
+        "y2": 146,
+        "confidence": 0.75,
+        "outline": "M264 85.5L269.5 87L278.5 85L283.5 87L286 88.5L288 94.5L291.5 98L299.5 100L304 104.5L306 111.5L316.5 119L323 126.5L326 134.5L324 143.5L316.5 147L247.5 147L226.5 145L224 142.5L223 138.5L224 134.5L232 124.5L237 108.5L239.5 107L248.5 107L254 98.5L256 88.5L259.5 86Z",
+        "ground": {
+          "x1": 223,
+          "y1": 100,
+          "x2": 326,
+          "y2": 159
+        }
+      },
+      {
+        "partId": "precipitation",
+        "x1": 386,
+        "y1": 160,
+        "x2": 518,
+        "y2": 219,
+        "confidence": 0.65625,
+        "outline": "M401 160.5L406.5 162L407.5 161L411.5 164L436.5 164L440.5 162L451.5 164L452.5 162L468.5 162L470.5 164L480.5 164L487.5 162L495.5 164L501.5 163L504.5 165L513.5 164L519 166.5L517 169.5L519 173.5L517.5 175L508.5 176L501.5 175L503 181.5L500 185.5L501 191.5L499 196.5L491.5 201L489 198.5L489 195.5L491 193.5L488.5 191L483.5 193L476.5 189L475.5 187L469.5 185L461 192.5L461 194.5L458 196.5L455 202.5L457.5 205L461.5 204L461.5 206L459.5 205L456.5 208L453.5 207L452.5 209L449.5 209L444.5 215L438.5 216L436.5 219L433.5 220L430 217.5L423 193.5L417 181.5L412 176.5L412 174.5L408.5 173L404.5 175L399.5 175L397.5 171L397 174.5L395 174.5L396 172.5L394 170.5L393 163.5L396.5 161L398.5 162ZM386 170.5L389.5 170L391 171.5L393 174.5L392 177.5L394 178.5L393.5 180L391 179.5L391 176.5L388 175.5L389 174.5ZM449 168.5L459 169.5L456.5 171L443.5 171L442 169.5ZM499 168.5L505.5 168L507 169.5L503.5 172L499.5 172L498 169.5ZM471 203.5L471.5 208L467.5 208L464 204.5ZM461 168.5L468.5 168L469 169.5L467.5 171L463.5 171L460.5 170ZM461 209.5L472 210.5L469.5 212L461.5 212ZM410 168.5L419 169.5L416.5 171L407 170.5Z",
+        "ground": {
+          "x1": 367,
+          "y1": 164,
+          "x2": 522,
+          "y2": 222
+        }
+      },
+      {
+        "partId": "transpiration",
+        "x1": 61,
+        "y1": 227,
+        "x2": 69,
+        "y2": 330,
+        "confidence": 0.82421875,
+        "outline": "M64 227.5L67 227.5L70 239.5L70 260.5L66 276.5L66 285.5L70 301.5L70 315.5L67 329.5L65.5 331L63 328.5L65 302.5L61 285.5L62 268.5L65 260.5L65 250.5L61 242.5Z",
+        "ground": {
+          "x1": 34,
+          "y1": 240,
+          "x2": 98,
+          "y2": 341
+        }
+      },
+      {
+        "partId": "evaporation",
+        "x1": 136,
+        "y1": 310,
+        "x2": 197,
+        "y2": 426,
+        "confidence": 0.73828125,
+        "outline": "M140 323.5L141.5 323L143 325.5L146 336.5L144 340.5L146 344.5L145 360.5L142 370.5L142 382.5L145 391.5L146 410.5L144 414.5L144 422.5L141.5 426L139 425.5L140 398.5L136 380.5L136 372.5L140 355.5L140 342.5L137 339.5L137 331.5ZM179 310.5L182 311.5L185 321.5L186 335.5L181 358.5L181 370.5L186 382.5L184 395.5L185 403.5L181.5 413L178 411.5L180 389.5L175 366.5L175 359.5L178 352.5L177 351.5L180 341.5L180 332.5L179 328.5L176 325.5ZM193 322.5L195 324.5L198 334.5L198 356.5L194 371.5L194 381.5L198 396.5L198 411.5L195.5 426L191 424.5L193 398.5L188 378.5L189 368.5L194 352.5L192 341.5L189 338.5L189 333.5ZM153 310.5L155 310.5L159 322.5L159 342.5L154 360.5L159 385.5L158 401.5L156 404.5L155.5 412L152 411.5L152 401.5L154 394.5L152 389.5L153 382.5L149 368.5L150 354.5L154 339.5L153 329.5L150 325.5ZM166 324.5L169 325.5L172 336.5L170 342.5L171 358.5L168 375.5L172 406.5L170 412.5L170 421.5L167.5 427L165 425.5L167 397.5L164 392.5L162 378.5L163 365.5L167 353.5L167 345.5L163 338.5L164 327.5Z",
+        "ground": {
+          "x1": 136,
+          "y1": 313,
+          "x2": 200,
+          "y2": 416
+        }
+      },
+      {
+        "partId": "runoff",
+        "x1": 322,
+        "y1": 332,
+        "x2": 351,
+        "y2": 362,
+        "confidence": 0.8984375,
+        "outline": "M342 332.5L346.5 333L352 338.5L350 342.5L339 353.5L339 358.5L337.5 360L322.5 363L322 355.5L324 346.5L329.5 346Z",
+        "ground": {
+          "x1": 320,
+          "y1": 342,
+          "x2": 352,
+          "y2": 376
+        }
+      }
+    ]
+  }
+}

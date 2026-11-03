@@ -301,7 +301,7 @@ export async function main(argv = process.argv.slice(2)) {
   }
   const url = `http://127.0.0.1:${port}`;
   say();
-  say(`  Make knowledge interactive is running at ${url}`);
+  say(`  Kinetext is running at ${url}`);
   say(`  ${describeMode(mode, relayUrl)}`);
   say('  Press Ctrl+C to stop.');
   say();

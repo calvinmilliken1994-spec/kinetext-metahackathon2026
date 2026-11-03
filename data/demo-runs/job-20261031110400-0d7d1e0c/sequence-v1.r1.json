@@ -1,0 +1,213 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How a bill becomes a law",
+    "orderBasis": "numbered",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "bill-proposed",
+        "label": "Bill is proposed as new or changed law",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "1. A bill is a proposal for a new law or a change to an existing law.",
+        "orderHint": ""
+      },
+      {
+        "id": "committee-research",
+        "label": "Bill is sent to committee for research",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "2. Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+        "orderHint": ""
+      },
+      {
+        "id": "chamber-vote",
+        "label": "Chamber votes on the bill",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "3. The bill is then put before that chamber to be voted on.",
+        "orderHint": ""
+      },
+      {
+        "id": "other-chamber-review",
+        "label": "Other chamber reviews and votes",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "4. If the bill passes one body of Congress, it goes to the other body to go through a similar process of research, discussion, changes, and voting.",
+        "orderHint": ""
+      },
+      {
+        "id": "chambers-agree",
+        "label": "Chambers agree on one version",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "5. Once both bodies vote to accept a bill, they must work out any differences between the two versions.",
+        "orderHint": ""
+      },
+      {
+        "id": "president-decision",
+        "label": "President approves or vetoes bill",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "6. The president then considers the bill. The president can approve the bill and sign it into law.",
+        "orderHint": ""
+      },
+      {
+        "id": "veto-override",
+        "label": "Congress can override a veto",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "7. If the president chooses to veto a bill, in most cases Congress can vote to override that veto and the bill becomes a law.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110400-0d7d1e0c:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"numbered\" holds: every quote carries an ascending order signal (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9c7318468fac4da99bc725e6825aae29",
+    "usage": {
+      "promptTokens": 2886,
+      "completionTokens": 9326,
+      "reasoningTokens": 8881,
+      "cachedTokens": 0
+    },
+    "latencyMs": 43840,
+    "estCostUSD": 0.043243,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110400-0d7d1e0c:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How a bill becomes a law",
+    "sources": [
+      {
+        "id": "usagov-how-laws-are-made",
+        "title": "How laws are made — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/how-laws-are-made",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How laws are made'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a0fa06d928204b895fc85a6e90675ea52362ca38af3e3c44b154b827b81b5f87"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9c7318468fac4da99bc725e6825aae29",
+      "runId": "job-20261031110400-0d7d1e0c",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:05:42.992Z"
+    },
+    "seed": 1002011354,
+    "orderBasis": "numbered",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "bill-proposed",
+        "label": "Bill is proposed as new or changed law",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "1. A bill is a proposal for a new law or a change to an existing law.",
+        "orderHint": ""
+      },
+      {
+        "id": "committee-research",
+        "label": "Bill is sent to committee for research",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "2. Once a bill is introduced, it is assigned to a committee whose members will research, discuss, and make changes to the bill.",
+        "orderHint": ""
+      },
+      {
+        "id": "chamber-vote",
+        "label": "Chamber votes on the bill",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "3. The bill is then put before that chamber to be voted on.",
+        "orderHint": ""
+      },
+      {
+        "id": "other-chamber-review",
+        "label": "Other chamber reviews and votes",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "4. If the bill passes one body of Congress, it goes to the other body to go through a similar process of research, discussion, changes, and voting.",
+        "orderHint": ""
+      },
+      {
+        "id": "chambers-agree",
+        "label": "Chambers agree on one version",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "5. Once both bodies vote to accept a bill, they must work out any differences between the two versions.",
+        "orderHint": ""
+      },
+      {
+        "id": "president-decision",
+        "label": "President approves or vetoes bill",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "6. The president then considers the bill. The president can approve the bill and sign it into law.",
+        "orderHint": ""
+      },
+      {
+        "id": "veto-override",
+        "label": "Congress can override a veto",
+        "sourceId": "usagov-how-laws-are-made",
+        "quote": "7. If the president chooses to veto a bill, in most cases Congress can vote to override that veto and the bill becomes a law.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

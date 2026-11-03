@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Compare interest rate and APR for loan shopping",
+    "cards": [
+      {
+        "id": "apr-fee-inclusion",
+        "stem": "What makes up the APR in addition to the interest rate?",
+        "options": [
+          "The APR is the interest rate plus any additional fees charged by the lender",
+          "Only the principal balance",
+          "Daily account maintenance charges",
+          "Future insurance premiums"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The APR is the interest rate plus any additional fees charged by the lender.",
+        "hint": "Think about what extra lender costs are added to the rate."
+      },
+      {
+        "id": "using-apr-to-compare",
+        "stem": "How can shoppers reliably compare loan offers from different lenders?",
+        "options": [
+          "Since all lenders must provide the APR",
+          "You must compare interest rates to APRs",
+          "You should trust the first offer only",
+          "You cannot compare any loan prices"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "Since all lenders must provide the APR, you can use the APR to compare auto loans.",
+        "hint": "Remember what every lender is required to share for shopping."
+      },
+      {
+        "id": "disclosure-timing-card",
+        "stem": "When must lenders share key loan terms including the APR?",
+        "options": [
+          "They must provide this info before you finalize your car loan",
+          "After the loan is fully repaid",
+          "Only if you ask in person",
+          "Once a year after closing"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "They must provide this info before you finalize your car loan.",
+        "hint": "Consider when disclosure is required in the loan process."
+      },
+      {
+        "id": "interest-rate-meaning",
+        "stem": "What does an interest rate represent for a borrower?",
+        "options": [
+          "An interest rate is the cost you pay to the lender for borrowing money",
+          "The total fees added to the APR",
+          "The required down payment amount",
+          "The lender profit guarantee"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "An interest rate is the cost you pay to the lender for borrowing money to finance your loan, on top of the loan amount or your principal.",
+        "hint": "Focus on the basic price of borrowing apart from fees."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100059-35283e4f:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e4f90e9aa16b4a268e5a7910db592ef5",
+    "usage": {
+      "promptTokens": 2815,
+      "completionTokens": 8801,
+      "reasoningTokens": 8360,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42540,
+    "estCostUSD": 0.040923,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100059-35283e4f:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Compare interest rate and APR for loan shopping",
+    "sources": [
+      {
+        "id": "cfpb-loan-interest-rate-vs-apr",
+        "title": "What is the difference between a loan interest rate and the APR? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/what-is-the-difference-between-a-loan-interest-rate-and-the-apr-en-733/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What is the difference between a loan interest rate and the APR?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "bb4deef0545569be19f0aa5a83968994bacccfa69a6746764044ef4762991700"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e4f90e9aa16b4a268e5a7910db592ef5",
+      "runId": "job-20261031100059-35283e4f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:02:12.196Z"
+    },
+    "seed": 3993137119,
+    "cards": [
+      {
+        "id": "apr-fee-inclusion",
+        "stem": "What makes up the APR in addition to the interest rate?",
+        "options": [
+          "The APR is the interest rate plus any additional fees charged by the lender",
+          "Only the principal balance",
+          "Daily account maintenance charges",
+          "Future insurance premiums"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The APR is the interest rate plus any additional fees charged by the lender.",
+        "hint": "Think about what extra lender costs are added to the rate."
+      },
+      {
+        "id": "using-apr-to-compare",
+        "stem": "How can shoppers reliably compare loan offers from different lenders?",
+        "options": [
+          "Since all lenders must provide the APR",
+          "You must compare interest rates to APRs",
+          "You should trust the first offer only",
+          "You cannot compare any loan prices"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "Since all lenders must provide the APR, you can use the APR to compare auto loans.",
+        "hint": "Remember what every lender is required to share for shopping."
+      },
+      {
+        "id": "disclosure-timing-card",
+        "stem": "When must lenders share key loan terms including the APR?",
+        "options": [
+          "They must provide this info before you finalize your car loan",
+          "After the loan is fully repaid",
+          "Only if you ask in person",
+          "Once a year after closing"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "They must provide this info before you finalize your car loan.",
+        "hint": "Consider when disclosure is required in the loan process."
+      },
+      {
+        "id": "interest-rate-meaning",
+        "stem": "What does an interest rate represent for a borrower?",
+        "options": [
+          "An interest rate is the cost you pay to the lender for borrowing money",
+          "The total fees added to the APR",
+          "The required down payment amount",
+          "The lender profit guarantee"
+        ],
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "An interest rate is the cost you pay to the lender for borrowing money to finance your loan, on top of the loan amount or your principal.",
+        "hint": "Focus on the basic price of borrowing apart from fees."
+      }
+    ]
+  }
+}

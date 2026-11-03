@@ -1,0 +1,261 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort SI building blocks into their organizational groups",
+    "groups": [
+      {
+        "id": "defining-constants",
+        "label": "seven (7) defining constants"
+      },
+      {
+        "id": "base-units",
+        "label": "base units"
+      },
+      {
+        "id": "generic-derived",
+        "label": "Derived units with generic names"
+      }
+    ],
+    "items": [
+      {
+        "id": "cesium-frequency",
+        "label": "cesium hyperfine splitting frequency",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants: the cesium hyperfine splitting frequency"
+      },
+      {
+        "id": "speed-of-light",
+        "label": "speed of light in vacuum",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants: the cesium hyperfine splitting frequency, the speed of light in vacuum"
+      },
+      {
+        "id": "planck-constant",
+        "label": "Planck constant",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "seven (7) defining constants: the cesium hyperfine splitting frequency, the speed of light in vacuum, the Planck constant"
+      },
+      {
+        "id": "twenty-nine-units",
+        "label": "twenty-nine units",
+        "groupId": "base-units",
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units."
+      },
+      {
+        "id": "core-set",
+        "label": "core set of SI units",
+        "groupId": "base-units",
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units."
+      },
+      {
+        "id": "area-item",
+        "label": "area (m^2)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "area (m^2)"
+      },
+      {
+        "id": "volume-item",
+        "label": "volume (m^3)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "volume (m^3)"
+      },
+      {
+        "id": "velocity-item",
+        "label": "velocity (m/s)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "velocity (m/s)"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105442-5f80212e:sort-groups-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "sort-groups-v1: no weakening — every one of the 3 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "91facab631ad478f9cabea5f078a5880",
+    "usage": {
+      "promptTokens": 5370,
+      "completionTokens": 2720,
+      "reasoningTokens": 2265,
+      "cachedTokens": 0
+    },
+    "latencyMs": 12041,
+    "estCostUSD": 0.0182725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105442-5f80212e:sort-groups-v1:r2",
+    "componentId": "sort-groups-v1",
+    "title": "Sort SI building blocks into their organizational groups",
+    "sources": [
+      {
+        "id": "nist-si-units",
+        "title": "SI Units — NIST Office of Weights and Measures, Metric (SI) Program",
+        "locator": "https://www.nist.gov/pml/owm/metric-si/si-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Office of Weights and Measures, Metric (SI) Program, 'SI Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "c43e5958aca8c142d4a9c1d75b0294b983d04a0e787bee139b20bfd1f75f21a3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "91facab631ad478f9cabea5f078a5880",
+      "runId": "job-20261031105442-5f80212e",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:57:43.452Z"
+    },
+    "seed": 4116569469,
+    "groups": [
+      {
+        "id": "defining-constants",
+        "label": "seven (7) defining constants"
+      },
+      {
+        "id": "base-units",
+        "label": "base units"
+      },
+      {
+        "id": "generic-derived",
+        "label": "Derived units with generic names"
+      }
+    ],
+    "items": [
+      {
+        "id": "cesium-frequency",
+        "label": "cesium hyperfine splitting frequency",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants: the cesium hyperfine splitting frequency"
+      },
+      {
+        "id": "speed-of-light",
+        "label": "speed of light in vacuum",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants: the cesium hyperfine splitting frequency, the speed of light in vacuum"
+      },
+      {
+        "id": "planck-constant",
+        "label": "Planck constant",
+        "groupId": "defining-constants",
+        "sourceId": "nist-si-units",
+        "quote": "seven (7) defining constants: the cesium hyperfine splitting frequency, the speed of light in vacuum, the Planck constant"
+      },
+      {
+        "id": "twenty-nine-units",
+        "label": "twenty-nine units",
+        "groupId": "base-units",
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units."
+      },
+      {
+        "id": "core-set",
+        "label": "core set of SI units",
+        "groupId": "base-units",
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units."
+      },
+      {
+        "id": "area-item",
+        "label": "area (m^2)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "area (m^2)"
+      },
+      {
+        "id": "volume-item",
+        "label": "volume (m^3)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "volume (m^3)"
+      },
+      {
+        "id": "velocity-item",
+        "label": "velocity (m/s)",
+        "groupId": "generic-derived",
+        "sourceId": "nist-si-units",
+        "quote": "velocity (m/s)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Savings growth with compound interest",
+    "labelHeader": "Item",
+    "columns": [
+      {
+        "header": "Amount you start with",
+        "unit": "dollars or percent",
+        "numeric": false,
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount you start with | $1,000 | Also called your principal |"
+      },
+      {
+        "header": "Also called your principal",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "cfpb-compound-interest",
+        "quote": "Also called your principal"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Amount you start with",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount you start with | $1,000 | Also called your principal |",
+        "values": [
+          {
+            "value": "$1,000",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "| Amount you start with | $1,000 | Also called your principal |"
+          },
+          {
+            "value": "Also called your principal",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your principal"
+          }
+        ]
+      },
+      {
+        "label": "How much you earn",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| How much you earn | 5 percent | Also called your interest rate, or rate of return |",
+        "values": [
+          {
+            "value": "5 percent",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "5 percent"
+          },
+          {
+            "value": "Also called your interest rate",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your interest rate"
+          }
+        ]
+      },
+      {
+        "label": "How often you calculate interest",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| How often you calculate interest | Once a year | Also called your compounding frequency |",
+        "values": [
+          {
+            "value": "Once a year",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Once a year"
+          },
+          {
+            "value": "Also called your compounding frequency",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your compounding frequency"
+          }
+        ]
+      },
+      {
+        "label": "Amount after the first year",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount after the first year | $1,050 |",
+        "values": [
+          {
+            "value": "$1,050",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "| Amount after the first year | $1,050 | Amount you started the year with, plus 5 percent 0.05 x $1,000 = $50 $1,000 + $50 = $1,050 |"
+          },
+          {
+            "value": "0.05 x $1,000 = $50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "0.05 x $1,000 = $50"
+          }
+        ]
+      },
+      {
+        "label": "Amount after the second year",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount after the second year | $1,102.50 |",
+        "values": [
+          {
+            "value": "$1,102.50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "$1,102.50"
+          },
+          {
+            "value": "0.05 x $1,050 = $52.50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "0.05 x $1,050 = $52.50"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "value-after-second-year",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 0
+      },
+      {
+        "id": "calc-after-first-year",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-amount",
+        "kind": "lookup",
+        "rowIndex": -1,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031095749-6cd1d9c9:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 17 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 10 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 5 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "questions[2] (largest-amount): rowIndex -1 is out of range for a lookup, expected 0..4",
+        "path": "/questions/2/rowIndex",
+        "affected": [
+          "/questions/2/rowIndex"
+        ]
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "chartColumnIndex is the -1 sentinel: this table shows no chart (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 5 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "47606e3da9ab43aeac2654c0bc0ba0a1",
+    "usage": {
+      "promptTokens": 5311,
+      "completionTokens": 11204,
+      "reasoningTokens": 10483,
+      "cachedTokens": 0
+    },
+    "latencyMs": 81561,
+    "estCostUSD": 0.05425575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095749-6cd1d9c9:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Savings growth with compound interest",
+    "sources": [
+      {
+        "id": "cfpb-compound-interest",
+        "title": "How does compound interest work? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-compound-interest-work-en-1683/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does compound interest work?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "b53156638f6b191a78c86fac8fa0b2051d61a41f7e64c7bf1e8b7258ae8c411c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "47606e3da9ab43aeac2654c0bc0ba0a1",
+      "runId": "job-20261031095749-6cd1d9c9",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:02:15.191Z"
+    },
+    "seed": 770053958,
+    "labelHeader": "Item",
+    "columns": [
+      {
+        "header": "Amount you start with",
+        "unit": "dollars or percent",
+        "numeric": false,
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount you start with | $1,000 | Also called your principal |"
+      },
+      {
+        "header": "Also called your principal",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "cfpb-compound-interest",
+        "quote": "Also called your principal"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Amount you start with",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount you start with | $1,000 | Also called your principal |",
+        "values": [
+          {
+            "value": "$1,000",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "| Amount you start with | $1,000 | Also called your principal |"
+          },
+          {
+            "value": "Also called your principal",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your principal"
+          }
+        ]
+      },
+      {
+        "label": "How much you earn",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| How much you earn | 5 percent | Also called your interest rate, or rate of return |",
+        "values": [
+          {
+            "value": "5 percent",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "5 percent"
+          },
+          {
+            "value": "Also called your interest rate",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your interest rate"
+          }
+        ]
+      },
+      {
+        "label": "How often you calculate interest",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| How often you calculate interest | Once a year | Also called your compounding frequency |",
+        "values": [
+          {
+            "value": "Once a year",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Once a year"
+          },
+          {
+            "value": "Also called your compounding frequency",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "Also called your compounding frequency"
+          }
+        ]
+      },
+      {
+        "label": "Amount after the first year",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount after the first year | $1,050 |",
+        "values": [
+          {
+            "value": "$1,050",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "| Amount after the first year | $1,050 | Amount you started the year with, plus 5 percent 0.05 x $1,000 = $50 $1,000 + $50 = $1,050 |"
+          },
+          {
+            "value": "0.05 x $1,000 = $50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "0.05 x $1,000 = $50"
+          }
+        ]
+      },
+      {
+        "label": "Amount after the second year",
+        "sourceId": "cfpb-compound-interest",
+        "quote": "| Amount after the second year | $1,102.50 |",
+        "values": [
+          {
+            "value": "$1,102.50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "$1,102.50"
+          },
+          {
+            "value": "0.05 x $1,050 = $52.50",
+            "sourceId": "cfpb-compound-interest",
+            "quote": "0.05 x $1,050 = $52.50"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "value-after-second-year",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 0
+      },
+      {
+        "id": "calc-after-first-year",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-amount",
+        "kind": "lookup",
+        "rowIndex": -1,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

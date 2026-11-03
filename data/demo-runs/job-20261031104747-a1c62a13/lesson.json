@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031104747-a1c62a13",
+  "analysisRef": "job-20261031104747-a1c62a13/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104747-a1c62a13:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Voluntary framework for managing trustworthy AI risks",
+    "sources": [
+      {
+        "id": "nist-ai-risk-management-framework",
+        "title": "AI Risk Management Framework — NIST Information Technology Laboratory, AI Program",
+        "locator": "https://www.nist.gov/itl/ai-risk-management-framework",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Information Technology Laboratory, AI Program, 'AI Risk Management Framework'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "d76ad1bde2388b029d9a4d6e3dc33f0cfc73a8131ca1a4e1343cbf828a44c8d1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "25469bfde08c48cb837d70108ed660da",
+      "runId": "job-20261031104747-a1c62a13",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:49:46.968Z"
+    },
+    "seed": 1001890725,
+    "headline": "Voluntary framework for managing trustworthy AI risks",
+    "keyPoints": [
+      {
+        "id": "voluntary-use",
+        "point": "Students learn that the framework is intended for voluntary use to improve trustworthiness across design, development, use, and evaluation.",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "The NIST AI Risk Management Framework (AI RMF) is intended for voluntary use and to improve the ability to incorporate trustworthiness considerations"
+      },
+      {
+        "id": "risk-management-purpose",
+        "point": "Students learn that the framework helps manage risks to individuals, organizations, and society associated with artificial intelligence.",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "framework to better manage risks to individuals, organizations, and society associated with artificial intelligence (AI)"
+      },
+      {
+        "id": "collaborative-development",
+        "point": "Students learn that the framework was developed through a consensus-driven, open, transparent, and collaborative process including public input.",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "developed through a consensus-driven, open, transparent, and collaborative process that included a Request for Information"
+      },
+      {
+        "id": "generative-ai-profile",
+        "point": "Students learn that a generative AI profile helps organizations identify unique risks and proposes actions aligned to their goals.",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "The profile can help organizations identify unique risks posed by generative AI and proposes actions for generative AI risk management"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "trustworthiness",
+        "term": "trustworthiness",
+        "gloss": "Ability to incorporate reliable behavior that supports trust in design and evaluation",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "to improve the ability to incorporate trustworthiness considerations into the design, development, use, and evaluation"
+      },
+      {
+        "id": "generative-ai",
+        "term": "generative AI",
+        "gloss": "Systems that create new content and bring unique risks needing specific management actions",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "unique risks posed by generative AI and proposes actions for generative AI risk management that best aligns"
+      },
+      {
+        "id": "critical-infrastructure",
+        "term": "critical infrastructure",
+        "gloss": "Systems and operators whose reliable function is vital and who consider specific risk practices",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "AI RMF Profile on Trustworthy AI in Critical Infrastructure. The profile will guide critical infrastructure operators"
+      },
+      {
+        "id": "artificial-intelligence",
+        "term": "artificial intelligence",
+        "gloss": "Computer systems that perform tasks associated with intelligent behavior and carry societal risks",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "framework to better manage risks to individuals, organizations, and society associated with artificial intelligence (AI)"
+      },
+      {
+        "id": "voluntary-use-term",
+        "term": "voluntary use",
+        "gloss": "Optional adoption intended to improve ability to add trustworthiness considerations",
+        "sourceId": "nist-ai-risk-management-framework",
+        "quote": "The NIST AI Risk Management Framework (AI RMF) is intended for voluntary use and to improve the ability to incorporate trustworthiness considerations"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nist-ai-risk-management-framework-job-20261031104747-a1c62a13",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104747-a1c62a13:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

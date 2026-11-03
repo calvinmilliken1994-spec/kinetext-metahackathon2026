@@ -1,0 +1,379 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Comparing one month, twelve month and annual average changes",
+    "labelHeader": "Change period",
+    "columns": [
+      {
+        "header": "Index value, December 2021",
+        "unit": "index points",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Index value, December 2021 |  | 278.802"
+      },
+      {
+        "header": "Index value, November 2021",
+        "unit": "index points",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Index value, November 2021 |  | 277.948"
+      },
+      {
+        "header": "Ratio multiplied by 100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3"
+      }
+    ],
+    "rows": [
+      {
+        "label": "One-month percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "One-month percent changes",
+        "values": [
+          {
+            "value": "278.802",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2021 |  | 278.802"
+          },
+          {
+            "value": "277.948",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, November 2021 |  | 277.948"
+          },
+          {
+            "value": "0.3",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3"
+          }
+        ]
+      },
+      {
+        "label": "Twelve-month percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Twelve-month percent changes",
+        "values": [
+          {
+            "value": "296.797",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2022 |  | 296.797"
+          },
+          {
+            "value": "278.802",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2021 |  | 278.802"
+          },
+          {
+            "value": "6.5",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .065 * 100 | 6.5"
+          }
+        ]
+      },
+      {
+        "label": "Annual average percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Annual average percent changes",
+        "values": [
+          {
+            "value": "292.655",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Annual average index value, December 2022 |  | 292.655"
+          },
+          {
+            "value": "270.970",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Annual average index value, December 2021 |  | 270.970"
+          },
+          {
+            "value": "8.0",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .080 * 100 | 8.0"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-later-dec2022",
+        "kind": "lookup",
+        "rowIndex": 1,
+        "columnIndex": 0
+      },
+      {
+        "id": "lookup-percent-onemonth",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-percent-change",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "smallest-percent-change",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031095003-325b55da:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 15 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 9 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 rows x 3 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-later-dec2022\" (lookup) → rows[1] \"296.797\"; \"lookup-percent-onemonth\" (lookup) → rows[0] \"0.3\"; \"largest-percent-change\" (largest) → rows[2] \"8.0\"; \"smallest-percent-change\" (smallest) → rows[0] \"0.3\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 2 (\"Ratio multiplied by 100\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 12 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "423d4ead14c04d24821560a8be44bc70",
+    "usage": {
+      "promptTokens": 6636,
+      "completionTokens": 11867,
+      "reasoningTokens": 11147,
+      "cachedTokens": 0
+    },
+    "latencyMs": 68650,
+    "estCostUSD": 0.05872975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095003-325b55da:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Comparing one month, twelve month and annual average changes",
+    "sources": [
+      {
+        "id": "bls-calculating-percent-changes",
+        "title": "Calculating percent changes — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/calculating-percent-changes.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Calculating percent changes'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "829533faa09f497cfa3c6b4a03b5afbd5c44b73ae3194ed951f4d6d61e19f6de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "423d4ead14c04d24821560a8be44bc70",
+      "runId": "job-20261031095003-325b55da",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:53:01.195Z"
+    },
+    "seed": 1508228036,
+    "labelHeader": "Change period",
+    "columns": [
+      {
+        "header": "Index value, December 2021",
+        "unit": "index points",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Index value, December 2021 |  | 278.802"
+      },
+      {
+        "header": "Index value, November 2021",
+        "unit": "index points",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Index value, November 2021 |  | 277.948"
+      },
+      {
+        "header": "Ratio multiplied by 100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3"
+      }
+    ],
+    "rows": [
+      {
+        "label": "One-month percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "One-month percent changes",
+        "values": [
+          {
+            "value": "278.802",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2021 |  | 278.802"
+          },
+          {
+            "value": "277.948",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, November 2021 |  | 277.948"
+          },
+          {
+            "value": "0.3",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3"
+          }
+        ]
+      },
+      {
+        "label": "Twelve-month percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Twelve-month percent changes",
+        "values": [
+          {
+            "value": "296.797",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2022 |  | 296.797"
+          },
+          {
+            "value": "278.802",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Index value, December 2021 |  | 278.802"
+          },
+          {
+            "value": "6.5",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .065 * 100 | 6.5"
+          }
+        ]
+      },
+      {
+        "label": "Annual average percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Annual average percent changes",
+        "values": [
+          {
+            "value": "292.655",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Annual average index value, December 2022 |  | 292.655"
+          },
+          {
+            "value": "270.970",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Annual average index value, December 2021 |  | 270.970"
+          },
+          {
+            "value": "8.0",
+            "sourceId": "bls-calculating-percent-changes",
+            "quote": "Ratio multiplied by 100 | .080 * 100 | 8.0"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-later-dec2022",
+        "kind": "lookup",
+        "rowIndex": 1,
+        "columnIndex": 0
+      },
+      {
+        "id": "lookup-percent-onemonth",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-percent-change",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "smallest-percent-change",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

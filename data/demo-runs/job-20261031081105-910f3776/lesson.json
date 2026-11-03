@@ -1,0 +1,138 @@
+{
+  "jobId": "job-20261031081105-910f3776",
+  "analysisRef": "job-20261031081105-910f3776/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031081105-910f3776:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Continuous circulation of water between ground and atmosphere",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19103-b055-7527-8253-253460acd3ac",
+      "runId": "job-20261031081105-910f3776",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T08:11:40.628Z"
+    },
+    "seed": 3781374786,
+    "headline": "Continuous circulation of water between ground and atmosphere",
+    "keyPoints": [
+      {
+        "id": "evaporation-energy",
+        "point": "Students learn that evaporation is a change of state from liquid water that requires energy.",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "transpiration-plants",
+        "point": "Students learn that transpiration moves water from plants through stomata to the atmosphere.",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "condensation-liquid",
+        "point": "Students learn that condensation changes water vapor into liquid and releases heat.",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "precipitation-forms",
+        "point": "Students learn that precipitation falls to Earth as rain, hail, snow or sleet.",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "runoff-saturated",
+        "point": "Students learn that runoff occurs when excessive precipitation leaves ground saturated that cannot absorb more water.",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Change of state from liquid to gas that requires energy.",
+        "id": "evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Evaporation"
+      },
+      {
+        "gloss": "Evaporation of water from plants through leaf pores.",
+        "id": "transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Transpiration"
+      },
+      {
+        "gloss": "Small openings on leaves that release water vapor.",
+        "id": "stomata",
+        "quote": "Stomata are small openings found on the underside of leaves that are connected to vascular plant tissues.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Stomata"
+      },
+      {
+        "gloss": "Process where water vapor becomes liquid and releases heat.",
+        "id": "condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Condensation"
+      },
+      {
+        "gloss": "Temperature when air becomes saturated and forms fog.",
+        "id": "dew-point",
+        "quote": "Foggy conditions often occur when air temperature and dew point are equal.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "dew point"
+      },
+      {
+        "gloss": "Water falling to Earth as rain, hail, snow or sleet.",
+        "id": "precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Precipitation"
+      },
+      {
+        "gloss": "Excess water flowing over saturated ground into rivers and lakes.",
+        "id": "runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Runoff"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261031081105-910f3776:label-diagram-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031081105-910f3776:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

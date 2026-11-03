@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031103420-cd73eead",
+  "analysisRef": "job-20261031103420-cd73eead/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103420-cd73eead:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Newton's laws explain inertia, force and action reaction in flight",
+    "sources": [
+      {
+        "id": "nasa-grc-newtons-laws-of-motion",
+        "title": "Newton's Laws of Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "907bae07076eef20118a4e54096ad399b11994ec5e310d9bed74850f6d009014"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "20f39cb3520b4e379a26c5abdc406c1c",
+      "runId": "job-20261031103420-cd73eead",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:35:39.337Z"
+    },
+    "seed": 2372576834,
+    "headline": "Newton's laws explain inertia, force and action reaction in flight",
+    "keyPoints": [
+      {
+        "id": "first-law-inertia",
+        "point": "An object remains at rest or in motion unless an unbalanced force acts on it.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "An object at rest remains at rest, and an object in motion remains in motion"
+      },
+      {
+        "id": "second-law-acceleration",
+        "point": "Acceleration depends on the mass and amount of force applied to an object.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "third-law-reaction",
+        "point": "When one object exerts a force, the second object exerts an equal and opposite reaction.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Whenever one object exerts a force on a second object, the second object exerts an equal and opposite force on the first."
+      },
+      {
+        "id": "inertia-tendency",
+        "point": "Inertia is the tendency to resist changes in motion when net forces cancel.",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-inertia",
+        "term": "inertia",
+        "gloss": "tendency to resist changes in motion for an object at rest or in motion",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "This tendency to resist changes in a state of motion is inertia."
+      },
+      {
+        "id": "term-acceleration",
+        "term": "acceleration",
+        "gloss": "change in velocity over time determined by applied force and mass",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "The acceleration of an object depends on the mass of the object and the amount of force applied."
+      },
+      {
+        "id": "term-momentum",
+        "term": "Momentum",
+        "gloss": "mass times velocity that defines change in momentum over time",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Momentum is defined to be the mass m of an object times its velocity V."
+      },
+      {
+        "id": "term-vector-quantity",
+        "term": "vector quantity",
+        "gloss": "vector that has both magnitude and direction such as velocity and force",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "Scientists and mathematicians call this a vector quantity."
+      },
+      {
+        "id": "term-net-force",
+        "term": "net force",
+        "gloss": "total force acting on an object after external forces cancel each other",
+        "sourceId": "nasa-grc-newtons-laws-of-motion",
+        "quote": "If all the external forces cancel each other out, then there is no net force acting on the object."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-newtons-laws-of-motion-job-20261031103420-cd73eead",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031103420-cd73eead:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

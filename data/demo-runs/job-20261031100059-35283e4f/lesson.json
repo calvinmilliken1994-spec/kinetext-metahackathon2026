@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031100059-35283e4f",
+  "analysisRef": "job-20261031100059-35283e4f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100059-35283e4f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How interest rate and APR measure loan cost and allow comparison",
+    "sources": [
+      {
+        "id": "cfpb-loan-interest-rate-vs-apr",
+        "title": "What is the difference between a loan interest rate and the APR? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/what-is-the-difference-between-a-loan-interest-rate-and-the-apr-en-733/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What is the difference between a loan interest rate and the APR?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "bb4deef0545569be19f0aa5a83968994bacccfa69a6746764044ef4762991700"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5dad5ca98187488b921e60557abd2d09",
+      "runId": "job-20261031100059-35283e4f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:01:29.629Z"
+    },
+    "seed": 468764835,
+    "headline": "How interest rate and APR measure loan cost and allow comparison",
+    "keyPoints": [
+      {
+        "id": "interest-rate-cost",
+        "point": "An interest rate is the cost you pay to the lender for borrowing money on top of principal.",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "An interest rate is the cost you pay to the lender for borrowing money to finance your loan, on top of the loan amount or your principal."
+      },
+      {
+        "id": "apr-plus-fees",
+        "point": "APR equals the interest rate plus additional fees charged by the lender such as origination charges.",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The APR is the interest rate plus any additional fees charged by the lender."
+      },
+      {
+        "id": "tila-disclosure",
+        "point": "Federal law requires lenders to disclose APR and other important loan terms before you finalize your car loan.",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The federal Truth in Lending Act (TILA) requires lenders to give you specific disclosures about the important terms in your loan, including the APR."
+      },
+      {
+        "id": "compare-apr-to-apr",
+        "point": "You can compare APRs to APRs across lenders to shop for the best loan costs.",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "Since all lenders must provide the APR, you can use the APR to compare auto loans."
+      },
+      {
+        "id": "credit-score-rates",
+        "point": "Higher credit scores generally lead to lower rates, but shopping around helps reduce costs.",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "In general, the higher your credit score, the lower your rates will be."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "interest-rate",
+        "term": "interest rate",
+        "gloss": "cost paid to the lender for borrowing money to finance the loan",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "An interest rate is the cost you pay to the lender for borrowing money to finance your loan, on top of the loan amount or your principal."
+      },
+      {
+        "id": "apr",
+        "term": "APR",
+        "gloss": "measure that adds additional fees to the interest rate",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The APR is the interest rate plus any additional fees charged by the lender."
+      },
+      {
+        "id": "principal",
+        "term": "principal",
+        "gloss": "loan amount on top of which borrowing cost is charged",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "An interest rate is the cost you pay to the lender for borrowing money to finance your loan, on top of the loan amount or your principal."
+      },
+      {
+        "id": "origination-charges",
+        "term": "origination charges",
+        "gloss": "fees charged when the loan is made by the lender",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "This includes origination charges and other fees charged when the loan is made."
+      },
+      {
+        "id": "credit-score",
+        "term": "credit score",
+        "gloss": "rating that helps determine the rates lenders offer a borrower",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "In general, the higher your credit score, the lower your rates will be."
+      },
+      {
+        "id": "disclosures",
+        "term": "disclosures",
+        "gloss": "specific information lenders must give about important loan terms",
+        "sourceId": "cfpb-loan-interest-rate-vs-apr",
+        "quote": "The federal Truth in Lending Act (TILA) requires lenders to give you specific disclosures about the important terms in your loan, including the APR."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031100059-35283e4f:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100059-35283e4f:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

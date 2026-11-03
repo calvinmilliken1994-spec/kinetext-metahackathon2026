@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031102829-8cfdb3eb",
+  "analysisRef": "job-20261031102829-8cfdb3eb/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102829-8cfdb3eb:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Ideal gas equation links pressure, volume and temperature",
+    "sources": [
+      {
+        "id": "nasa-grc-equation-of-state-ideal-gas",
+        "title": "Equation Of State (Ideal Gas) — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equation-of-state-ideal-gas-2/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1647515d09cd96cf0c68fd8c09acf13b06e089610e1a415924e53f438062e1a4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f9e70583d7cb464085e27ba61636e9ae",
+      "runId": "job-20261031102829-8cfdb3eb",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:30:02.701Z"
+    },
+    "seed": 3781377003,
+    "headline": "Ideal gas equation links pressure, volume and temperature",
+    "keyPoints": [
+      {
+        "id": "gas-state-properties",
+        "point": "Students learn that gas properties of pressure, temperature, mass and volume determine the state of a gas",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "including the gas pressure p, temperature T, mass m, and volume V that contains the gas."
+      },
+      {
+        "id": "boyles-law-constant",
+        "point": "Students learn that Boyle’s law states the product of pressure and volume is constant for an ideal gas",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "The product of pressure and volume is exactly a constant for an ideal gas."
+      },
+      {
+        "id": "combined-equation-state",
+        "point": "Students learn that combined gas laws give the single equation of state pV equals nRT",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "The gas laws of Boyle and Charles and Gay-Lussac can be combined into a single equation of state given in red at the center of the slide:"
+      },
+      {
+        "id": "absolute-temperature-requirement",
+        "point": "Students learn that the equation requires absolute temperature that begins at absolute zero in Kelvin or Rankine",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "Also be aware that the temperature given in the equation of state must be an absolute temperature that begins at absolute zero."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "pressure",
+        "term": "pressure",
+        "gloss": "force per area exerted by gas that changes with volume and temperature",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "including the gas pressure p, temperature T, mass m, and volume V that contains the gas."
+      },
+      {
+        "id": "gas-density",
+        "term": "gas density",
+        "gloss": "ratio of mass to volume for a gas sample",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This allows us to define a single additional property called the gas density rho (ρ), which is the ratio of mass to volume."
+      },
+      {
+        "id": "boyles-law",
+        "term": "Boyle’s Law",
+        "gloss": "relationship where pressure and volume product stays constant for ideal gas",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This relationship between pressure and volume is called Boyle’s Law in honor of Robert Boyle who first observed it in 1660."
+      },
+      {
+        "id": "equation-of-state",
+        "term": "equation of state",
+        "gloss": "single combined relation that links gas pressure, volume and temperature",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "The gas laws of Boyle and Charles and Gay-Lussac can be combined into a single equation of state given in red at the center of the slide:"
+      },
+      {
+        "id": "absolute-temperature",
+        "term": "absolute temperature",
+        "gloss": "temperature scale that starts at absolute zero and is needed for gas law",
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "Also be aware that the temperature given in the equation of state must be an absolute temperature that begins at absolute zero."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031102829-8cfdb3eb:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031102829-8cfdb3eb:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-08: the page formula line could not be parsed with the calculator grammar (the formula line has no parseable tokens (only prose after the \"=\")) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula c",
+      "revision": 3
+    }
+  ]
+}

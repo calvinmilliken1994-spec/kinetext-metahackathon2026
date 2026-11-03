@@ -1,0 +1,50 @@
+{
+  "jobId": "job-20261031100746-032ca0d8",
+  "sourceId": "irs-tax-inflation-adjustments-2026",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:07:46.863Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.177556,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:07:46.863Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "data-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "DT-02",
+        "DT-05",
+        "DT-06"
+      ],
+      "fixed": [
+        "DT-02",
+        "DT-05",
+        "DT-06"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-10-31T10:10:26.205Z"
+}

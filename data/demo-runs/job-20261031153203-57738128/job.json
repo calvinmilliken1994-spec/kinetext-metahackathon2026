@@ -1,0 +1,36 @@
+{
+  "jobId": "job-20261031153203-57738128",
+  "sourceId": "dos-alaska-purchase",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T15:32:03.760Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.16878,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 21768,
+    "startedAt": "2026-10-31T15:32:03.760Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "dos-alaska-purchase-job-20261031153203-57738128",
+  "publishable": true,
+  "checksPassed": 11,
+  "checksTotal": 11,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-31T15:33:54.527Z"
+}

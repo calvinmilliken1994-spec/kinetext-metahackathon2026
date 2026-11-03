@@ -1,0 +1,185 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Building relative time before absolute dating",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the passage order from Steno to Powell",
+    "steps": [
+      {
+        "id": "steno-1669-laws",
+        "label": "Steno writes stratigraphic laws",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws.",
+        "orderHint": ""
+      },
+      {
+        "id": "hutton-1788-uniformitarianism",
+        "label": "Hutton proposes uniformitarianism",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism.",
+        "orderHint": ""
+      },
+      {
+        "id": "smith-1815-faunal-succession",
+        "label": "Smith defines faunal succession",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species",
+        "orderHint": ""
+      },
+      {
+        "id": "first-time-scale-1841",
+        "label": "First geologic time scale published",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West.",
+        "orderHint": ""
+      },
+      {
+        "id": "powell-great-unconformity",
+        "label": "Powell sketches Great Unconformity",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "he was the first geologist to sketch the Great Unconformity in the Grand Canyon.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031111125-16528ee3:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "90dbaadf440e494a9d137de3ace6fe24",
+    "usage": {
+      "promptTokens": 4346,
+      "completionTokens": 8294,
+      "reasoningTokens": 7938,
+      "cachedTokens": 0
+    },
+    "latencyMs": 39372,
+    "estCostUSD": 0.040682,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031111125-16528ee3:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Building relative time before absolute dating",
+    "sources": [
+      {
+        "id": "usgs-powell-geologic-time",
+        "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "90dbaadf440e494a9d137de3ace6fe24",
+      "runId": "job-20261031111125-16528ee3",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:13:44.986Z"
+    },
+    "seed": 4009191111,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the passage order from Steno to Powell",
+    "steps": [
+      {
+        "id": "steno-1669-laws",
+        "label": "Steno writes stratigraphic laws",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "Nicholas Steno, 1669, gets credit for first writing down basic geological principles as laws.",
+        "orderHint": ""
+      },
+      {
+        "id": "hutton-1788-uniformitarianism",
+        "label": "Hutton proposes uniformitarianism",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1788, James Hutton proposed what would become the foundational principle of geology — uniformitarianism.",
+        "orderHint": ""
+      },
+      {
+        "id": "smith-1815-faunal-succession",
+        "label": "Smith defines faunal succession",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "In 1815, Smith developed the law of faunal succession, which states that species become extinct and are replaced by new species",
+        "orderHint": ""
+      },
+      {
+        "id": "first-time-scale-1841",
+        "label": "First geologic time scale published",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "The first geologic time scale was published in 1841 — Powell certainly would have known of it and used it in his geologic trips to the West.",
+        "orderHint": ""
+      },
+      {
+        "id": "powell-great-unconformity",
+        "label": "Powell sketches Great Unconformity",
+        "sourceId": "usgs-powell-geologic-time",
+        "quote": "he was the first geologist to sketch the Great Unconformity in the Grand Canyon.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

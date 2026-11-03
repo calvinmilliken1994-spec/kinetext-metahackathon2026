@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Acidity scale basics for classroom review",
+    "cards": [
+      {
+        "id": "card-range-neutral",
+        "stem": "Which value on the pH scale shows neutral water?",
+        "options": [
+          "7 being neutral",
+          "0 being neutral",
+          "14 being neutral"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral.",
+        "hint": "Think about the middle of the scale."
+      },
+      {
+        "id": "card-aqueous-requirement",
+        "stem": "What must a solution contain to have a pH value?",
+        "options": [
+          "aqueous (contains water)",
+          "oily (contains fat)",
+          "gaseous (contains air)"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "for a solution to have a pH, it has to be aqueous (contains water).",
+        "hint": "Recall what type of liquid allows pH."
+      },
+      {
+        "id": "card-ph-meaning",
+        "stem": "What does pH measure in water?",
+        "options": [
+          "how acidic/basic water is",
+          "how salty water is",
+          "how clear water is"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH is a measure of how acidic/basic water is.",
+        "hint": ""
+      },
+      {
+        "id": "card-acidity-threshold",
+        "stem": "Which pH values show that water is acidic?",
+        "options": [
+          "less than 7 indicate acidity",
+          "greater than 7 indicate acidity",
+          "equal to 7 indicate acidity"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base.",
+        "hint": "Acidic values are below neutral."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101091135-96787516:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e6015801eef54d27a17290d5ab6030fe",
+    "usage": {
+      "promptTokens": 4160,
+      "completionTokens": 7053,
+      "reasoningTokens": 6706,
+      "cachedTokens": 0
+    },
+    "latencyMs": 46551,
+    "estCostUSD": 0.03517525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091135-96787516:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Acidity scale basics for classroom review",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e6015801eef54d27a17290d5ab6030fe",
+      "runId": "job-20261101091135-96787516",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T09:13:49.674Z"
+    },
+    "seed": 987416280,
+    "cards": [
+      {
+        "id": "card-range-neutral",
+        "stem": "Which value on the pH scale shows neutral water?",
+        "options": [
+          "7 being neutral",
+          "0 being neutral",
+          "14 being neutral"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral.",
+        "hint": "Think about the middle of the scale."
+      },
+      {
+        "id": "card-aqueous-requirement",
+        "stem": "What must a solution contain to have a pH value?",
+        "options": [
+          "aqueous (contains water)",
+          "oily (contains fat)",
+          "gaseous (contains air)"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "for a solution to have a pH, it has to be aqueous (contains water).",
+        "hint": "Recall what type of liquid allows pH."
+      },
+      {
+        "id": "card-ph-meaning",
+        "stem": "What does pH measure in water?",
+        "options": [
+          "how acidic/basic water is",
+          "how salty water is",
+          "how clear water is"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH is a measure of how acidic/basic water is.",
+        "hint": ""
+      },
+      {
+        "id": "card-acidity-threshold",
+        "stem": "Which pH values show that water is acidic?",
+        "options": [
+          "less than 7 indicate acidity",
+          "greater than 7 indicate acidity",
+          "equal to 7 indicate acidity"
+        ],
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base.",
+        "hint": "Acidic values are below neutral."
+      }
+    ]
+  }
+}

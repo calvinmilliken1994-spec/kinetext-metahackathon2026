@@ -1,0 +1,11 @@
+Throwing a ball on the Moon
+
+This note was written by the project team for a classroom test. It is our own work.
+
+On the Moon there is no air, so a thrown ball feels no drag at all. Its flight is purely ballistic. The only force on the ball after it leaves the hand is its weight, which pulls it straight down.
+
+Split the launch velocity into two parts: a horizontal speed U0 and a vertical speed V0. Nothing pushes the ball sideways, so the horizontal speed stays U0 for the whole flight and the ball moves x = U0 * t across the ground.
+
+Vertically, gravity slows the ball at a steady rate g. On the Moon g is about 1.62 m/s^2, roughly one sixth of the 9.8 m/s^2 we feel on Earth. The vertical speed is V = V0 - g * t, and the height is y = V0 * t - g * t^2 / 2.
+
+The ball stops rising when V = 0, which happens at t = V0 / g. Putting that time into the height equation gives the highest point: ymax = V0^2 / (2 * g). Because g on the Moon is about six times smaller, the same throw rises about six times higher than on Earth.

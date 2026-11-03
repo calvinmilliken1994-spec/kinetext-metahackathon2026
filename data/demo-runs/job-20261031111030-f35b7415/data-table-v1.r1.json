@@ -1,0 +1,412 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Parent daughter pairs and half-life values for dating",
+    "labelHeader": "Parent isotope",
+    "columns": [
+      {
+        "header": "Stable daughter product",
+        "unit": " ",
+        "numeric": false,
+        "sourceId": "usgs-geologic-age",
+        "quote": "The parent isotopes and corresponding daughter products most commonly used to determine the ages of ancient rocks are listed below:"
+      },
+      {
+        "header": "Half-life",
+        "unit": " ",
+        "numeric": false,
+        "sourceId": "usgs-geologic-age",
+        "quote": "The rate of decay is conveniently expressed in terms of an isotope's half-life, or the time it takes for one-half"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Uranium-238",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Uranium-238 | Lead-206 | 4.5 billion years",
+        "values": [
+          {
+            "value": "Lead-206",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-238 | Lead-206 | 4.5 billion years"
+          },
+          {
+            "value": "4.5 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-238 | Lead-206 | 4.5 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Uranium-235",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Uranium-235 | Lead-207 | 704 million years",
+        "values": [
+          {
+            "value": "Lead-207",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-235 | Lead-207 | 704 million years"
+          },
+          {
+            "value": "704 million years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-235 | Lead-207 | 704 million years"
+          }
+        ]
+      },
+      {
+        "label": "Thorium-232",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Thorium-232 | Lead-208 | 14.0 billion years",
+        "values": [
+          {
+            "value": "Lead-208",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Thorium-232 | Lead-208 | 14.0 billion years"
+          },
+          {
+            "value": "14.0 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Thorium-232 | Lead-208 | 14.0 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Rubidium-87",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years",
+        "values": [
+          {
+            "value": "Strontium-87",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years"
+          },
+          {
+            "value": "48.8 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Potassium-40",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Potassium-40 | Argon-40 | 1.25 billion years",
+        "values": [
+          {
+            "value": "Argon-40",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Potassium-40 | Argon-40 | 1.25 billion years"
+          },
+          {
+            "value": "1.25 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Potassium-40 | Argon-40 | 1.25 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Samarium-147",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Samarium-147 | Neodymium-143 | 106 billion years",
+        "values": [
+          {
+            "value": "Neodymium-143",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Samarium-147 | Neodymium-143 | 106 billion years"
+          },
+          {
+            "value": "106 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Samarium-147 | Neodymium-143 | 106 billion years"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-daughter-uranium238",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 0
+      },
+      {
+        "id": "lookup-half-life-potassium40",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031111030-f35b7415:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 20 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0]: the header \"Stable daughter product\" does not occur in its quote \"The parent isotopes and corresponding daughter products most\" (the column quote must contain the header as the page prints it)",
+        "path": "/columns/0/header",
+        "affected": [
+          "/columns/0/header",
+          "/columns/0/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-daughter-uranium238\" (lookup) → rows[0] \"Lead-206\"; \"lookup-half-life-potassium40\" (lookup) → rows[4] \"1.25 billion years\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "chartColumnIndex is the -1 sentinel: this table shows no chart (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f7965dad987748fb803094dbabd178d3",
+    "usage": {
+      "promptTokens": 3766,
+      "completionTokens": 6705,
+      "reasoningTokens": 5845,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38018,
+    "estCostUSD": 0.03320375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031111030-f35b7415:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Parent daughter pairs and half-life values for dating",
+    "sources": [
+      {
+        "id": "usgs-geologic-age",
+        "title": "Geologic Age: Using Radioactive Decay to Determine Geologic Age — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/educational-resources/geologic-age-using-radioactive-decay-determine-geologic-age",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Geologic Age: Using Radioactive Decay to Determine Geologic Age' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "6e5bf0115bcc99d56d14dbecdc9d5ce23538b3bf71393efa1f5f77b6969614c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f7965dad987748fb803094dbabd178d3",
+      "runId": "job-20261031111030-f35b7415",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:12:05.307Z"
+    },
+    "seed": 3183004706,
+    "labelHeader": "Parent isotope",
+    "columns": [
+      {
+        "header": "Stable daughter product",
+        "unit": " ",
+        "numeric": false,
+        "sourceId": "usgs-geologic-age",
+        "quote": "The parent isotopes and corresponding daughter products most commonly used to determine the ages of ancient rocks are listed below:"
+      },
+      {
+        "header": "Half-life",
+        "unit": " ",
+        "numeric": false,
+        "sourceId": "usgs-geologic-age",
+        "quote": "The rate of decay is conveniently expressed in terms of an isotope's half-life, or the time it takes for one-half"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Uranium-238",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Uranium-238 | Lead-206 | 4.5 billion years",
+        "values": [
+          {
+            "value": "Lead-206",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-238 | Lead-206 | 4.5 billion years"
+          },
+          {
+            "value": "4.5 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-238 | Lead-206 | 4.5 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Uranium-235",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Uranium-235 | Lead-207 | 704 million years",
+        "values": [
+          {
+            "value": "Lead-207",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-235 | Lead-207 | 704 million years"
+          },
+          {
+            "value": "704 million years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Uranium-235 | Lead-207 | 704 million years"
+          }
+        ]
+      },
+      {
+        "label": "Thorium-232",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Thorium-232 | Lead-208 | 14.0 billion years",
+        "values": [
+          {
+            "value": "Lead-208",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Thorium-232 | Lead-208 | 14.0 billion years"
+          },
+          {
+            "value": "14.0 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Thorium-232 | Lead-208 | 14.0 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Rubidium-87",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years",
+        "values": [
+          {
+            "value": "Strontium-87",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years"
+          },
+          {
+            "value": "48.8 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Rubidium-87 | Strontium-87 | 48.8 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Potassium-40",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Potassium-40 | Argon-40 | 1.25 billion years",
+        "values": [
+          {
+            "value": "Argon-40",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Potassium-40 | Argon-40 | 1.25 billion years"
+          },
+          {
+            "value": "1.25 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Potassium-40 | Argon-40 | 1.25 billion years"
+          }
+        ]
+      },
+      {
+        "label": "Samarium-147",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Samarium-147 | Neodymium-143 | 106 billion years",
+        "values": [
+          {
+            "value": "Neodymium-143",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Samarium-147 | Neodymium-143 | 106 billion years"
+          },
+          {
+            "value": "106 billion years",
+            "sourceId": "usgs-geologic-age",
+            "quote": "Samarium-147 | Neodymium-143 | 106 billion years"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-daughter-uranium238",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 0
+      },
+      {
+        "id": "lookup-half-life-potassium40",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

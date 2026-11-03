@@ -1,0 +1,182 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Water continuously circulates in the hydrologic cycle",
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Steps follow the order presented in the source.",
+    "steps": [
+      {
+        "id": "evaporation-step",
+        "label": "Water evaporates from surface",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "orderHint": "Remember that liquid water needs energy to become vapor."
+      },
+      {
+        "id": "transpiration-step",
+        "label": "Plants release water to air",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "orderHint": "Think about water leaving leaves through tiny openings."
+      },
+      {
+        "id": "condensation-step",
+        "label": "Vapor condenses into liquid",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "orderHint": "Recall how cooling vapor forms liquid."
+      },
+      {
+        "id": "runoff-step",
+        "label": "Runoff flows to rivers and oceans",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "orderHint": "Notice what happens when the ground cannot absorb more water."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101212123-3e4734fe:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ea4a4f8c7261447ab3cc26af7bc441e2",
+    "usage": {
+      "promptTokens": 3362,
+      "completionTokens": 3551,
+      "reasoningTokens": 3189,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22843,
+    "estCostUSD": 0.01929425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "precipitation-step",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101212123-3e4734fe:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Water continuously circulates in the hydrologic cycle",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ea4a4f8c7261447ab3cc26af7bc441e2",
+      "runId": "job-20261101212123-3e4734fe",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T21:22:55.939Z"
+    },
+    "seed": 1618312287,
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Steps follow the order presented in the source.",
+    "steps": [
+      {
+        "id": "evaporation-step",
+        "label": "Water evaporates from surface",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "orderHint": "Remember that liquid water needs energy to become vapor."
+      },
+      {
+        "id": "transpiration-step",
+        "label": "Plants release water to air",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "orderHint": "Think about water leaving leaves through tiny openings."
+      },
+      {
+        "id": "condensation-step",
+        "label": "Vapor condenses into liquid",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "orderHint": "Recall how cooling vapor forms liquid."
+      },
+      {
+        "id": "runoff-step",
+        "label": "Runoff flows to rivers and oceans",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "orderHint": "Notice what happens when the ground cannot absorb more water."
+      }
+    ]
+  }
+}

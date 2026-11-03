@@ -1,0 +1,246 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "history",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers the 1803 Louisiana Purchase transaction for 828,000 square miles for $15 million after authorization of $10 million for New Orleans and the Floridas, Jefferson's constitutional doubts, and consequences for sectional conflict and Native displacement.",
+    "overview": {
+      "headline": "How the 1803 Louisiana purchase doubled the nation and deepened divisions",
+      "keyPoints": [
+        {
+          "id": "purchase-size-price",
+          "point": "Students learn the United States purchased 828,000 square miles west of the Mississippi River for $15 million.",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million"
+        },
+        {
+          "id": "negotiators-authorized",
+          "point": "Students learn negotiators were authorized to pay up to $10 million for New Orleans and the Floridas before being offered Louisiana.",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+        },
+        {
+          "id": "jefferson-expansion",
+          "point": "Students learn President Thomas Jefferson set aside strict constitutional doubts to expand across the continent.",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "the desire to expand the United States across the entire continent trumped his ideological beliefs"
+        },
+        {
+          "id": "sectional-slavery-compromises",
+          "point": "Students learn expansion exposed sectional weaknesses over slavery leading to compromises and civil war.",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+        },
+        {
+          "id": "native-displacement",
+          "point": "Students learn the purchase ignored Native peoples who were later forced onto reservations and lost tribal lands.",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "louisiana-purchase",
+          "term": "Louisiana Purchase",
+          "gloss": "1803 transaction that ignored Native presence while doubling the nation's size",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "In addition, the Louisiana Purchase ignored the potential impact on Native Americans."
+        },
+        {
+          "id": "new-orleans",
+          "term": "New Orleans",
+          "gloss": "Port city negotiators were originally authorized to obtain for up to $10 million",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+        },
+        {
+          "id": "strict-interpreter",
+          "term": "strict interpreter",
+          "gloss": "Belief that the Constitution must be read in a strict way that limits government authority",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered"
+        },
+        {
+          "id": "sectional-weaknesses",
+          "term": "sectional weaknesses",
+          "gloss": "Divisions between North and South exposed by expansion over slavery",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+        },
+        {
+          "id": "missouri-compromise",
+          "term": "Missouri Compromise",
+          "gloss": "Compromise that tried to maintain balance between free and slave states",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "(notably the Missouri Compromise and the Compromise of 1850)"
+        },
+        {
+          "id": "american-indians",
+          "term": "American Indians",
+          "gloss": "Thousands of tribal members populated the ceded lands before removal",
+          "sourceId": "nara-louisiana-purchase-treaty",
+          "quote": "was populated with thousands of American Indians across dozens of tribes"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Builds factual recall of purchase size, price and actors before analyzing consequences.",
+        "focusQuote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      },
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Traces cause and effect from authorization and offer through expansion to sectional conflict and Native consequences.",
+        "focusQuote": "the desire to maintain a balance between \"free states\" and \"slave states\" required a series of fragile compromises",
+        "focusSourceId": "nara-louisiana-purchase-treaty"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102111-672e0f27:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"history\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 2589 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 6, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); \"according to\" counts only when it names the publisher, and \"as stated by\" / \"official\" / \"endorsed\" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 6 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7106349e492a4537a081696678a744ea",
+    "usage": {
+      "promptTokens": 7657,
+      "completionTokens": 3702,
+      "reasoningTokens": 2751,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30497,
+    "estCostUSD": 0.02530475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

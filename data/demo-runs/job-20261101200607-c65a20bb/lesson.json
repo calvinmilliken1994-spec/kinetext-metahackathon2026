@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261101200607-c65a20bb",
+  "analysisRef": "job-20261101200607-c65a20bb/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101200607-c65a20bb:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How water circulates between ground and atmosphere",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a198b8-b508-75f6-9310-4da563ee9e34",
+      "runId": "job-20261101200607-c65a20bb",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T20:06:44.344Z"
+    },
+    "seed": 1236100144,
+    "headline": "How water circulates between ground and atmosphere",
+    "keyPoints": [
+      {
+        "id": "water-cycle-circulation",
+        "point": "Students learn that the hydrologic cycle involves continuous circulation of water in the Earth-Atmosphere system.",
+        "quote": "The hydrologic cycle involves the continuous circulation of water in the Earth-Atmosphere system.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "evaporation-change",
+        "point": "Students learn that evaporation is the change of state from liquid to gas.",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "transpiration-plants",
+        "point": "Students learn that transpiration is evaporation of water from plants through stomata on leaves.",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "condensation-process",
+        "point": "Students learn that condensation is the process where water vapor is changed into liquid state.",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "precipitation-forms",
+        "point": "Students learn that precipitation can be rain, hail, snow or sleet as fresh water received on Earth.",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Change of state from liquid to gas that requires energy input",
+        "id": "evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Evaporation"
+      },
+      {
+        "gloss": "Evaporation of water from plants through leaf stomata controlled by humidity",
+        "id": "transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Transpiration"
+      },
+      {
+        "gloss": "Process where water vapor changes into liquid state in clouds or dew",
+        "id": "condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Condensation"
+      },
+      {
+        "gloss": "Water falling to Earth as rain, hail, snow or sleet after coalescence",
+        "id": "precipitation",
+        "quote": "Precipitation is the primary way we receive fresh water on Earth.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Precipitation"
+      },
+      {
+        "gloss": "Excess precipitation flowing over saturated ground to form rivers and lakes",
+        "id": "runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Runoff"
+      },
+      {
+        "gloss": "Small openings on underside of leaves connected to vascular tissues",
+        "id": "stomata",
+        "quote": "Stomata are small openings found on the underside of leaves that are connected to vascular plant tissues.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Stomata"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101200607-c65a20bb:label-diagram-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261101200607-c65a20bb:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

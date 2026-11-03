@@ -1,0 +1,84 @@
+{
+  "jobId": "job-20261031103922-8ad67e8b",
+  "sourceId": "nasa-grc-speed-of-sound",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:39:22.534Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.256034,
+  "reservedUnknownUSD": 0,
+  "engine": "speed-of-sound-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "semantic.range.gasConstantJPerKgK",
+        "semantic.predictions-in-range",
+        "policy.no-publisher-attribution"
+      ],
+      "fixed": [
+        "semantic.range.gasConstantJPerKgK",
+        "semantic.predictions-in-range",
+        "policy.no-publisher-attribution"
+      ],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "repair.no-weakening"
+      ],
+      "fixed": [
+        "repair.no-weakening"
+      ],
+      "remaining": [],
+      "publishable": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:39:22.534Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "compare-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "schema.gen"
+      ],
+      "fixed": [
+        "schema.gen"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "specId": "nasa-grc-speed-of-sound-job-20261031103922-8ad67e8b",
+  "publishable": true,
+  "checksPassed": 16,
+  "checksTotal": 16,
+  "publishedRevision": 3,
+  "finishedAt": "2026-10-31T10:43:02.708Z"
+}

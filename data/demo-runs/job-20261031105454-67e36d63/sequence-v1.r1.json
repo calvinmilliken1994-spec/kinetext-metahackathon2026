@@ -1,0 +1,171 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Past carbon dioxide feedback cycle",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "sunlight-increase",
+        "label": "Small increase in incoming sunlight",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The warm episodes (interglacials) began with a small increase in incoming sunlight in the Northern Hemisphere summer",
+        "orderHint": ""
+      },
+      {
+        "id": "initial-warming",
+        "label": "Slight warming from extra sunlight",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "That little bit of extra sunlight caused a little bit of warming.",
+        "orderHint": ""
+      },
+      {
+        "id": "ocean-outgassing",
+        "label": "Oceans warm and outgas carbon dioxide",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "As the oceans warmed, they outgassed carbon dioxide—like a can of soda going flat in the heat of a summer day.",
+        "orderHint": ""
+      },
+      {
+        "id": "amplified-warming",
+        "label": "Extra carbon dioxide amplifies warming",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The extra carbon dioxide in the atmosphere greatly amplified the initial, solar-driven warming.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105454-67e36d63:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ab44e274dc7f4402a4f49efdc58455f3",
+    "usage": {
+      "promptTokens": 5390,
+      "completionTokens": 3090,
+      "reasoningTokens": 2815,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18966,
+    "estCostUSD": 0.01987,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105454-67e36d63:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Past carbon dioxide feedback cycle",
+    "sources": [
+      {
+        "id": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "title": "Climate change: atmospheric carbon dioxide — NOAA Climate.gov",
+        "locator": "https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Climate.gov, 'Climate change: atmospheric carbon dioxide'. Credit: NOAA Climate.gov. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "407ee5d0a24d391a0d9c368c628007f1d8c75de1105ea65a2948570abc7ce770"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ab44e274dc7f4402a4f49efdc58455f3",
+      "runId": "job-20261031105454-67e36d63",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:57:10.394Z"
+    },
+    "seed": 2917861198,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "sunlight-increase",
+        "label": "Small increase in incoming sunlight",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The warm episodes (interglacials) began with a small increase in incoming sunlight in the Northern Hemisphere summer",
+        "orderHint": ""
+      },
+      {
+        "id": "initial-warming",
+        "label": "Slight warming from extra sunlight",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "That little bit of extra sunlight caused a little bit of warming.",
+        "orderHint": ""
+      },
+      {
+        "id": "ocean-outgassing",
+        "label": "Oceans warm and outgas carbon dioxide",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "As the oceans warmed, they outgassed carbon dioxide—like a can of soda going flat in the heat of a summer day.",
+        "orderHint": ""
+      },
+      {
+        "id": "amplified-warming",
+        "label": "Extra carbon dioxide amplifies warming",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The extra carbon dioxide in the atmosphere greatly amplified the initial, solar-driven warming.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

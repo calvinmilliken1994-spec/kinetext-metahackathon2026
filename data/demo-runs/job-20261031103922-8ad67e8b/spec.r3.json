@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-speed-of-sound-job-20261031103922-8ad67e8b",
+  "title": "Speed of Sound in a Gas",
+  "learningObjectives": [
+    "Understand that transmission of small disturbances through a gas is an isentropic process and speed depends on gas state.",
+    "Apply a = sqrt(gamma * R * T) to calculate speed of sound from gamma, R and absolute temperature.",
+    "Explain why temperature must be on an absolute scale and how gas type enters through R and gamma."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-speed-of-sound",
+      "title": "Speed of Sound Interactive — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "7ebd6e4acd15582d57fbdf4cdea82b7d4748c231e5aea039c2c8756214c8e02a"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-isentropic",
+      "text": "The transmission of small disturbances through a gas is isentropic, returning to original conditions, and speed depends on molecular collisions and gas state.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-speed-of-sound",
+          "quote": "The transmission of a small disturbance through a gas is an isentropic process."
+        }
+      ]
+    },
+    {
+      "id": "exp-formula",
+      "text": "The speed of sound is given by the square-root relation involving the ratio of specific heats, the gas constant and the absolute temperature.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-speed-of-sound",
+          "quote": "a = sqrt(gamma * R * T)"
+        },
+        {
+          "sourceId": "nasa-grc-speed-of-sound",
+          "quote": "the speed of sound a is equal to the square root of the ratio of specific heat gamma (γ) times the gas constant R times the temperature T."
+        }
+      ]
+    },
+    {
+      "id": "exp-absolute-scale",
+      "text": "The temperature in the formula must be on an absolute scale and the gas type affects the constant through R and gamma.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-speed-of-sound",
+          "quote": "Notice that the temperature must be specified on an absolute scale (Kelvin or Rankine)."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "speed-of-sound-v1",
+    "equation": "a=sqrt(gamma*R*T)",
+    "gamma": {
+      "unit": "1",
+      "min": 1.01,
+      "max": 1.69,
+      "default": 1.4
+    },
+    "gasConstantJPerKgK": {
+      "unit": "J/(kg*K)",
+      "min": 200,
+      "max": 1000,
+      "default": 287
+    },
+    "temperatureK": {
+      "unit": "K",
+      "min": 250,
+      "max": 350,
+      "default": 288.15
+    },
+    "scenario": {
+      "objectLabel": "Air sample",
+      "settingLabel": "Sea-level standard day"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "cold",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 100,
+      "expectedSpeedMps": 200.4495,
+      "tolerance": 0.5
+    },
+    {
+      "name": "warm",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 500,
+      "expectedSpeedMps": 447.96,
+      "tolerance": 0.5
+    },
+    {
+      "name": "mid-range",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 300,
+      "expectedSpeedMps": 347.1887,
+      "tolerance": 0.5
+    }
+  ],
+  "predictions": [
+    {
+      "id": "prediction-1",
+      "prompt": "Verify the simulation value for a standard sea-level air sample.",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 288.15,
+      "expectedSpeedMps": 340.2626,
+      "tolerance": 0.5
+    },
+    {
+      "id": "prediction-2",
+      "prompt": "Second check with different gas properties inside the slider range.",
+      "gamma": 1.3,
+      "gasConstantJPerKgK": 400,
+      "temperatureK": 300,
+      "expectedSpeedMps": 394.9684,
+      "tolerance": 0.5
+    },
+    {
+      "id": "prediction-3",
+      "prompt": "Third check with another in-range temperature.",
+      "gamma": 1.4,
+      "gasConstantJPerKgK": 287,
+      "temperatureK": 320,
+      "expectedSpeedMps": 358.575,
+      "tolerance": 0.5
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8315b27885694cb18f2dd10931cdcdc7",
+    "runId": "job-20261031103922-8ad67e8b",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:43:02.697Z",
+    "revision": 3,
+    "repairOf": 2
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "cards": [
+      {
+        "hint": "Recall which letters pair across the ladder rungs.",
+        "id": "dna-base-pairing",
+        "options": [
+          "A with T and C with G",
+          "A with C and T with G",
+          "A with G and T with C"
+        ],
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "Which base pairing builds the units called base pairs?"
+      },
+      {
+        "hint": "Think of the four letters that spell the code.",
+        "id": "dna-four-bases",
+        "options": [
+          "adenine (A), guanine (G), cytosine (C), and thymine (T)",
+          "adenine (A), guanine (G), cytosine (C), and uracil (U)",
+          "adenine (A), guanine (G), thymine (T), and uracil (U)"
+        ],
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "Which set includes the four chemical bases in DNA?"
+      },
+      {
+        "hint": "Focus on where most of the material is found.",
+        "id": "dna-location-nucleus",
+        "options": [
+          "nuclear DNA",
+          "mitochondrial DNA or mtDNA",
+          "sugar-phosphate backbone"
+        ],
+        "quote": "Most DNA is located in the cell nucleus (where it is called nuclear DNA)",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "What is most hereditary material in the cell nucleus called?"
+      },
+      {
+        "hint": "Think about what happens before cells divide.",
+        "id": "dna-replication-copies",
+        "options": [
+          "make copies of itself",
+          "convert the energy from food into a form that cells can use",
+          "form words and sentences"
+        ],
+        "quote": "An important property of DNA is that it can replicate, or make copies of itself.",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "What important property lets DNA support new cells during division?"
+      }
+    ],
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How DNA stores and copies information"
+  },
+  "report": {
+    "artifactId": "job-20261101182353-097482c0:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a1985b-3aa9-749e-8ffa-df483fc3d5a6",
+    "usage": {
+      "promptTokens": 2865,
+      "completionTokens": 7306,
+      "reasoningTokens": 6860,
+      "cachedTokens": 0
+    },
+    "latencyMs": 24331,
+    "estCostUSD": 0.03463175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101182353-097482c0:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How DNA stores and copies information",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1985b-3aa9-749e-8ffa-df483fc3d5a6",
+      "runId": "job-20261101182353-097482c0",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T18:24:38.167Z"
+    },
+    "seed": 373383936,
+    "cards": [
+      {
+        "hint": "Recall which letters pair across the ladder rungs.",
+        "id": "dna-base-pairing",
+        "options": [
+          "A with T and C with G",
+          "A with C and T with G",
+          "A with G and T with C"
+        ],
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "Which base pairing builds the units called base pairs?"
+      },
+      {
+        "hint": "Think of the four letters that spell the code.",
+        "id": "dna-four-bases",
+        "options": [
+          "adenine (A), guanine (G), cytosine (C), and thymine (T)",
+          "adenine (A), guanine (G), cytosine (C), and uracil (U)",
+          "adenine (A), guanine (G), thymine (T), and uracil (U)"
+        ],
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "Which set includes the four chemical bases in DNA?"
+      },
+      {
+        "hint": "Focus on where most of the material is found.",
+        "id": "dna-location-nucleus",
+        "options": [
+          "nuclear DNA",
+          "mitochondrial DNA or mtDNA",
+          "sugar-phosphate backbone"
+        ],
+        "quote": "Most DNA is located in the cell nucleus (where it is called nuclear DNA)",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "What is most hereditary material in the cell nucleus called?"
+      },
+      {
+        "hint": "Think about what happens before cells divide.",
+        "id": "dna-replication-copies",
+        "options": [
+          "make copies of itself",
+          "convert the energy from food into a form that cells can use",
+          "form words and sentences"
+        ],
+        "quote": "An important property of DNA is that it can replicate, or make copies of itself.",
+        "sourceId": "medlineplus-what-is-dna",
+        "stem": "What important property lets DNA support new cells during division?"
+      }
+    ]
+  }
+}

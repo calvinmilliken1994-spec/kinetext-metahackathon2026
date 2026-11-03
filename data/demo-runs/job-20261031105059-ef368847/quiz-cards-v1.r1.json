@@ -1,0 +1,230 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Bubble sort complexity and improvement checks",
+    "cards": [
+      {
+        "id": "complexity-arbitrary",
+        "stem": "What complexity is stated for arbitrary data?",
+        "options": [
+          "O(n^2)",
+          "O(n log n)",
+          "O(1)",
+          "O(log n)"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Complexity is O(n^2) for arbitrary data",
+        "hint": "Think about the worst case for unsorted input."
+      },
+      {
+        "id": "complexity-nearly-ordered",
+        "stem": "What does the complexity approach when the list is nearly in order at the beginning?",
+        "options": [
+          "Θ(n)",
+          "O(n log n)",
+          "O(1)",
+          "O(log n)"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "approaches Θ(n) if the list is nearly in order at the beginning.",
+        "hint": "Consider the best case for an almost sorted list."
+      },
+      {
+        "id": "improvement-decrement",
+        "stem": "What improvement is suggested because at least one item reaches its final place each pass?",
+        "options": [
+          "decrement the last position checked on each pass",
+          "increment the start position each pass",
+          "restart from the beginning each time",
+          "swap only the first pair"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Since at least one item is moved into its final place for each pass, an improvement is to decrement the last position checked on each pass.",
+        "hint": "Think about shortening the range that still needs checking."
+      },
+      {
+        "id": "definition-swap",
+        "stem": "How does the definition describe ordering adjacent items?",
+        "options": [
+          "swapping the items if necessary",
+          "dividing the list in half",
+          "selecting a pivot element",
+          "merging sorted halves"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Sort by comparing each adjacent pair of items in a list in turn, swapping the items if necessary",
+        "hint": "Focus on what happens to each adjacent pair."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105059-ef368847:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cards[0].options[2] states the number 1, which does not appear as that whole number on the page or in the same quote (N-01); cards[1].options[2] states the number 1, which does not appear as that whole number on the page or in the same quote (N-01)",
+        "path": "/cards/0/options/2",
+        "affected": [
+          "/cards/0/options/2",
+          "/cards/1/options/2"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7df0c0183dda40d9b1b4e10f59d5ebdc",
+    "usage": {
+      "promptTokens": 2679,
+      "completionTokens": 5420,
+      "reasoningTokens": 5029,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27313,
+    "estCostUSD": 0.02638375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105059-ef368847:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Bubble sort complexity and improvement checks",
+    "sources": [
+      {
+        "id": "nist-dads-bubble-sort",
+        "title": "bubble sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bubblesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'bubble sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7df0c0183dda40d9b1b4e10f59d5ebdc",
+      "runId": "job-20261031105059-ef368847",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:52:26.174Z"
+    },
+    "seed": 3335719459,
+    "cards": [
+      {
+        "id": "complexity-arbitrary",
+        "stem": "What complexity is stated for arbitrary data?",
+        "options": [
+          "O(n^2)",
+          "O(n log n)",
+          "O(1)",
+          "O(log n)"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Complexity is O(n^2) for arbitrary data",
+        "hint": "Think about the worst case for unsorted input."
+      },
+      {
+        "id": "complexity-nearly-ordered",
+        "stem": "What does the complexity approach when the list is nearly in order at the beginning?",
+        "options": [
+          "Θ(n)",
+          "O(n log n)",
+          "O(1)",
+          "O(log n)"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "approaches Θ(n) if the list is nearly in order at the beginning.",
+        "hint": "Consider the best case for an almost sorted list."
+      },
+      {
+        "id": "improvement-decrement",
+        "stem": "What improvement is suggested because at least one item reaches its final place each pass?",
+        "options": [
+          "decrement the last position checked on each pass",
+          "increment the start position each pass",
+          "restart from the beginning each time",
+          "swap only the first pair"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Since at least one item is moved into its final place for each pass, an improvement is to decrement the last position checked on each pass.",
+        "hint": "Think about shortening the range that still needs checking."
+      },
+      {
+        "id": "definition-swap",
+        "stem": "How does the definition describe ordering adjacent items?",
+        "options": [
+          "swapping the items if necessary",
+          "dividing the list in half",
+          "selecting a pivot element",
+          "merging sorted halves"
+        ],
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Sort by comparing each adjacent pair of items in a list in turn, swapping the items if necessary",
+        "hint": "Focus on what happens to each adjacent pair."
+      }
+    ]
+  }
+}

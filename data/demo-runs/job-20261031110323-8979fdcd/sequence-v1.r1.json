@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How each branch checks the others",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "president-vetoes-legislation",
+        "label": "President vetoes congressional legislation",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president can veto legislation created by Congress.",
+        "orderHint": ""
+      },
+      {
+        "id": "president-nominates-officials",
+        "label": "President nominates agency and court officials",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "He or she also nominates heads of federal agencies and high court appointees.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-reviews-nominees",
+        "label": "Congress reviews presidential nominees",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "Congress confirms or rejects the president's nominees.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-removes-president",
+        "label": "Congress removes president in exceptional cases",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "It can also remove the president from office in exceptional circumstances.",
+        "orderHint": ""
+      },
+      {
+        "id": "justices-overturn-laws",
+        "label": "Justices overturn unconstitutional laws",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The Justices of the Supreme Court can overturn unconstitutional laws.",
+        "orderHint": ""
+      },
+      {
+        "id": "justices-nominated-confirmed",
+        "label": "Justices are nominated and confirmed",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "These justices are nominated by the president and confirmed by the Senate.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110323-8979fdcd:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "18a56ddb42a44c26b00eca20b6d1af19",
+    "usage": {
+      "promptTokens": 3009,
+      "completionTokens": 4085,
+      "reasoningTokens": 3756,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25193,
+    "estCostUSD": 0.0211225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110323-8979fdcd:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How each branch checks the others",
+    "sources": [
+      {
+        "id": "usagov-branches-of-government",
+        "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/branches-of-government",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "18a56ddb42a44c26b00eca20b6d1af19",
+      "runId": "job-20261031110323-8979fdcd",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:04:40.207Z"
+    },
+    "seed": 3127535624,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "president-vetoes-legislation",
+        "label": "President vetoes congressional legislation",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president can veto legislation created by Congress.",
+        "orderHint": ""
+      },
+      {
+        "id": "president-nominates-officials",
+        "label": "President nominates agency and court officials",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "He or she also nominates heads of federal agencies and high court appointees.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-reviews-nominees",
+        "label": "Congress reviews presidential nominees",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "Congress confirms or rejects the president's nominees.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-removes-president",
+        "label": "Congress removes president in exceptional cases",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "It can also remove the president from office in exceptional circumstances.",
+        "orderHint": ""
+      },
+      {
+        "id": "justices-overturn-laws",
+        "label": "Justices overturn unconstitutional laws",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The Justices of the Supreme Court can overturn unconstitutional laws.",
+        "orderHint": ""
+      },
+      {
+        "id": "justices-nominated-confirmed",
+        "label": "Justices are nominated and confirmed",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "These justices are nominated by the president and confirmed by the Senate.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

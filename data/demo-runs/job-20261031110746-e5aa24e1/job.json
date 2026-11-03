@@ -1,0 +1,79 @@
+{
+  "jobId": "job-20261031110746-e5aa24e1",
+  "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T11:07:46.183Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.268416,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T11:07:46.183Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "FE-08"
+      ],
+      "fixed": [],
+      "remaining": [
+        "FE-08"
+      ],
+      "passed": false,
+      "afterInjectedFault": false
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "FE-08"
+      ],
+      "fixed": [],
+      "remaining": [
+        "FE-05",
+        "FE-08",
+        "repair.no-weakening"
+      ],
+      "passed": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-10-31T11:11:54.525Z"
+}

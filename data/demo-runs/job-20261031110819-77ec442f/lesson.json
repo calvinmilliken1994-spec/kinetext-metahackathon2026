@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031110819-77ec442f",
+  "analysisRef": "job-20261031110819-77ec442f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110819-77ec442f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How radioactivity and half-life build the numeric geologic time scale",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "364a91bab186484e94c2a45ce2451c05",
+      "runId": "job-20261031110819-77ec442f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:09:25.913Z"
+    },
+    "seed": 914846590,
+    "headline": "How radioactivity and half-life build the numeric geologic time scale",
+    "keyPoints": [
+      {
+        "id": "earth-age-determination",
+        "point": "Geologists use radioactivity to show Earth is about 4.6 billion years old.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Earth is about 4.6 billion years old?"
+      },
+      {
+        "id": "half-life-definition",
+        "point": "Half-life is the length of time required for one-half of parent atoms to decay to daughter atoms.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+      },
+      {
+        "id": "isotope-neutron-difference",
+        "point": "Isotopes of an element differ only in the number of neutrons in the nucleus.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopes of an element are atoms that differ from one another only in the number of neutrons in the nucleus."
+      },
+      {
+        "id": "numeric-dating-process",
+        "point": "Isotopic techniques measure the time at which a particular mineral within a rock was formed.",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "half-life",
+        "term": "half-life",
+        "gloss": "Length of time required for one-half of parent atoms to decay to daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+      },
+      {
+        "id": "isotope",
+        "term": "isotope",
+        "gloss": "Radioactive form that has its own unique half-life",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Each radioactive isotope has its own unique half-life."
+      },
+      {
+        "id": "parent",
+        "term": "parent",
+        "gloss": "Radioactive atom that decays to daughter at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life."
+      },
+      {
+        "id": "geologic-time-scale",
+        "term": "geologic time scale",
+        "gloss": "Product of many years of detective work using dating techniques to order rock and fossil history",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The geologic time scale is the product of many years of detective work, as well as a variety of dating techniques not discussed here."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-fossils-numeric-time-scale-job-20261031110819-77ec442f",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110819-77ec442f:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

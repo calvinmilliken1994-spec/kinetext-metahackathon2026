@@ -1,0 +1,167 @@
+{
+  "gen": {
+    "schemaVersion": "algorithm-trace-v1",
+    "title": "Tracing bubble sort through adjacent swaps",
+    "algorithm": "bubble-sort",
+    "algorithmName": "bubble sort",
+    "sourceId": "nist-dads-bubble-sort",
+    "quote": "bubble sort",
+    "input": [
+      8,
+      3,
+      6,
+      2,
+      5
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": [
+      {
+        "id": "pass-progress",
+        "kind": "property",
+        "text": "Since at least one item is moved into its final place for each pass",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Since at least one item is moved into its final place for each pass"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105059-ef368847:algorithm-trace-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every algorithm-trace title, name length and claim id/kind/text shape is within the frozen limits"
+      },
+      {
+        "id": "ALG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "ALG-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "algorithmName \"bubble sort\" occurs as a whole phrase in the quote and matches the frozen name pattern for \"bubble-sort\" (algorithm-named-in-quote)"
+      },
+      {
+        "id": "ALG-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the input is valid: 5 integer values in 0-99, hasTarget is false exactly for the sort, and the target is the sentinel 0 (input-valid)"
+      },
+      {
+        "id": "ALG-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our tracer ran bubble sort to completion in 19 frame(s) (limit 400) and the sorted result [2, 3, 5, 6, 8] is ascending and holds every input value — computed by our tested engine, never by the model (trace-runs)"
+      },
+      {
+        "id": "ALG-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 claim text(s) occur in their own quote after whitespace normalisation, with every number matching as the same whole number (claims-in-quote)"
+      },
+      {
+        "id": "ALG-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the algorithm name and the claim texts appears on the cited page as that whole number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "ALG-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the counts are valid: 5 input values (4-10) and 1 claim(s) (0-3) (counts-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "algorithm-trace-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "60434fbab54042358054be5dff90a945",
+    "usage": {
+      "promptTokens": 3594,
+      "completionTokens": 2245,
+      "reasoningTokens": 2117,
+      "cachedTokens": 0
+    },
+    "latencyMs": 13568,
+    "estCostUSD": 0.01403375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105059-ef368847:algorithm-trace-v1:r2",
+    "componentId": "algorithm-trace-v1",
+    "title": "Tracing bubble sort through adjacent swaps",
+    "sources": [
+      {
+        "id": "nist-dads-bubble-sort",
+        "title": "bubble sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bubblesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'bubble sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "60434fbab54042358054be5dff90a945",
+      "runId": "job-20261031105059-ef368847",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:52:39.581Z"
+    },
+    "seed": 1410594986,
+    "algorithm": "bubble-sort",
+    "algorithmName": "bubble sort",
+    "sourceId": "nist-dads-bubble-sort",
+    "quote": "bubble sort",
+    "input": [
+      8,
+      3,
+      6,
+      2,
+      5
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": [
+      {
+        "id": "pass-progress",
+        "kind": "property",
+        "text": "Since at least one item is moved into its final place for each pass",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Since at least one item is moved into its final place for each pass"
+      }
+    ]
+  }
+}

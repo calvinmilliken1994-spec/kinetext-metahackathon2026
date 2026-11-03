@@ -1,0 +1,213 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How a field pH meter produces a reading",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "place-sample-in-cup",
+        "label": "Place sample in collection cup",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "To use the pH meter in the photograph below, the water sample is placed in the cup",
+        "orderHint": ""
+      },
+      {
+        "id": "lower-glass-probe",
+        "label": "Lower glass probe into water",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "the glass probe at the end of the retractable arm is placed in the water",
+        "orderHint": ""
+      },
+      {
+        "id": "electrodes-detect-voltage",
+        "label": "Electrodes detect voltage in bulb",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Inside the thin glass bulb at the end of the probe there are two electrodes that measure voltage",
+        "orderHint": ""
+      },
+      {
+        "id": "reference-electrode-fixed",
+        "label": "Reference electrode keeps fixed acidity",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "One electrode is contained in a liquid that has a fixed acidity, or pH",
+        "orderHint": ""
+      },
+      {
+        "id": "sample-electrode-senses",
+        "label": "Sample electrode senses water acidity",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The other electrode responds to the acidity of the water sample",
+        "orderHint": ""
+      },
+      {
+        "id": "voltmeter-measures-difference",
+        "label": "Voltmeter measures voltage difference",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "A voltmeter in the probe measures the difference between the voltages of the two electrodes",
+        "orderHint": ""
+      },
+      {
+        "id": "meter-converts-display",
+        "label": "Meter converts voltage to display",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The meter then translates the voltage difference into pH and displays it on the little screen on the main box",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101091135-96787516:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3ce63e6ea3644f579db36e247da464c6",
+    "usage": {
+      "promptTokens": 4257,
+      "completionTokens": 5213,
+      "reasoningTokens": 4816,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28320,
+    "estCostUSD": 0.0274765,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091135-96787516:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How a field pH meter produces a reading",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3ce63e6ea3644f579db36e247da464c6",
+      "runId": "job-20261101091135-96787516",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T09:14:18.013Z"
+    },
+    "seed": 3685367327,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "place-sample-in-cup",
+        "label": "Place sample in collection cup",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "To use the pH meter in the photograph below, the water sample is placed in the cup",
+        "orderHint": ""
+      },
+      {
+        "id": "lower-glass-probe",
+        "label": "Lower glass probe into water",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "the glass probe at the end of the retractable arm is placed in the water",
+        "orderHint": ""
+      },
+      {
+        "id": "electrodes-detect-voltage",
+        "label": "Electrodes detect voltage in bulb",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Inside the thin glass bulb at the end of the probe there are two electrodes that measure voltage",
+        "orderHint": ""
+      },
+      {
+        "id": "reference-electrode-fixed",
+        "label": "Reference electrode keeps fixed acidity",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "One electrode is contained in a liquid that has a fixed acidity, or pH",
+        "orderHint": ""
+      },
+      {
+        "id": "sample-electrode-senses",
+        "label": "Sample electrode senses water acidity",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The other electrode responds to the acidity of the water sample",
+        "orderHint": ""
+      },
+      {
+        "id": "voltmeter-measures-difference",
+        "label": "Voltmeter measures voltage difference",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "A voltmeter in the probe measures the difference between the voltages of the two electrodes",
+        "orderHint": ""
+      },
+      {
+        "id": "meter-converts-display",
+        "label": "Meter converts voltage to display",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The meter then translates the voltage difference into pH and displays it on the little screen on the main box",
+        "orderHint": ""
+      }
+    ]
+  }
+}

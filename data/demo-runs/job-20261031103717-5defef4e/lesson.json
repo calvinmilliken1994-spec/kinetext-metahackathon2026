@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031103717-5defef4e",
+  "analysisRef": "job-20261031103717-5defef4e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103717-5defef4e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Simplified aircraft motion with balanced and unbalanced forces",
+    "sources": [
+      {
+        "id": "nasa-grc-simplified-aircraft-motion",
+        "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9eb27b0d631546fbb6995affd807fe56",
+      "runId": "job-20261031103717-5defef4e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:37:59.363Z"
+    },
+    "seed": 2149281168,
+    "headline": "Simplified aircraft motion with balanced and unbalanced forces",
+    "keyPoints": [
+      {
+        "id": "simplified-motion-idea",
+        "point": "Simplified motion looks at one force and one direction at a time while other forces are balanced.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "some of the four forces acting on the aircraft are balanced by other forces"
+      },
+      {
+        "id": "balanced-cruise",
+        "point": "Constant speed level flight happens when weight is balanced by lift and drag is balanced by thrust.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "the weight would be balanced by the lift and the drag would be balanced by the thrust."
+      },
+      {
+        "id": "newton-second-compute",
+        "point": "Newton’s second law lets you compute aircraft acceleration from the net force.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "We can compute the acceleration which the aircraft will experience from Newton’s second law of motion:"
+      },
+      {
+        "id": "net-force-difference",
+        "point": "Net force is the difference between opposing forces like lift minus weight or thrust minus drag.",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "weight-term",
+        "term": "weight",
+        "gloss": "downward force that is balanced by lift during level flight",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "In an ideal situation, an airplane could sustain a constant speed and level flight in which the weight would be balanced by the lift"
+      },
+      {
+        "id": "lift-term",
+        "term": "lift",
+        "gloss": "upward force that can be held constant while weight changes",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "If the weight is decreased while the lift is held constant, the airplane will rise:"
+      },
+      {
+        "id": "thrust-term",
+        "term": "thrust",
+        "gloss": "forward force that overcomes drag to accelerate the aircraft",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "increasing the thrust while the drag is constant will cause the plane to accelerate:"
+      },
+      {
+        "id": "drag-term",
+        "term": "drag",
+        "gloss": "backward force that slows the aircraft when it exceeds thrust",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "And increasing the drag at a constant thrust will cause the plane to slow down:"
+      },
+      {
+        "id": "acceleration-term",
+        "term": "acceleration",
+        "gloss": "rate of change of velocity that you compute from net force and mass",
+        "sourceId": "nasa-grc-simplified-aircraft-motion",
+        "quote": "We can compute the acceleration which the aircraft will experience from Newton’s second law of motion:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "forces-1d-v1",
+      "specId": "nasa-grc-simplified-aircraft-motion-job-20261031103717-5defef4e",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031103717-5defef4e:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

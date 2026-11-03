@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031104621-5e34a769",
+  "analysisRef": "job-20261031104621-5e34a769/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104621-5e34a769:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How random and assortative mating affect human genetics",
+    "sources": [
+      {
+        "id": "nij-random-mating",
+        "title": "Random Mating — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle/random-mating",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Random Mating'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "9f06caf792ddeb146476c0c5d2cf1851b1f5e8bd6f0fc7dfae8cb33d50725ad8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3e8ee36dd7134cf2b68ab3a22a419692",
+      "runId": "job-20261031104621-5e34a769",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:47:33.162Z"
+    },
+    "seed": 2741014598,
+    "headline": "How random and assortative mating affect human genetics",
+    "keyPoints": [
+      {
+        "id": "hwe-condition",
+        "point": "A condition for Hardy-Weinberg equilibrium is random mating, which does not always occur in humans.",
+        "sourceId": "nij-random-mating",
+        "quote": "One reason that Hardy-Weinberg does not always apply to humans is that random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur."
+      },
+      {
+        "id": "random-mating-definition",
+        "point": "Random mating means mating is arbitrary with regard to the locus being considered.",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "similar-mating-trait",
+        "point": "Humans tend to mate with similar individuals for visible traits such as height and ethnicity.",
+        "sourceId": "nij-random-mating",
+        "quote": "humans tend to mate with individuals that are similar to themselves"
+      },
+      {
+        "id": "assortative-effect",
+        "point": "Positive assortative mating increases homozygotes whereas negative assortative mating increases heterozygotes.",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "random-traits-blood",
+        "point": "Humans mate randomly for blood type and short tandem repeat genotype even though they mate assortatively for physical attributes.",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "random-mating-term",
+        "term": "Random mating",
+        "gloss": "mating that is arbitrary with regard to the locus being considered",
+        "sourceId": "nij-random-mating",
+        "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+      },
+      {
+        "id": "positive-assortative",
+        "term": "positive assortative mating",
+        "gloss": "non-random mating between similar individuals that increases homozygotes",
+        "sourceId": "nij-random-mating",
+        "quote": "This constitutes non-random, positive assortative mating."
+      },
+      {
+        "id": "negative-assortative",
+        "term": "negative assortative mating",
+        "gloss": "breeding between individuals with dissimilar genotypes",
+        "sourceId": "nij-random-mating",
+        "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+      },
+      {
+        "id": "homozygotes-term",
+        "term": "homozygotes",
+        "gloss": "genotypes with identical alleles that show an increase after positive assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "heterozygotes-term",
+        "term": "heterozygotes",
+        "gloss": "genotypes with different alleles that show an increase after negative assortative mating",
+        "sourceId": "nij-random-mating",
+        "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+      },
+      {
+        "id": "str-genotype",
+        "term": "short tandem repeat",
+        "gloss": "repeated DNA trait that is an example of randomly mating traits such as blood type",
+        "sourceId": "nij-random-mating",
+        "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031104621-5e34a769:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104621-5e34a769:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

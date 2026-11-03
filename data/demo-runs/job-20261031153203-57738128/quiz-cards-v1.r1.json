@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Why the Alaska purchase mattered",
+    "cards": [
+      {
+        "id": "statehood-date",
+        "stem": "When did Alaska become a state?",
+        "options": [
+          "January 3, 1959",
+          "October 18, 1867",
+          "March 30, 1867",
+          "1884"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "Alaska became a state on January 3, 1959.",
+        "hint": "Think about the final step to statehood."
+      },
+      {
+        "id": "purchase-price",
+        "stem": "For what amount was Alaska purchased?",
+        "options": [
+          "$7.2 million",
+          "an exchange for military aid",
+          "a lease with annual payments",
+          "land ceded at no cost"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "to purchase Alaska for $7.2 million",
+        "hint": "Recall the price agreed in the treaty."
+      },
+      {
+        "id": "russian-negotiator",
+        "stem": "Who was the Russian minister in Washington who proposed the sale?",
+        "options": [
+          "Edouard de Stoeckl",
+          "Vitus Bering",
+          "Peter the Great",
+          "William Seward"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "on March 30, 1867, agreed to a proposal from Russian Minister in Washington, Edouard de Stoeckl, to purchase Alaska for $7.2 million",
+        "hint": "Identify the diplomat who negotiated for Russia."
+      },
+      {
+        "id": "alaska-gold-discovery",
+        "stem": "What event later helped vindicate the purchase?",
+        "options": [
+          "a major gold deposit was discovered in the Yukon in 1896",
+          "the territory was abandoned by the United States",
+          "Great Britain seized the Pacific ports",
+          "military rule was permanently restored"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "a major gold deposit was discovered in the Yukon in 1896",
+        "hint": "Consider what made skeptics change their view."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031153203-57738128:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5842d5dc461347a58dda305e64b5ef81",
+    "usage": {
+      "promptTokens": 2857,
+      "completionTokens": 9737,
+      "reasoningTokens": 9352,
+      "cachedTokens": 0
+    },
+    "latencyMs": 26717,
+    "estCostUSD": 0.0449535,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153203-57738128:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Why the Alaska purchase mattered",
+    "sources": [
+      {
+        "id": "dos-alaska-purchase",
+        "title": "Purchase of Alaska, 1867 — U.S. Department of State, Office of the Historian, Milestones: 1866–1898",
+        "locator": "https://history.state.gov/milestones/1866-1898/alaska-purchase",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Department of State, Office of the Historian, 'Milestones: 1866–1898 — Purchase of Alaska, 1867'. Per the Department's Copyright Information page, 'Unless a copyright is indicated, information on State Department websites is in the public domain and may be copied and distributed without permission. Citation of the U.S. State Department as source of the information is appreciated.' The U.S. Department of State has not reviewed, approved or endorsed this activity.",
+        "sha256": "108a7038cad1fe36f6facd30ee54ff6b1ee2768e3902e234455f33fabf00008b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5842d5dc461347a58dda305e64b5ef81",
+      "runId": "job-20261031153203-57738128",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T15:33:10.209Z"
+    },
+    "seed": 3809683604,
+    "cards": [
+      {
+        "id": "statehood-date",
+        "stem": "When did Alaska become a state?",
+        "options": [
+          "January 3, 1959",
+          "October 18, 1867",
+          "March 30, 1867",
+          "1884"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "Alaska became a state on January 3, 1959.",
+        "hint": "Think about the final step to statehood."
+      },
+      {
+        "id": "purchase-price",
+        "stem": "For what amount was Alaska purchased?",
+        "options": [
+          "$7.2 million",
+          "an exchange for military aid",
+          "a lease with annual payments",
+          "land ceded at no cost"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "to purchase Alaska for $7.2 million",
+        "hint": "Recall the price agreed in the treaty."
+      },
+      {
+        "id": "russian-negotiator",
+        "stem": "Who was the Russian minister in Washington who proposed the sale?",
+        "options": [
+          "Edouard de Stoeckl",
+          "Vitus Bering",
+          "Peter the Great",
+          "William Seward"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "on March 30, 1867, agreed to a proposal from Russian Minister in Washington, Edouard de Stoeckl, to purchase Alaska for $7.2 million",
+        "hint": "Identify the diplomat who negotiated for Russia."
+      },
+      {
+        "id": "alaska-gold-discovery",
+        "stem": "What event later helped vindicate the purchase?",
+        "options": [
+          "a major gold deposit was discovered in the Yukon in 1896",
+          "the territory was abandoned by the United States",
+          "Great Britain seized the Pacific ports",
+          "military rule was permanently restored"
+        ],
+        "sourceId": "dos-alaska-purchase",
+        "quote": "a major gold deposit was discovered in the Yukon in 1896",
+        "hint": "Consider what made skeptics change their view."
+      }
+    ]
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How doubling and tripling keep the cosine ratio unchanged",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "black-triangle-described",
+        "label": "Introduce smallest triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The black triangle is the smallest triangle and has a hypotenuse “h” of length “y” and an adjacent side “a” equal to “x”.",
+        "orderHint": "Start with the smallest triangle dimensions"
+      },
+      {
+        "id": "cosine-black-defined",
+        "label": "Define cosine for smallest triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "orderHint": "Note the original ratio"
+      },
+      {
+        "id": "red-triangle-doubled",
+        "label": "Form triangle by doubling sides",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "It was formed by doubling the size of sides of the black triangle.",
+        "orderHint": "Scale up by doubling"
+      },
+      {
+        "id": "cosine-red-defined",
+        "label": "Define cosine for doubled triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the red triangle, the cosine of “b” is equal to 2x divided by 2y.",
+        "orderHint": "Write the new ratio"
+      },
+      {
+        "id": "ratio-red-simplified",
+        "label": "Simplify doubled ratio to original",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "orderHint": "Cancel the scale factor"
+      },
+      {
+        "id": "blue-triangle-tripled",
+        "label": "Form triangle by tripling sides",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "It was formed by tripling the size of sides of the black triangle.",
+        "orderHint": "Scale up by tripling"
+      },
+      {
+        "id": "cosine-blue-defined",
+        "label": "Define cosine for tripled triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the blue triangle, the cosine of “b” is equal to 3x divided by 3y.",
+        "orderHint": "Write the new ratio with three"
+      },
+      {
+        "id": "ratio-blue-simplified",
+        "label": "Simplify tripled ratio to original",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “3’s” gives x divided by y, the same value as the black triangle and the red triangle.",
+        "orderHint": "Cancel to show the ratio stays the same"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103059-cc532c13:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 8 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c123617ebfd6498fb061c4a9d760a80a",
+    "usage": {
+      "promptTokens": 3292,
+      "completionTokens": 5382,
+      "reasoningTokens": 4853,
+      "cachedTokens": 0
+    },
+    "latencyMs": 28092,
+    "estCostUSD": 0.0269885,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103059-cc532c13:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How doubling and tripling keep the cosine ratio unchanged",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c123617ebfd6498fb061c4a9d760a80a",
+      "runId": "job-20261031103059-cc532c13",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:32:35.075Z"
+    },
+    "seed": 4106277602,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "black-triangle-described",
+        "label": "Introduce smallest triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The black triangle is the smallest triangle and has a hypotenuse “h” of length “y” and an adjacent side “a” equal to “x”.",
+        "orderHint": "Start with the smallest triangle dimensions"
+      },
+      {
+        "id": "cosine-black-defined",
+        "label": "Define cosine for smallest triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y.",
+        "orderHint": "Note the original ratio"
+      },
+      {
+        "id": "red-triangle-doubled",
+        "label": "Form triangle by doubling sides",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "It was formed by doubling the size of sides of the black triangle.",
+        "orderHint": "Scale up by doubling"
+      },
+      {
+        "id": "cosine-red-defined",
+        "label": "Define cosine for doubled triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the red triangle, the cosine of “b” is equal to 2x divided by 2y.",
+        "orderHint": "Write the new ratio"
+      },
+      {
+        "id": "ratio-red-simplified",
+        "label": "Simplify doubled ratio to original",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “2’s” gives x divided by y, the same value as the black triangle.",
+        "orderHint": "Cancel the scale factor"
+      },
+      {
+        "id": "blue-triangle-tripled",
+        "label": "Form triangle by tripling sides",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "It was formed by tripling the size of sides of the black triangle.",
+        "orderHint": "Scale up by tripling"
+      },
+      {
+        "id": "cosine-blue-defined",
+        "label": "Define cosine for tripled triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the blue triangle, the cosine of “b” is equal to 3x divided by 3y.",
+        "orderHint": "Write the new ratio with three"
+      },
+      {
+        "id": "ratio-blue-simplified",
+        "label": "Simplify tripled ratio to original",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "Dividing out the “3’s” gives x divided by y, the same value as the black triangle and the red triangle.",
+        "orderHint": "Cancel to show the ratio stays the same"
+      }
+    ]
+  }
+}

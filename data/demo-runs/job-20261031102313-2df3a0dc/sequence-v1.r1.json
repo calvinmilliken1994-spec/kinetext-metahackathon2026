@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Electoral college process from selection to inauguration",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order presented in the source text",
+    "steps": [
+      {
+        "id": "selection-outlined",
+        "label": "Selection of electors outlined",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "the selection of the electors, the meeting of the electors where they vote for President and Vice President",
+        "orderHint": ""
+      },
+      {
+        "id": "voters-choose-electors",
+        "label": "Voters choose candidate electors",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "When you vote for a Presidential candidate you are actually voting for your candidate's preferred electors.",
+        "orderHint": ""
+      },
+      {
+        "id": "electors-meet-december",
+        "label": "Electors meet in December",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The meeting of the electors takes place on the first Tuesday after the second Wednesday in December after the general election.",
+        "orderHint": ""
+      },
+      {
+        "id": "electors-cast-ballots",
+        "label": "Electors cast votes on separate ballots",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The electors meet in their respective States, where they cast their votes for President and Vice President on separate ballots.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-counts-votes",
+        "label": "Congress counts electoral votes",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Each State’s electoral votes are counted in a joint session of Congress on the 6th of January in the year following the meeting of the electors.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102313-2df3a0dc:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7d72273af538491883144725a39b0cdb",
+    "usage": {
+      "promptTokens": 3312,
+      "completionTokens": 6230,
+      "reasoningTokens": 5744,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38523,
+    "estCostUSD": 0.0306175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 2,
+      "id": "state-certifies-electors",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    },
+    {
+      "index": 6,
+      "id": "president-inaugurated-january",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102313-2df3a0dc:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Electoral college process from selection to inauguration",
+    "sources": [
+      {
+        "id": "nara-what-is-the-electoral-college",
+        "title": "What is the Electoral College? — National Archives, U.S. Electoral College",
+        "locator": "https://www.archives.gov/electoral-college/about",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'What is the Electoral College?'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "4b1141642b66f6e4b5dc8e1085b321d5e51d41c348d845433b13bce147d2bd88"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7d72273af538491883144725a39b0cdb",
+      "runId": "job-20261031102313-2df3a0dc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:24:36.182Z"
+    },
+    "seed": 2158808572,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order presented in the source text",
+    "steps": [
+      {
+        "id": "selection-outlined",
+        "label": "Selection of electors outlined",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "the selection of the electors, the meeting of the electors where they vote for President and Vice President",
+        "orderHint": ""
+      },
+      {
+        "id": "voters-choose-electors",
+        "label": "Voters choose candidate electors",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "When you vote for a Presidential candidate you are actually voting for your candidate's preferred electors.",
+        "orderHint": ""
+      },
+      {
+        "id": "electors-meet-december",
+        "label": "Electors meet in December",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The meeting of the electors takes place on the first Tuesday after the second Wednesday in December after the general election.",
+        "orderHint": ""
+      },
+      {
+        "id": "electors-cast-ballots",
+        "label": "Electors cast votes on separate ballots",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "The electors meet in their respective States, where they cast their votes for President and Vice President on separate ballots.",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-counts-votes",
+        "label": "Congress counts electoral votes",
+        "sourceId": "nara-what-is-the-electoral-college",
+        "quote": "Each State’s electoral votes are counted in a joint session of Congress on the 6th of January in the year following the meeting of the electors.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "computing",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page defines hash table as a dictionary mapped to array positions by hash functions, explains collisions and perfect hashing, divides resolution into open addressing, chaining and overflow area, lists variants and parts, and notes constant-time complexity and bucket arrays.",
+    "overview": {
+      "headline": "Hash tables map keys to array positions with collision handling",
+      "keyPoints": [
+        {
+          "id": "mapping-keys-to-positions",
+          "point": "Students learn that a hash table maps keys to array positions using hash functions.",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+        },
+        {
+          "id": "collision-definition",
+          "point": "Students learn that a collision occurs when keys of different items map to the same position.",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "Having the keys of more than one item map to the same position is called a collision."
+        },
+        {
+          "id": "resolution-schemes",
+          "point": "Students learn that collision resolution schemes include open addressing, chaining, and a special overflow area.",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+        },
+        {
+          "id": "perfect-hashing-tradeoff",
+          "point": "Students learn that perfect hashing avoids collisions but can be time-consuming to create.",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "Perfect hashing avoids collisions, but may be time-consuming to create."
+        },
+        {
+          "id": "constant-time-condition",
+          "point": "Students learn that hash table operations may be constant time if the table is big enough or grows.",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "Complexity depends on the hash function and collision resolution scheme, but may be constant (Θ(1)) if the table is big enough or grows."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "term-dictionary",
+          "term": "dictionary",
+          "gloss": "Collection where keys are mapped to values using array positions",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+        },
+        {
+          "id": "term-collision",
+          "term": "collision",
+          "gloss": "Case where two items map to the same position in the table",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "Having the keys of more than one item map to the same position is called a collision."
+        },
+        {
+          "id": "term-hash-functions",
+          "term": "hash functions",
+          "gloss": "Functions that map keys to array positions for direct access",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+        },
+        {
+          "id": "term-open-addressing",
+          "term": "open addressing",
+          "gloss": "Collision resolution that keeps items inside the main table by probing",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+        },
+        {
+          "id": "term-chaining",
+          "term": "chaining",
+          "gloss": "Collision resolution that chains colliding items together in linked lists",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+        },
+        {
+          "id": "term-perfect-hashing",
+          "term": "Perfect hashing",
+          "gloss": "Method that avoids collisions but may be time-consuming to build",
+          "sourceId": "nist-dads-hash-table",
+          "quote": "Perfect hashing avoids collisions, but may be time-consuming to create."
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Quick checks reinforce definitions of dictionary mapping, collision, and constant-time behavior.",
+        "focusQuote": "A dictionary in which keys are mapped to array positions by hash functions.",
+        "focusSourceId": "nist-dads-hash-table"
+      },
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Sorting variants and resolution schemes helps learners categorize hashing techniques clearly.",
+        "focusQuote": "perfect hashing, dynamic hashing, 2-left hashing, cuckoo hashing, 2-choice hashing, hashbelt.",
+        "focusSourceId": "nist-dads-hash-table"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105127-502cd8c1:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"computing\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1926 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 6, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); \"according to\" counts only when it names the publisher, and \"as stated by\" / \"official\" / \"endorsed\" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 6 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ad5315e7551845dbbc3099134264d83c",
+    "usage": {
+      "promptTokens": 4666,
+      "completionTokens": 10009,
+      "reasoningTokens": 9164,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51553,
+    "estCostUSD": 0.04837075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

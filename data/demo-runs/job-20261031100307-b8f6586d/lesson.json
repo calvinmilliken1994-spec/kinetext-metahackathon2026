@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031100307-b8f6586d",
+  "analysisRef": "job-20261031100307-b8f6586d/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100307-b8f6586d:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Paying for college by starting with non-loan aid and comparing loan options",
+    "sources": [
+      {
+        "id": "cfpb-ways-to-pay-for-college",
+        "title": "What are the different ways to pay for college or graduate school? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/what-are-the-different-ways-to-pay-for-college-or-graduate-school-en-545/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What are the different ways to pay for college or graduate school?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "c2f41ceeb5a9c980341ce04560a1baa319fe6ab50aac7e281e775f5d9b26f4cd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "aa00bf76183c40e4a7c6350c9ba6d18b",
+      "runId": "job-20261031100307-b8f6586d",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:04:22.526Z"
+    },
+    "seed": 2540346650,
+    "headline": "Paying for college by starting with non-loan aid and comparing loan options",
+    "keyPoints": [
+      {
+        "id": "funding-order",
+        "point": "Students should apply for grants and scholarships before turning to federal student loans and then private loans.",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "it’s generally best to apply for grants, scholarships, and then federal student loans before private loans."
+      },
+      {
+        "id": "grants-not-repaid",
+        "point": "Grants and scholarships are financial aid that does not have to be repaid after college.",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Grants and scholarships are a type of financial aid that doesn’t have to be repaid."
+      },
+      {
+        "id": "tuition-installments",
+        "point": "Tuition payment plans split college bills into equal monthly payments and usually do not charge interest.",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Tuition payment plans, also called tuition installment plans, are short-term payment plans that split your college bills into equal monthly payments."
+      },
+      {
+        "id": "federal-loan-protections",
+        "point": "Federal student loans offer fixed interest rates and income-driven repayment alternatives that private loans often lack.",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Fixed interest rates, meaning your interest rate will stay the same over time"
+      },
+      {
+        "id": "isa-income-percentage",
+        "point": "Income share agreements require a percentage of future income and can lead to excessive debt if combined with other loans.",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Income share agreements (ISAs) are a type of private education loan where you receive money to pay for your education"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-grants",
+        "term": "grants",
+        "gloss": "Grants are funds for college that do not need repayment and are applied for before loans",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "it’s generally best to apply for grants, scholarships, and then federal student loans before private loans."
+      },
+      {
+        "id": "term-scholarships",
+        "term": "scholarships",
+        "gloss": "Scholarships are merit-based aid that does not need repayment and can reduce borrowing",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "it’s generally best to apply for grants, scholarships, and then federal student loans before private loans."
+      },
+      {
+        "id": "term-tuition-payment-plans",
+        "term": "Tuition payment plans",
+        "gloss": "Tuition payment plans split college bills into short-term monthly payments without interest",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Tuition payment plans, also called tuition installment plans, are short-term payment plans that split your college bills into equal monthly payments."
+      },
+      {
+        "id": "term-income-share-agreements",
+        "term": "Income share agreements",
+        "gloss": "Income share agreements require future payments based on a percentage of income until a defined amount is reached",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Income share agreements (ISAs) are a type of private education loan where you receive money to pay for your education"
+      },
+      {
+        "id": "term-federal-student-loans",
+        "term": "Federal student loans",
+        "gloss": "Federal student loans are made by the Department of Education with fixed rates and income-driven repayment options",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Federal student loans are made and guaranteed by the Department of Education"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031100307-b8f6586d:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031100307-b8f6586d:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

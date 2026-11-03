@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105658-f892153d",
+  "analysisRef": "job-20261031105658-f892153d/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105658-f892153d:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Three atmospheric cells that shape pressure belts and global weather patterns",
+    "sources": [
+      {
+        "id": "noaa-jetstream-global-atmospheric-circulations",
+        "title": "Global Atmospheric Circulations — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/global/global-atmospheric-circulations",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Global Atmospheric Circulations'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "2b099d0243e2edbc42421df046fe3a0041adbe63087eedcbb3d8710070bbe672"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "de9594b57a3142fbaeeb3be3dd1b9b21",
+      "runId": "job-20261031105658-f892153d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:58:03.964Z"
+    },
+    "seed": 1549376415,
+    "headline": "Three atmospheric cells that shape pressure belts and global weather patterns",
+    "keyPoints": [
+      {
+        "id": "global-movement",
+        "point": "Global circulation is the movement of air around the planet that transports thermal energy.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "Global Atmospheric Circulation is the movement of air around the planet."
+      },
+      {
+        "id": "simple-circulation",
+        "point": "Without rotation warm air would move directly north toward the poles and sink to create high pressure.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "That warm air would then move directly north toward the poles, where it would become very cold and sink, creating a large area of high pressure."
+      },
+      {
+        "id": "coriolis-effect",
+        "point": "Earth rotation creates easterly movement of air called the Coriolis effect that breaks up simple circulation.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "The Earth’s rotation results in an easterly-movement of air, called the Coriolis effect"
+      },
+      {
+        "id": "three-circulations",
+        "point": "Instead of one large circulation each hemisphere contains three circulations of air that form distinct cells.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "Instead of one large circulation in each hemisphere, there are three circulations in each:"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "hadley-cell",
+        "term": "Hadley cell",
+        "gloss": "Low latitude convection cell where air near the equator is heated and rises vertically.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "Hadley cell – At low latitudes, air moves toward the equator, where it is heated and rises vertically."
+      },
+      {
+        "id": "ferrel-cell",
+        "term": "Ferrel cell",
+        "gloss": "Mid latitude cell where surface air flows poleward and eastward through friction.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "Ferrel cell – In this mid-latitude atmospheric circulation cell, air near the surface flows poleward and eastward"
+      },
+      {
+        "id": "polar-cell",
+        "term": "Polar cell",
+        "gloss": "Smallest high latitude cell where air rises and travels toward the cold poles.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "Polar cell – At higher latitudes, air rises and travels toward the poles."
+      },
+      {
+        "id": "coriolis-effect-term",
+        "term": "Coriolis effect",
+        "gloss": "Apparent shift from Earth rotation that causes easterly movement of air.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "The Earth’s rotation results in an easterly-movement of air, called the Coriolis effect"
+      },
+      {
+        "id": "high-pressure",
+        "term": "high pressure",
+        "gloss": "Belt of sinking air around 30° N/S latitude at each pole linked to fair dry weather.",
+        "sourceId": "noaa-jetstream-global-atmospheric-circulations",
+        "quote": "The high pressure band is located at about 30° N/S latitude and at each pole."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031105658-f892153d:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031105658-f892153d:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

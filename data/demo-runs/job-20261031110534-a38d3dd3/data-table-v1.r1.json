@@ -1,0 +1,432 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Presidential election cycle from registration to inauguration",
+    "labelHeader": "Stage",
+    "columns": [
+      {
+        "header": "Time of year",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Election Cycle Table"
+      },
+      {
+        "header": "Event",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Election Cycle Table"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Registration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "values": [
+          {
+            "value": "Spring of the year before an election",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Spring of the year before an election"
+          },
+          {
+            "value": "Candidates register with the Federal",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Candidates register with the Federal Election Commission to run for president."
+          }
+        ]
+      },
+      {
+        "label": "Announcement",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates announce their intentions to run.",
+        "values": [
+          {
+            "value": "Spring of the year before an election",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Spring of the year before an election"
+          },
+          {
+            "value": "Candidates announce their intentions",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Candidates announce their intentions to run."
+          }
+        ]
+      },
+      {
+        "label": "Primaries and caucuses",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "values": [
+          {
+            "value": "January to June of election year",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "January to June of election year"
+          },
+          {
+            "value": "presidential primaries and caucuses.",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "States and parties hold presidential primaries and caucuses."
+          }
+        ]
+      },
+      {
+        "label": "Nominating conventions",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Parties hold nominating conventions to choose their presidential candidates.",
+        "values": [
+          {
+            "value": "July to early September",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "July to early September"
+          },
+          {
+            "value": "Parties hold nominating conventions",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Parties hold nominating conventions to choose their presidential candidates."
+          }
+        ]
+      },
+      {
+        "label": "Electoral College vote",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "values": [
+          {
+            "value": "December",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "December"
+          },
+          {
+            "value": "Electors cast their votes for president",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Electors cast their votes for president in the Electoral College."
+          }
+        ]
+      },
+      {
+        "label": "Inauguration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "January 20",
+        "values": [
+          {
+            "value": "January 20",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "January 20"
+          },
+          {
+            "value": "Presidential Inauguration Day",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Presidential Inauguration Day"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "q1-time-of-inauguration",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      },
+      {
+        "id": "q2-event-in-december",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 1
+      },
+      {
+        "id": "q3-time-of-conventions",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031110534-a38d3dd3:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 20 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0]: the header \"Time of year\" does not occur in its quote \"Presidential Election Cycle Table\" (the column quote must contain the header as the page prints it); columns[1]: the header \"Event\" does not occur in its quote \"Presidential Election Cycle Table\" (the column quote must contain the header as the page prints it); rows[0]: the label \"Registration\" occurs neither in its quote \"Candidates register with the Federal Election Commission to \" nor in the same source paragraph (the row must be the page's own row); rows[1]: the label \"Announcement\" occurs neither in its quote \"Candidates announce their intentions to run.\" nor in the same source paragraph (the row must be the page's own row); rows[4]: the label \"Electoral College vote\" occurs neither in its quote \"Electors cast their votes for president in the Electoral Col\" nor in the same source paragraph (the row must be the page's own row)",
+        "path": "/columns/0/header",
+        "affected": [
+          "/columns/0/header",
+          "/columns/0/quote",
+          "/columns/1/header",
+          "/columns/1/quote",
+          "/rows/0/label",
+          "/rows/0/quote",
+          "/rows/1/label",
+          "/rows/1/quote",
+          "/rows/4/label",
+          "/rows/4/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"q1-time-of-inauguration\" (lookup) → rows[5] \"January 20\"; \"q2-event-in-december\" (lookup) → rows[4] \"Electors cast their votes for president\"; \"q3-time-of-conventions\" (lookup) → rows[3] \"July to early September\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "chartColumnIndex is the -1 sentinel: this table shows no chart (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4a44ad495a464b769b5d4492ac9b628b",
+    "usage": {
+      "promptTokens": 2687,
+      "completionTokens": 14329,
+      "reasoningTokens": 13579,
+      "cachedTokens": 0
+    },
+    "latencyMs": 81969,
+    "estCostUSD": 0.064257,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110534-a38d3dd3:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Presidential election cycle from registration to inauguration",
+    "sources": [
+      {
+        "id": "usagov-presidential-election-process",
+        "title": "Overview of the presidential election process — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/presidential-election-process",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Overview of the presidential election process'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "dab5e0bb2bd4fbb8ad6e9d4e8554cef8d4d363028ced8cd2650173905c0efc2a"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4a44ad495a464b769b5d4492ac9b628b",
+      "runId": "job-20261031110534-a38d3dd3",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:07:46.847Z"
+    },
+    "seed": 3444808059,
+    "labelHeader": "Stage",
+    "columns": [
+      {
+        "header": "Time of year",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Election Cycle Table"
+      },
+      {
+        "header": "Event",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Presidential Election Cycle Table"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Registration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates register with the Federal Election Commission to run for president.",
+        "values": [
+          {
+            "value": "Spring of the year before an election",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Spring of the year before an election"
+          },
+          {
+            "value": "Candidates register with the Federal",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Candidates register with the Federal Election Commission to run for president."
+          }
+        ]
+      },
+      {
+        "label": "Announcement",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Candidates announce their intentions to run.",
+        "values": [
+          {
+            "value": "Spring of the year before an election",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Spring of the year before an election"
+          },
+          {
+            "value": "Candidates announce their intentions",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Candidates announce their intentions to run."
+          }
+        ]
+      },
+      {
+        "label": "Primaries and caucuses",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "States and parties hold presidential primaries and caucuses.",
+        "values": [
+          {
+            "value": "January to June of election year",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "January to June of election year"
+          },
+          {
+            "value": "presidential primaries and caucuses.",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "States and parties hold presidential primaries and caucuses."
+          }
+        ]
+      },
+      {
+        "label": "Nominating conventions",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Parties hold nominating conventions to choose their presidential candidates.",
+        "values": [
+          {
+            "value": "July to early September",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "July to early September"
+          },
+          {
+            "value": "Parties hold nominating conventions",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Parties hold nominating conventions to choose their presidential candidates."
+          }
+        ]
+      },
+      {
+        "label": "Electoral College vote",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "Electors cast their votes for president in the Electoral College.",
+        "values": [
+          {
+            "value": "December",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "December"
+          },
+          {
+            "value": "Electors cast their votes for president",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Electors cast their votes for president in the Electoral College."
+          }
+        ]
+      },
+      {
+        "label": "Inauguration",
+        "sourceId": "usagov-presidential-election-process",
+        "quote": "January 20",
+        "values": [
+          {
+            "value": "January 20",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "January 20"
+          },
+          {
+            "value": "Presidential Inauguration Day",
+            "sourceId": "usagov-presidential-election-process",
+            "quote": "Presidential Inauguration Day"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "q1-time-of-inauguration",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      },
+      {
+        "id": "q2-event-in-december",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 1
+      },
+      {
+        "id": "q3-time-of-conventions",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": -1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031095130-ba41acad",
+  "analysisRef": "job-20261031095130-ba41acad/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095130-ba41acad:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Using CPI ratios to measure purchasing power and constant dollars",
+    "sources": [
+      {
+        "id": "bls-purchasing-power-constant-dollars",
+        "title": "Purchasing power and constant dollars — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/purchasing-power-constant-dollars.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Purchasing power and constant dollars'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "225ad7ff26dd45fa959c8ac6b8a27893",
+      "runId": "job-20261031095130-ba41acad",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:53:39.691Z"
+    },
+    "seed": 149401315,
+    "headline": "Using CPI ratios to measure purchasing power and constant dollars",
+    "keyPoints": [
+      {
+        "id": "purchasing-power-2022",
+        "point": "Students learn that the purchasing power of a dollar in 2022 was about 92.6 percent of its purchasing power in 2021.",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+      },
+      {
+        "id": "decline-from-inflation",
+        "point": "Students learn that purchasing power declined about 7.4 percent between 2021 and 2022 because of inflation.",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation."
+      },
+      {
+        "id": "convert-to-constant-dollars",
+        "point": "Students learn that converting nominal amounts into constant dollars uses multiplying each dollar amount by a ratio of price indexes with one year as the base.",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+      },
+      {
+        "id": "nominal-versus-real-growth",
+        "point": "Students learn that nominal median household income rose from 49,276 to 70,784 between 2010 and 2021, an increase of 43.6 percent, while real growth was more modest.",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "purchasing-power",
+        "term": "purchasing power",
+        "gloss": "share of goods a dollar can buy, shown by purchasing power change over time",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+      },
+      {
+        "id": "cpi-u",
+        "term": "CPI-U",
+        "gloss": "index that measures average price change used in the CPI-U ratio",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+      },
+      {
+        "id": "constant-dollars",
+        "term": "Constant dollars",
+        "gloss": "dollars expressed in prices of a chosen base year, shown as Constant dollars values",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Constant dollars"
+      },
+      {
+        "id": "nominal-dollars",
+        "term": "nominal dollars",
+        "gloss": "current dollar amounts before adjusting for price changes, called nominal dollars",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars."
+      },
+      {
+        "id": "inflation",
+        "term": "inflation",
+        "gloss": "general rise in prices that causes purchasing power to decline because of inflation",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031095130-ba41acad:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-05, FE-08: the sourceExample quote does not explicitly bind \"CPI-U\" to a value (supported patterns: \"CPI-U = <number>\", \"CPI-U is <number>\", \"<number> for CPI-U\") — unbound quote numbers are never assigned to variables; the sourceExample quote does not explicitly bind \"CPI-U\" to a value (supported patterns: \"C",
+      "revision": 3
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031095130-ba41acad:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031095130-ba41acad:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

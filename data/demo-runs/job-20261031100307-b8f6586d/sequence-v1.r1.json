@@ -1,0 +1,171 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Recommended funding order from free aid to loans",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the suggested order from lowest cost aid to higher cost borrowing",
+    "steps": [
+      {
+        "id": "research-without-loans",
+        "label": "Research options that avoid loans",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "It’s important to first research how you can pay for college without loans.",
+        "orderHint": "Start here before borrowing"
+      },
+      {
+        "id": "apply-grants-scholarships",
+        "label": "Apply for grants and scholarships",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Grants and scholarships are a type of financial aid that doesn’t have to be repaid.",
+        "orderHint": "Free aid comes first"
+      },
+      {
+        "id": "use-federal-loans-next",
+        "label": "Use federal student loans next",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Federal student loans are made and guaranteed by the Department of Education",
+        "orderHint": "Federal loans before private"
+      },
+      {
+        "id": "consider-private-last",
+        "label": "Consider private loans last",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "including applying for the maximum federal student loans you’re eligible for, before shopping for a private student loan.",
+        "orderHint": "Shop private only at the end"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100307-b8f6586d:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6e19d9701cf34299bdedbb3980c16612",
+    "usage": {
+      "promptTokens": 3555,
+      "completionTokens": 6188,
+      "reasoningTokens": 5909,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27662,
+    "estCostUSD": 0.03074275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100307-b8f6586d:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Recommended funding order from free aid to loans",
+    "sources": [
+      {
+        "id": "cfpb-ways-to-pay-for-college",
+        "title": "What are the different ways to pay for college or graduate school? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/what-are-the-different-ways-to-pay-for-college-or-graduate-school-en-545/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What are the different ways to pay for college or graduate school?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "c2f41ceeb5a9c980341ce04560a1baa319fe6ab50aac7e281e775f5d9b26f4cd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6e19d9701cf34299bdedbb3980c16612",
+      "runId": "job-20261031100307-b8f6586d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:04:50.193Z"
+    },
+    "seed": 3269632750,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the suggested order from lowest cost aid to higher cost borrowing",
+    "steps": [
+      {
+        "id": "research-without-loans",
+        "label": "Research options that avoid loans",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "It’s important to first research how you can pay for college without loans.",
+        "orderHint": "Start here before borrowing"
+      },
+      {
+        "id": "apply-grants-scholarships",
+        "label": "Apply for grants and scholarships",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Grants and scholarships are a type of financial aid that doesn’t have to be repaid.",
+        "orderHint": "Free aid comes first"
+      },
+      {
+        "id": "use-federal-loans-next",
+        "label": "Use federal student loans next",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Federal student loans are made and guaranteed by the Department of Education",
+        "orderHint": "Federal loans before private"
+      },
+      {
+        "id": "consider-private-last",
+        "label": "Consider private loans last",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "including applying for the maximum federal student loans you’re eligible for, before shopping for a private student loan.",
+        "orderHint": "Shop private only at the end"
+      }
+    ]
+  }
+}

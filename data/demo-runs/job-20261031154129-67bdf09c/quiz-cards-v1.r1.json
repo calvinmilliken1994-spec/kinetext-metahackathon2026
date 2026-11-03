@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Lunar mission objectives and milestones",
+    "cards": [
+      {
+        "id": "card-experiment-deployed",
+        "stem": "Which experiment was deployed on the lunar surface?",
+        "options": [
+          "solar wind composition experiment",
+          "lunar rover performance test",
+          "orbital magnetic survey",
+          "high altitude weather study"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "deployment of a solar wind composition experiment, seismic experiment package and a Laser Ranging Retroreflector.",
+        "hint": ""
+      },
+      {
+        "id": "card-primary-objective",
+        "stem": "What was the primary objective of the mission?",
+        "options": [
+          "perform a crewed lunar landing and return to Earth",
+          "assemble a permanent orbital station",
+          "test uncrewed supply delivery",
+          "photograph distant planets"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "perform a crewed lunar landing and return to Earth.",
+        "hint": ""
+      },
+      {
+        "id": "card-landing-site",
+        "stem": "Where did the Eagle land on the moon?",
+        "options": [
+          "Sea of Tranquility",
+          "Ocean of Storms",
+          "Mare Imbrium",
+          "Highland Plateau"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "the Eagle landed in the Sea of Tranquility in Site 2 at 0 degrees, 41 minutes, 15 seconds north latitude",
+        "hint": ""
+      },
+      {
+        "id": "card-splashdown-location",
+        "stem": "Where did Apollo 11 splash down on the return to Earth?",
+        "options": [
+          "Pacific Ocean",
+          "Atlantic Ocean",
+          "Indian Ocean",
+          "Gulf of Mexico"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "Apollo 11 splashed down in the Pacific Ocean, 13 miles from the recovery ship USS Hornet.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031154129-67bdf09c:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "049cac663c614d21aed560aa4ac29bcc",
+    "usage": {
+      "promptTokens": 4682,
+      "completionTokens": 3755,
+      "reasoningTokens": 3399,
+      "cachedTokens": 0
+    },
+    "latencyMs": 18636,
+    "estCostUSD": 0.02181125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031154129-67bdf09c:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Lunar mission objectives and milestones",
+    "sources": [
+      {
+        "id": "nasa-apollo-11-mission-overview",
+        "title": "Apollo 11 Mission Overview — NASA",
+        "locator": "https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA, 'Apollo 11 Mission Overview'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; no NASA images or logos are stored and this activity is labelled AI-generated. NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4b29539152f1ed2229358538d39df45198fafd17251631e6efc9561260db7e1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "049cac663c614d21aed560aa4ac29bcc",
+      "runId": "job-20261031154129-67bdf09c",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T15:42:21.338Z"
+    },
+    "seed": 424255816,
+    "cards": [
+      {
+        "id": "card-experiment-deployed",
+        "stem": "Which experiment was deployed on the lunar surface?",
+        "options": [
+          "solar wind composition experiment",
+          "lunar rover performance test",
+          "orbital magnetic survey",
+          "high altitude weather study"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "deployment of a solar wind composition experiment, seismic experiment package and a Laser Ranging Retroreflector.",
+        "hint": ""
+      },
+      {
+        "id": "card-primary-objective",
+        "stem": "What was the primary objective of the mission?",
+        "options": [
+          "perform a crewed lunar landing and return to Earth",
+          "assemble a permanent orbital station",
+          "test uncrewed supply delivery",
+          "photograph distant planets"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "perform a crewed lunar landing and return to Earth.",
+        "hint": ""
+      },
+      {
+        "id": "card-landing-site",
+        "stem": "Where did the Eagle land on the moon?",
+        "options": [
+          "Sea of Tranquility",
+          "Ocean of Storms",
+          "Mare Imbrium",
+          "Highland Plateau"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "the Eagle landed in the Sea of Tranquility in Site 2 at 0 degrees, 41 minutes, 15 seconds north latitude",
+        "hint": ""
+      },
+      {
+        "id": "card-splashdown-location",
+        "stem": "Where did Apollo 11 splash down on the return to Earth?",
+        "options": [
+          "Pacific Ocean",
+          "Atlantic Ocean",
+          "Indian Ocean",
+          "Gulf of Mexico"
+        ],
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "Apollo 11 splashed down in the Pacific Ocean, 13 miles from the recovery ship USS Hornet.",
+        "hint": ""
+      }
+    ]
+  }
+}

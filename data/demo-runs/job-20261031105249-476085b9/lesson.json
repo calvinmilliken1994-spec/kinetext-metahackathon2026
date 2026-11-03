@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105249-476085b9",
+  "analysisRef": "job-20261031105249-476085b9/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105249-476085b9:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Quicksort partitions around a pivot and recursively sorts with efficient typical time",
+    "sources": [
+      {
+        "id": "nist-dads-quicksort",
+        "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "35bf4ee88d9f4fc69ec21bd97fef8915",
+      "runId": "job-20261031105249-476085b9",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:53:46.071Z"
+    },
+    "seed": 1659195665,
+    "headline": "Quicksort partitions around a pivot and recursively sorts with efficient typical time",
+    "keyPoints": [
+      {
+        "id": "pivot-partition-recursion",
+        "point": "Students learn quicksort partitions remaining elements around a chosen pivot and recursively sorts the resulting partitions.",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "partition the remaining elements into those greater than and less than this pivot, and recursively sort the partitions."
+      },
+      {
+        "id": "worst-typical-time",
+        "point": "Students see quicksort has worst case quadratic running time but is typically much faster with logarithmic linear bounds.",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n)."
+      },
+      {
+        "id": "variant-choices",
+        "point": "Students understand many variants differ in how to select the pivot, partition the array, and handle small partitions.",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions"
+      },
+      {
+        "id": "good-pivot-variant",
+        "point": "Students learn using a selection routine to pick good pivots can give a variant with improved worst case running time.",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "pivot",
+        "term": "pivot",
+        "gloss": "element from the array used to divide remaining elements into groups",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot"
+      },
+      {
+        "id": "partition",
+        "term": "partition",
+        "gloss": "process that divides remaining elements into groups greater and less than the pivot for sorting",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "partition the remaining elements into those greater than and less than this pivot, and recursively sort the partitions."
+      },
+      {
+        "id": "recursion",
+        "term": "recursion",
+        "gloss": "repeated use of same sorting method to handle each partition until small groups are sorted",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions"
+      },
+      {
+        "id": "variant",
+        "term": "variant",
+        "gloss": "alternative version that picks good pivots to improve worst case running time",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time."
+      },
+      {
+        "id": "quicksort-term",
+        "term": "Quicksort",
+        "gloss": "sorting method with worst case quadratic running time that is typically logarithmic linear",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031105249-476085b9:algorithm-trace-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105249-476085b9:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How PCR copies DNA segments",
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Steps follow the order described in the how PCR works paragraph.",
+    "steps": [
+      {
+        "id": "sample-heated-denatures",
+        "label": "Sample heated to denature DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "orderHint": ""
+      },
+      {
+        "id": "taq-builds-new-strands",
+        "label": "Taq polymerase builds new strands",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "orderHint": ""
+      },
+      {
+        "id": "duplication-mixed-molecules",
+        "label": "Duplication creates molecules with old and new strands",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "This process results in the duplication of the original DNA, with each of the new molecules containing one old and one new strand of DNA.",
+        "orderHint": ""
+      },
+      {
+        "id": "strands-create-new-copies",
+        "label": "Strands create two new copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Then each of these strands can be used to create two new copies, and so on, and so on.",
+        "orderHint": ""
+      },
+      {
+        "id": "cycle-repeats-many-copies",
+        "label": "Cycle repeats to make many copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times, leading to more than one billion exact copies",
+        "orderHint": ""
+      },
+      {
+        "id": "thermocycler-automates-cycling",
+        "label": "Thermocycler automates temperature changes",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction every few minutes",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104302-447420e6:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "db82ca11cf56431f9de21454e840daff",
+    "usage": {
+      "promptTokens": 2872,
+      "completionTokens": 6768,
+      "reasoningTokens": 6329,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35944,
+    "estCostUSD": 0.032354,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104302-447420e6:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How PCR copies DNA segments",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "db82ca11cf56431f9de21454e840daff",
+      "runId": "job-20261031104302-447420e6",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:44:48.033Z"
+    },
+    "seed": 275900358,
+    "orderBasis": "page-order",
+    "cyclic": true,
+    "orderNote": "Steps follow the order described in the how PCR works paragraph.",
+    "steps": [
+      {
+        "id": "sample-heated-denatures",
+        "label": "Sample heated to denature DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA.",
+        "orderHint": ""
+      },
+      {
+        "id": "taq-builds-new-strands",
+        "label": "Taq polymerase builds new strands",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "orderHint": ""
+      },
+      {
+        "id": "duplication-mixed-molecules",
+        "label": "Duplication creates molecules with old and new strands",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "This process results in the duplication of the original DNA, with each of the new molecules containing one old and one new strand of DNA.",
+        "orderHint": ""
+      },
+      {
+        "id": "strands-create-new-copies",
+        "label": "Strands create two new copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Then each of these strands can be used to create two new copies, and so on, and so on.",
+        "orderHint": ""
+      },
+      {
+        "id": "cycle-repeats-many-copies",
+        "label": "Cycle repeats to make many copies",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "The cycle of denaturing and synthesizing new DNA is repeated as many as 30 or 40 times, leading to more than one billion exact copies",
+        "orderHint": ""
+      },
+      {
+        "id": "thermocycler-automates-cycling",
+        "label": "Thermocycler automates temperature changes",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "It is directed by a machine called a thermocycler, which is programmed to alter the temperature of the reaction every few minutes",
+        "orderHint": ""
+      }
+    ]
+  }
+}

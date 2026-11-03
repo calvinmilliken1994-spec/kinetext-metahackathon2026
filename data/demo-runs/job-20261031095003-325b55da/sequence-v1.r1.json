@@ -1,0 +1,185 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps to work out change between index values",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the taught calculation order to find the change",
+    "steps": [
+      {
+        "id": "express-as-percent-changes",
+        "label": "Express movements as percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Movements of an index from one month to another are usually expressed as percent changes rather than as changes in the index value",
+        "orderHint": ""
+      },
+      {
+        "id": "subtract-earlier-from-later",
+        "label": "Subtract earlier value from later value",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "you first subtract the earlier index value from the later one",
+        "orderHint": ""
+      },
+      {
+        "id": "divide-difference-by-earlier",
+        "label": "Divide difference by earlier value",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "then divide that difference by the earlier index value",
+        "orderHint": ""
+      },
+      {
+        "id": "multiply-to-get-percent",
+        "label": "Multiply result to get percent",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "and finally multiply the result by 100",
+        "orderHint": ""
+      },
+      {
+        "id": "check-final-percent-result",
+        "label": "Check ratio multiplied for final change",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095003-325b55da:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "12abb7e6db90402d841dbe63504820d9",
+    "usage": {
+      "promptTokens": 3586,
+      "completionTokens": 6977,
+      "reasoningTokens": 6681,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40038,
+    "estCostUSD": 0.03413475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095003-325b55da:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps to work out change between index values",
+    "sources": [
+      {
+        "id": "bls-calculating-percent-changes",
+        "title": "Calculating percent changes — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/calculating-percent-changes.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Calculating percent changes'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "829533faa09f497cfa3c6b4a03b5afbd5c44b73ae3194ed951f4d6d61e19f6de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "12abb7e6db90402d841dbe63504820d9",
+      "runId": "job-20261031095003-325b55da",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:52:04.019Z"
+    },
+    "seed": 68628384,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the taught calculation order to find the change",
+    "steps": [
+      {
+        "id": "express-as-percent-changes",
+        "label": "Express movements as percent changes",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Movements of an index from one month to another are usually expressed as percent changes rather than as changes in the index value",
+        "orderHint": ""
+      },
+      {
+        "id": "subtract-earlier-from-later",
+        "label": "Subtract earlier value from later value",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "you first subtract the earlier index value from the later one",
+        "orderHint": ""
+      },
+      {
+        "id": "divide-difference-by-earlier",
+        "label": "Divide difference by earlier value",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "then divide that difference by the earlier index value",
+        "orderHint": ""
+      },
+      {
+        "id": "multiply-to-get-percent",
+        "label": "Multiply result to get percent",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "and finally multiply the result by 100",
+        "orderHint": ""
+      },
+      {
+        "id": "check-final-percent-result",
+        "label": "Check ratio multiplied for final change",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Ratio multiplied by 100 | .003 * 100 | 0.3",
+        "orderHint": ""
+      }
+    ]
+  }
+}

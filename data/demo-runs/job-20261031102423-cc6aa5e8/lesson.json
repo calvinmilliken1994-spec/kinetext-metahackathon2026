@@ -1,0 +1,132 @@
+{
+  "jobId": "job-20261031102423-cc6aa5e8",
+  "analysisRef": "job-20261031102423-cc6aa5e8/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102423-cc6aa5e8:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Bernoulli equation linking pressure and velocity in steady incompressible flow",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "edab17d73c3d4d58a88bb73a005b7d78",
+      "runId": "job-20261031102423-cc6aa5e8",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:25:41.911Z"
+    },
+    "seed": 3341892877,
+    "headline": "Bernoulli equation linking pressure and velocity in steady incompressible flow",
+    "keyPoints": [
+      {
+        "id": "total-pressure-constant",
+        "point": "Students learn that the constant total pressure equals static plus dynamic contributions throughout the flow.",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We call this constant the total pressure pt of the flow."
+      },
+      {
+        "id": "bernoulli-restrictions",
+        "point": "Students learn that Bernoulli form applies only to inviscid incompressible steady flow without heat addition and negligible height change.",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height."
+      },
+      {
+        "id": "dynamic-pressure-form",
+        "point": "Students learn that dynamic pressure is density times the square of the velocity divided by two.",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The form of the dynamic pressure is the density times the square of the velocity divided by two."
+      },
+      {
+        "id": "pressure-sum-conservation",
+        "point": "Students learn that static pressure plus dynamic pressure equals original total pressure when energy is conserved in the flow.",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the static pressure plus the dynamic pressure is equal to the original total pressure in a flow"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "static-pressure",
+        "term": "static pressure",
+        "gloss": "Pressure from random motion of molecules in the flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "The remaining random motion of the molecules still produces a pressure called the static pressure."
+      },
+      {
+        "id": "dynamic-pressure",
+        "term": "dynamic pressure",
+        "gloss": "Pressure associated with ordered motion of the gas",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We call this pressure the dynamic pressure."
+      },
+      {
+        "id": "total-pressure",
+        "term": "total pressure",
+        "gloss": "Constant sum of static and dynamic pressure throughout the flow",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "We call this constant the total pressure pt of the flow."
+      },
+      {
+        "id": "inviscid",
+        "term": "inviscid",
+        "gloss": "Flow condition that neglects viscous dissipation of energy",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height."
+      },
+      {
+        "id": "incompressible",
+        "term": "incompressible",
+        "gloss": "Flow condition where density remains constant along the streamline",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "the restrictions for this form are that the flow is inviscid, incompressible, steady, without heat addition, and with negligible change in height."
+      },
+      {
+        "id": "streamline",
+        "term": "streamline",
+        "gloss": "Single flow path where Bernoulli equation holds along the constant",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "an assumption was also introduced that restricts this equation to be true only along a single streamline."
+      },
+      {
+        "id": "enthalpy",
+        "term": "enthalpy",
+        "gloss": "Total fluid energy measure that combines internal energy and pressure work",
+        "sourceId": "nasa-grc-bernoullis-equation",
+        "quote": "where ht is the total enthalpy of the fluid, q is the heat transfer into the fluid, and Wsh is the useful work done by the fluid."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031102423-cc6aa5e8:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102423-cc6aa5e8:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

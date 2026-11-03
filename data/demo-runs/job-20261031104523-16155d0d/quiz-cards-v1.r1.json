@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Understanding population definitions and genetic variation",
+    "cards": [
+      {
+        "id": "card-race-descriptors",
+        "stem": "How does research describe racial classifications for explaining human genetic variation?",
+        "options": [
+          "Research has demonstrated that racial classifications are inadequate descriptors",
+          "Research proves racial groupings perfectly predict allele frequencies",
+          "Research shows race provides complete explanations for human variation",
+          "Research confirms racial categories are definitive measures of difference"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species",
+        "hint": ""
+      },
+      {
+        "id": "card-biology-population",
+        "stem": "What characteristic defines a population in the biological sense?",
+        "options": [
+          "In biology, a population generally denotes a group",
+          "A random collection of individuals with no shared breeding pattern",
+          "A collection of different species coexisting in one habitat",
+          "All organisms worldwide that carry a specific allele"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves",
+        "hint": ""
+      },
+      {
+        "id": "card-common-misconception",
+        "stem": "What mistaken idea is described about human populations and race?",
+        "options": [
+          "A common misconception is that human populations fall into uniform groups",
+          "A proven fact is that human groups show complete genetic uniformity",
+          "Accurate research shows races have distinct and separate gene pools",
+          "Established pattern is that ethnicity fully explains genetic traits"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "A common misconception is that human populations fall into uniform groups with large biological differences, which lie along racial boundaries",
+        "hint": ""
+      },
+      {
+        "id": "card-alternative-classification",
+        "stem": "What alternative grouping is mentioned for classifying the human species?",
+        "options": [
+          "An alternative to classifying the human species by race",
+          "The only way to define populations is by geographic isolation",
+          "Physical isolation is required for any breeding to occur",
+          "Self-described ethnicity always matches familial origins exactly"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104523-16155d0d:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "baa35d47a5094abe9eeb3585d0464c5a",
+    "usage": {
+      "promptTokens": 2671,
+      "completionTokens": 12613,
+      "reasoningTokens": 12188,
+      "cachedTokens": 0
+    },
+    "latencyMs": 77326,
+    "estCostUSD": 0.056944,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104523-16155d0d:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Understanding population definitions and genetic variation",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "baa35d47a5094abe9eeb3585d0464c5a",
+      "runId": "job-20261031104523-16155d0d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:48:01.725Z"
+    },
+    "seed": 3762361914,
+    "cards": [
+      {
+        "id": "card-race-descriptors",
+        "stem": "How does research describe racial classifications for explaining human genetic variation?",
+        "options": [
+          "Research has demonstrated that racial classifications are inadequate descriptors",
+          "Research proves racial groupings perfectly predict allele frequencies",
+          "Research shows race provides complete explanations for human variation",
+          "Research confirms racial categories are definitive measures of difference"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "Research has demonstrated that racial classifications are inadequate descriptors of the distribution of genetic variation in the human species",
+        "hint": ""
+      },
+      {
+        "id": "card-biology-population",
+        "stem": "What characteristic defines a population in the biological sense?",
+        "options": [
+          "In biology, a population generally denotes a group",
+          "A random collection of individuals with no shared breeding pattern",
+          "A collection of different species coexisting in one habitat",
+          "All organisms worldwide that carry a specific allele"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "In biology, a population generally denotes a group whose members breed primarily or solely among themselves",
+        "hint": ""
+      },
+      {
+        "id": "card-common-misconception",
+        "stem": "What mistaken idea is described about human populations and race?",
+        "options": [
+          "A common misconception is that human populations fall into uniform groups",
+          "A proven fact is that human groups show complete genetic uniformity",
+          "Accurate research shows races have distinct and separate gene pools",
+          "Established pattern is that ethnicity fully explains genetic traits"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "A common misconception is that human populations fall into uniform groups with large biological differences, which lie along racial boundaries",
+        "hint": ""
+      },
+      {
+        "id": "card-alternative-classification",
+        "stem": "What alternative grouping is mentioned for classifying the human species?",
+        "options": [
+          "An alternative to classifying the human species by race",
+          "The only way to define populations is by geographic isolation",
+          "Physical isolation is required for any breeding to occur",
+          "Self-described ethnicity always matches familial origins exactly"
+        ],
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity",
+        "hint": ""
+      }
+    ]
+  }
+}

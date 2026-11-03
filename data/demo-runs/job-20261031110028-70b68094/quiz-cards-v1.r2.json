@@ -1,0 +1,240 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recall of plutonium properties and reactor cycle",
+    "cards": [
+      {
+        "id": "card-atomic-number",
+        "stem": "What is the atomic number of plutonium?",
+        "options": [
+          "94",
+          "238",
+          "239",
+          "240"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium is a radioactive metallic element with the atomic number 94.",
+        "hint": ""
+      },
+      {
+        "id": "card-pacemaker-isotope",
+        "stem": "Which plutonium isotope has been used to power batteries for heart pacemakers?",
+        "options": [
+          "Plutonium-238",
+          "Plutonium-239",
+          "Plutonium-240",
+          "Plutonium-241"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium-238 has been used to power batteries for some heart pacemakers, as well as provide a long-lived heat source to power NASA space missions.",
+        "hint": ""
+      },
+      {
+        "id": "card-common-isotope",
+        "stem": "Which of these is listed as a common plutonium isotope?",
+        "options": [
+          "Pu-239",
+          "Pu-1940",
+          "Pu-94",
+          "Pu-14.4"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242.",
+        "hint": ""
+      },
+      {
+        "id": "card-spent-fuel-content",
+        "stem": "About how much plutonium by weight is found in spent fuel from United States reactors?",
+        "options": [
+          "1 percent",
+          "94 percent",
+          "14.4 percent",
+          "24,100 percent"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110028-70b68094:quiz-cards-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": false,
+        "message": "cards[0].options[1] states the number 238, which does not appear as that whole number on the page or in the same quote (N-01); cards[0].options[2] states the number 239, which does not appear as that whole number on the page or in the same quote (N-01); cards[0].options[3] states the number 240, which does not appear as that whole number on the page or in the same quote (N-01); cards[2].options[1] states the number -1940, which does not appear as that whole number on the page or in the same quote (N-01); cards[2].options[2] states the number -94, which does not appear as that whole number on the page or in the same quote (N-01); cards[2].options[3] states the number -14.4, which does not appear as that whole number on the page or in the same quote (N-01)",
+        "path": "/cards/0/options/1",
+        "affected": [
+          "/cards/0/options/1",
+          "/cards/0/options/2",
+          "/cards/0/options/3",
+          "/cards/2/options/1",
+          "/cards/2/options/2",
+          "/cards/2/options/3"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "quiz-cards-v1: no weakening — every one of the 12 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6893a21d2a6544e6b20170ff19f69c7e",
+    "usage": {
+      "promptTokens": 4981,
+      "completionTokens": 4840,
+      "reasoningTokens": 4473,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32108,
+    "estCostUSD": 0.02679625,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110028-70b68094:quiz-cards-v1:r2",
+    "componentId": "quiz-cards-v1",
+    "title": "Recall of plutonium properties and reactor cycle",
+    "sources": [
+      {
+        "id": "nrc-backgrounder-plutonium",
+        "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+        "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6893a21d2a6544e6b20170ff19f69c7e",
+      "runId": "job-20261031110028-70b68094",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:02:39.307Z"
+    },
+    "seed": 1227714456,
+    "cards": [
+      {
+        "id": "card-atomic-number",
+        "stem": "What is the atomic number of plutonium?",
+        "options": [
+          "94",
+          "238",
+          "239",
+          "240"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium is a radioactive metallic element with the atomic number 94.",
+        "hint": ""
+      },
+      {
+        "id": "card-pacemaker-isotope",
+        "stem": "Which plutonium isotope has been used to power batteries for heart pacemakers?",
+        "options": [
+          "Plutonium-238",
+          "Plutonium-239",
+          "Plutonium-240",
+          "Plutonium-241"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Plutonium-238 has been used to power batteries for some heart pacemakers, as well as provide a long-lived heat source to power NASA space missions.",
+        "hint": ""
+      },
+      {
+        "id": "card-common-isotope",
+        "stem": "Which of these is listed as a common plutonium isotope?",
+        "options": [
+          "Pu-239",
+          "Pu-1940",
+          "Pu-94",
+          "Pu-14.4"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "There are five “common” isotopes of plutonium, Pu-238, Pu-239, Pu-240, Pu-241, and Pu-242.",
+        "hint": ""
+      },
+      {
+        "id": "card-spent-fuel-content",
+        "stem": "About how much plutonium by weight is found in spent fuel from United States reactors?",
+        "options": [
+          "1 percent",
+          "94 percent",
+          "14.4 percent",
+          "24,100 percent"
+        ],
+        "sourceId": "nrc-backgrounder-plutonium",
+        "quote": "Spent nuclear fuel from U.S. reactors contains about 1 percent plutonium by weight.",
+        "hint": ""
+      }
+    ]
+  }
+}

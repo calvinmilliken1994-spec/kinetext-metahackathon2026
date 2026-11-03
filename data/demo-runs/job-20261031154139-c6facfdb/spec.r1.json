@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-radioactive-waste-job-20261031154139-c6facfdb",
+  "title": "Cesium-137 and Strontium-90 Decay",
+  "learningObjectives": [
+    "Explain that a half-life is the time for half of a radioactive sample to decay",
+    "Compare 30-year half-lives of fission products with the much longer half-life of plutonium-239"
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-radioactive-waste",
+      "title": "Backgrounder on Radioactive Waste — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-radioactive-waste",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Radioactive Waste', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "096bd0acfbc24540be6110113c96ed0fa4b892969980ff5bcf1d7834bc1d71b7"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-half-life-30y",
+      "text": "Fission products such as cesium-137 and strontium-90 lose half their radioactivity about every 30 years, following exponential decay.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Strontium-90 and cesium-137 have half-lives of about 30 years (half the radioactivity will decay in 30 years)."
+        }
+      ]
+    },
+    {
+      "id": "exp-decay-general",
+      "text": "Radioactive isotopes do not disappear instantly; they decay over time toward stable, harmless materials at rates set by their half-lives.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Radioactive isotopes eventually decay, or disintegrate, to harmless materials."
+        }
+      ]
+    },
+    {
+      "id": "exp-long-lived",
+      "text": "Some heavier elements decay far more slowly than fission products, remaining hazardous for thousands of years.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-radioactive-waste",
+          "quote": "Plutonium-239 has a half-life of 24,000 years."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 10,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 10,
+      "max": 60,
+      "default": 30
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 150,
+      "default": 30
+    },
+    "scenario": {
+      "objectLabel": "Cesium-137 sample (grams)",
+      "settingLabel": "Storage time in years (30-yr half-life)"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "no decay at t=0",
+      "initialAmount": 100,
+      "halfLife": 30,
+      "elapsedTime": 0,
+      "expectedRemaining": 100,
+      "tolerance": 0.25
+    },
+    {
+      "name": "one half-life t=T",
+      "initialAmount": 100,
+      "halfLife": 30,
+      "elapsedTime": 30,
+      "expectedRemaining": 50,
+      "tolerance": 0.25
+    },
+    {
+      "name": "two half-lives t=2T",
+      "initialAmount": 100,
+      "halfLife": 30,
+      "elapsedTime": 60,
+      "expectedRemaining": 25,
+      "tolerance": 0.125
+    },
+    {
+      "name": "fractional half-life",
+      "initialAmount": 800,
+      "halfLife": 10,
+      "elapsedTime": 15,
+      "expectedRemaining": 282.8427,
+      "tolerance": 0.25
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-opening",
+      "prompt": "A 100 gram cesium-137 sample with a 30-year half-life is stored for 30 years. How much remains?",
+      "initialAmount": 100,
+      "halfLife": 30,
+      "elapsedTime": 30,
+      "expectedRemaining": 50,
+      "tolerance": 0.25
+    },
+    {
+      "id": "pred-two-half-lives",
+      "prompt": "A 200 gram cesium-137 sample with the same 30-year half-life stored for 60 years.",
+      "initialAmount": 200,
+      "halfLife": 30,
+      "elapsedTime": 60,
+      "expectedRemaining": 50,
+      "tolerance": 0.25
+    },
+    {
+      "id": "pred-short-half-life",
+      "prompt": "An 80 gram sample with a 20-year half-life stored for 40 years.",
+      "initialAmount": 80,
+      "halfLife": 20,
+      "elapsedTime": 40,
+      "expectedRemaining": 20,
+      "tolerance": 0.1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "51d4e46bb23a43b2a64583fcb03a887f",
+    "runId": "job-20261031154139-c6facfdb",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T15:43:20.189Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

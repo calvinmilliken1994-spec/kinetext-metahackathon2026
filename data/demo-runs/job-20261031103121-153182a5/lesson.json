@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031103121-153182a5",
+  "analysisRef": "job-20261031103121-153182a5/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103121-153182a5:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How random molecular motion creates gas pressure and temperature",
+    "sources": [
+      {
+        "id": "nasa-grc-kinetic-theory-of-gasses",
+        "title": "Kinetic Theory of Gases — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/kinetic-theory-of-gasses/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d348d7fadb5d1d605627298358bc29f9b9041782d38636f0968fb21659df5ea4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "cb375b470e47421f9dc8a64a677f3ad9",
+      "runId": "job-20261031103121-153182a5",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:32:12.623Z"
+    },
+    "seed": 2754279138,
+    "headline": "How random molecular motion creates gas pressure and temperature",
+    "keyPoints": [
+      {
+        "id": "molecular-assumptions",
+        "point": "Molecules are very small relative to the distance between them and are in constant random motion.",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The model, called the kinetic theory of gases, assumes that the molecules are very small relative to the distance between molecules."
+      },
+      {
+        "id": "pressure-from-momentum",
+        "point": "Gas molecules collide with the walls of a container and impart momentum to the walls producing a measurable force.",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "As the gas molecules collide with the walls of a container, the molecules impart momentum to the walls, producing a force that can be measured."
+      },
+      {
+        "id": "temperature-energy",
+        "point": "Temperature is a measure of the mean kinetic energy of gas motion and rises with greater motion.",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The temperature of a gas is a measure of the mean kinetic energy of the gas."
+      },
+      {
+        "id": "pressure-types",
+        "point": "Static pressure from random motion and dynamic pressure from ordered motion combine to form total pressure.",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "And Bernoulli’s equation tells us that the sum of the static and dynamic pressure is the total pressure which we can also measure."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kinetic-theory",
+        "term": "kinetic theory",
+        "gloss": "model that assumes gas molecules are small and widely spaced",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The model, called the kinetic theory of gases, assumes that the molecules are very small relative to the distance between molecules."
+      },
+      {
+        "id": "density",
+        "term": "density",
+        "gloss": "mass of molecules divided by volume they occupy",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The density of a gas is simply the sum of the mass of the molecules divided by the volume which the gas occupies."
+      },
+      {
+        "id": "pressure",
+        "term": "pressure",
+        "gloss": "measure of linear momentum transferred to walls per area",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The pressure of a gas is a measure of the linear momentum of the molecules."
+      },
+      {
+        "id": "temperature",
+        "term": "temperature",
+        "gloss": "measure of mean kinetic energy of gas molecules in motion",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The temperature of a gas is a measure of the mean kinetic energy of the gas."
+      },
+      {
+        "id": "static-pressure",
+        "term": "static pressure",
+        "gloss": "pressure produced by random component of molecular motion",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "We measure the pressure produced by the random component as the static pressure."
+      },
+      {
+        "id": "dynamic-pressure",
+        "term": "dynamic pressure",
+        "gloss": "pressure produced by ordered motion of the fluid",
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The pressure produced by the ordered motion is called dynamic pressure."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031103121-153182a5:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031103121-153182a5:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

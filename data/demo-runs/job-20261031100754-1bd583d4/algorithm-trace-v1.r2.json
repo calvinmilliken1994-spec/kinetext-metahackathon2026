@@ -1,0 +1,155 @@
+{
+  "gen": {
+    "schemaVersion": "algorithm-trace-v1",
+    "title": "Tracing bubble sort with a small list",
+    "algorithm": "bubble-sort",
+    "algorithmName": "codominant inheritance",
+    "sourceId": "medlineplus-inheritance-patterns",
+    "quote": "In codominant inheritance, two different versions (alleles) of a gene are expressed, and each version makes a slightly different protein.",
+    "input": [
+      4,
+      9,
+      2,
+      7,
+      5
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": []
+  },
+  "report": {
+    "artifactId": "job-20261031100754-1bd583d4:algorithm-trace-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every algorithm-trace title, name length and claim id/kind/text shape is within the frozen limits"
+      },
+      {
+        "id": "ALG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 1 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "ALG-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "algorithmName \"codominant inheritance\" does not match the name pattern for algorithm \"bubble-sort\" (/\\bbubble[ -]sort\\b/i) — the name must be this algorithm's own name, e.g. binary-search is \"binary search\" (algorithm-named-in-quote)",
+        "path": "/algorithmName",
+        "affected": [
+          "/algorithmName"
+        ]
+      },
+      {
+        "id": "ALG-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the input is valid: 5 integer values in 0-99, hasTarget is false exactly for the sort, and the target is the sentinel 0 (input-valid)"
+      },
+      {
+        "id": "ALG-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our tracer ran codominant inheritance to completion in 16 frame(s) (limit 400) and the sorted result [2, 4, 5, 7, 9] is ascending and holds every input value — computed by our tested engine, never by the model (trace-runs)"
+      },
+      {
+        "id": "ALG-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 0 claim text(s) occur in their own quote after whitespace normalisation, with every number matching as the same whole number (claims-in-quote)"
+      },
+      {
+        "id": "ALG-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the algorithm name and the claim texts appears on the cited page as that whole number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "ALG-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the counts are valid: 5 input values (4-10) and 0 claim(s) (0-3) (counts-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "algorithm-trace-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "eb47e528f7ae442da9908979c401e605",
+    "usage": {
+      "promptTokens": 4304,
+      "completionTokens": 2480,
+      "reasoningTokens": 2378,
+      "cachedTokens": 0
+    },
+    "latencyMs": 13700,
+    "estCostUSD": 0.01592,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100754-1bd583d4:algorithm-trace-v1:r2",
+    "componentId": "algorithm-trace-v1",
+    "title": "Tracing bubble sort with a small list",
+    "sources": [
+      {
+        "id": "medlineplus-inheritance-patterns",
+        "title": "What are the different ways a genetic condition can be inherited? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/inheritance/inheritancepatterns/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "6c3e0ea6ffae78fec81ece6e4f2fb86ebcc073655e940de575de6d5cb59318e4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "eb47e528f7ae442da9908979c401e605",
+      "runId": "job-20261031100754-1bd583d4",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:09:17.315Z"
+    },
+    "seed": 1007645340,
+    "algorithm": "bubble-sort",
+    "algorithmName": "codominant inheritance",
+    "sourceId": "medlineplus-inheritance-patterns",
+    "quote": "In codominant inheritance, two different versions (alleles) of a gene are expressed, and each version makes a slightly different protein.",
+    "input": [
+      4,
+      9,
+      2,
+      7,
+      5
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": []
+  }
+}

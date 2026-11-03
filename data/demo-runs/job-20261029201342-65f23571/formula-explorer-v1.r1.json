@@ -1,0 +1,325 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Lift Equation Explorer",
+    "formulaText": "L = k * V^2 * A * cl",
+    "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+    "quote": "L = k * V^2 * A * cl",
+    "expression": "k*v^2*a*cl",
+    "variables": [
+      {
+        "name": "k",
+        "pageSymbol": "k",
+        "meaning": "Smeaton coefficient",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 0.0027,
+        "max": 0.005,
+        "default": 0.0033
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "velocity",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 5,
+        "max": 30,
+        "default": 15
+      },
+      {
+        "name": "a",
+        "pageSymbol": "A",
+        "meaning": "wing area",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 50,
+        "max": 300,
+        "default": 150
+      },
+      {
+        "name": "cl",
+        "pageSymbol": "cl",
+        "meaning": "lift coefficient",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 0.2,
+        "max": 1,
+        "default": 0.5
+      }
+    ],
+    "xVariable": "v",
+    "cases": [
+      {
+        "id": "case-1-lift-15mph",
+        "inputs": [
+          {
+            "name": "k",
+            "value": 0.0033
+          },
+          {
+            "name": "v",
+            "value": 15
+          },
+          {
+            "name": "a",
+            "value": 100
+          },
+          {
+            "name": "cl",
+            "value": 0.4
+          }
+        ]
+      },
+      {
+        "id": "case-2-lift-15mph-high-k",
+        "inputs": [
+          {
+            "name": "k",
+            "value": 0.005
+          },
+          {
+            "name": "v",
+            "value": 15
+          },
+          {
+            "name": "a",
+            "value": 150
+          },
+          {
+            "name": "cl",
+            "value": 0.5
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261029201342-65f23571:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-lift-equation-of-the-1900s\" and formulaText occurs inside the quote after normalisation (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"v\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 2 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"k * V^2 * A * cl\" parsed from the quote with the same grammar: 5/5 finite slider-range sample points agree within relative 1e-9 (expression-matches-page-formula)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6fd9e9230bee48498b2aed07ef5cd3c5",
+    "usage": {
+      "promptTokens": 3731,
+      "completionTokens": 8632,
+      "reasoningTokens": 8132,
+      "cachedTokens": 0
+    },
+    "latencyMs": 42579,
+    "estCostUSD": 0.04134975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201342-65f23571:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "Lift Equation Explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-lift-equation-of-the-1900s",
+        "title": "Lift Equation of the 1900's — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation-of-the-1900s/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "41fb1b6349509be9b9478942fed514cd8d077b15436694132ecbfb588c477402"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6fd9e9230bee48498b2aed07ef5cd3c5",
+      "runId": "job-20261029201342-65f23571",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:16:04.287Z"
+    },
+    "seed": 2454321836,
+    "formulaText": "L = k * V^2 * A * cl",
+    "sourceId": "nasa-grc-lift-equation-of-the-1900s",
+    "quote": "L = k * V^2 * A * cl",
+    "expression": "k*v^2*a*cl",
+    "variables": [
+      {
+        "name": "k",
+        "pageSymbol": "k",
+        "meaning": "Smeaton coefficient",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 0.0027,
+        "max": 0.005,
+        "default": 0.0033
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "velocity",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 5,
+        "max": 30,
+        "default": 15
+      },
+      {
+        "name": "a",
+        "pageSymbol": "A",
+        "meaning": "wing area",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 50,
+        "max": 300,
+        "default": 150
+      },
+      {
+        "name": "cl",
+        "pageSymbol": "cl",
+        "meaning": "lift coefficient",
+        "meaningQuoted": true,
+        "quote": "where L is the lift, k is the Smeaton coefficient, V is the velocity, A is the wing area, and cl is the lift coefficient.",
+        "unit": "",
+        "min": 0.2,
+        "max": 1,
+        "default": 0.5
+      }
+    ],
+    "xVariable": "v",
+    "cases": [
+      {
+        "id": "case-1-lift-15mph",
+        "inputs": [
+          {
+            "name": "k",
+            "value": 0.0033
+          },
+          {
+            "name": "v",
+            "value": 15
+          },
+          {
+            "name": "a",
+            "value": 100
+          },
+          {
+            "name": "cl",
+            "value": 0.4
+          }
+        ]
+      },
+      {
+        "id": "case-2-lift-15mph-high-k",
+        "inputs": [
+          {
+            "name": "k",
+            "value": 0.005
+          },
+          {
+            "name": "v",
+            "value": 15
+          },
+          {
+            "name": "a",
+            "value": 150
+          },
+          {
+            "name": "cl",
+            "value": 0.5
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

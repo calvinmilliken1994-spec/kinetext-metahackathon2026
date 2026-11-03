@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031101018-fde4946e",
+  "analysisRef": "job-20261031101018-fde4946e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101018-fde4946e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Cells as building blocks and their specialized parts",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-cell",
+        "title": "What is a cell? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/cell/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "e1e13e682d36c67bceb40f4665d1bb179174796619028f4cd49b9ec874b4f2b3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "18f9406d9fab43bfbed31277b23751fb",
+      "runId": "job-20261031101018-fde4946e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:05.489Z"
+    },
+    "seed": 1932190951,
+    "headline": "Cells as building blocks and their specialized parts",
+    "keyPoints": [
+      {
+        "id": "kp-structure-function",
+        "point": "Cells provide structure, take in nutrients, convert nutrients into energy and carry out specialized functions.",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "They provide structure for the body, take in nutrients from food, convert those nutrients into energy, and carry out specialized functions."
+      },
+      {
+        "id": "kp-nucleus-command",
+        "point": "The nucleus acts as the command center that sends directions for growth and division and houses hereditary material.",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The nucleus serves as the cell’s command center, sending directions to the cell to grow, mature, divide, or die."
+      },
+      {
+        "id": "kp-mitochondria-energy",
+        "point": "Mitochondria convert energy from food into a usable form and contain their own genetic material.",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Mitochondria are complex organelles that convert energy from food into a form that the cell can use."
+      },
+      {
+        "id": "kp-cytoskeleton-framework",
+        "point": "The cytoskeleton forms the structural framework that determines cell shape and allows movement and division.",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The cytoskeleton is a network of long fibers that make up the cell’s structural framework."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-cytoplasm",
+        "term": "cytoplasm",
+        "gloss": "jelly-like fluid and structures that surround the nucleus",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Within cells, the cytoplasm is made up of a jelly-like fluid (called the cytosol) and other structures that surround the nucleus."
+      },
+      {
+        "id": "kt-cytoskeleton",
+        "term": "cytoskeleton",
+        "gloss": "network of fibers forming the structural framework of the cell",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The cytoskeleton is a network of long fibers that make up the cell’s structural framework."
+      },
+      {
+        "id": "kt-mitochondria",
+        "term": "Mitochondria",
+        "gloss": "organelles that convert energy from food into usable form",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Mitochondria are complex organelles that convert energy from food into a form that the cell can use."
+      },
+      {
+        "id": "kt-nucleus",
+        "term": "nucleus",
+        "gloss": "command center that houses hereditary material and directs growth and division",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The nucleus serves as the cell’s command center, sending directions to the cell to grow, mature, divide, or die."
+      },
+      {
+        "id": "kt-ribosomes",
+        "term": "Ribosomes",
+        "gloss": "organelles that process genetic instructions to create proteins",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Ribosomes are organelles that process the cell’s genetic instructions to create proteins."
+      },
+      {
+        "id": "kt-plasma-membrane",
+        "term": "plasma membrane",
+        "gloss": "outer lining that separates the cell from its environment",
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The plasma membrane is the outer lining of the cell."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101018-fde4946e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261031101018-fde4946e:concept-map-v1:r1",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    }
+  ]
+}

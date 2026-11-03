@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105059-ef368847",
+  "analysisRef": "job-20261031105059-ef368847/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105059-ef368847:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How bubble sort repeatedly swaps adjacent items to order a list",
+    "sources": [
+      {
+        "id": "nist-dads-bubble-sort",
+        "title": "bubble sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bubblesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'bubble sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "7034ebf8337b63fd948fec934b5580cbcd77a018b54bf00db8ae76ea0e4015ca"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "267614e8506b4101a8241d022a8b6541",
+      "runId": "job-20261031105059-ef368847",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:51:58.829Z"
+    },
+    "seed": 4049808760,
+    "headline": "How bubble sort repeatedly swaps adjacent items to order a list",
+    "keyPoints": [
+      {
+        "id": "definition-swap",
+        "point": "Students learn that the method works by comparing each adjacent pair and swapping items when necessary during a pass.",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Sort by comparing each adjacent pair of items in a list in turn, swapping the items if necessary"
+      },
+      {
+        "id": "repeating-passes",
+        "point": "Students learn the procedure keeps repeating passes through the list until no swaps are done.",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "repeating the pass through the list until no swaps are done."
+      },
+      {
+        "id": "complexity-behavior",
+        "point": "Students learn complexity is quadratic for arbitrary data but approaches linear when the list is nearly ordered.",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Complexity is O(n^2) for arbitrary data, but approaches Θ(n) if the list is nearly in order at the beginning."
+      },
+      {
+        "id": "optimization-decrement",
+        "point": "Students learn an improvement is to decrement the checked range because at least one item reaches its final place each pass.",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Since at least one item is moved into its final place for each pass, an improvement is to decrement the last position checked on each pass."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "bubble-sort",
+        "term": "bubble sort",
+        "gloss": "a simple sort that repeatedly compares adjacent items to order the list",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "bubble sort"
+      },
+      {
+        "id": "adjacent-pair",
+        "term": "adjacent pair",
+        "gloss": "two items that are adjacent and may be swapped during a pass",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "each adjacent pair of items in a list in turn"
+      },
+      {
+        "id": "stable-sort",
+        "term": "stable sort",
+        "gloss": "a stable sort that keeps equal items in their original order while sorting",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "in-place sort, stable sort."
+      },
+      {
+        "id": "in-place-sort",
+        "term": "in-place sort",
+        "gloss": "a sort that rearranges items within the existing list without extra storage",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "in-place sort, stable sort."
+      },
+      {
+        "id": "complexity-term",
+        "term": "Complexity",
+        "gloss": "how running time approaches linear when the input is nearly ordered at the beginning",
+        "sourceId": "nist-dads-bubble-sort",
+        "quote": "Complexity is O(n^2) for arbitrary data, but approaches Θ(n) if the list is nearly in order at the beginning."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031105059-ef368847:algorithm-trace-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105059-ef368847:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

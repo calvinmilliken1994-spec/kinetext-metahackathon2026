@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031094943-7234f176",
+  "analysisRef": "job-20261031094943-7234f176/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031094943-7234f176:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Voting rights law that banned literacy tests and added federal oversight",
+    "sources": [
+      {
+        "id": "nara-voting-rights-act",
+        "title": "Voting Rights Act (1965) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/voting-rights-act",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Voting Rights Act (1965)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "c546aa8910d2b60d139449fb21b27959fb6bde49de81940d055b186a945feb60"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1915e-2c2e-71ee-8126-9b3c28174441",
+      "runId": "job-20261031094943-7234f176",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:50:30.573Z"
+    },
+    "seed": 1295575034,
+    "headline": "Voting rights law that banned literacy tests and added federal oversight",
+    "keyPoints": [
+      {
+        "id": "voting-obstacles",
+        "point": "Students learn that African Americans in the South faced poll taxes, literacy tests and other restrictions when trying to vote.",
+        "quote": "African Americans in the South faced tremendous obstacles to voting, including poll taxes, literacy tests, and other bureaucratic restrictions",
+        "sourceId": "nara-voting-rights-act"
+      },
+      {
+        "id": "selma-pressure",
+        "point": "Students learn that peaceful marchers in Selma gained national attention that helped push Congress to pass voting legislation.",
+        "quote": "the attack by white state troopers on peaceful marchers in Selma, Alabama, gained national attention",
+        "sourceId": "nara-voting-rights-act"
+      },
+      {
+        "id": "section-two-ban",
+        "point": "Students learn that Section 2 created a nationwide prohibition on denying the vote on account of race or color.",
+        "quote": "applied a nationwide prohibition of the denial or abridgment of the right to vote on account of race or color.",
+        "sourceId": "nara-voting-rights-act"
+      },
+      {
+        "id": "registration-gains",
+        "point": "Students learn that a quarter of a million new Black voters were registered by the end of 1965 with help from federal examiners.",
+        "quote": "By the end of 1965, a quarter of a million new Black voters had been registered, one-third by federal examiners.",
+        "sourceId": "nara-voting-rights-act"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Taxes charged before voting that made registration harder for Black citizens",
+        "id": "poll-taxes",
+        "quote": "including poll taxes, literacy tests, and other bureaucratic restrictions to deny them the right to vote.",
+        "sourceId": "nara-voting-rights-act",
+        "term": "poll taxes"
+      },
+      {
+        "gloss": "Reading tests used to deny registration to qualified citizens seeking to vote",
+        "id": "literacy-tests",
+        "quote": "including poll taxes, literacy tests, and other bureaucratic restrictions to deny them the right to vote.",
+        "sourceId": "nara-voting-rights-act",
+        "term": "literacy tests"
+      },
+      {
+        "gloss": "Federal officials with power to register qualified citizens in covered places",
+        "id": "federal-examiners",
+        "quote": "provided for the appointment of federal examiners (with the power to register qualified citizens to vote)",
+        "sourceId": "nara-voting-rights-act",
+        "term": "federal examiners"
+      },
+      {
+        "gloss": "Advance approval needed before covered jurisdictions changed voting practices",
+        "id": "preclearance",
+        "quote": "Section 5 of the act required covered jurisdictions to obtain \"preclearance\" from either",
+        "sourceId": "nara-voting-rights-act",
+        "term": "preclearance"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031094943-7234f176:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031094943-7234f176:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

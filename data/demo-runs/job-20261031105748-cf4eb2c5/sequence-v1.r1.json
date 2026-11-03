@@ -1,0 +1,185 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Vertical structure of air around Earth from top to bottom",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Displayed from outermost to lowest as shown on page",
+    "steps": [
+      {
+        "id": "exosphere-outermost",
+        "label": "Outermost exosphere far above Earth",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "This is the outermost layer of the atmosphere.",
+        "orderHint": "Highest layer"
+      },
+      {
+        "id": "thermosphere-upper",
+        "label": "Thermosphere occupies upper atmosphere",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Between about 53 miles (85 km) and 375 miles (600 km) lies the thermosphere, known as the upper atmosphere.",
+        "orderHint": "Next below exosphere"
+      },
+      {
+        "id": "mesosphere-middle",
+        "label": "Mesosphere spans middle heights above surface",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "This layer extends from around 31 miles (50 km) above the Earth's surface to 53 miles (85 km).",
+        "orderHint": "Middle layer below thermosphere"
+      },
+      {
+        "id": "stratosphere-extends",
+        "label": "Stratosphere extends above lower atmosphere",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The stratosphere extends from 4 -12 miles (6-20 km) above the Earth's surface to around 31 miles (50 km).",
+        "orderHint": "Above lowest layer"
+      },
+      {
+        "id": "troposphere-surface",
+        "label": "Troposphere touches surface and varies in height",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The troposphere begins at the Earth's surface, but the height of the troposphere varies.",
+        "orderHint": "Lowest layer at surface"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105748-cf4eb2c5:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "861dbcb7497c449e9c437ec2fd6f0882",
+    "usage": {
+      "promptTokens": 3382,
+      "completionTokens": 9165,
+      "reasoningTokens": 8797,
+      "cachedTokens": 0
+    },
+    "latencyMs": 60110,
+    "estCostUSD": 0.04317875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105748-cf4eb2c5:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Vertical structure of air around Earth from top to bottom",
+    "sources": [
+      {
+        "id": "noaa-jetstream-layers-of-atmosphere",
+        "title": "Layers of the Atmosphere — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Layers of the Atmosphere'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "75a26a66f8c260bac9fb18573281be8d0a62c9cc36a790a7c00e5129e643fdba"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "861dbcb7497c449e9c437ec2fd6f0882",
+      "runId": "job-20261031105748-cf4eb2c5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:00:22.496Z"
+    },
+    "seed": 48861516,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Displayed from outermost to lowest as shown on page",
+    "steps": [
+      {
+        "id": "exosphere-outermost",
+        "label": "Outermost exosphere far above Earth",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "This is the outermost layer of the atmosphere.",
+        "orderHint": "Highest layer"
+      },
+      {
+        "id": "thermosphere-upper",
+        "label": "Thermosphere occupies upper atmosphere",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Between about 53 miles (85 km) and 375 miles (600 km) lies the thermosphere, known as the upper atmosphere.",
+        "orderHint": "Next below exosphere"
+      },
+      {
+        "id": "mesosphere-middle",
+        "label": "Mesosphere spans middle heights above surface",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "This layer extends from around 31 miles (50 km) above the Earth's surface to 53 miles (85 km).",
+        "orderHint": "Middle layer below thermosphere"
+      },
+      {
+        "id": "stratosphere-extends",
+        "label": "Stratosphere extends above lower atmosphere",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The stratosphere extends from 4 -12 miles (6-20 km) above the Earth's surface to around 31 miles (50 km).",
+        "orderHint": "Above lowest layer"
+      },
+      {
+        "id": "troposphere-surface",
+        "label": "Troposphere touches surface and varies in height",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The troposphere begins at the Earth's surface, but the height of the troposphere varies.",
+        "orderHint": "Lowest layer at surface"
+      }
+    ]
+  }
+}

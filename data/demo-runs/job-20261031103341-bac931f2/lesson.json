@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031103341-bac931f2",
+  "analysisRef": "job-20261031103341-bac931f2/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103341-bac931f2:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Free fall under constant gravity in a vacuum",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a409d9f049174bb58ccc9dd77397edec",
+      "runId": "job-20261031103341-bac931f2",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:35:25.633Z"
+    },
+    "seed": 1179942302,
+    "headline": "Free fall under constant gravity in a vacuum",
+    "keyPoints": [
+      {
+        "id": "vacuum-gravity-force",
+        "point": "Free falling objects in a vacuum are acted on by only the gravitational force as weight.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "constant-acceleration-gravity",
+        "point": "Gravitational acceleration near sea level on Earth is constant at 9.8 meters per square second.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity-location-equations",
+        "point": "Velocity and location of a free falling object can be determined from acceleration and time using equations.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Knowing the acceleration, we can determine the velocity and location of any free falling object at any time using the following equations."
+      },
+      {
+        "id": "linear-quadratic-growth",
+        "point": "During free fall acceleration stays constant while velocity increases linearly and location increases quadratically.",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "gravitational-force",
+        "term": "gravitational force",
+        "gloss": "weight pull from gravity that acts on an object in a vacuum",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that falls through a vacuum is subjected to only one external force, the gravitational force, expressed as the weight of the object."
+      },
+      {
+        "id": "acceleration",
+        "term": "acceleration",
+        "gloss": "constant rate of change of velocity near sea level",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "The acceleration is constant and equal to the gravitational acceleration g which is 9.8 meters per square second at sea level on the Earth."
+      },
+      {
+        "id": "velocity",
+        "term": "velocity",
+        "gloss": "speed of an object that increases linearly over time",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Notice that the acceleration is a constant, the velocity increases linearly, and the location increases quadratically."
+      },
+      {
+        "id": "displacement",
+        "term": "displacement",
+        "gloss": "distance from an initial location after falling",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "where a is the acceleration, V is the velocity, and X is the displacement from an initial location."
+      },
+      {
+        "id": "drag-force",
+        "term": "drag force",
+        "gloss": "additional push from air acting on an object",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "there is an additional drag force acting on the object"
+      },
+      {
+        "id": "free-falling",
+        "term": "free falling",
+        "gloss": "movement caused only by gravity with no other forces",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "An object that is moving only because of the action of gravity is said to be free falling"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031103341-bac931f2:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031103341-bac931f2:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

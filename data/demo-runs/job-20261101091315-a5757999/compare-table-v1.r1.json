@@ -1,0 +1,183 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing how autotrophs make food",
+    "attributes": [
+      "Energy",
+      "Product"
+    ],
+    "rows": [
+      {
+        "entity": "Photosynthesis",
+        "values": [
+          {
+            "value": "energy from the sun",
+            "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+            "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun."
+          },
+          {
+            "value": "oxygen and sugars (food)",
+            "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+            "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun."
+          }
+        ]
+      },
+      {
+        "entity": "Chemosynthesis",
+        "values": [
+          {
+            "value": "energy released from chemical reactions",
+            "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+            "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions."
+          },
+          {
+            "value": "sugars (food)",
+            "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+            "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions."
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101091315-a5757999:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "106b409e7b414d95a23ad76da48e8f1c",
+    "usage": {
+      "promptTokens": 5436,
+      "completionTokens": 5890,
+      "reasoningTokens": 5644,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35974,
+    "estCostUSD": 0.0318275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091315-a5757999:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Comparing how autotrophs make food",
+    "sources": [
+      {
+        "id": "noaa-oceanexplorer-fueling-life-on-earth",
+        "title": "Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration, Educator Guide and Teacher Key (grades 9-12 chemistry)",
+        "locator": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-guide-fueling-life-on-earth.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis' educator guide. NOAA's Education and Outreach FAQ (https://www.noaa.gov/office-education/outreach-communication/faq) states: 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', and requires credit to NOAA without claiming or endorsing; edits and generative-AI outputs must not be presented as official NOAA material. The document itself asks: 'If reproducing this activity, please cite NOAA as the source, and provide the following URL: https://oceanexplorer.noaa.gov.' Text only: the third-party photo credit printed on page 1 ('Image courtesy of NOAA Ocean Exploration, NSF/NOAA, Jason, Copyright WHOI') and the video/image links on the resources page are not stored. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "106b409e7b414d95a23ad76da48e8f1c",
+      "runId": "job-20261101091315-a5757999",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T09:14:59.605Z"
+    },
+    "seed": 3636202989,
+    "entities": [
+      "Photosynthesis",
+      "Chemosynthesis"
+    ],
+    "attributes": [
+      "Energy",
+      "Product"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "energy from the sun",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "oxygen and sugars (food)",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "energy released from chemical reactions",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions."
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "sugars (food)",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions."
+      }
+    ]
+  }
+}

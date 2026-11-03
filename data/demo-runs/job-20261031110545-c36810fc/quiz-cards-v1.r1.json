@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Check what you know about voter registration",
+    "cards": [
+      {
+        "id": "documents-vary",
+        "stem": "How does the source describe the need for documents to register?",
+        "options": [
+          "vary by state",
+          "are identical in every state",
+          "are decided by local schools",
+          "are not needed at all"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The required documents you need to register vary by state.",
+        "hint": ""
+      },
+      {
+        "id": "in-person-option",
+        "stem": "Where can a voter register directly in their community?",
+        "options": [
+          "In person at your local election office",
+          "By social media message only",
+          "Through a private club only",
+          "At any overseas embassy only"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office",
+        "hint": ""
+      },
+      {
+        "id": "assistance-program",
+        "stem": "Which program helps overseas and military voters register and request a ballot?",
+        "options": [
+          "The Federal Voting Assistance Program",
+          "The National Park Service program",
+          "The Local Library membership program",
+          "The Private Banking assistance program"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The Federal Voting Assistance Program lets you register to vote and request an absentee ballot if you are a:",
+        "hint": ""
+      },
+      {
+        "id": "common-id",
+        "stem": "What is one common form of identification mentioned for registration?",
+        "options": [
+          "driver’s license",
+          "high school diploma",
+          "store loyalty card",
+          "gym membership card"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In most cases, you will need either a driver’s license or a state ID to register to vote.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110545-c36810fc:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ec67bdf7f4664b9085589d24889d2813",
+    "usage": {
+      "promptTokens": 2568,
+      "completionTokens": 8534,
+      "reasoningTokens": 8203,
+      "cachedTokens": 0
+    },
+    "latencyMs": 48438,
+    "estCostUSD": 0.0394795,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110545-c36810fc:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Check what you know about voter registration",
+    "sources": [
+      {
+        "id": "usagov-register-to-vote",
+        "title": "How to register to vote — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/register-to-vote",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How to register to vote'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "f8d5a15bf1bc22c4b181555f4a66df77abf7286a87030044ebbba345d0817cb3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ec67bdf7f4664b9085589d24889d2813",
+      "runId": "job-20261031110545-c36810fc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:07:35.288Z"
+    },
+    "seed": 2800819285,
+    "cards": [
+      {
+        "id": "documents-vary",
+        "stem": "How does the source describe the need for documents to register?",
+        "options": [
+          "vary by state",
+          "are identical in every state",
+          "are decided by local schools",
+          "are not needed at all"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The required documents you need to register vary by state.",
+        "hint": ""
+      },
+      {
+        "id": "in-person-option",
+        "stem": "Where can a voter register directly in their community?",
+        "options": [
+          "In person at your local election office",
+          "By social media message only",
+          "Through a private club only",
+          "At any overseas embassy only"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office",
+        "hint": ""
+      },
+      {
+        "id": "assistance-program",
+        "stem": "Which program helps overseas and military voters register and request a ballot?",
+        "options": [
+          "The Federal Voting Assistance Program",
+          "The National Park Service program",
+          "The Local Library membership program",
+          "The Private Banking assistance program"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The Federal Voting Assistance Program lets you register to vote and request an absentee ballot if you are a:",
+        "hint": ""
+      },
+      {
+        "id": "common-id",
+        "stem": "What is one common form of identification mentioned for registration?",
+        "options": [
+          "driver’s license",
+          "high school diploma",
+          "store loyalty card",
+          "gym membership card"
+        ],
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In most cases, you will need either a driver’s license or a state ID to register to vote.",
+        "hint": ""
+      }
+    ]
+  }
+}

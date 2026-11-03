@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031103615-bf6b9727",
+  "analysisRef": "job-20261031103615-bf6b9727/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103615-bf6b9727:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How Mach number controls compressibility and density changes in flight",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "088336dbcf6e48b7974892217fbb4f20",
+      "runId": "job-20261031103615-bf6b9727",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:37:09.925Z"
+    },
+    "seed": 1661362034,
+    "headline": "How Mach number controls compressibility and density changes in flight",
+    "keyPoints": [
+      {
+        "id": "compressibility-affects-force",
+        "point": "Students learn that compressibility alters aerodynamic force because aerodynamic force depends on air density.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+      },
+      {
+        "id": "mach-definition",
+        "point": "Students learn that Mach number is the ratio of aircraft or gas speed to speed of sound in the gas.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+      },
+      {
+        "id": "transonic-density",
+        "point": "Students learn that transonic density change equals velocity change and compressibility cannot be ignored.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored."
+      },
+      {
+        "id": "supersonic-density",
+        "point": "Students learn that supersonic and hypersonic density changes faster than velocity by square of Mach number.",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "mach-number",
+        "term": "Mach number",
+        "gloss": "ratio that compares aircraft or gas speed to speed of sound in the gas",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas."
+      },
+      {
+        "id": "compressibility",
+        "term": "compressibility",
+        "gloss": "effect where aerodynamic force depends on changes in air density",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "This compressibility effect alters the amount of resulting force on the aircraft since the aerodynamic force depends on the air density."
+      },
+      {
+        "id": "speed-of-sound",
+        "term": "speed of sound",
+        "gloss": "speed at which small disturbances are transmitted in the flow",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The speed of sound is equal to the speed of transmission of small, isentropic disturbances in the flow."
+      },
+      {
+        "id": "isentropic",
+        "term": "isentropic",
+        "gloss": "condition where disturbances transmit with constant entropy",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The speed of sound is equal to the speed of transmission of small, isentropic disturbances in the flow."
+      },
+      {
+        "id": "subsonic",
+        "term": "subsonic",
+        "gloss": "low speed conditions where Mach number is less than one",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For low speed, or subsonic conditions, the Mach number is less than one"
+      },
+      {
+        "id": "transonic",
+        "term": "transonic",
+        "gloss": "flight condition where Mach number is nearly equal to one",
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "As the speed of the object approaches the speed of sound, the flight Mach number is nearly equal to one, M = 1, and the flow is said to be transonic."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "speed-of-sound-v1",
+      "specId": "nasa-grc-role-of-the-mach-number-job-20261031103615-bf6b9727",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031103615-bf6b9727:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

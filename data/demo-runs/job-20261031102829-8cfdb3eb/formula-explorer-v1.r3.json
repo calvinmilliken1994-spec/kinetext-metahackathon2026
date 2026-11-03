@@ -1,0 +1,340 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Ideal gas relation explorer",
+    "formulaText": "pV=nRT",
+    "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+    "quote": "pV=nRT",
+    "expression": "n*r*t",
+    "variables": [
+      {
+        "name": "n",
+        "pageSymbol": "n",
+        "meaning": "amount of gas",
+        "meaningQuoted": false,
+        "quote": "a universal constant R and the mass of the gas expressed in moles n.",
+        "unit": "",
+        "min": 0.1,
+        "max": 2,
+        "default": 1
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "gas constant",
+        "meaningQuoted": false,
+        "quote": "a universal constant R and the mass of the gas expressed in moles n.",
+        "unit": "",
+        "min": 0.1,
+        "max": 1,
+        "default": 0.286
+      },
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "absolute temperature",
+        "meaningQuoted": false,
+        "quote": "including the gas pressure p, temperature T, mass m, and volume V that contains the gas.",
+        "unit": "",
+        "min": 200,
+        "max": 600,
+        "default": 300
+      }
+    ],
+    "xVariable": "t",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 300
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 400
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 2
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 300
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261031102829-8cfdb3eb:formula-explorer-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-equation-of-state-ideal-gas\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"t\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the page formula line could not be parsed with the calculator grammar (the formula line has no parseable tokens (only prose after the \"=\")) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression",
+          "/quote",
+          "/formulaText",
+          "/hasSourceExample",
+          "/sourceExample/quote",
+          "/sourceExample/resultNumber",
+          "/sourceExample/tolerance",
+          "/variables/0/pageSymbol",
+          "/variables/1/pageSymbol",
+          "/variables/2/pageSymbol"
+        ]
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "092f5bd33ffe4136a9c9bd369e1341d1",
+    "usage": {
+      "promptTokens": 5698,
+      "completionTokens": 9755,
+      "reasoningTokens": 9394,
+      "cachedTokens": 0
+    },
+    "latencyMs": 64707,
+    "estCostUSD": 0.04858125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102829-8cfdb3eb:formula-explorer-v1:r3",
+    "componentId": "formula-explorer-v1",
+    "title": "Ideal gas relation explorer",
+    "sources": [
+      {
+        "id": "nasa-grc-equation-of-state-ideal-gas",
+        "title": "Equation Of State (Ideal Gas) — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equation-of-state-ideal-gas-2/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1647515d09cd96cf0c68fd8c09acf13b06e089610e1a415924e53f438062e1a4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "092f5bd33ffe4136a9c9bd369e1341d1",
+      "runId": "job-20261031102829-8cfdb3eb",
+      "promptVersion": "s6-v10",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-31T10:33:26.203Z"
+    },
+    "seed": 3776713808,
+    "formulaText": "pV=nRT",
+    "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+    "quote": "pV=nRT",
+    "expression": "n*r*t",
+    "variables": [
+      {
+        "name": "n",
+        "pageSymbol": "n",
+        "meaning": "amount of gas",
+        "meaningQuoted": false,
+        "quote": "a universal constant R and the mass of the gas expressed in moles n.",
+        "unit": "",
+        "min": 0.1,
+        "max": 2,
+        "default": 1
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "gas constant",
+        "meaningQuoted": false,
+        "quote": "a universal constant R and the mass of the gas expressed in moles n.",
+        "unit": "",
+        "min": 0.1,
+        "max": 1,
+        "default": 0.286
+      },
+      {
+        "name": "t",
+        "pageSymbol": "T",
+        "meaning": "absolute temperature",
+        "meaningQuoted": false,
+        "quote": "including the gas pressure p, temperature T, mass m, and volume V that contains the gas.",
+        "unit": "",
+        "min": 200,
+        "max": 600,
+        "default": 300
+      }
+    ],
+    "xVariable": "t",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 300
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 1
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 400
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "n",
+            "value": 2
+          },
+          {
+            "name": "r",
+            "value": 0.286
+          },
+          {
+            "name": "t",
+            "value": 300
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

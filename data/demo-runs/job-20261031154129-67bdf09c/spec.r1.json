@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-apollo-11-mission-overview-job-20261031154129-67bdf09c",
+  "title": "Apollo 11: From Systems Tests to Launch and Recovery",
+  "learningObjectives": [
+    "Sequence major prelaunch tests through rollout, launch and splashdown in mid-July 1969.",
+    "Explain the mission goal of a crewed lunar landing and safe return enabled by a free-return trajectory."
+  ],
+  "sources": [
+    {
+      "id": "nasa-apollo-11-mission-overview",
+      "title": "Apollo 11 Mission Overview — NASA",
+      "locator": "https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA, 'Apollo 11 Mission Overview'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; no NASA images or logos are stored and this activity is labelled AI-generated. NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "d4b29539152f1ed2229358538d39df45198fafd17251631e6efc9561260db7e1"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Testing of the lunar and command modules in late 1968 through spring 1969 led to rollout, launch and eventual recovery, showing how incremental preparation supports a crewed lunar flight.",
+      "evidence": [
+        {
+          "sourceId": "nasa-apollo-11-mission-overview",
+          "quote": "5/20/69 – rollout to Launch Pad 39A"
+        },
+        {
+          "sourceId": "nasa-apollo-11-mission-overview",
+          "quote": "July 16, 1969; 9:32 a.m. EDT"
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "The flight aimed to complete the crewed landing and return goal and to use a trajectory that permitted return without engine firing, highlighting mission design for safety.",
+      "evidence": [
+        {
+          "sourceId": "nasa-apollo-11-mission-overview",
+          "quote": "The primary objective of Apollo 11 was to complete a national goal set by President John F. Kennedy on May 25, 1961"
+        },
+        {
+          "sourceId": "nasa-apollo-11-mission-overview",
+          "quote": "This was to be the last Apollo mission to fly a “free-return” trajectory"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "LM-5 integrated systems test",
+        "year": 68,
+        "month": 11,
+        "day": 21,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "11/21/68 – LM-5 integrated systems test"
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "CSM-107 integrated systems test",
+        "year": 68,
+        "month": 12,
+        "day": 6,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "12/6/68 – CSM-107 integrated systems test"
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "LM-5 ascent stage delivered to Kennedy",
+        "year": 69,
+        "month": 1,
+        "day": 8,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "1/8/69 – LM-5 ascent stage delivered to Kennedy"
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Rollout to Launch Pad 39A",
+        "year": 69,
+        "month": 5,
+        "day": 20,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "5/20/69 – rollout to Launch Pad 39A"
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Launch from Cape Kennedy",
+        "year": 1969,
+        "month": 7,
+        "day": 16,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "July 16, 1969; 9:32 a.m. EDT"
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Splashdown in the Pacific Ocean",
+        "year": 1969,
+        "month": 7,
+        "day": 24,
+        "evidence": [
+          {
+            "sourceId": "nasa-apollo-11-mission-overview",
+            "quote": "July 24, 1969; 12:50 p.m. EDT"
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Apollo 11 Mission",
+      "settingLabel": "Kennedy Space Center to the Moon, 1968-1969"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Systems test before rollout",
+      "earlierEventId": "e1",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Ascent stage delivery before rollout",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Launch before splashdown",
+      "earlierEventId": "e5",
+      "laterEventId": "e6"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: LM-5 integrated systems test or splashdown in the Pacific Ocean?",
+      "earlierEventId": "e1",
+      "laterEventId": "e6"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: rollout to Launch Pad 39A or launch from Cape Kennedy?",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "df8c850ee86e4e919131346a3305b1ca",
+    "runId": "job-20261031154129-67bdf09c",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T15:43:11.339Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

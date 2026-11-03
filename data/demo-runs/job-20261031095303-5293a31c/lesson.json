@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031095303-5293a31c",
+  "analysisRef": "job-20261031095303-5293a31c/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095303-5293a31c:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Rebasing a price index to a new reference period",
+    "sources": [
+      {
+        "id": "bls-rebasing",
+        "title": "Rebasing an index — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/rebasing.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Rebasing an index'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "12b5479a4b039561a9b371a9ff42e67a18717caf06659d7262130e3d95b1088e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "460984533ceb44cbb24f60e502b5c383",
+      "runId": "job-20261031095303-5293a31c",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:54:07.134Z"
+    },
+    "seed": 4058579785,
+    "headline": "Rebasing a price index to a new reference period",
+    "keyPoints": [
+      {
+        "id": "need-for-rebasing",
+        "point": "Students learn it is sometimes necessary to use index values on a reference base that is not published for contracts and graphs.",
+        "sourceId": "bls-rebasing",
+        "quote": "It is sometimes necessary to use index values on a reference base that is not published."
+      },
+      {
+        "id": "rate-of-change-invariant",
+        "point": "Students learn the only difference between series is the year set to 100 and the rate of change is exactly the same.",
+        "sourceId": "bls-rebasing",
+        "quote": "the only difference between series is the year we set to 100, the rate of change is exactly the same."
+      },
+      {
+        "id": "finding-relative",
+        "point": "Students learn to find the relative for each data point by dividing it by the previous data point.",
+        "sourceId": "bls-rebasing",
+        "quote": "First, we must find the relative for each data point in the series by dividing it by the previous data point."
+      },
+      {
+        "id": "chaining-from-new-base",
+        "point": "Students learn to select any period to set equal to 100 as the new base and chain relatives by multiplying previous index values.",
+        "sourceId": "bls-rebasing",
+        "quote": "we can select any period to set equal to 100 (the new base) and chain the relatives from that value"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "index",
+        "term": "index",
+        "gloss": "A statistical index that tracks price level and allows comparison of values across reference periods",
+        "sourceId": "bls-rebasing",
+        "quote": "It is sometimes necessary to use index values on a reference base that is not published."
+      },
+      {
+        "id": "reference-base",
+        "term": "reference base",
+        "gloss": "The period set equal to 100 that defines index values used for comparison",
+        "sourceId": "bls-rebasing",
+        "quote": "It is sometimes necessary to use index values on a reference base that is not published."
+      },
+      {
+        "id": "relative",
+        "term": "relative",
+        "gloss": "The ratio obtained by dividing a current value by the previous data point",
+        "sourceId": "bls-rebasing",
+        "quote": "First, we must find the relative for each data point in the series by dividing it by the previous data point."
+      },
+      {
+        "id": "percent-changes",
+        "term": "percent changes",
+        "gloss": "The change in index values expressed as percent between two periods",
+        "sourceId": "bls-rebasing",
+        "quote": "The December-December 12-month percent changes of the CPI-U U.S. city average all items series for these two bases"
+      },
+      {
+        "id": "consumer-price-index",
+        "term": "Consumer Price Index",
+        "gloss": "A published price measure for urban consumers that tracks average change in city items",
+        "sourceId": "bls-rebasing",
+        "quote": "One alternate base is published for the Consumer Price Index for all urban consumers (CPI-U) in addition to the standard 1982-1984=100 base."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031095303-5293a31c:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031095303-5293a31c:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

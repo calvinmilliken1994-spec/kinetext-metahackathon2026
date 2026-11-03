@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031104832-008d8e12",
+  "analysisRef": "job-20261031104832-008d8e12/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104832-008d8e12:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Understanding big-O as an asymptotic upper bound for algorithm growth",
+    "sources": [
+      {
+        "id": "nist-dads-big-o-notation",
+        "title": "big-O notation — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bigOnotation.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'big-O notation'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "8a683981b6992055fcae5aa99b2f047c41df971de59a647d35e0d8825836952e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9577a70f0067467481f60d7e0702865a",
+      "runId": "job-20261031104832-008d8e12",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:49:59.939Z"
+    },
+    "seed": 1755286056,
+    "headline": "Understanding big-O as an asymptotic upper bound for algorithm growth",
+    "keyPoints": [
+      {
+        "id": "theoretical-measure",
+        "point": "Students learn that big-O provides a theoretical measure of execution time or memory needed for a given problem size n.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "A theoretical measure of the execution of an algorithm, usually the time or memory needed, given the problem size n"
+      },
+      {
+        "id": "formal-definition",
+        "point": "Students learn the formal definition states big-O holds when positive constants c and k bound the function for all sufficiently large n.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "Formal Definition: f(n) = O(g(n)) means there are positive constants c and k, such that 0 ≤ f(n) ≤ cg(n) for all n ≥ k."
+      },
+      {
+        "id": "quadratic-example",
+        "point": "Students see the example where n² + 3n + 4 is O(n²) since it stays below 2n² for all n greater than 10.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "As an example, n² + 3n + 4 is O(n²), since n² + 3n + 4 < 2n² for all n > 10 (and many smaller values of n)."
+      },
+      {
+        "id": "misuse-distinction",
+        "point": "Students recognize big-O notation is often misused to mean less than rather than equal to, with Theta expressing equality.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "big-O notation is often misused to mean \"equal to\" rather than \"less than\"."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "big-o-notation",
+        "term": "big-O notation",
+        "gloss": "Notation for an upper bound that is often misused in place of equal to.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "big-O notation is often misused to mean \"equal to\" rather than \"less than\"."
+      },
+      {
+        "id": "asymptotic-upper-bound",
+        "term": "asymptotic upper bound",
+        "gloss": "Alternative name indicating an asymptotic limit above actual growth for large inputs.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "Also known as O, asymptotic upper bound."
+      },
+      {
+        "id": "algorithm",
+        "term": "algorithm",
+        "gloss": "Step-by-step procedure whose execution time or memory is analyzed for a given problem size.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "A theoretical measure of the execution of an algorithm, usually the time or memory needed, given the problem size n"
+      },
+      {
+        "id": "problem-size",
+        "term": "problem size",
+        "gloss": "Input magnitude given by number of items n that determines time or memory needed.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "A theoretical measure of the execution of an algorithm, usually the time or memory needed, given the problem size n"
+      },
+      {
+        "id": "constants-c-k",
+        "term": "constants c and k",
+        "gloss": "Fixed positive values that make the inequality hold for all sufficiently large n.",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "there are positive constants c and k, such that 0 ≤ f(n) ≤ cg(n) for all n ≥ k."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104832-008d8e12:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031104832-008d8e12:compare-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

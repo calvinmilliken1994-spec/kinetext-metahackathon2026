@@ -1,0 +1,293 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Exploring the CPI ratio for purchasing power",
+    "formulaText": "218.06 / 224.94 =",
+    "sourceId": "bls-purchasing-power-constant-dollars",
+    "quote": "218.06 / 224.94 = | 0.97",
+    "expression": "cpi_2021/cpi_2022",
+    "variables": [
+      {
+        "name": "cpi_2021",
+        "pageSymbol": "CPI-U",
+        "meaning": "2021 price index",
+        "meaningQuoted": false,
+        "quote": "Annual average index value, December 2021 |  | 270.970",
+        "unit": ".",
+        "min": 218.06,
+        "max": 296.797,
+        "default": 270.97
+      },
+      {
+        "name": "cpi_2022",
+        "pageSymbol": "CPI-U",
+        "meaning": "2022 price index",
+        "meaningQuoted": false,
+        "quote": "Annual average index value, December 2022 |  | 292.655",
+        "unit": ".",
+        "min": 218.06,
+        "max": 296.797,
+        "default": 292.655
+      }
+    ],
+    "xVariable": "cpi_2022",
+    "cases": [
+      {
+        "id": "case-2021-2022",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 270.97
+          },
+          {
+            "name": "cpi_2022",
+            "value": 292.655
+          }
+        ]
+      },
+      {
+        "id": "case-dec-2021-2022",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 278.802
+          },
+          {
+            "name": "cpi_2022",
+            "value": 296.797
+          }
+        ]
+      },
+      {
+        "id": "case-2010-2021",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 218.06
+          },
+          {
+            "name": "cpi_2022",
+            "value": 270.97
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261031095130-ba41acad:formula-explorer-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"bls-purchasing-power-constant-dollars\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 2 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"cpi_2022\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the page formula line could not be parsed with the calculator grammar (the complete formula line could not be lexed (unexpected character \"|\" at position 0); unsupported mathematical content is never truncated away) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression",
+          "/quote",
+          "/formulaText",
+          "/hasSourceExample",
+          "/sourceExample/quote",
+          "/sourceExample/resultNumber",
+          "/sourceExample/tolerance",
+          "/variables/0/pageSymbol",
+          "/variables/1/pageSymbol"
+        ]
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 6 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "09047990d0324e34b8ccda258c3bda98",
+    "usage": {
+      "promptTokens": 6841,
+      "completionTokens": 9744,
+      "reasoningTokens": 9366,
+      "cachedTokens": 0
+    },
+    "latencyMs": 58352,
+    "estCostUSD": 0.04996325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095130-ba41acad:formula-explorer-v1:r2",
+    "componentId": "formula-explorer-v1",
+    "title": "Exploring the CPI ratio for purchasing power",
+    "sources": [
+      {
+        "id": "bls-purchasing-power-constant-dollars",
+        "title": "Purchasing power and constant dollars — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/purchasing-power-constant-dollars.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Purchasing power and constant dollars'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "09047990d0324e34b8ccda258c3bda98",
+      "runId": "job-20261031095130-ba41acad",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:56:24.535Z"
+    },
+    "seed": 2412164841,
+    "formulaText": "218.06 / 224.94 =",
+    "sourceId": "bls-purchasing-power-constant-dollars",
+    "quote": "218.06 / 224.94 = | 0.97",
+    "expression": "cpi_2021/cpi_2022",
+    "variables": [
+      {
+        "name": "cpi_2021",
+        "pageSymbol": "CPI-U",
+        "meaning": "2021 price index",
+        "meaningQuoted": false,
+        "quote": "Annual average index value, December 2021 |  | 270.970",
+        "unit": ".",
+        "min": 218.06,
+        "max": 296.797,
+        "default": 270.97
+      },
+      {
+        "name": "cpi_2022",
+        "pageSymbol": "CPI-U",
+        "meaning": "2022 price index",
+        "meaningQuoted": false,
+        "quote": "Annual average index value, December 2022 |  | 292.655",
+        "unit": ".",
+        "min": 218.06,
+        "max": 296.797,
+        "default": 292.655
+      }
+    ],
+    "xVariable": "cpi_2022",
+    "cases": [
+      {
+        "id": "case-2021-2022",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 270.97
+          },
+          {
+            "name": "cpi_2022",
+            "value": 292.655
+          }
+        ]
+      },
+      {
+        "id": "case-dec-2021-2022",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 278.802
+          },
+          {
+            "name": "cpi_2022",
+            "value": 296.797
+          }
+        ]
+      },
+      {
+        "id": "case-2010-2021",
+        "inputs": [
+          {
+            "name": "cpi_2021",
+            "value": 218.06
+          },
+          {
+            "name": "cpi_2022",
+            "value": 270.97
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

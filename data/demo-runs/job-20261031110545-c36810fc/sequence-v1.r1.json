@@ -1,0 +1,190 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps to register to vote",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order shown on the page from start to method choice.",
+    "steps": [
+      {
+        "id": "begin-registration-process",
+        "label": "Begin registration process",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Visit vote.gov to begin the voter registration process.",
+        "orderHint": ""
+      },
+      {
+        "id": "select-state-or-territory",
+        "label": "Select state or territory",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Select your state or territory.",
+        "orderHint": ""
+      },
+      {
+        "id": "review-state-instructions",
+        "label": "Review state registration instructions",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Depending on its rules, you will find instructions on how to register:",
+        "orderHint": ""
+      },
+      {
+        "id": "register-in-person",
+        "label": "Register in person at election office",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110545-c36810fc:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9e6f6354706d45a3994d922b2aa813df",
+    "usage": {
+      "promptTokens": 2658,
+      "completionTokens": 9208,
+      "reasoningTokens": 8929,
+      "cachedTokens": 0
+    },
+    "latencyMs": 54604,
+    "estCostUSD": 0.0424565,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 3,
+      "id": "register-online",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    },
+    {
+      "index": 4,
+      "id": "register-by-mail",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110545-c36810fc:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps to register to vote",
+    "sources": [
+      {
+        "id": "usagov-register-to-vote",
+        "title": "How to register to vote — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/register-to-vote",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How to register to vote'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "f8d5a15bf1bc22c4b181555f4a66df77abf7286a87030044ebbba345d0817cb3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9e6f6354706d45a3994d922b2aa813df",
+      "runId": "job-20261031110545-c36810fc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:07:41.431Z"
+    },
+    "seed": 211946402,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order shown on the page from start to method choice.",
+    "steps": [
+      {
+        "id": "begin-registration-process",
+        "label": "Begin registration process",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Visit vote.gov to begin the voter registration process.",
+        "orderHint": ""
+      },
+      {
+        "id": "select-state-or-territory",
+        "label": "Select state or territory",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Select your state or territory.",
+        "orderHint": ""
+      },
+      {
+        "id": "review-state-instructions",
+        "label": "Review state registration instructions",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Depending on its rules, you will find instructions on how to register:",
+        "orderHint": ""
+      },
+      {
+        "id": "register-in-person",
+        "label": "Register in person at election office",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office",
+        "orderHint": ""
+      }
+    ]
+  }
+}

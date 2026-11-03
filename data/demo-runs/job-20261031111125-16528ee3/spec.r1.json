@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-powell-geologic-time-job-20261031111125-16528ee3",
+  "title": "Powell Expedition geologic time half-life",
+  "learningObjectives": [
+    "Explain that a half-life is the time for half of the parent isotopes to decay to a stable daughter isotope.",
+    "Use the relation N = N0(1/2)^(t/T) to calculate the amount of parent isotope remaining after elapsed time t.",
+    "Interpret a parent-daughter ratio of one-eighth parent remaining as three half-lives, about 2.13 billion years for uranium-235."
+  ],
+  "sources": [
+    {
+      "id": "usgs-powell-geologic-time",
+      "title": "Powell Expedition—Geologic Time. Then and Now. — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/news/powell-expedition-geologic-time-then-and-now",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Powell Expedition—Geologic Time. Then and Now.' (2019). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "fa7498537478e10722976127bedd9cf61ccb5dda39090e0a4f844635b5a8f71f"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "half-life-definition",
+      "text": "A half-life is the characteristic time for half of the original parent isotopes to decay to a stable daughter isotope.",
+      "evidence": [
+        {
+          "sourceId": "usgs-powell-geologic-time",
+          "quote": "A half-life is the length of time it takes for half of the number of original, or parent, isotopes to decay to a stable daughter isotope."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 10,
+      "max": 1000,
+      "default": 800
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 100,
+      "max": 1500,
+      "default": 710
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 3550,
+      "default": 2130
+    },
+    "scenario": {
+      "objectLabel": "Uranium-235 sample (grams)",
+      "settingLabel": "Half-life in million years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "behavioralTests",
+      "initialAmount": 1000,
+      "halfLife": 710,
+      "elapsedTime": 0,
+      "expectedRemaining": 1000,
+      "tolerance": 0.001
+    },
+    {
+      "name": "behavioralTests",
+      "initialAmount": 1000,
+      "halfLife": 710,
+      "elapsedTime": 710,
+      "expectedRemaining": 500,
+      "tolerance": 0.001
+    },
+    {
+      "name": "behavioralTests",
+      "initialAmount": 1000,
+      "halfLife": 710,
+      "elapsedTime": 1420,
+      "expectedRemaining": 250,
+      "tolerance": 0.001
+    },
+    {
+      "name": "behavioralTests",
+      "initialAmount": 800,
+      "halfLife": 710,
+      "elapsedTime": 2130,
+      "expectedRemaining": 100,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "opening-uranium-three-halflives",
+      "prompt": "A uranium-235 sample starts with 800 grams and has a half-life of 710 million years. After 2.13 billion years, how much parent uranium remains?",
+      "initialAmount": 800,
+      "halfLife": 710,
+      "elapsedTime": 2130,
+      "expectedRemaining": 100,
+      "tolerance": 0.001
+    },
+    {
+      "id": "one-halflife",
+      "prompt": "Same 800 gram sample after one half-life of 710 million years, how much remains?",
+      "initialAmount": 800,
+      "halfLife": 710,
+      "elapsedTime": 710,
+      "expectedRemaining": 400,
+      "tolerance": 0.001
+    },
+    {
+      "id": "two-halflives",
+      "prompt": "Same 800 gram sample after two half-lives, 1420 million years, how much remains?",
+      "initialAmount": 800,
+      "halfLife": 710,
+      "elapsedTime": 1420,
+      "expectedRemaining": 200,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f189f856820943dea40f401b2d52f63d",
+    "runId": "job-20261031111125-16528ee3",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T11:13:47.684Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

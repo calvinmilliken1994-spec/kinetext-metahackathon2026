@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-articles-of-confederation-job-20261031101350-d7a71497",
+  "title": "The Articles of Confederation: America's First Constitution",
+  "learningObjectives": [
+    "Describe the adoption of the Articles of Confederation on November 15, 1777 and its role as the first constitution until 1789.",
+    "Explain the committee drafting process, representation by state, and the requirement for unanimous ratification completed March 1, 1781.",
+    "Identify the weaknesses of the central government under the Articles that led to the Constitutional Convention in May 1787."
+  ],
+  "sources": [
+    {
+      "id": "nara-articles-of-confederation",
+      "title": "Articles of Confederation (1777) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/articles-of-confederation",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Articles of Confederation (1777)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "The Articles created a league of friendship with equal voting for each state and required all states to agree before the system could begin.",
+      "evidence": [
+        {
+          "sourceId": "nara-articles-of-confederation",
+          "quote": "This \"first constitution of the United States\" established a \"league of friendship\" for the 13 sovereign and independent states."
+        },
+        {
+          "sourceId": "nara-articles-of-confederation",
+          "quote": "The Articles of Confederation also outlined a Congress with representation not based on population – each state would have one vote in Congress."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Limited central power to regulate commerce and collect revenue created crisis conditions that prompted a new convention to revise the system.",
+      "evidence": [
+        {
+          "sourceId": "nara-articles-of-confederation",
+          "quote": "With the states retaining considerable power, the central government had insufficient power to regulate commerce."
+        },
+        {
+          "sourceId": "nara-articles-of-confederation",
+          "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Congress appoints committees to plan confederation",
+        "year": 1776,
+        "month": 6,
+        "day": 11,
+        "evidence": [
+          {
+            "sourceId": "nara-articles-of-confederation",
+            "quote": "After the Lee Resolution proposed independence for the American colonies, the Second Continental Congress appointed three committees on June 11, 1776."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Articles of Confederation adopted",
+        "year": 1777,
+        "month": 11,
+        "day": 15,
+        "evidence": [
+          {
+            "sourceId": "nara-articles-of-confederation",
+            "quote": "The Articles of Confederation were adopted by the Continental Congress on November 15, 1777."
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Maryland ratifies and Confederation Congress begins",
+        "year": 1781,
+        "month": 3,
+        "day": 1,
+        "evidence": [
+          {
+            "sourceId": "nara-articles-of-confederation",
+            "quote": "When Maryland ratified it on March 1, 1781, the Congress of the Confederation came into being."
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Constitutional Convention assembles in Philadelphia",
+        "year": 1787,
+        "month": 5,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-articles-of-confederation",
+            "quote": "In May of 1787, the Constitutional Convention assembled in Philadelphia to revise the Articles of Confederation."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Articles of Confederation",
+      "settingLabel": "United States, 1776-1789"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Committees appointed before Articles adopted",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Articles adopted before Maryland ratification",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Ratification before Constitutional Convention",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Convention before new Constitution effect",
+      "earlierEventId": "e1",
+      "laterEventId": "e4"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: the appointment of three committees on June 11, 1776 or the adoption of the Articles on November 15, 1777?",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: Maryland's ratification on March 1, 1781 or the Constitutional Convention assembling in May 1787?",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: the adoption of the Articles on November 15, 1777 or the Constitutional Convention assembling in May 1787?",
+      "earlierEventId": "e2",
+      "laterEventId": "e4"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "66cda21a518949f39b86880aeeb295bc",
+    "runId": "job-20261031101350-d7a71497",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:17:48.250Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

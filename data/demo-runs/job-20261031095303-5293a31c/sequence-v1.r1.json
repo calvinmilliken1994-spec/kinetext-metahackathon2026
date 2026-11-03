@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Rebasing an index to a new base period",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the order used to rebase an index in the text.",
+    "steps": [
+      {
+        "id": "recognize-need-new-base",
+        "label": "Recognize need for new base",
+        "sourceId": "bls-rebasing",
+        "quote": "It is sometimes necessary to use index values on a reference base that is not published.",
+        "orderHint": ""
+      },
+      {
+        "id": "note-rate-unchanged",
+        "label": "Note rate of change stays same",
+        "sourceId": "bls-rebasing",
+        "quote": "the only difference between series is the year we set to 100, the rate of change is exactly the same.",
+        "orderHint": ""
+      },
+      {
+        "id": "calculate-period-relative",
+        "label": "Calculate each period relative",
+        "sourceId": "bls-rebasing",
+        "quote": "First, we must find the relative for each data point in the series by dividing it by the previous data point.",
+        "orderHint": ""
+      },
+      {
+        "id": "choose-new-reference",
+        "label": "Choose new reference period",
+        "sourceId": "bls-rebasing",
+        "quote": "we can select any period to set equal to 100 (the new base) and chain the relatives from that value",
+        "orderHint": ""
+      },
+      {
+        "id": "chain-relatives-build",
+        "label": "Chain relatives to build series",
+        "sourceId": "bls-rebasing",
+        "quote": "by multiplying the previous month’s index value by the current month’s index relative.",
+        "orderHint": ""
+      },
+      {
+        "id": "review-worked-example",
+        "label": "Review worked example in table",
+        "sourceId": "bls-rebasing",
+        "quote": "An example of this process is given in table 2.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095303-5293a31c:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ef1133365fab4b3aa0e32e07e845b365",
+    "usage": {
+      "promptTokens": 4005,
+      "completionTokens": 5074,
+      "reasoningTokens": 4720,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31927,
+    "estCostUSD": 0.02657075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095303-5293a31c:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Rebasing an index to a new base period",
+    "sources": [
+      {
+        "id": "bls-rebasing",
+        "title": "Rebasing an index — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/rebasing.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Rebasing an index'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "12b5479a4b039561a9b371a9ff42e67a18717caf06659d7262130e3d95b1088e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ef1133365fab4b3aa0e32e07e845b365",
+      "runId": "job-20261031095303-5293a31c",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:54:39.066Z"
+    },
+    "seed": 2496026115,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the order used to rebase an index in the text.",
+    "steps": [
+      {
+        "id": "recognize-need-new-base",
+        "label": "Recognize need for new base",
+        "sourceId": "bls-rebasing",
+        "quote": "It is sometimes necessary to use index values on a reference base that is not published.",
+        "orderHint": ""
+      },
+      {
+        "id": "note-rate-unchanged",
+        "label": "Note rate of change stays same",
+        "sourceId": "bls-rebasing",
+        "quote": "the only difference between series is the year we set to 100, the rate of change is exactly the same.",
+        "orderHint": ""
+      },
+      {
+        "id": "calculate-period-relative",
+        "label": "Calculate each period relative",
+        "sourceId": "bls-rebasing",
+        "quote": "First, we must find the relative for each data point in the series by dividing it by the previous data point.",
+        "orderHint": ""
+      },
+      {
+        "id": "choose-new-reference",
+        "label": "Choose new reference period",
+        "sourceId": "bls-rebasing",
+        "quote": "we can select any period to set equal to 100 (the new base) and chain the relatives from that value",
+        "orderHint": ""
+      },
+      {
+        "id": "chain-relatives-build",
+        "label": "Chain relatives to build series",
+        "sourceId": "bls-rebasing",
+        "quote": "by multiplying the previous month’s index value by the current month’s index relative.",
+        "orderHint": ""
+      },
+      {
+        "id": "review-worked-example",
+        "label": "Review worked example in table",
+        "sourceId": "bls-rebasing",
+        "quote": "An example of this process is given in table 2.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

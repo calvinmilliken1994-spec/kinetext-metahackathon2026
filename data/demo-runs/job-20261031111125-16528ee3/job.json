@@ -1,0 +1,63 @@
+{
+  "jobId": "job-20261031111125-16528ee3",
+  "sourceId": "usgs-powell-geologic-time",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T11:11:25.157Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.229845,
+  "reservedUnknownUSD": 0,
+  "engine": "half-life-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "semantic.unique-ids"
+      ],
+      "fixed": [
+        "semantic.unique-ids"
+      ],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "repair.no-weakening"
+      ],
+      "fixed": [],
+      "remaining": [
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T11:11:25.157Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [],
+  "bestRevision": 1,
+  "checksPassed": 14,
+  "checksTotal": 15,
+  "finishedAt": "2026-10-31T11:14:44.940Z"
+}

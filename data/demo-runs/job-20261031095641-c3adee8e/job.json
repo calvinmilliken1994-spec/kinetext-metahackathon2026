@@ -1,0 +1,75 @@
+{
+  "jobId": "job-20261031095641-c3adee8e",
+  "sourceId": "census-poverty-measures",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T09:56:41.177Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.328333,
+  "reservedUnknownUSD": 0.133586,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-09",
+        "OV-03"
+      ],
+      "fixed": [
+        "A-09",
+        "OV-03"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T09:56:41.177Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "sequence-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "SEQ-03"
+      ],
+      "fixed": [
+        "SEQ-03"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "SORT-02"
+      ],
+      "fixed": [],
+      "remaining": [
+        "SORT-02"
+      ],
+      "passed": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-10-31T10:01:03.180Z"
+}

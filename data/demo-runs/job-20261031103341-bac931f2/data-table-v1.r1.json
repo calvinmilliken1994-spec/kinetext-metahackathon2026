@@ -1,0 +1,681 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Free fall motion in a vacuum over time",
+    "labelHeader": "Time",
+    "columns": [
+      {
+        "header": "Acceleration",
+        "unit": "m/s²",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      },
+      {
+        "header": "Velocity",
+        "unit": "m/s",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      },
+      {
+        "header": "Distance",
+        "unit": "m",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      }
+    ],
+    "rows": [
+      {
+        "label": "0",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   0",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "0.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   0.0"
+          },
+          {
+            "value": "0.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   0.0"
+          }
+        ]
+      },
+      {
+        "label": "1",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   1",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   9.8"
+          },
+          {
+            "value": "4.9",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   4.9"
+          }
+        ]
+      },
+      {
+        "label": "2",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   2",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "19.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   19.6"
+          },
+          {
+            "value": "19.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   19.6"
+          }
+        ]
+      },
+      {
+        "label": "3",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   3",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "29.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   29.4"
+          },
+          {
+            "value": "44.1",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   44.1"
+          }
+        ]
+      },
+      {
+        "label": "4",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   4",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "39.2",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   39.2"
+          },
+          {
+            "value": "78.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   78.4"
+          }
+        ]
+      },
+      {
+        "label": "5",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   5",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "49.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   49.0"
+          },
+          {
+            "value": "122.5",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   122.5"
+          }
+        ]
+      },
+      {
+        "label": "6",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   6",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "58.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   58.8"
+          },
+          {
+            "value": "176.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   176.4"
+          }
+        ]
+      },
+      {
+        "label": "7",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   7",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "68.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   68.6"
+          },
+          {
+            "value": "240.1",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   240.1"
+          }
+        ]
+      },
+      {
+        "label": "8",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   8",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "78.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   78.4"
+          },
+          {
+            "value": "313.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   313.6"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-velocity-at-3",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-distance",
+        "kind": "largest",
+        "rowIndex": 8,
+        "columnIndex": 2
+      },
+      {
+        "id": "smallest-velocity",
+        "kind": "smallest",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031103341-bac931f2:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0].quote: quote \"Table\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; columns[1].quote: quote \"Table\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; columns[2].quote: quote \"Table\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].quote: quote \"Time/Sec   0\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[0].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[0].values[1].quote: quote \"Velocity – m/sec   0.0\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[0].values[2].quote: quote \"Distance – meters   0.0\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[1].quote: quote \"Time/Sec   1\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[1].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[1].values[1].quote: quote \"Velocity – m/sec   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[1].values[2].quote: quote \"Distance – meters   4.9\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[2].quote: quote \"Time/Sec   2\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[2].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[2].values[1].quote: quote \"Velocity – m/sec   19.6\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[2].values[2].quote: quote \"Distance – meters   19.6\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[3].quote: quote \"Time/Sec   3\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[3].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[3].values[1].quote: quote \"Velocity – m/sec   29.4\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[3].values[2].quote: quote \"Distance – meters   44.1\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[4].quote: quote \"Time/Sec   4\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[4].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[4].values[1].quote: quote \"Velocity – m/sec   39.2\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[4].values[2].quote: quote \"Distance – meters   78.4\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[5].quote: quote \"Time/Sec   5\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[5].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[5].values[1].quote: quote \"Velocity – m/sec   49.0\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[5].values[2].quote: quote \"Distance – meters   122.5\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[6].quote: quote \"Time/Sec   6\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[6].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[6].values[1].quote: quote \"Velocity – m/sec   58.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[6].values[2].quote: quote \"Distance – meters   176.4\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[7].quote: quote \"Time/Sec   7\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[7].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[7].values[1].quote: quote \"Velocity – m/sec   68.6\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[7].values[2].quote: quote \"Distance – meters   240.1\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[8].quote: quote \"Time/Sec   8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[8].values[0].quote: quote \"Accel – m/sec^2   9.8\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[8].values[1].quote: quote \"Velocity – m/sec   78.4\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation; rows[8].values[2].quote: quote \"Distance – meters   313.6\" was not found verbatim in source \"nasa-grc-motion-of-free-falling-object\" after whitespace normalisation (expected verbatim quotes of 1-150 characters copied from the cited source)",
+        "path": "/columns/0/quote",
+        "affected": [
+          "/columns/0/quote",
+          "/columns/1/quote",
+          "/columns/2/quote",
+          "/rows/0/quote",
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/quote",
+          "/rows/0/values/2/quote",
+          "/rows/1/quote",
+          "/rows/1/values/0/quote",
+          "/rows/1/values/1/quote",
+          "/rows/1/values/2/quote",
+          "/rows/2/quote",
+          "/rows/2/values/0/quote",
+          "/rows/2/values/1/quote",
+          "/rows/2/values/2/quote",
+          "/rows/3/quote",
+          "/rows/3/values/0/quote",
+          "/rows/3/values/1/quote",
+          "/rows/3/values/2/quote",
+          "/rows/4/quote",
+          "/rows/4/values/0/quote",
+          "/rows/4/values/1/quote",
+          "/rows/4/values/2/quote",
+          "/rows/5/quote",
+          "/rows/5/values/0/quote",
+          "/rows/5/values/1/quote",
+          "/rows/5/values/2/quote",
+          "/rows/6/quote",
+          "/rows/6/values/0/quote",
+          "/rows/6/values/1/quote",
+          "/rows/6/values/2/quote",
+          "/rows/7/quote",
+          "/rows/7/values/0/quote",
+          "/rows/7/values/1/quote",
+          "/rows/7/values/2/quote",
+          "/rows/8/quote",
+          "/rows/8/values/0/quote",
+          "/rows/8/values/1/quote",
+          "/rows/8/values/2/quote"
+        ]
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0]: the header \"Acceleration\" does not occur in its quote \"Table\" (the column quote must contain the header as the page prints it); columns[1]: the header \"Velocity\" does not occur in its quote \"Table\" (the column quote must contain the header as the page prints it); columns[2]: the header \"Distance\" does not occur in its quote \"Table\" (the column quote must contain the header as the page prints it)",
+        "path": "/columns/0/header",
+        "affected": [
+          "/columns/0/header",
+          "/columns/0/quote",
+          "/columns/1/header",
+          "/columns/1/quote",
+          "/columns/2/header",
+          "/columns/2/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 27 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 9 rows x 3 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "questions[1] (largest-distance): rowIndex is 8, expected the -1 sentinel for a largest question; questions[2] (smallest-velocity): rowIndex is 0, expected the -1 sentinel for a smallest question",
+        "path": "/questions/1/rowIndex",
+        "affected": [
+          "/questions/1/rowIndex",
+          "/questions/2/rowIndex"
+        ]
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 2 (\"Distance\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "41e6e663a29b4216a1d9aef4faea9cc4",
+    "usage": {
+      "promptTokens": 3081,
+      "completionTokens": 11587,
+      "reasoningTokens": 10199,
+      "cachedTokens": 0
+    },
+    "latencyMs": 64891,
+    "estCostUSD": 0.053096,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103341-bac931f2:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Free fall motion in a vacuum over time",
+    "sources": [
+      {
+        "id": "nasa-grc-motion-of-free-falling-object",
+        "title": "Motion of Free Falling Object — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/motion-of-free-falling-object/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f94199ea21e14dad578baee19694e534fff3dba5dc88f9bc2ea6ec082445c317"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "41e6e663a29b4216a1d9aef4faea9cc4",
+      "runId": "job-20261031103341-bac931f2",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:36:30.556Z"
+    },
+    "seed": 298524698,
+    "labelHeader": "Time",
+    "columns": [
+      {
+        "header": "Acceleration",
+        "unit": "m/s²",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      },
+      {
+        "header": "Velocity",
+        "unit": "m/s",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      },
+      {
+        "header": "Distance",
+        "unit": "m",
+        "numeric": true,
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Table"
+      }
+    ],
+    "rows": [
+      {
+        "label": "0",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   0",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "0.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   0.0"
+          },
+          {
+            "value": "0.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   0.0"
+          }
+        ]
+      },
+      {
+        "label": "1",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   1",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   9.8"
+          },
+          {
+            "value": "4.9",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   4.9"
+          }
+        ]
+      },
+      {
+        "label": "2",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   2",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "19.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   19.6"
+          },
+          {
+            "value": "19.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   19.6"
+          }
+        ]
+      },
+      {
+        "label": "3",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   3",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "29.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   29.4"
+          },
+          {
+            "value": "44.1",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   44.1"
+          }
+        ]
+      },
+      {
+        "label": "4",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   4",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "39.2",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   39.2"
+          },
+          {
+            "value": "78.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   78.4"
+          }
+        ]
+      },
+      {
+        "label": "5",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   5",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "49.0",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   49.0"
+          },
+          {
+            "value": "122.5",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   122.5"
+          }
+        ]
+      },
+      {
+        "label": "6",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   6",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "58.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   58.8"
+          },
+          {
+            "value": "176.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   176.4"
+          }
+        ]
+      },
+      {
+        "label": "7",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   7",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "68.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   68.6"
+          },
+          {
+            "value": "240.1",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   240.1"
+          }
+        ]
+      },
+      {
+        "label": "8",
+        "sourceId": "nasa-grc-motion-of-free-falling-object",
+        "quote": "Time/Sec   8",
+        "values": [
+          {
+            "value": "9.8",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Accel – m/sec^2   9.8"
+          },
+          {
+            "value": "78.4",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Velocity – m/sec   78.4"
+          },
+          {
+            "value": "313.6",
+            "sourceId": "nasa-grc-motion-of-free-falling-object",
+            "quote": "Distance – meters   313.6"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-velocity-at-3",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-distance",
+        "kind": "largest",
+        "rowIndex": 8,
+        "columnIndex": 2
+      },
+      {
+        "id": "smallest-velocity",
+        "kind": "smallest",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

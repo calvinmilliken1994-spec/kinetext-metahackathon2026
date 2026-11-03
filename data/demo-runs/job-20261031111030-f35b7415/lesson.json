@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031111030-f35b7415",
+  "analysisRef": "job-20261031111030-f35b7415/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031111030-f35b7415:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Using radioactive decay clocks to determine geologic age and history",
+    "sources": [
+      {
+        "id": "usgs-geologic-age",
+        "title": "Geologic Age: Using Radioactive Decay to Determine Geologic Age — U.S. Geological Survey",
+        "locator": "https://www.usgs.gov/educational-resources/geologic-age-using-radioactive-decay-determine-geologic-age",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Geologic Age: Using Radioactive Decay to Determine Geologic Age' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "6e5bf0115bcc99d56d14dbecdc9d5ce23538b3bf71393efa1f5f77b6969614c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8498d2cb68e74386b01031875f2c5721",
+      "runId": "job-20261031111030-f35b7415",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:11:27.259Z"
+    },
+    "seed": 834336648,
+    "headline": "Using radioactive decay clocks to determine geologic age and history",
+    "keyPoints": [
+      {
+        "id": "reconstruct-sequence",
+        "point": "Geologists reconstruct the sequence of events that shaped the Earth's surface from petrology, stratigraphy and paleontology.",
+        "sourceId": "usgs-geologic-age",
+        "quote": "today geologists reconstruct the sequence of events that has shaped the Earth's surface."
+      },
+      {
+        "id": "divide-geologic-time",
+        "point": "Geologic history is divided into Eras and Periods based on general character of life and major crustal disturbances.",
+        "sourceId": "usgs-geologic-age",
+        "quote": "dividing the Earth's history into Eras -- broad spans based on the general character of life"
+      },
+      {
+        "id": "radioactive-decay-process",
+        "point": "Radioactive decay is a spontaneous process where a parent isotope loses particles to form a new element isotope.",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Radioactive decay is a spontaneous process in which an isotope (the parent) loses particles from its nucleus to form an isotope of a new element"
+      },
+      {
+        "id": "age-equation-expression",
+        "point": "The age equation relates radioactive decay to geologic time using decay constant and daughter to parent ratio.",
+        "sourceId": "usgs-geologic-age",
+        "quote": "The mathematical expression that relates radioactive decay to geologic time is called the age equation"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "petrology",
+        "term": "petrology",
+        "gloss": "study of rock origins and rock types from investigations of formation",
+        "sourceId": "usgs-geologic-age",
+        "quote": "studies on the origins of the various kinds of rocks (petrology), coupled with studies of rock layering (stratigraphy)"
+      },
+      {
+        "id": "isotope",
+        "term": "isotope",
+        "gloss": "atoms of same element with different atomic weights due to neutron variation",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Atoms of the same element with differing atomic weights are called isotopes."
+      },
+      {
+        "id": "half-life",
+        "term": "half-life",
+        "gloss": "time required for half of radioactive isotope atoms to decay",
+        "sourceId": "usgs-geologic-age",
+        "quote": "The rate of decay is conveniently expressed in terms of an isotope's half-life, or the time it takes for one-half"
+      },
+      {
+        "id": "decay-constant",
+        "term": "decay constant",
+        "gloss": "constant rate of decay used in age equation to relate half-life and age",
+        "sourceId": "usgs-geologic-age",
+        "quote": "delta is the appropriate decay constant."
+      },
+      {
+        "id": "geologic-time",
+        "term": "geologic time",
+        "gloss": "broad history of Earth divided into Eras and Periods from geologic record",
+        "sourceId": "usgs-geologic-age",
+        "quote": "Geologists have done the same thing to geologic time by dividing the Earth's history into Eras"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "half-life-v1",
+      "specId": "usgs-geologic-age-job-20261031111030-f35b7415",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031111030-f35b7415:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "jobId": "job-20261102050029-1ebd79c6",
+  "analysisRef": "job-20261102050029-1ebd79c6/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261102050029-1ebd79c6:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How volcanoes create ash, lava, and mudflow hazards",
+    "sources": [
+      {
+        "id": "usgs-volcano-hazards",
+        "title": "What Are Volcano Hazards? — U.S. Geological Survey Fact Sheet 002-97 (revised March 2008)",
+        "locator": "https://pubs.usgs.gov/fs/fs002-97/old%20html%20files/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey Fact Sheet 002-97, 'What Are Volcano Hazards?' (revised March 2008), by Bobbie Myers, Steven R. Brantley, Peter Stauffer, and James W. Hendley II; graphics by Bobbie Myers, Sara Boore, and Susan Mayfield. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "ab12208bf12992727711ca9e3334f16cb5af2f4287bb669e5b7a34f8c45e1af8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19aa2-49f0-704b-8f93-d4eca917e80e",
+      "runId": "job-20261102050029-1ebd79c6",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-02T05:01:29.819Z"
+    },
+    "seed": 144051669,
+    "headline": "How volcanoes create ash, lava, and mudflow hazards",
+    "keyPoints": [
+      {
+        "id": "distant-eruption-effects",
+        "point": "Students learn that large explosive eruptions endanger people hundreds of miles away and affect global climate.",
+        "quote": "Large explosive eruptions can endanger people and property hundreds of miles away and even affect global climate.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "ash-aviation-hazard",
+        "point": "Students learn that volcanic ash in the cloud poses a serious hazard to aviation.",
+        "quote": "The volcanic ash in the cloud can pose a serious hazard to aviation.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "carbon-dioxide-risk",
+        "point": "Students learn that carbon dioxide is heavier than air and can be trapped in low areas at deadly concentrations.",
+        "quote": "Carbon dioxide is heavier than air and can be trapped in low areas in concentrations that are deadly to people and animals.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "lahar-appearance",
+        "point": "Students learn that some lahars look like fast moving rivers of wet concrete because of rock debris.",
+        "quote": "Some lahars contain so much rock debris (60 to 90% by weight) that they look like fast-moving rivers of wet concrete.",
+        "sourceId": "usgs-volcano-hazards"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Solid and molten rock fragments blasted from explosive eruptions",
+        "id": "tephra",
+        "quote": "An explosive eruption blasts solid and molten rock fragments (tephra) and volcanic gases into the air with tremendous force.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "tephra"
+      },
+      {
+        "gloss": "Small openings in the ground where gases reach the surface",
+        "id": "fumaroles",
+        "quote": "Even when a volcano is not erupting, cracks in the ground allow gases to reach the surface through small openings called fumaroles.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "fumaroles"
+      },
+      {
+        "gloss": "Molten rock that pours onto the surface to form flows",
+        "id": "lava",
+        "quote": "Molten rock (magma) that pours or oozes onto the Earth’s surface is called lava and forms lava flows.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "lava"
+      },
+      {
+        "gloss": "Hot ash avalanches that move at high speeds down valleys",
+        "id": "pyroclastic-flows",
+        "quote": "These pyroclastic flows can be as hot as 1,500°F and move at speeds of 100 to 150 miles per hour.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "pyroclastic flows"
+      },
+      {
+        "gloss": "Flows of volcanic mud and debris on the flanks of a volcano",
+        "id": "lahars",
+        "quote": "Mudflows or debris flows composed mostly of volcanic materials on the flanks of a volcano are called lahars.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "lahars"
+      },
+      {
+        "gloss": "Irregular mounds formed when thick lava squeezes out of a vent",
+        "id": "lava-domes",
+        "quote": "Dacite and rhyolite lavas often squeeze out of a vent to form irregular mounds called lava domes.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "lava domes"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261102050029-1ebd79c6:label-diagram-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261102050029-1ebd79c6:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261102050029-1ebd79c6:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

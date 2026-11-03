@@ -1,0 +1,183 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "What each mortgage payment includes",
+    "attributes": [
+      "Main component",
+      "Additional costs"
+    ],
+    "rows": [
+      {
+        "entity": "Principal and interest payment",
+        "values": [
+          {
+            "value": "The principal is the amount you borrowed and have to pay back",
+            "sourceId": "cfpb-mortgage-total-monthly-payment",
+            "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+          },
+          {
+            "value": "interest is what the lender charges for lending you the money",
+            "sourceId": "cfpb-mortgage-total-monthly-payment",
+            "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+          }
+        ]
+      },
+      {
+        "entity": "Total monthly payment",
+        "values": [
+          {
+            "value": "Principal + interest",
+            "sourceId": "cfpb-mortgage-total-monthly-payment",
+            "quote": "Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment"
+          },
+          {
+            "value": "escrow (homeowners insurance and tax)",
+            "sourceId": "cfpb-mortgage-total-monthly-payment",
+            "quote": "Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment"
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100106-81faeefe:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e70e3370777c47e4adb4d67995982b47",
+    "usage": {
+      "promptTokens": 2994,
+      "completionTokens": 10923,
+      "reasoningTokens": 10660,
+      "cachedTokens": 0
+    },
+    "latencyMs": 70640,
+    "estCostUSD": 0.05016525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100106-81faeefe:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "What each mortgage payment includes",
+    "sources": [
+      {
+        "id": "cfpb-mortgage-total-monthly-payment",
+        "title": "On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/on-a-mortgage-whats-the-difference-between-my-principal-and-interest-payment-and-my-total-monthly-payment-en-1941/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "54e2133fc95a619dc83b68fb7b37f0db5f648e72b4ecb95056ce80de11963d02"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e70e3370777c47e4adb4d67995982b47",
+      "runId": "job-20261031100106-81faeefe",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:03:03.533Z"
+    },
+    "seed": 607828338,
+    "entities": [
+      "Principal and interest payment",
+      "Total monthly payment"
+    ],
+    "attributes": [
+      "Main component",
+      "Additional costs"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "The principal is the amount you borrowed and have to pay back",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "interest is what the lender charges for lending you the money",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "The principal is the amount you borrowed and have to pay back, and interest is what the lender charges for lending you the money."
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "Principal + interest",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "escrow (homeowners insurance and tax)",
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Principal + interest + mortgage insurance (if applicable) + escrow (homeowners insurance and tax) = total monthly payment"
+      }
+    ]
+  }
+}

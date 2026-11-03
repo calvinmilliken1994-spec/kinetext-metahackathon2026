@@ -1,0 +1,137 @@
+{
+  "jobId": "job-20261101194027-0082b239",
+  "analysisRef": "job-20261101194027-0082b239/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101194027-0082b239:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Water moves continuously between Earth and atmosphere",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a198a1-106f-7425-9ca1-81d825c3cb89",
+      "runId": "job-20261101194027-0082b239",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T19:40:54.883Z"
+    },
+    "seed": 132498072,
+    "headline": "Water moves continuously between Earth and atmosphere",
+    "keyPoints": [
+      {
+        "id": "water-circulation",
+        "point": "Students learn that the hydrologic cycle involves continuous circulation of water between Earth and atmosphere.",
+        "quote": "The hydrologic cycle involves the continuous circulation of water in the Earth-Atmosphere system.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "evaporation-change",
+        "point": "Students learn that evaporation is a change of state from liquid substance to gas.",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "transpiration-plants",
+        "point": "Students learn that transpiration is evaporation of water from plants through stomata.",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "condensation-liquid",
+        "point": "Students learn that condensation changes water vapor into liquid and releases heat energy.",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "precipitation-forms",
+        "point": "Students learn that precipitation includes rain, hail, snow and sleet falling to Earth.",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "runoff-saturated",
+        "point": "Students learn that runoff occurs when saturated ground cannot absorb more water.",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Change of liquid substance into gas that needs energy",
+        "id": "evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Evaporation"
+      },
+      {
+        "gloss": "Evaporation of water from plants through leaf stomata",
+        "id": "transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Transpiration"
+      },
+      {
+        "gloss": "Small openings on leaves connected to plant tissues",
+        "id": "stomata",
+        "quote": "Stomata are small openings found on the underside of leaves that are connected to vascular plant tissues.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Stomata"
+      },
+      {
+        "gloss": "Process where water vapor changes into liquid clouds or dew",
+        "id": "condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Condensation"
+      },
+      {
+        "gloss": "Water falling as rain, hail, snow or sleet",
+        "id": "precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Precipitation"
+      },
+      {
+        "gloss": "Excess water that saturated ground cannot absorb",
+        "id": "runoff",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Runoff"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101194027-0082b239:label-diagram-v1:r2",
+      "status": "failed",
+      "reason": "LD-06: the point of parts[4] (\"Runoff\") at image pixel (306, 340.2) lies outside its region (320,331)-(351,372) by more than 11.4 px; expected the region to contain the point",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261101194027-0082b239:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

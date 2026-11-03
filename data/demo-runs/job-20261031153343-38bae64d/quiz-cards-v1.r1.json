@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Estimating doubling time with the Rule of 72",
+    "cards": [
+      {
+        "id": "rule-72-purpose",
+        "stem": "What does the Rule of 72 help you estimate about an investment?",
+        "options": [
+          "estimate how your investment will grow over time",
+          "calculate the exact interest earned in one year",
+          "determine the price of a pizza slice",
+          "find the legal interpretation of the policy"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "The Rule of 72 is a great way to estimate how your investment will grow over time.",
+        "hint": ""
+      },
+      {
+        "id": "divide-by-rate",
+        "stem": "What do you divide the number 72 by to estimate doubling time?",
+        "options": [
+          "your investment’s expected rate of return (interest rate)",
+          "your monthly pizza spending",
+          "the initial $100 deposit",
+          "the number of slices per year"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Simply divide the number 72 by your investment’s expected rate of return (interest rate).",
+        "hint": ""
+      },
+      {
+        "id": "what-rule-tells",
+        "stem": "What does the Rule of 72 tell you when you know the interest rate?",
+        "options": [
+          "how long it will take for your investment to double in value",
+          "how much pizza costs per day",
+          "how many students take the class",
+          "how to calculate exact legal policy"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "If you know the interest rate, the Rule of 72 can tell you approximately how long it will take for your investment to double in value.",
+        "hint": ""
+      },
+      {
+        "id": "example-9-percent",
+        "stem": "About how often will an investment double if the expected rate of return is 9%?",
+        "options": [
+          "about every 8 years",
+          "after five years",
+          "in 10 years",
+          "in 25 years"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Assuming an expected rate of return of 9%, your investment will double in value about every 8 years (72 divided by 9 equals 8).",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031153343-38bae64d:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f91967bc85fa4c70a7ac4a57ab12536f",
+    "usage": {
+      "promptTokens": 2720,
+      "completionTokens": 9982,
+      "reasoningTokens": 9559,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40824,
+    "estCostUSD": 0.0458235,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153343-38bae64d:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Estimating doubling time with the Rule of 72",
+    "sources": [
+      {
+        "id": "investorgov-what-is-compound-interest",
+        "title": "What is compound interest? — Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy)",
+        "locator": "https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy), 'What is compound interest?'. Investor.gov is an SEC website and its privacy policy refers users to SEC.gov policy; per the SEC 'Website Dissemination' policy, 'Information presented on sec.gov is considered public information and may be copied or further distributed by users of the web site without the SEC's permission. Please consider appropriate citation to the SEC as the source.' The page's own disclaimer reads: 'The Office of Investor Education and Advocacy has provided this information as a service to investors. It is neither a legal interpretation nor a statement of SEC policy.' The U.S. Securities and Exchange Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "d13f49be2c935e2a5982c1304925d5598d996864a13d60a7614e9e3505480649"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f91967bc85fa4c70a7ac4a57ab12536f",
+      "runId": "job-20261031153343-38bae64d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T15:35:00.953Z"
+    },
+    "seed": 2658125104,
+    "cards": [
+      {
+        "id": "rule-72-purpose",
+        "stem": "What does the Rule of 72 help you estimate about an investment?",
+        "options": [
+          "estimate how your investment will grow over time",
+          "calculate the exact interest earned in one year",
+          "determine the price of a pizza slice",
+          "find the legal interpretation of the policy"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "The Rule of 72 is a great way to estimate how your investment will grow over time.",
+        "hint": ""
+      },
+      {
+        "id": "divide-by-rate",
+        "stem": "What do you divide the number 72 by to estimate doubling time?",
+        "options": [
+          "your investment’s expected rate of return (interest rate)",
+          "your monthly pizza spending",
+          "the initial $100 deposit",
+          "the number of slices per year"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Simply divide the number 72 by your investment’s expected rate of return (interest rate).",
+        "hint": ""
+      },
+      {
+        "id": "what-rule-tells",
+        "stem": "What does the Rule of 72 tell you when you know the interest rate?",
+        "options": [
+          "how long it will take for your investment to double in value",
+          "how much pizza costs per day",
+          "how many students take the class",
+          "how to calculate exact legal policy"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "If you know the interest rate, the Rule of 72 can tell you approximately how long it will take for your investment to double in value.",
+        "hint": ""
+      },
+      {
+        "id": "example-9-percent",
+        "stem": "About how often will an investment double if the expected rate of return is 9%?",
+        "options": [
+          "about every 8 years",
+          "after five years",
+          "in 10 years",
+          "in 25 years"
+        ],
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Assuming an expected rate of return of 9%, your investment will double in value about every 8 years (72 divided by 9 equals 8).",
+        "hint": ""
+      }
+    ]
+  }
+}

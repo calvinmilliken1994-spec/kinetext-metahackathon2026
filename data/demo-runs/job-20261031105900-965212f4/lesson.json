@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105900-965212f4",
+  "analysisRef": "job-20261031105900-965212f4/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105900-965212f4:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How absorbed carbon dioxide makes seawater more acidic and harms shell building organisms",
+    "sources": [
+      {
+        "id": "noaa-oceanservice-ocean-acidification",
+        "title": "What is Ocean Acidification? — NOAA National Ocean Service, Ocean Facts",
+        "locator": "https://oceanservice.noaa.gov/facts/acidification.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Ocean Service, Ocean Facts, 'What is Ocean Acidification?'. Credit: NOAA National Ocean Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "2fd351cd28a1bf3be2f402200128f20d39c708536b13ea27329611fbaaf63c7c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "19e6750b7964480dab3b5f0f985bade2",
+      "runId": "job-20261031105900-965212f4",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:59:42.752Z"
+    },
+    "seed": 2538172809,
+    "headline": "How absorbed carbon dioxide makes seawater more acidic and harms shell building organisms",
+    "keyPoints": [
+      {
+        "id": "ocean-acidification-definition",
+        "point": "Ocean acidification is a long term reduction in ocean pH driven by carbon dioxide uptake.",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "a reduction in the pH of the ocean over an extended period of time, caused primarily by uptake of carbon dioxide"
+      },
+      {
+        "id": "ocean-co2-absorption",
+        "point": "The ocean absorbs about 30 percent of carbon dioxide released to the atmosphere.",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere"
+      },
+      {
+        "id": "acidity-carbonate-change",
+        "point": "Absorbed carbon dioxide raises hydrogen ion concentration and makes seawater more acidic while carbonate ions become less abundant.",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "This increase causes the seawater to become more acidic and causes carbonate ions to be relatively less abundant."
+      },
+      {
+        "id": "carbonate-shell-difficulty",
+        "point": "Decreases in carbonate ions make it difficult for calcifying organisms such as oysters to build shells.",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Decreases in carbonate ions can make building and maintaining shells and other calcium carbonate structures difficult for calcifying organisms"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "ocean-acidification-term",
+        "term": "Ocean acidification",
+        "gloss": "reduction in ocean pH over extended time caused by carbon dioxide uptake",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Ocean acidification refers to a reduction in the pH of the ocean"
+      },
+      {
+        "id": "carbon-dioxide-term",
+        "term": "carbon dioxide",
+        "gloss": "gas whose atmospheric concentration has increased due to fossil fuel burning",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "the concentration of carbon dioxide (CO2) in the atmosphere has increased"
+      },
+      {
+        "id": "carbonate-ions-term",
+        "term": "carbonate ions",
+        "gloss": "building blocks for shells and coral skeletons that become relatively less abundant in acidic water",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "causes carbonate ions to be relatively less abundant"
+      },
+      {
+        "id": "hydrogen-ions-term",
+        "term": "hydrogen ions",
+        "gloss": "particles whose increased concentration makes seawater more acidic",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "increased concentration of hydrogen ions"
+      },
+      {
+        "id": "calcifying-organisms-term",
+        "term": "calcifying organisms",
+        "gloss": "organisms such as oysters and corals that build calcium carbonate shells",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "difficult for calcifying organisms such as oysters, clams, sea urchins"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031105900-965212f4:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105900-965212f4:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

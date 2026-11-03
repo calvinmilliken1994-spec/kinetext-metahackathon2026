@@ -1,0 +1,255 @@
+{
+  "gen": {
+    "groups": [
+      {
+        "id": "volcanic-gases",
+        "label": "Volcanic gases"
+      },
+      {
+        "id": "lava",
+        "label": "Lava"
+      },
+      {
+        "id": "pyroclastic-flows",
+        "label": "Pyroclastic flows"
+      }
+    ],
+    "items": [
+      {
+        "groupId": "volcanic-gases",
+        "id": "carbon-dioxide",
+        "label": "Carbon dioxide",
+        "quote": "Other common volcanic gases are carbon dioxide, sulfur dioxide, hydrogen sulfide, hydrogen, and fluorine.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "volcanic-gases",
+        "id": "sulfur-dioxide",
+        "label": "Sulfur dioxide",
+        "quote": "Sulfur dioxide gas can react with water droplets in the atmosphere to create acid rain, which causes corrosion and harms vegetation.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "volcanic-gases",
+        "id": "fluorine",
+        "label": "Fluorine",
+        "quote": "Fluorine, which in high concentrations is toxic, can be adsorbed onto volcanic ash particles that later fall to the ground.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "basalt-lava",
+        "label": "Basalt lava",
+        "quote": "low-silica basalt lava can form fast-moving (10 to 30 miles per hour) streams",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "andesite",
+        "label": "Andesite",
+        "quote": "In contrast, flows of higher-silica andesite and dacite lava tend to be thick and sluggish, traveling only short distances from a vent.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "lava-domes",
+        "label": "Lava domes",
+        "quote": "Dacite and rhyolite lavas often squeeze out of a vent to form irregular mounds called lava domes.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "pyroclastic-flows",
+        "id": "pyroclastic-surges",
+        "label": "Pyroclastic surges",
+        "quote": "Lower-density pyroclastic flows, called pyroclastic surges, can easily overflow ridges hundreds of feet high.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "pyroclastic-flows",
+        "id": "hot-ash",
+        "label": "Hot ash",
+        "quote": "High-speed avalanches of hot ash, rock fragments, and gas can move down the sides of a volcano during explosive eruptions",
+        "sourceId": "usgs-volcano-hazards"
+      }
+    ],
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort eruption materials into hazard groups"
+  },
+  "report": {
+    "artifactId": "job-20261102050029-1ebd79c6:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a19aa3-2f45-7666-93b1-ca998a107e59",
+    "usage": {
+      "promptTokens": 4556,
+      "completionTokens": 10557,
+      "reasoningTokens": 10019,
+      "cachedTokens": 0
+    },
+    "latencyMs": 58792,
+    "estCostUSD": 0.05056225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261102050029-1ebd79c6:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort eruption materials into hazard groups",
+    "sources": [
+      {
+        "id": "usgs-volcano-hazards",
+        "title": "What Are Volcano Hazards? — U.S. Geological Survey Fact Sheet 002-97 (revised March 2008)",
+        "locator": "https://pubs.usgs.gov/fs/fs002-97/old%20html%20files/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey Fact Sheet 002-97, 'What Are Volcano Hazards?' (revised March 2008), by Bobbie Myers, Steven R. Brantley, Peter Stauffer, and James W. Hendley II; graphics by Bobbie Myers, Sara Boore, and Susan Mayfield. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "ab12208bf12992727711ca9e3334f16cb5af2f4287bb669e5b7a34f8c45e1af8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19aa3-2f45-7666-93b1-ca998a107e59",
+      "runId": "job-20261102050029-1ebd79c6",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-02T05:02:28.686Z"
+    },
+    "seed": 1547409533,
+    "groups": [
+      {
+        "id": "volcanic-gases",
+        "label": "Volcanic gases"
+      },
+      {
+        "id": "lava",
+        "label": "Lava"
+      },
+      {
+        "id": "pyroclastic-flows",
+        "label": "Pyroclastic flows"
+      }
+    ],
+    "items": [
+      {
+        "groupId": "volcanic-gases",
+        "id": "carbon-dioxide",
+        "label": "Carbon dioxide",
+        "quote": "Other common volcanic gases are carbon dioxide, sulfur dioxide, hydrogen sulfide, hydrogen, and fluorine.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "volcanic-gases",
+        "id": "sulfur-dioxide",
+        "label": "Sulfur dioxide",
+        "quote": "Sulfur dioxide gas can react with water droplets in the atmosphere to create acid rain, which causes corrosion and harms vegetation.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "volcanic-gases",
+        "id": "fluorine",
+        "label": "Fluorine",
+        "quote": "Fluorine, which in high concentrations is toxic, can be adsorbed onto volcanic ash particles that later fall to the ground.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "basalt-lava",
+        "label": "Basalt lava",
+        "quote": "low-silica basalt lava can form fast-moving (10 to 30 miles per hour) streams",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "andesite",
+        "label": "Andesite",
+        "quote": "In contrast, flows of higher-silica andesite and dacite lava tend to be thick and sluggish, traveling only short distances from a vent.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "lava",
+        "id": "lava-domes",
+        "label": "Lava domes",
+        "quote": "Dacite and rhyolite lavas often squeeze out of a vent to form irregular mounds called lava domes.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "pyroclastic-flows",
+        "id": "pyroclastic-surges",
+        "label": "Pyroclastic surges",
+        "quote": "Lower-density pyroclastic flows, called pyroclastic surges, can easily overflow ridges hundreds of feet high.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "groupId": "pyroclastic-flows",
+        "id": "hot-ash",
+        "label": "Hot ash",
+        "quote": "High-speed avalanches of hot ash, rock fragments, and gas can move down the sides of a volcano during explosive eruptions",
+        "sourceId": "usgs-volcano-hazards"
+      }
+    ]
+  }
+}

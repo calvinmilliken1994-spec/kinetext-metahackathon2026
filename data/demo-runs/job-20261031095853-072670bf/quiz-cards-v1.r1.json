@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How daily interest and card payments work",
+    "cards": [
+      {
+        "id": "daily-rate-name",
+        "stem": "What is the name for interest charged each day?",
+        "options": [
+          "daily periodic rate",
+          "annual grace fee",
+          "minimum balance charge",
+          "average monthly cost"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "The interest charged daily is called the daily periodic rate.",
+        "hint": "Think about the rate applied each day."
+      },
+      {
+        "id": "interest-basis",
+        "stem": "How do many companies determine the interest you owe each day?",
+        "options": [
+          "average daily account balance",
+          "fixed yearly income",
+          "original credit limit",
+          "minimum payment amount"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "Many credit card companies calculate the interest you owe daily, based on your average daily account balance.",
+        "hint": "Recall what average is used for daily calculation."
+      },
+      {
+        "id": "grace-period-avoid",
+        "stem": "When can you avoid paying interest on purchases if a grace period exists?",
+        "options": [
+          "pay off your balance in full by the due date each month",
+          "keep a balance for the next month",
+          "pay only the minimum amount owed",
+          "request cash advances often"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "If your card has a grace period, you can avoid paying interest on purchases if you pay off your balance in full by the due date each month.",
+        "hint": "Consider what full payment by the due date does."
+      },
+      {
+        "id": "payment-allocation",
+        "stem": "Where does a payment above the minimum go first?",
+        "options": [
+          "balance with the highest interest rate",
+          "balance with the lowest interest rate",
+          "most recent purchase balance",
+          "oldest cash advance balance"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "the card issuer must generally apply the amount you pay over the minimum first to the balance with the highest interest rate",
+        "hint": "Remember which balance gets extra payment first."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095853-072670bf:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "25b0bd95a82b4e4d910f76d1b6209c0b",
+    "usage": {
+      "promptTokens": 2535,
+      "completionTokens": 4945,
+      "reasoningTokens": 4550,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34808,
+    "estCostUSD": 0.024185,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095853-072670bf:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How daily interest and card payments work",
+    "sources": [
+      {
+        "id": "cfpb-credit-card-interest-calculation",
+        "title": "How does my credit card company calculate the amount of interest I owe? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-my-credit-card-company-calculate-the-amount-of-interest-i-owe-en-51/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does my credit card company calculate the amount of interest I owe?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "1d5dbef610660615ac5db9d0b780497b890eb934df9e556f60d3b5900893fa3e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "25b0bd95a82b4e4d910f76d1b6209c0b",
+      "runId": "job-20261031095853-072670bf",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:00:12.011Z"
+    },
+    "seed": 814269005,
+    "cards": [
+      {
+        "id": "daily-rate-name",
+        "stem": "What is the name for interest charged each day?",
+        "options": [
+          "daily periodic rate",
+          "annual grace fee",
+          "minimum balance charge",
+          "average monthly cost"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "The interest charged daily is called the daily periodic rate.",
+        "hint": "Think about the rate applied each day."
+      },
+      {
+        "id": "interest-basis",
+        "stem": "How do many companies determine the interest you owe each day?",
+        "options": [
+          "average daily account balance",
+          "fixed yearly income",
+          "original credit limit",
+          "minimum payment amount"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "Many credit card companies calculate the interest you owe daily, based on your average daily account balance.",
+        "hint": "Recall what average is used for daily calculation."
+      },
+      {
+        "id": "grace-period-avoid",
+        "stem": "When can you avoid paying interest on purchases if a grace period exists?",
+        "options": [
+          "pay off your balance in full by the due date each month",
+          "keep a balance for the next month",
+          "pay only the minimum amount owed",
+          "request cash advances often"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "If your card has a grace period, you can avoid paying interest on purchases if you pay off your balance in full by the due date each month.",
+        "hint": "Consider what full payment by the due date does."
+      },
+      {
+        "id": "payment-allocation",
+        "stem": "Where does a payment above the minimum go first?",
+        "options": [
+          "balance with the highest interest rate",
+          "balance with the lowest interest rate",
+          "most recent purchase balance",
+          "oldest cash advance balance"
+        ],
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "the card issuer must generally apply the amount you pay over the minimum first to the balance with the highest interest rate",
+        "hint": "Remember which balance gets extra payment first."
+      }
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "jobId": "job-20261031095641-c3adee8e",
+  "analysisRef": "job-20261031095641-c3adee8e/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095641-c3adee8e:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Poverty status set by comparing family income to thresholds",
+    "sources": [
+      {
+        "id": "census-poverty-measures",
+        "title": "How the Census Bureau Measures Poverty — U.S. Census Bureau",
+        "locator": "https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, Income and Poverty, 'How the Census Bureau Measures Poverty'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States.' The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4596ea891842c2ee0ed4b34986ca579ae50aef29dbbb308f0ce50b4e3cff0b5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "355c27614d574a69ab6f68221af14941",
+      "runId": "job-20261031095641-c3adee8e",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:58:15.605Z"
+    },
+    "seed": 3245273831,
+    "headline": "Poverty status set by comparing family income to thresholds",
+    "keyPoints": [
+      {
+        "id": "poverty-considered",
+        "point": "A family and everyone in it is considered to be in poverty when income is less than its threshold.",
+        "sourceId": "census-poverty-measures",
+        "quote": "Is less than the poverty threshold for that family - that family and everyone in it is considered to be in poverty."
+      },
+      {
+        "id": "assigned-thresholds",
+        "point": "Each person or family is assigned one of 48 possible poverty thresholds.",
+        "sourceId": "census-poverty-measures",
+        "quote": "The Census Bureau assigns each person or family one out of 48 possible poverty thresholds."
+      },
+      {
+        "id": "geographic-uniformity",
+        "point": "The same thresholds are used throughout the United States and do not vary geographically.",
+        "sourceId": "census-poverty-measures",
+        "quote": "The same thresholds are used throughout the United States (they do not vary geographically)."
+      },
+      {
+        "id": "income-definition",
+        "point": "Poverty status uses before-tax money income and excludes capital gains and noncash benefits.",
+        "sourceId": "census-poverty-measures",
+        "quote": "money income before taxes and does not include capital gains or noncash benefits"
+      },
+      {
+        "id": "excluded-populations",
+        "point": "Poverty status cannot be determined for people in institutional group quarters, college dormitories, and military barracks.",
+        "sourceId": "census-poverty-measures",
+        "quote": "Poverty status cannot be determined for people in:"
+      },
+      {
+        "id": "ratio-calculation",
+        "point": "Family income is compared to its threshold to calculate the ratio of income to poverty.",
+        "sourceId": "census-poverty-measures",
+        "quote": "The total family income divided by the poverty threshold is called the Ratio of Income to Poverty."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "poverty-thresholds",
+        "term": "Poverty thresholds",
+        "gloss": "dollar amounts used to determine poverty status for families of different sizes",
+        "sourceId": "census-poverty-measures",
+        "quote": "Poverty thresholds are the dollar amounts used to determine poverty status."
+      },
+      {
+        "id": "money-income",
+        "term": "money income",
+        "gloss": "before-tax cash income counted to compute poverty status",
+        "sourceId": "census-poverty-measures",
+        "quote": "money income before taxes and does not include capital gains or noncash benefits"
+      },
+      {
+        "id": "cpi-u",
+        "term": "CPI-U",
+        "gloss": "inflation index used to update thresholds annually for price changes",
+        "sourceId": "census-poverty-measures",
+        "quote": "Thresholds are updated annually for inflation using the Consumer Price Index for All Urban Consumers (CPI-U)."
+      },
+      {
+        "id": "ratio-income-poverty",
+        "term": "Ratio of Income to Poverty",
+        "gloss": "number found by dividing family income by its poverty threshold",
+        "sourceId": "census-poverty-measures",
+        "quote": "The total family income divided by the poverty threshold is called the Ratio of Income to Poverty."
+      },
+      {
+        "id": "income-deficit",
+        "term": "Income Deficit",
+        "gloss": "dollar gap showing how far income falls below a familys poverty threshold",
+        "sourceId": "census-poverty-measures",
+        "quote": "is called the Income Deficit (for families in poverty)"
+      },
+      {
+        "id": "poverty-universe",
+        "term": "poverty universe",
+        "gloss": "set of people whose poverty status can be determined and included in totals",
+        "sourceId": "census-poverty-measures",
+        "quote": "they are excluded from the “poverty universe” (table totals)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031095641-c3adee8e:sequence-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031095641-c3adee8e:sort-groups-v1:r1",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    }
+  ]
+}

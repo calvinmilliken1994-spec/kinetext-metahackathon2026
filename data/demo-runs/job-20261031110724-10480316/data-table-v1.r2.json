@@ -1,0 +1,524 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Comparing recurrence intervals and yearly flood chance",
+    "labelHeader": "Return period",
+    "columns": [
+      {
+        "header": "Recurrence interval",
+        "unit": "years",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      },
+      {
+        "header": "Annual exceedance probability",
+        "unit": "percent",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Recurrence interval, years",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Annual exceedance probability, percent",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "20",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Annual exceedance probability",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "4",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "50-year recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Thus, a rainfall total of 6.60 inches in a consecutive 24-hour period is said to have a 50-year recurrence interval.",
+        "values": [
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "100-year recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Thus, a peak flow of 15,000 ft^3/s at the site is said to have a 100-year recurrence interval.",
+        "values": [
+          {
+            "value": "100",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "1",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "25- 50- or 100-year floods",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "such as 25- 50- or 100-year floods.",
+        "values": [
+          {
+            "value": "200",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          },
+          {
+            "value": "0.5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          }
+        ]
+      },
+      {
+        "label": "100-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Instead of the term \"100-year flood\" a hydrologist would rather describe this extreme hydrologic event as a flood having a 100-year recurrence interval.",
+        "values": [
+          {
+            "value": "500",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          },
+          {
+            "value": "0.2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "which-500-year-is-rarest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "which-2-year-is-most-likely",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "what-chance-for-100-year",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031110724-10480316:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[7].quote: quote \"Instead of the term \"100-year flood\" a hydrologist would rat\" is 152 characters, expected <= 150 (expected verbatim quotes of 1-150 characters copied from the cited source)",
+        "path": "/rows/7/quote",
+        "affected": [
+          "/rows/7/quote"
+        ]
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].values[0]: the value \"2\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[0].values[1]: the value \"50\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[1].values[0]: the value \"5\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[1].values[1]: the value \"20\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[2].values[0]: the value \"10\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[2].values[1]: the value \"10\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[3].values[0]: the value \"25\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[3].values[1]: the value \"4\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[4].values[0]: the value \"50\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[4].values[1]: the value \"2\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[5].values[0]: the value \"100\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all; rows[5].values[1]: the value \"1\" does not occur in its quote \"Recurrence interval, years | Annual exceedance probability, \" at all",
+        "path": "/rows/0/values/0/value",
+        "affected": [
+          "/rows/0/values/0/value",
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/value",
+          "/rows/0/values/1/quote",
+          "/rows/1/values/0/value",
+          "/rows/1/values/0/quote",
+          "/rows/1/values/1/value",
+          "/rows/1/values/1/quote",
+          "/rows/2/values/0/value",
+          "/rows/2/values/0/quote",
+          "/rows/2/values/1/value",
+          "/rows/2/values/1/quote",
+          "/rows/3/values/0/value",
+          "/rows/3/values/0/quote",
+          "/rows/3/values/1/value",
+          "/rows/3/values/1/quote",
+          "/rows/4/values/0/value",
+          "/rows/4/values/0/quote",
+          "/rows/4/values/1/value",
+          "/rows/4/values/1/quote",
+          "/rows/5/values/0/value",
+          "/rows/5/values/0/quote",
+          "/rows/5/values/1/value",
+          "/rows/5/values/1/quote"
+        ]
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 8 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"which-500-year-is-rarest\" (largest) → rows[7] \"500\"; \"which-2-year-is-most-likely\" (smallest) → rows[0] \"2\"; \"what-chance-for-100-year\" (lookup) → rows[5] \"1\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"Annual exceedance probability\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 28 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9119a4629e074e69bf1a5cc3e41950b7",
+    "usage": {
+      "promptTokens": 9204,
+      "completionTokens": 11194,
+      "reasoningTokens": 10156,
+      "cachedTokens": 0
+    },
+    "latencyMs": 61397,
+    "estCostUSD": 0.0590795,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110724-10480316:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Comparing recurrence intervals and yearly flood chance",
+    "sources": [
+      {
+        "id": "usgs-100-year-flood",
+        "title": "The 100-Year Flood — U.S. Geological Survey, Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/100-year-flood",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'The 100-Year Flood'. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9119a4629e074e69bf1a5cc3e41950b7",
+      "runId": "job-20261031110724-10480316",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:11:09.260Z"
+    },
+    "seed": 1676846271,
+    "labelHeader": "Return period",
+    "columns": [
+      {
+        "header": "Recurrence interval",
+        "unit": "years",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      },
+      {
+        "header": "Annual exceedance probability",
+        "unit": "percent",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Recurrence interval, years",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Annual exceedance probability, percent",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "20",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "Annual exceedance probability",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "4",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "50-year recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Thus, a rainfall total of 6.60 inches in a consecutive 24-hour period is said to have a 50-year recurrence interval.",
+        "values": [
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "100-year recurrence interval",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Thus, a peak flow of 15,000 ft^3/s at the site is said to have a 100-year recurrence interval.",
+        "values": [
+          {
+            "value": "100",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          },
+          {
+            "value": "1",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+          }
+        ]
+      },
+      {
+        "label": "25- 50- or 100-year floods",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "such as 25- 50- or 100-year floods.",
+        "values": [
+          {
+            "value": "200",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          },
+          {
+            "value": "0.5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          }
+        ]
+      },
+      {
+        "label": "100-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Instead of the term \"100-year flood\" a hydrologist would rather describe this extreme hydrologic event as a flood having a 100-year recurrence interval.",
+        "values": [
+          {
+            "value": "500",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          },
+          {
+            "value": "0.2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "which-500-year-is-rarest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "which-2-year-is-most-likely",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "what-chance-for-100-year",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

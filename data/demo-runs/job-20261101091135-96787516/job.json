@@ -1,0 +1,67 @@
+{
+  "jobId": "job-20261101091135-96787516",
+  "sourceId": "usgs-wss-ph-and-water",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-11-01T09:11:35.284Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.253611,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 51532,
+    "startedAt": "2026-11-01T09:11:35.284Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 3,
+    "componentsPublished": 2,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [
+    {
+      "componentId": "log-ladder-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "LOG-04",
+        "LOG-07"
+      ],
+      "fixed": [
+        "LOG-04",
+        "LOG-07"
+      ],
+      "remaining": [
+        "LOG-06"
+      ],
+      "passed": false,
+      "afterInjectedFault": false
+    },
+    {
+      "componentId": "log-ladder-v1",
+      "attempt": 2,
+      "revision": 3,
+      "targeted": [
+        "LOG-06"
+      ],
+      "fixed": [
+        "LOG-06"
+      ],
+      "remaining": [
+        "LOG-04",
+        "LOG-07"
+      ],
+      "passed": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-11-01T09:15:25.115Z"
+}

@@ -1,0 +1,432 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Consumer price index percent changes by base period",
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Old base 1967=100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-rebasing",
+        "quote": "Old base: 1967=100 (CUUR0000AA0)"
+      },
+      {
+        "header": "Current base 1982-1984=100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-rebasing",
+        "quote": "Current base: 1982-1984=100 (CUUR0000SA0)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2000",
+        "sourceId": "bls-rebasing",
+        "quote": "2000 | 3.4 | 3.4",
+        "values": [
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2000 | 3.4 | 3.4"
+          },
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2000 | 3.4 | 3.4"
+          }
+        ]
+      },
+      {
+        "label": "2001",
+        "sourceId": "bls-rebasing",
+        "quote": "2001 | 1.6 | 1.6",
+        "values": [
+          {
+            "value": "1.6",
+            "sourceId": "bls-rebasing",
+            "quote": "2001 | 1.6 | 1.6"
+          },
+          {
+            "value": "1.6",
+            "sourceId": "bls-rebasing",
+            "quote": "2001 | 1.6 | 1.6"
+          }
+        ]
+      },
+      {
+        "label": "2002",
+        "sourceId": "bls-rebasing",
+        "quote": "2002 | 2.4 | 2.4",
+        "values": [
+          {
+            "value": "2.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2002 | 2.4 | 2.4"
+          },
+          {
+            "value": "2.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2002 | 2.4 | 2.4"
+          }
+        ]
+      },
+      {
+        "label": "2003",
+        "sourceId": "bls-rebasing",
+        "quote": "2003 | 1.9 | 1.9",
+        "values": [
+          {
+            "value": "1.9",
+            "sourceId": "bls-rebasing",
+            "quote": "2003 | 1.9 | 1.9"
+          },
+          {
+            "value": "1.9",
+            "sourceId": "bls-rebasing",
+            "quote": "2003 | 1.9 | 1.9"
+          }
+        ]
+      },
+      {
+        "label": "2004",
+        "sourceId": "bls-rebasing",
+        "quote": "2004 | 3.3 | 3.3",
+        "values": [
+          {
+            "value": "3.3",
+            "sourceId": "bls-rebasing",
+            "quote": "2004 | 3.3 | 3.3"
+          },
+          {
+            "value": "3.3",
+            "sourceId": "bls-rebasing",
+            "quote": "2004 | 3.3 | 3.3"
+          }
+        ]
+      },
+      {
+        "label": "2005",
+        "sourceId": "bls-rebasing",
+        "quote": "2005 | 3.4 | 3.4",
+        "values": [
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2005 | 3.4 | 3.4"
+          },
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2005 | 3.4 | 3.4"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-2003-old",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 0
+      },
+      {
+        "id": "largest-2000-2005",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "smallest-2000-2005",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031095303-5293a31c:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 20 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0]: the header \"Old base 1967=100\" does not occur in its quote \"Old base: 1967=100 (CUUR0000AA0)\" (the column quote must contain the header as the page prints it); columns[1]: the header \"Current base 1982-1984=100\" does not occur in its quote \"Current base: 1982-1984=100 (CUUR0000SA0)\" (the column quote must contain the header as the page prints it)",
+        "path": "/columns/0/header",
+        "affected": [
+          "/columns/0/header",
+          "/columns/0/quote",
+          "/columns/1/header",
+          "/columns/1/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 12 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "questions[1] (largest-2000-2005): our code finds no answer for this largest question — column 0 (\"Old base 1967=100\") has no unique largest value (a tie, or a value that does not parse)",
+        "path": "/questions/1/kind",
+        "affected": [
+          "/questions/1/kind",
+          "/questions/1/rowIndex",
+          "/questions/1/columnIndex"
+        ]
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 0 (\"Old base 1967=100\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "115e950c2d0f484ea068fe41c3f47f54",
+    "usage": {
+      "promptTokens": 3976,
+      "completionTokens": 9120,
+      "reasoningTokens": 8320,
+      "cachedTokens": 0
+    },
+    "latencyMs": 53379,
+    "estCostUSD": 0.04373,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095303-5293a31c:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Consumer price index percent changes by base period",
+    "sources": [
+      {
+        "id": "bls-rebasing",
+        "title": "Rebasing an index — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/rebasing.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Rebasing an index'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "12b5479a4b039561a9b371a9ff42e67a18717caf06659d7262130e3d95b1088e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "115e950c2d0f484ea068fe41c3f47f54",
+      "runId": "job-20261031095303-5293a31c",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:55:00.539Z"
+    },
+    "seed": 2001676702,
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Old base 1967=100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-rebasing",
+        "quote": "Old base: 1967=100 (CUUR0000AA0)"
+      },
+      {
+        "header": "Current base 1982-1984=100",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "bls-rebasing",
+        "quote": "Current base: 1982-1984=100 (CUUR0000SA0)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2000",
+        "sourceId": "bls-rebasing",
+        "quote": "2000 | 3.4 | 3.4",
+        "values": [
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2000 | 3.4 | 3.4"
+          },
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2000 | 3.4 | 3.4"
+          }
+        ]
+      },
+      {
+        "label": "2001",
+        "sourceId": "bls-rebasing",
+        "quote": "2001 | 1.6 | 1.6",
+        "values": [
+          {
+            "value": "1.6",
+            "sourceId": "bls-rebasing",
+            "quote": "2001 | 1.6 | 1.6"
+          },
+          {
+            "value": "1.6",
+            "sourceId": "bls-rebasing",
+            "quote": "2001 | 1.6 | 1.6"
+          }
+        ]
+      },
+      {
+        "label": "2002",
+        "sourceId": "bls-rebasing",
+        "quote": "2002 | 2.4 | 2.4",
+        "values": [
+          {
+            "value": "2.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2002 | 2.4 | 2.4"
+          },
+          {
+            "value": "2.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2002 | 2.4 | 2.4"
+          }
+        ]
+      },
+      {
+        "label": "2003",
+        "sourceId": "bls-rebasing",
+        "quote": "2003 | 1.9 | 1.9",
+        "values": [
+          {
+            "value": "1.9",
+            "sourceId": "bls-rebasing",
+            "quote": "2003 | 1.9 | 1.9"
+          },
+          {
+            "value": "1.9",
+            "sourceId": "bls-rebasing",
+            "quote": "2003 | 1.9 | 1.9"
+          }
+        ]
+      },
+      {
+        "label": "2004",
+        "sourceId": "bls-rebasing",
+        "quote": "2004 | 3.3 | 3.3",
+        "values": [
+          {
+            "value": "3.3",
+            "sourceId": "bls-rebasing",
+            "quote": "2004 | 3.3 | 3.3"
+          },
+          {
+            "value": "3.3",
+            "sourceId": "bls-rebasing",
+            "quote": "2004 | 3.3 | 3.3"
+          }
+        ]
+      },
+      {
+        "label": "2005",
+        "sourceId": "bls-rebasing",
+        "quote": "2005 | 3.4 | 3.4",
+        "values": [
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2005 | 3.4 | 3.4"
+          },
+          {
+            "value": "3.4",
+            "sourceId": "bls-rebasing",
+            "quote": "2005 | 3.4 | 3.4"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-2003-old",
+        "kind": "lookup",
+        "rowIndex": 3,
+        "columnIndex": 0
+      },
+      {
+        "id": "largest-2000-2005",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "smallest-2000-2005",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

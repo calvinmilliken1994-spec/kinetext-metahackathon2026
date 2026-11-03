@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "dos-alaska-purchase-job-20261031153203-57738128",
+  "title": "Purchase of Alaska: From Russian Exploration to Statehood",
+  "learningObjectives": [
+    "Sequence Russian exploration, the 1859 offer, and the 1867 purchase and transfer of Alaska.",
+    "Explain how limited Russian settlement and external rivalries led to the sale and U.S. acquisition.",
+    "Trace post-purchase governance, gold discovery, and Alaska's path to statehood in 1959."
+  ],
+  "sources": [
+    {
+      "id": "dos-alaska-purchase",
+      "title": "Purchase of Alaska, 1867 — U.S. Department of State, Office of the Historian, Milestones: 1866–1898",
+      "locator": "https://history.state.gov/milestones/1866-1898/alaska-purchase",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Department of State, Office of the Historian, 'Milestones: 1866–1898 — Purchase of Alaska, 1867'. Per the Department's Copyright Information page, 'Unless a copyright is indicated, information on State Department websites is in the public domain and may be copied and distributed without permission. Citation of the U.S. State Department as source of the information is appreciated.' The U.S. Department of State has not reviewed, approved or endorsed this activity.",
+      "sha256": "108a7038cad1fe36f6facd30ee54ff6b1ee2768e3902e234455f33fabf00008b"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "Russia maintained a small presence in Alaska despite early exploration, and strategic pressures reduced its interest.",
+      "evidence": [
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "Defeat in the Crimean War further reduced Russian interest in this region."
+        },
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "and permanent Russian settlers in Alaska never numbered more than four hundred"
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Diplomatic offers in 1859 and renewed negotiations after the Civil War led to the 1867 agreement and formal transfer.",
+      "evidence": [
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "Russia offered to sell Alaska to the United States in 1859"
+        },
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "on March 30, 1867, agreed to a proposal from Russian Minister in Washington, Edouard de Stoeckl, to purchase Alaska for $7.2 million"
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "After purchase, Alaska was governed under federal systems until mining laws, gold discovery, and finally statehood established its modern status.",
+      "evidence": [
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "the United States constituted a civil government in 1884"
+        },
+        {
+          "sourceId": "dos-alaska-purchase",
+          "quote": "Alaska became a state on January 3, 1959"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Peter the Great dispatches Vitus Bering",
+        "year": 1725,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "Beginning in 1725, when Russian Czar Peter the Great dispatched Vitus Bering to explore the Alaskan coast"
+          },
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "Russia had a keen interest in this region, which was rich in natural resources and lightly inhabited"
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Russia offers to sell Alaska",
+        "year": 1859,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "Russia offered to sell Alaska to the United States in 1859"
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Seward agrees to purchase Alaska",
+        "year": 1867,
+        "month": 3,
+        "day": 30,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "on March 30, 1867, agreed to a proposal from Russian Minister in Washington, Edouard de Stoeckl, to purchase Alaska for $7.2 million"
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Formal transfer of Alaska",
+        "year": 1867,
+        "month": 10,
+        "day": 18,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "Alaska was formally transferred to the United States on October 18, 1867"
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "U.S. establishes civil government",
+        "year": 1884,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "the United States constituted a civil government in 1884"
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Gold discovered in the Yukon",
+        "year": 1896,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "when a major gold deposit was discovered in the Yukon in 1896"
+          }
+        ]
+      },
+      {
+        "id": "e7",
+        "label": "Alaska becomes a state",
+        "year": 1959,
+        "month": 1,
+        "day": 3,
+        "evidence": [
+          {
+            "sourceId": "dos-alaska-purchase",
+            "quote": "Alaska became a state on January 3, 1959"
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Purchase of Alaska",
+      "settingLabel": "Russian America to U.S. Statehood, 1725-1959"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Bering expedition before sale offer",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "name": "Sale offer before purchase agreement",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Purchase agreement before formal transfer",
+      "earlierEventId": "e3",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Civil government before statehood",
+      "earlierEventId": "e5",
+      "laterEventId": "e7"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Russia’s 1859 offer to sell Alaska or the formal transfer on October 18, 1867?",
+      "earlierEventId": "e2",
+      "laterEventId": "e4"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: the formal transfer in 1867 or establishment of civil government in 1884?",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: Yukon gold discovery in 1896 or Alaska statehood on January 3, 1959?",
+      "earlierEventId": "e6",
+      "laterEventId": "e7"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "529e5931f9d144e4843b2d09c08317d0",
+    "runId": "job-20261031153203-57738128",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T15:33:54.518Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

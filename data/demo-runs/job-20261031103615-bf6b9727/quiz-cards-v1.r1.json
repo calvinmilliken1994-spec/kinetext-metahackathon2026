@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How Mach number affects density and compressibility",
+    "cards": [
+      {
+        "id": "card-supersonic-density",
+        "stem": "For which flows does density change faster than velocity by the square of Mach number?",
+        "options": [
+          "For supersonic and hypersonic flows",
+          "For transonic flows",
+          "For low speed, or subsonic conditions"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "hint": ""
+      },
+      {
+        "id": "card-transonic-equality",
+        "stem": "For which flows is density change nearly equal to velocity change?",
+        "options": [
+          "For transonic flows",
+          "For supersonic and hypersonic flows",
+          "For the low subsonic conditions"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored.",
+        "hint": ""
+      },
+      {
+        "id": "card-subsonic-ignore",
+        "stem": "When can compressibility be ignored?",
+        "options": [
+          "For the low subsonic conditions",
+          "For transonic flows",
+          "For supersonic and hypersonic flows"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "hint": ""
+      },
+      {
+        "id": "card-mach-definition",
+        "stem": "What is the Mach number?",
+        "options": [
+          "The Mach number is the ratio of the speed of the aircraft",
+          "The speed of sound is equal to the speed of transmission",
+          "Sharp disturbances generate shock waves"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103615-bf6b9727:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2e04c82d89c94c408dfe0958a20bea47",
+    "usage": {
+      "promptTokens": 3283,
+      "completionTokens": 16996,
+      "reasoningTokens": 16616,
+      "cachedTokens": 0
+    },
+    "latencyMs": 82682,
+    "estCostUSD": 0.07633675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103615-bf6b9727:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How Mach number affects density and compressibility",
+    "sources": [
+      {
+        "id": "nasa-grc-role-of-the-mach-number",
+        "title": "Role of the Mach Number — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/role-of-the-mach-number/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "a7355b33f7126247cd0576ce48a0975a781814c8687022d8fdf12e11fdeaa3c8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2e04c82d89c94c408dfe0958a20bea47",
+      "runId": "job-20261031103615-bf6b9727",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:38:32.635Z"
+    },
+    "seed": 1372833115,
+    "cards": [
+      {
+        "id": "card-supersonic-density",
+        "stem": "For which flows does density change faster than velocity by the square of Mach number?",
+        "options": [
+          "For supersonic and hypersonic flows",
+          "For transonic flows",
+          "For low speed, or subsonic conditions"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For supersonic and hypersonic flows, the density changes faster than the velocity changes by a factor equal to the square of the Mach number.",
+        "hint": ""
+      },
+      {
+        "id": "card-transonic-equality",
+        "stem": "For which flows is density change nearly equal to velocity change?",
+        "options": [
+          "For transonic flows",
+          "For supersonic and hypersonic flows",
+          "For the low subsonic conditions"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For transonic flows, the change in density is nearly equal to the change in velocity, and compressibility effects cannot be ignored.",
+        "hint": ""
+      },
+      {
+        "id": "card-subsonic-ignore",
+        "stem": "When can compressibility be ignored?",
+        "options": [
+          "For the low subsonic conditions",
+          "For transonic flows",
+          "For supersonic and hypersonic flows"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "For the low subsonic conditions, compressibility can be ignored.",
+        "hint": ""
+      },
+      {
+        "id": "card-mach-definition",
+        "stem": "What is the Mach number?",
+        "options": [
+          "The Mach number is the ratio of the speed of the aircraft",
+          "The speed of sound is equal to the speed of transmission",
+          "Sharp disturbances generate shock waves"
+        ],
+        "sourceId": "nasa-grc-role-of-the-mach-number",
+        "quote": "The Mach number is the ratio of the speed of the aircraft, or the speed of the gas, to the speed of sound in the gas.",
+        "hint": ""
+      }
+    ]
+  }
+}

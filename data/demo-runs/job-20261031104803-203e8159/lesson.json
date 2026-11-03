@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031104803-203e8159",
+  "analysisRef": "job-20261031104803-203e8159/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104803-203e8159:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Cybersecurity framework 2.0 expands governance and support for all organizations",
+    "sources": [
+      {
+        "id": "nist-csf-2-0-release",
+        "title": "NIST Releases Version 2.0 of Landmark Cybersecurity Framework — NIST News",
+        "locator": "https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, 'NIST Releases Version 2.0 of Landmark Cybersecurity Framework' (NIST News). Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4c7ce2ca7d3c035aeb3f9dac0d3c8d25b6931ef97d0f90e3896e16d384eb6ee"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8725880afc3b4755b2d0f6d901c0148c",
+      "runId": "job-20261031104803-203e8159",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:49:42.055Z"
+    },
+    "seed": 506637329,
+    "headline": "Cybersecurity framework 2.0 expands governance and support for all organizations",
+    "keyPoints": [
+      {
+        "id": "scope-expansion",
+        "point": "Students learn that the framework now helps all organizations, not just critical infrastructure, manage and reduce risks.",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "now explicitly aims to help all organizations — not just those in critical infrastructure"
+      },
+      {
+        "id": "governance-enterprise",
+        "point": "Students learn that governance means senior leaders treat cybersecurity as enterprise risk alongside finance and reputation.",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "cybersecurity is a major source of enterprise risk that senior leaders should consider alongside others such as finance and reputation"
+      },
+      {
+        "id": "core-functions",
+        "point": "Students learn the core now includes six functions that together form a life cycle for managing cybersecurity risk.",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "The framework’s core is now organized around six key functions: Identify, Protect, Detect, Respond and Recover"
+      },
+      {
+        "id": "reference-catalog",
+        "point": "Students learn the catalog cross-references guidance to more than 50 other cybersecurity documents.",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "cross-reference the CSF’s guidance to more than 50 other cybersecurity documents"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "governance-term",
+        "term": "governance",
+        "gloss": "organizational governance that shapes strategy and informed decisions for cybersecurity",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "with added emphasis on governance as well as supply chains"
+      },
+      {
+        "id": "supply-chains-term",
+        "term": "supply chains",
+        "gloss": "external supply chains that affect cybersecurity risk and need protection",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "organizations seeking to secure their supply chains"
+      },
+      {
+        "id": "quickstart-guides-term",
+        "term": "quick-start guides",
+        "gloss": "tailored quick-start guides that help specific audiences implement the framework",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "quick-start guides aimed at specific audiences"
+      },
+      {
+        "id": "informative-references-term",
+        "term": "informative references",
+        "gloss": "searchable informative references that cross-reference guidance to other documents",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "a searchable catalog of informative references that allows users to cross-reference the framework’s guidance"
+      },
+      {
+        "id": "enterprise-risk-term",
+        "term": "enterprise risk",
+        "gloss": "enterprise risk that senior leaders consider alongside finance and reputation",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "cybersecurity is a major source of enterprise risk that senior leaders should consider alongside others such as finance and reputation"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031104803-203e8159:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: detect-step (SEQ-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031104803-203e8159:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

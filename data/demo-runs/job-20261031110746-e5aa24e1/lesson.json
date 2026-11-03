@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031110746-e5aa24e1",
+  "analysisRef": "job-20261031110746-e5aa24e1/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110746-e5aa24e1:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How magnitude, energy release and shaking intensity are measured and related",
+    "sources": [
+      {
+        "id": "usgs-earthquake-magnitude-energy-intensity",
+        "title": "Earthquake Magnitude, Energy Release, and Shaking Intensity — USGS Earthquake Hazards Program",
+        "locator": "https://www.usgs.gov/programs/earthquake-hazards/earthquake-magnitude-energy-release-and-shaking-intensity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Earthquake Hazards Program, 'Earthquake Magnitude, Energy Release, and Shaking Intensity'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "812e8755535e4c47953f9c65410b5f89",
+      "runId": "job-20261031110746-e5aa24e1",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:09:00.005Z"
+    },
+    "seed": 355339915,
+    "headline": "How magnitude, energy release and shaking intensity are measured and related",
+    "keyPoints": [
+      {
+        "id": "magnitude-single-value",
+        "point": "Students understand that magnitude is a single value describing earthquake size while intensity varies by location.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "Whereas the magnitude of an earthquake is one value that describes the size"
+      },
+      {
+        "id": "logarithmic-amplitude",
+        "point": "Students understand that each whole number increase in magnitude represents a tenfold increase in measured amplitude on a seismogram.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "each whole number increase in magnitude represents a tenfold increase in measured amplitude as measured on a seismogram."
+      },
+      {
+        "id": "energy-release-scale",
+        "point": "Students understand that a whole number increase in magnitude corresponds to about 32 times more energy release.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "While each whole number increase in magnitude represents a tenfold increase in the measured amplitude, it represents an 32 times more energy release."
+      },
+      {
+        "id": "seismic-moment-calculation",
+        "point": "Students understand that seismic moment is calculated from rigidity, area and slip on the fault.",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "Moment (MO) = rigidity x area x slip"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "magnitude",
+        "term": "Magnitude",
+        "gloss": "single number describing the size of an earthquake",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "Magnitude is the size of the earthquake."
+      },
+      {
+        "id": "intensity",
+        "term": "intensity",
+        "gloss": "measure of shaking at a place that varies with distance and local geology",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "The intensity is the measure of shaking at each location"
+      },
+      {
+        "id": "seismometer",
+        "term": "seismometer",
+        "gloss": "sensitive instrument that provides the recorded vibrations that travel through earth",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "The time, location, and magnitude of an earthquake can be determined from the data recorded by seismometer."
+      },
+      {
+        "id": "rigidity",
+        "term": "rigidity",
+        "gloss": "strength of rock along the fault that resists slip",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved."
+      },
+      {
+        "id": "modified-mercalli-intensity-scale",
+        "term": "Modified Mercalli Intensity Scale",
+        "gloss": "scale used in the United States to express intensity in roman numerals",
+        "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+        "quote": "The intensity scale that we use in the United States is called the Modified Mercalli Intensity Scale, but other countries use other scales."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "log-ladder-v1",
+      "specId": "job-20261031110746-e5aa24e1:log-ladder-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031110746-e5aa24e1:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-05, FE-08, repair.no-weakening: the sourceExample quote does not explicitly bind \"rigidity\" to a value (supported patterns: \"rigidity = <number>\", \"rigidity is <number>\", \"<number> for rigidity\") — unbound quote numbers are never assigned to variables; the sourceExample quote does not explicitly bind \"area\" to a value (supported p",
+      "revision": 3
+    }
+  ]
+}

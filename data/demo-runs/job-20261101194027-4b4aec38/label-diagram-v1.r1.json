@@ -1,0 +1,696 @@
+{
+  "gen": {
+    "figureId": "medlineplus-dna-structure-1",
+    "hint": "Use the colour key on the right to match partners, then find the backbone wrapping around the helix.",
+    "parts": [
+      {
+        "areaX1": 192,
+        "areaX2": 392,
+        "areaY1": 126,
+        "areaY2": 934,
+        "id": "base-pairs",
+        "labelX1": 396,
+        "labelX2": 542,
+        "labelY1": 304,
+        "labelY2": 332,
+        "name": "base pairs",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 270,
+        "y": 443
+      },
+      {
+        "areaX1": 742,
+        "areaX2": 876,
+        "areaY1": 300,
+        "areaY2": 333,
+        "id": "thymine",
+        "labelX1": 762,
+        "labelX2": 872,
+        "labelY1": 351,
+        "labelY2": 377,
+        "name": "thymine",
+        "quote": "cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 810,
+        "y": 316
+      },
+      {
+        "areaX1": 623,
+        "areaX2": 745,
+        "areaY1": 300,
+        "areaY2": 333,
+        "id": "adenine",
+        "labelX1": 595,
+        "labelX2": 708,
+        "labelY1": 351,
+        "labelY2": 377,
+        "name": "adenine",
+        "quote": "four chemical bases: adenine (A), guanine (G),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 683,
+        "y": 316
+      },
+      {
+        "areaX1": 623,
+        "areaX2": 752,
+        "areaY1": 509,
+        "areaY2": 542,
+        "id": "guanine",
+        "labelX1": 595,
+        "labelX2": 706,
+        "labelY1": 560,
+        "labelY2": 588,
+        "name": "guanine",
+        "quote": "adenine (A), guanine (G), cytosine (C),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 685,
+        "y": 525
+      },
+      {
+        "areaX1": 749,
+        "areaX2": 876,
+        "areaY1": 509,
+        "areaY2": 542,
+        "id": "cytosine",
+        "labelX1": 768,
+        "labelX2": 875,
+        "labelY1": 560,
+        "labelY2": 588,
+        "name": "cytosine",
+        "quote": "guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 812,
+        "y": 525
+      },
+      {
+        "areaX1": 137,
+        "areaX2": 495,
+        "areaY1": 83,
+        "areaY2": 938,
+        "id": "sugar-phosphate-backbone",
+        "labelX1": 515,
+        "labelX2": 743,
+        "labelY1": 717,
+        "labelY2": 779,
+        "name": "sugar-phosphate backbone",
+        "quote": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 170,
+        "y": 740
+      }
+    ],
+    "schemaVersion": "label-diagram-v1",
+    "title": "Label the parts of DNA"
+  },
+  "report": {
+    "artifactId": "job-20261101194027-4b4aec38:label-diagram-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every label-diagram title, part id and part name shape is within the frozen limits"
+      },
+      {
+        "id": "LD-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 part quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LD-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every one of the 6 part name(s) occurs as a whole phrase in its own quote, case-insensitive, and is the printed word of its slot where the figure's printed labels are stored (name-in-quote)"
+      },
+      {
+        "id": "LD-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "figureId \"medlineplus-dna-structure-1\" is one of the source's 1 library figure(s) (figure-valid)"
+      },
+      {
+        "id": "LD-04",
+        "kind": "semantic",
+        "passed": false,
+        "message": "parts[3]: the point (685, 525) lies on a printed word of the figure (image pixel 411, 315); the point must sit on the drawn part itself, never on printed text; parts[4]: the point (812, 525) lies on a printed word of the figure (image pixel 487, 315); the point must sit on the drawn part itself, never on printed text",
+        "path": "/parts/3/x",
+        "affected": [
+          "/parts/3/x",
+          "/parts/3/y",
+          "/parts/4/x",
+          "/parts/4/y"
+        ]
+      },
+      {
+        "id": "LD-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every label box is the all-zero sentinel or well-formed inside 0..1000, no two boxes overlap, and 6 part(s) carry a box (the figure prints its labels; at least 3 required) (label-boxes-valid)"
+      },
+      {
+        "id": "LD-06",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the point of parts[3] (\"guanine\") at image pixel (411, 315) lies outside its region (346,279)-(442,296) by more than 12 px; expected the region to contain the point; the point of parts[4] (\"cytosine\") at image pixel (487.2, 315) lies outside its region (440,278)-(524,296) by more than 12 px; expected the region to contain the point",
+        "path": "/parts/3/x",
+        "affected": [
+          "/parts/3/x",
+          "/parts/3/y",
+          "/parts/4/x",
+          "/parts/4/y"
+        ]
+      },
+      {
+        "id": "LD-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 15 region pair(s) are distinct: the largest pairwise IoU is 0.06, at most 0.6 (regions-distinct)"
+      },
+      {
+        "id": "LD-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the AI-written title and hint appears on the page (N-01); part names are bound to their quotes by LD-02 (numbers-checkable)"
+      },
+      {
+        "id": "LD-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "6 parts (within 3-8) with distinct ids and distinct names (counts-valid)"
+      },
+      {
+        "id": "LD-10",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 6 printed label(s) of the figure that the page text names are claimed by a part (labels-covered)"
+      },
+      {
+        "id": "LD-11",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "SAM was at least 0.5 sure of all 6 region(s) that carry a confidence (regions-confident)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "muse-spark-1.3",
+    "returnedModel": "muse-spark-1.3",
+    "responseId": "chatcmpl-01a198a1-66d0-7585-abfe-59f2bf8b85b0",
+    "usage": {
+      "promptTokens": 4079,
+      "completionTokens": 6370,
+      "reasoningTokens": 5722,
+      "cachedTokens": 0
+    },
+    "latencyMs": 23619,
+    "estCostUSD": 0.03217125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "meta-api",
+    "model": "muse-spark-1.3",
+    "providerModel": "muse-spark-1.3",
+    "cachedUnknown": false
+  },
+  "regions": [
+    {
+      "partId": "base-pairs",
+      "x1": 92,
+      "y1": 253,
+      "x2": 230,
+      "y2": 289,
+      "confidence": 0.8203125,
+      "outline": "M202 275.5L204.5 275L205.5 279L227.5 278L230 279.5L231 282.5L228.5 288L223.5 289L147.5 288L127.5 290L117.5 289L112 284.5L115.5 279L152.5 279L155.5 281L157.5 278L186.5 279L198.5 278ZM95 253.5L117.5 255L127.5 254L138.5 256L140.5 255L163.5 257L170.5 256L173 257.5L167.5 259L169 261.5L165.5 265L163.5 263L161.5 266L151.5 266L146.5 264L97.5 264L92 261.5L92 254.5ZM181 256.5L199.5 257L203 259.5L203 263.5L201.5 266L196.5 267L175.5 266L173 263.5L176 257.5Z",
+      "ground": {
+        "x1": 90,
+        "y1": 252,
+        "x2": 232,
+        "y2": 291
+      }
+    },
+    {
+      "partId": "thymine",
+      "x1": 432,
+      "y1": 182,
+      "x2": 524,
+      "y2": 199,
+      "confidence": 0.90625,
+      "outline": "M443 182.5L522.5 182L525 184.5L525 195.5L520.5 200L443.5 200L436.5 198L432 193.5L432 188.5L436.5 184L438.5 185Z",
+      "ground": {
+        "x1": 429,
+        "y1": 181,
+        "x2": 525,
+        "y2": 199
+      }
+    },
+    {
+      "partId": "adenine",
+      "x1": 347,
+      "y1": 182,
+      "x2": 438,
+      "y2": 199,
+      "confidence": 0.9140625,
+      "outline": "M348 182.5L434.5 182L438.5 183L439 184.5L436.5 184L432 188.5L432 193.5L436.5 199L354.5 200L349.5 199L347 196.5Z",
+      "ground": {
+        "x1": 345,
+        "y1": 181,
+        "x2": 431,
+        "y2": 199
+      }
+    },
+    {
+      "partId": "guanine",
+      "x1": 346,
+      "y1": 279,
+      "x2": 442,
+      "y2": 296,
+      "confidence": 0.91796875,
+      "outline": "M349 279.5L438.5 279L442 280.5L443 290.5L442 293.5L438.5 296L427.5 297L353.5 297L349.5 296L347 293.5L346 286.5L347 281.5Z",
+      "ground": {
+        "x1": 345,
+        "y1": 277,
+        "x2": 445,
+        "y2": 297
+      }
+    },
+    {
+      "partId": "cytosine",
+      "x1": 440,
+      "y1": 278,
+      "x2": 524,
+      "y2": 296,
+      "confidence": 0.921875,
+      "outline": "M511 278.5L522.5 279L525 281.5L525 293.5L523.5 296L452.5 297L440 295.5L443 290.5L441.5 279Z",
+      "ground": {
+        "x1": 443,
+        "y1": 277,
+        "x2": 525,
+        "y2": 297
+      }
+    },
+    {
+      "partId": "sugar-phosphate-backbone",
+      "x1": 84,
+      "y1": 51,
+      "x2": 239,
+      "y2": 561,
+      "confidence": 0.80859375,
+      "outline": "M180 51.5L189.5 51L200.5 53L211.5 56L217 59.5L217 61.5L214.5 63L194.5 71L188.5 72L184 75.5L188.5 81L191.5 82L214.5 101L230.5 105L237 109.5L240 119.5L239 131.5L231.5 141L223.5 146L162.5 176L138.5 192L127.5 197L126 201.5L123.5 202L119 206.5L119.5 220L117.5 221L106.5 216L101 221.5L105.5 225L112.5 227L120.5 226L122 221.5L121 219.5L127.5 216L129.5 212L133.5 213L139.5 219L186.5 245L192.5 242L191 246.5L193.5 249L207.5 255L209.5 258L213.5 255L215 260.5L231 274.5L231 276.5L235 279.5L237 283.5L239 289.5L239 315.5L237 322.5L226 338.5L226 341.5L231 348.5L231 351.5L235 355.5L239 365.5L240 384.5L238 401.5L233 412.5L233 415.5L229 418.5L227 423.5L220 432.5L209.5 443L192.5 455L184 463.5L198.5 477L206 481.5L207 484.5L210 486.5L227 508.5L235 525.5L239 540.5L240 558.5L236.5 562L228 535.5L222.5 531L207.5 529L203.5 530L198.5 528L182.5 526L178.5 527L174.5 525L167.5 526L157.5 523L136.5 522L130.5 525L122.5 524L113.5 522L94.5 514L90.5 514L87 511.5L85 507.5L86 488.5L91.5 483L106.5 474L112.5 473L116.5 470L120.5 470L121 465.5L118 463.5L123 459.5L121.5 458L117.5 458L113.5 451L95.5 443L87 434.5L84 417.5L88 404.5L96.5 395L106.5 388L161.5 357L180.5 348L194 337.5L185.5 331L182.5 331L167.5 321L143.5 310L126.5 298L122.5 297L115.5 289L109.5 287L100.5 279L88 262.5L85 251.5L85 226.5L87 217.5L96 203.5L96 200.5L90 191.5L86 179.5L86 139.5L90 127.5L97 114.5L115.5 92L140.5 72L162.5 59ZM117 234.5L123.5 234L126.5 238L130.5 234L133 236.5L130.5 237L129.5 239L134.5 238L138.5 242L154.5 247L162 252.5L158.5 255L148.5 256L172.5 257L167 259.5L169 261.5L165.5 265L164.5 263L163 263.5L162 265.5L165.5 269L167.5 267L170.5 270L172.5 267L183.5 267L194 272.5L194 276.5L192.5 278L198.5 278L204.5 275L205.5 279L229.5 279L231 282.5L227 291.5L228 300.5L223.5 305L219.5 305L221 306.5L219.5 308L217 305.5L218 303.5L215.5 304L213.5 302L206.5 304L202.5 301L183.5 302L160.5 300L159 296.5L152 291.5L153 289.5L151.5 288L134.5 290L115.5 288L112 284.5L114 280.5L115.5 279L123 278.5L122 273.5L119.5 271L115.5 270L114 267.5L114.5 265L119 264.5L114.5 263L93.5 263L92 261.5L92 254.5L94.5 253L99 253.5L94 245.5L96 242.5L92 239.5L92 237.5L94.5 235L96.5 237L97.5 235L108.5 235L114.5 237ZM125 114.5L145.5 116L155.5 119L164.5 119L167.5 121L180.5 122L182.5 120L184.5 123L190.5 122L192.5 124L196.5 124L198.5 121L200.5 121L200 123.5L201.5 125L203.5 124L205 127.5L201.5 131L196.5 131L188.5 134L171.5 135L165.5 137L155.5 136L150.5 138L137.5 139L136.5 141L133.5 139L111.5 141L100.5 140L99 138.5L113.5 121L118.5 119L121.5 120L121 117.5ZM188 392.5L196.5 396L204.5 393L221.5 395L226.5 394L227 395.5L224 396.5L221 402.5L211.5 413L207.5 416L201.5 416L198.5 418L188.5 418L189.5 415L182.5 416L161.5 413L159.5 415L153.5 416L149.5 413L144.5 412L131.5 413L117 409.5L124.5 403L132.5 400L136.5 401L140.5 399L142.5 400L144.5 398L161.5 398L163.5 400L169.5 397L182.5 396ZM106 422.5L107.5 422L109.5 424L111.5 422L119.5 422L126.5 424L136.5 423L146.5 425L162.5 424L184.5 426L191 428.5L186.5 433L181.5 434L165.5 446L156.5 446L142.5 439L131.5 437L129.5 435L122.5 434L107.5 428L104 424.5ZM136 148.5L153.5 148L160 150.5L143.5 160L137.5 161L134.5 165L128.5 168L101.5 177L96.5 176L91 166.5L90 161.5L92.5 154L109.5 151L129.5 151ZM191 495.5L194.5 495L198.5 498L215 515.5L210.5 518L200.5 518L196.5 516L183.5 516L169.5 513L147.5 512L139.5 510L131 505.5L131.5 504L144.5 503L146.5 501L152.5 502L157.5 499L171.5 500L173.5 498ZM166 84.5L172.5 85L180.5 92L191.5 98L202 108.5L198.5 112L188.5 113L181.5 111L177.5 112L170.5 109L158.5 110L156.5 107L157 110.5L151.5 112L149.5 107L142.5 106L139 103.5L139 100.5L142.5 97L158.5 88L163.5 87ZM218 358.5L223.5 358L227 364.5L229 378.5L226.5 381L201.5 383L194.5 387L192.5 385L190.5 387L177.5 387L162 384.5L172.5 377L198.5 366L200.5 363L202.5 365L205.5 363L211.5 364L213.5 361L216 361.5L215.5 359ZM163 475.5L169.5 478L172.5 482L175.5 482L179 484.5L164.5 490L151.5 491L145.5 495L141.5 494L141 495.5L143.5 499L138 497.5L140 495.5L139.5 494L132.5 495L124 493.5L128.5 492L130.5 488L131.5 489ZM181 256.5L199.5 257L203 259.5L203 263.5L201.5 266L197.5 267L175.5 266L173 263.5L176 257.5ZM215 311.5L222.5 312L225 315.5L211.5 326L197 318.5L197.5 313L213.5 313Z",
+      "ground": {
+        "x1": 82,
+        "y1": 50,
+        "x2": 246,
+        "y2": 563
+      }
+    }
+  ],
+  "grounding": {
+    "ok": true,
+    "located": 6,
+    "of": 6,
+    "receipt": {
+      "purpose": "test-live",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a198a1-a080-717b-baa7-fd07365dd4a4",
+      "usage": {
+        "promptTokens": 707,
+        "completionTokens": 3378,
+        "reasoningTokens": 3024,
+        "cachedTokens": 0
+      },
+      "latencyMs": 14725,
+      "estCostUSD": 0.01524025,
+      "reservedUnknownUSD": 0,
+      "finishReason": "stop",
+      "attempts": 1,
+      "costBasis": "usage",
+      "provider": "meta-api",
+      "model": "muse-spark-1.3",
+      "providerModel": "muse-spark-1.3",
+      "cachedUnknown": false
+    },
+    "parts": [
+      {
+        "partId": "base-pairs",
+        "ground": {
+          "x1": 150,
+          "y1": 420,
+          "x2": 386,
+          "y2": 485
+        }
+      },
+      {
+        "partId": "thymine",
+        "ground": {
+          "x1": 715,
+          "y1": 302,
+          "x2": 875,
+          "y2": 332
+        }
+      },
+      {
+        "partId": "adenine",
+        "ground": {
+          "x1": 575,
+          "y1": 302,
+          "x2": 718,
+          "y2": 332
+        }
+      },
+      {
+        "partId": "guanine",
+        "ground": {
+          "x1": 575,
+          "y1": 462,
+          "x2": 742,
+          "y2": 495
+        }
+      },
+      {
+        "partId": "cytosine",
+        "ground": {
+          "x1": 738,
+          "y1": 462,
+          "x2": 875,
+          "y2": 495
+        }
+      },
+      {
+        "partId": "sugar-phosphate-backbone",
+        "ground": {
+          "x1": 136,
+          "y1": 84,
+          "x2": 410,
+          "y2": 938
+        }
+      }
+    ]
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101194027-4b4aec38:label-diagram-v1:r1",
+    "componentId": "label-diagram-v1",
+    "title": "Label the parts of DNA",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a198a1-66d0-7585-abfe-59f2bf8b85b0",
+      "runId": "job-20261101194027-4b4aec38",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T19:41:33.529Z"
+    },
+    "seed": 2128357660,
+    "figureId": "medlineplus-dna-structure-1",
+    "parts": [
+      {
+        "areaX1": 192,
+        "areaX2": 392,
+        "areaY1": 126,
+        "areaY2": 934,
+        "id": "base-pairs",
+        "labelX1": 396,
+        "labelX2": 542,
+        "labelY1": 304,
+        "labelY2": 332,
+        "name": "base pairs",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 270,
+        "y": 443
+      },
+      {
+        "areaX1": 742,
+        "areaX2": 876,
+        "areaY1": 300,
+        "areaY2": 333,
+        "id": "thymine",
+        "labelX1": 762,
+        "labelX2": 872,
+        "labelY1": 351,
+        "labelY2": 377,
+        "name": "thymine",
+        "quote": "cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 810,
+        "y": 316
+      },
+      {
+        "areaX1": 623,
+        "areaX2": 745,
+        "areaY1": 300,
+        "areaY2": 333,
+        "id": "adenine",
+        "labelX1": 595,
+        "labelX2": 708,
+        "labelY1": 351,
+        "labelY2": 377,
+        "name": "adenine",
+        "quote": "four chemical bases: adenine (A), guanine (G),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 683,
+        "y": 316
+      },
+      {
+        "areaX1": 623,
+        "areaX2": 752,
+        "areaY1": 509,
+        "areaY2": 542,
+        "id": "guanine",
+        "labelX1": 595,
+        "labelX2": 706,
+        "labelY1": 560,
+        "labelY2": 588,
+        "name": "guanine",
+        "quote": "adenine (A), guanine (G), cytosine (C),",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 685,
+        "y": 525
+      },
+      {
+        "areaX1": 749,
+        "areaX2": 876,
+        "areaY1": 509,
+        "areaY2": 542,
+        "id": "cytosine",
+        "labelX1": 768,
+        "labelX2": 875,
+        "labelY1": 560,
+        "labelY2": 588,
+        "name": "cytosine",
+        "quote": "guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 812,
+        "y": 525
+      },
+      {
+        "areaX1": 137,
+        "areaX2": 495,
+        "areaY1": 83,
+        "areaY2": 938,
+        "id": "sugar-phosphate-backbone",
+        "labelX1": 515,
+        "labelX2": 743,
+        "labelY1": 717,
+        "labelY2": 779,
+        "name": "sugar-phosphate backbone",
+        "quote": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+        "sourceId": "medlineplus-what-is-dna",
+        "x": 170,
+        "y": 740
+      }
+    ],
+    "hint": "Use the colour key on the right to match partners, then find the backbone wrapping around the helix.",
+    "figure": {
+      "id": "medlineplus-dna-structure-1",
+      "width": 600,
+      "height": 600,
+      "caption": "DNA is a double helix formed by base pairs attached to a sugar-phosphate backbone.",
+      "credit": "Credit: U.S. National Library of Medicine",
+      "license": "U.S. Government work (U.S. National Library of Medicine), public domain",
+      "labelsInImage": true,
+      "labelBoxes": [
+        {
+          "x1": 235,
+          "y1": 180,
+          "x2": 327,
+          "y2": 203,
+          "text": "Base pairs",
+          "group": 1
+        },
+        {
+          "x1": 454,
+          "y1": 209,
+          "x2": 528,
+          "y2": 233,
+          "text": "Thymine",
+          "group": 2
+        },
+        {
+          "x1": 354,
+          "y1": 210,
+          "x2": 426,
+          "y2": 230,
+          "text": "Adenine",
+          "group": 3
+        },
+        {
+          "x1": 354,
+          "y1": 304,
+          "x2": 427,
+          "y2": 324,
+          "text": "Guanine",
+          "group": 4
+        },
+        {
+          "x1": 454,
+          "y1": 304,
+          "x2": 530,
+          "y2": 327,
+          "text": "Cytosine",
+          "group": 5
+        },
+        {
+          "x1": 304,
+          "y1": 401,
+          "x2": 448,
+          "y2": 441,
+          "text": "Sugar phosphate backbone",
+          "group": 6
+        },
+        {
+          "x1": 304,
+          "y1": 421,
+          "x2": 387,
+          "y2": 440,
+          "group": 6
+        }
+      ],
+      "partLabelGroups": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "regions": [
+      {
+        "partId": "base-pairs",
+        "x1": 92,
+        "y1": 253,
+        "x2": 230,
+        "y2": 289,
+        "confidence": 0.8203125,
+        "outline": "M202 275.5L204.5 275L205.5 279L227.5 278L230 279.5L231 282.5L228.5 288L223.5 289L147.5 288L127.5 290L117.5 289L112 284.5L115.5 279L152.5 279L155.5 281L157.5 278L186.5 279L198.5 278ZM95 253.5L117.5 255L127.5 254L138.5 256L140.5 255L163.5 257L170.5 256L173 257.5L167.5 259L169 261.5L165.5 265L163.5 263L161.5 266L151.5 266L146.5 264L97.5 264L92 261.5L92 254.5ZM181 256.5L199.5 257L203 259.5L203 263.5L201.5 266L196.5 267L175.5 266L173 263.5L176 257.5Z",
+        "ground": {
+          "x1": 90,
+          "y1": 252,
+          "x2": 232,
+          "y2": 291
+        }
+      },
+      {
+        "partId": "thymine",
+        "x1": 432,
+        "y1": 182,
+        "x2": 524,
+        "y2": 199,
+        "confidence": 0.90625,
+        "outline": "M443 182.5L522.5 182L525 184.5L525 195.5L520.5 200L443.5 200L436.5 198L432 193.5L432 188.5L436.5 184L438.5 185Z",
+        "ground": {
+          "x1": 429,
+          "y1": 181,
+          "x2": 525,
+          "y2": 199
+        }
+      },
+      {
+        "partId": "adenine",
+        "x1": 347,
+        "y1": 182,
+        "x2": 438,
+        "y2": 199,
+        "confidence": 0.9140625,
+        "outline": "M348 182.5L434.5 182L438.5 183L439 184.5L436.5 184L432 188.5L432 193.5L436.5 199L354.5 200L349.5 199L347 196.5Z",
+        "ground": {
+          "x1": 345,
+          "y1": 181,
+          "x2": 431,
+          "y2": 199
+        }
+      },
+      {
+        "partId": "guanine",
+        "x1": 346,
+        "y1": 279,
+        "x2": 442,
+        "y2": 296,
+        "confidence": 0.91796875,
+        "outline": "M349 279.5L438.5 279L442 280.5L443 290.5L442 293.5L438.5 296L427.5 297L353.5 297L349.5 296L347 293.5L346 286.5L347 281.5Z",
+        "ground": {
+          "x1": 345,
+          "y1": 277,
+          "x2": 445,
+          "y2": 297
+        }
+      },
+      {
+        "partId": "cytosine",
+        "x1": 440,
+        "y1": 278,
+        "x2": 524,
+        "y2": 296,
+        "confidence": 0.921875,
+        "outline": "M511 278.5L522.5 279L525 281.5L525 293.5L523.5 296L452.5 297L440 295.5L443 290.5L441.5 279Z",
+        "ground": {
+          "x1": 443,
+          "y1": 277,
+          "x2": 525,
+          "y2": 297
+        }
+      },
+      {
+        "partId": "sugar-phosphate-backbone",
+        "x1": 84,
+        "y1": 51,
+        "x2": 239,
+        "y2": 561,
+        "confidence": 0.80859375,
+        "outline": "M180 51.5L189.5 51L200.5 53L211.5 56L217 59.5L217 61.5L214.5 63L194.5 71L188.5 72L184 75.5L188.5 81L191.5 82L214.5 101L230.5 105L237 109.5L240 119.5L239 131.5L231.5 141L223.5 146L162.5 176L138.5 192L127.5 197L126 201.5L123.5 202L119 206.5L119.5 220L117.5 221L106.5 216L101 221.5L105.5 225L112.5 227L120.5 226L122 221.5L121 219.5L127.5 216L129.5 212L133.5 213L139.5 219L186.5 245L192.5 242L191 246.5L193.5 249L207.5 255L209.5 258L213.5 255L215 260.5L231 274.5L231 276.5L235 279.5L237 283.5L239 289.5L239 315.5L237 322.5L226 338.5L226 341.5L231 348.5L231 351.5L235 355.5L239 365.5L240 384.5L238 401.5L233 412.5L233 415.5L229 418.5L227 423.5L220 432.5L209.5 443L192.5 455L184 463.5L198.5 477L206 481.5L207 484.5L210 486.5L227 508.5L235 525.5L239 540.5L240 558.5L236.5 562L228 535.5L222.5 531L207.5 529L203.5 530L198.5 528L182.5 526L178.5 527L174.5 525L167.5 526L157.5 523L136.5 522L130.5 525L122.5 524L113.5 522L94.5 514L90.5 514L87 511.5L85 507.5L86 488.5L91.5 483L106.5 474L112.5 473L116.5 470L120.5 470L121 465.5L118 463.5L123 459.5L121.5 458L117.5 458L113.5 451L95.5 443L87 434.5L84 417.5L88 404.5L96.5 395L106.5 388L161.5 357L180.5 348L194 337.5L185.5 331L182.5 331L167.5 321L143.5 310L126.5 298L122.5 297L115.5 289L109.5 287L100.5 279L88 262.5L85 251.5L85 226.5L87 217.5L96 203.5L96 200.5L90 191.5L86 179.5L86 139.5L90 127.5L97 114.5L115.5 92L140.5 72L162.5 59ZM117 234.5L123.5 234L126.5 238L130.5 234L133 236.5L130.5 237L129.5 239L134.5 238L138.5 242L154.5 247L162 252.5L158.5 255L148.5 256L172.5 257L167 259.5L169 261.5L165.5 265L164.5 263L163 263.5L162 265.5L165.5 269L167.5 267L170.5 270L172.5 267L183.5 267L194 272.5L194 276.5L192.5 278L198.5 278L204.5 275L205.5 279L229.5 279L231 282.5L227 291.5L228 300.5L223.5 305L219.5 305L221 306.5L219.5 308L217 305.5L218 303.5L215.5 304L213.5 302L206.5 304L202.5 301L183.5 302L160.5 300L159 296.5L152 291.5L153 289.5L151.5 288L134.5 290L115.5 288L112 284.5L114 280.5L115.5 279L123 278.5L122 273.5L119.5 271L115.5 270L114 267.5L114.5 265L119 264.5L114.5 263L93.5 263L92 261.5L92 254.5L94.5 253L99 253.5L94 245.5L96 242.5L92 239.5L92 237.5L94.5 235L96.5 237L97.5 235L108.5 235L114.5 237ZM125 114.5L145.5 116L155.5 119L164.5 119L167.5 121L180.5 122L182.5 120L184.5 123L190.5 122L192.5 124L196.5 124L198.5 121L200.5 121L200 123.5L201.5 125L203.5 124L205 127.5L201.5 131L196.5 131L188.5 134L171.5 135L165.5 137L155.5 136L150.5 138L137.5 139L136.5 141L133.5 139L111.5 141L100.5 140L99 138.5L113.5 121L118.5 119L121.5 120L121 117.5ZM188 392.5L196.5 396L204.5 393L221.5 395L226.5 394L227 395.5L224 396.5L221 402.5L211.5 413L207.5 416L201.5 416L198.5 418L188.5 418L189.5 415L182.5 416L161.5 413L159.5 415L153.5 416L149.5 413L144.5 412L131.5 413L117 409.5L124.5 403L132.5 400L136.5 401L140.5 399L142.5 400L144.5 398L161.5 398L163.5 400L169.5 397L182.5 396ZM106 422.5L107.5 422L109.5 424L111.5 422L119.5 422L126.5 424L136.5 423L146.5 425L162.5 424L184.5 426L191 428.5L186.5 433L181.5 434L165.5 446L156.5 446L142.5 439L131.5 437L129.5 435L122.5 434L107.5 428L104 424.5ZM136 148.5L153.5 148L160 150.5L143.5 160L137.5 161L134.5 165L128.5 168L101.5 177L96.5 176L91 166.5L90 161.5L92.5 154L109.5 151L129.5 151ZM191 495.5L194.5 495L198.5 498L215 515.5L210.5 518L200.5 518L196.5 516L183.5 516L169.5 513L147.5 512L139.5 510L131 505.5L131.5 504L144.5 503L146.5 501L152.5 502L157.5 499L171.5 500L173.5 498ZM166 84.5L172.5 85L180.5 92L191.5 98L202 108.5L198.5 112L188.5 113L181.5 111L177.5 112L170.5 109L158.5 110L156.5 107L157 110.5L151.5 112L149.5 107L142.5 106L139 103.5L139 100.5L142.5 97L158.5 88L163.5 87ZM218 358.5L223.5 358L227 364.5L229 378.5L226.5 381L201.5 383L194.5 387L192.5 385L190.5 387L177.5 387L162 384.5L172.5 377L198.5 366L200.5 363L202.5 365L205.5 363L211.5 364L213.5 361L216 361.5L215.5 359ZM163 475.5L169.5 478L172.5 482L175.5 482L179 484.5L164.5 490L151.5 491L145.5 495L141.5 494L141 495.5L143.5 499L138 497.5L140 495.5L139.5 494L132.5 495L124 493.5L128.5 492L130.5 488L131.5 489ZM181 256.5L199.5 257L203 259.5L203 263.5L201.5 266L197.5 267L175.5 266L173 263.5L176 257.5ZM215 311.5L222.5 312L225 315.5L211.5 326L197 318.5L197.5 313L213.5 313Z",
+        "ground": {
+          "x1": 82,
+          "y1": 50,
+          "x2": 246,
+          "y2": 563
+        }
+      }
+    ]
+  }
+}

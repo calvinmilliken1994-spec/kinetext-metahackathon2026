@@ -1,0 +1,229 @@
+{
+  "gen": {
+    "schemaVersion": "log-ladder-v1",
+    "title": "pH acidity ladder",
+    "quantity": "pH",
+    "factor": 10,
+    "factorText": "10-fold",
+    "effectPhrase": "more acidic",
+    "increasing": false,
+    "sourceId": "usgs-wss-ph-and-water",
+    "quote": "pH is reported in \"logarithmic units\". Each number represents a 10-fold change in the acidity/basicness of the water.",
+    "rungs": [
+      {
+        "id": "rung-7-neutral",
+        "label": "Neutral water at pH 7",
+        "value": 7,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-6-example",
+        "label": "Dryville Creek example at pH 6.3",
+        "value": 6.3,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "today's pH value of Dryville Creek is 6.3!"
+      },
+      {
+        "id": "rung-5-example",
+        "label": "Basic limit at pH 14",
+        "value": 14,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH ranges from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-5-6-rainfall",
+        "label": "Normal rainfall at pH 5.6",
+        "value": 5.6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere."
+      },
+      {
+        "id": "rung-2-mine",
+        "label": "Mine drainage at pH 2",
+        "value": 2,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water coming out of an abandoned coal mine can have a pH of 2"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-6-to-5",
+        "fromValue": 6,
+        "toValue": 5.6
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101091135-96787516:log-ladder-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every log-ladder title, page-word field, rung/case count, id and label shape is within the frozen limits"
+      },
+      {
+        "id": "LOG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LOG-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote states the factor in the page's own words: \"10-fold\" occurs in the quote and means 10 per whole step (factor-stated)"
+      },
+      {
+        "id": "LOG-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote names the scale \"pH\" as a whole phrase and the direction of the effect \"more acidic\" (increasing false) is bound to a known scale or stated by the quote (quantity-in-quote)"
+      },
+      {
+        "id": "LOG-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 rung value(s) occur in their own quote as the same whole number, in the form the page prints (rung-values-in-quote)"
+      },
+      {
+        "id": "LOG-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 rung values are distinct points on the scale (rungs-distinct)"
+      },
+      {
+        "id": "LOG-06",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "cases[0] (case-6-to-5): fromValue 6 is not the value of any rung (the rungs sit at 7, 6.3, 14, 5.6, 2) — a case must start on a rung the page states; set fromValue to one of the rung values (cases-valid)",
+        "path": "/cases/0/fromValue",
+        "affected": [
+          "/cases/0/fromValue"
+        ]
+      },
+      {
+        "id": "LOG-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the scale name, the factor wording, the effect phrase and the rung labels appears on the cited page as that whole number (N-01), and every number a rung label states (digits or words) agrees with that rung's value (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "log-ladder-v1: no weakening — every one of the 6 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "63d95a8171de47cc936a476d2fce7299",
+    "usage": {
+      "promptTokens": 6008,
+      "completionTokens": 6343,
+      "reasoningTokens": 5945,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37582,
+    "estCostUSD": 0.03446775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091135-96787516:log-ladder-v1:r2",
+    "componentId": "log-ladder-v1",
+    "title": "pH acidity ladder",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "63d95a8171de47cc936a476d2fce7299",
+      "runId": "job-20261101091135-96787516",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-11-01T09:15:08.531Z"
+    },
+    "seed": 3010217320,
+    "quantity": "pH",
+    "factor": 10,
+    "factorText": "10-fold",
+    "effectPhrase": "more acidic",
+    "increasing": false,
+    "sourceId": "usgs-wss-ph-and-water",
+    "quote": "pH is reported in \"logarithmic units\". Each number represents a 10-fold change in the acidity/basicness of the water.",
+    "rungs": [
+      {
+        "id": "rung-7-neutral",
+        "label": "Neutral water at pH 7",
+        "value": 7,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-6-example",
+        "label": "Dryville Creek example at pH 6.3",
+        "value": 6.3,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "today's pH value of Dryville Creek is 6.3!"
+      },
+      {
+        "id": "rung-5-example",
+        "label": "Basic limit at pH 14",
+        "value": 14,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH ranges from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-5-6-rainfall",
+        "label": "Normal rainfall at pH 5.6",
+        "value": 5.6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere."
+      },
+      {
+        "id": "rung-2-mine",
+        "label": "Mine drainage at pH 2",
+        "value": 2,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water coming out of an abandoned coal mine can have a pH of 2"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-6-to-5",
+        "fromValue": 6,
+        "toValue": 5.6
+      }
+    ]
+  }
+}

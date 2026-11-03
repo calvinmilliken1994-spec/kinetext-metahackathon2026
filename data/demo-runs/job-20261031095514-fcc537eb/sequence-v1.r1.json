@@ -1,0 +1,185 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How census data become new district lines",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the order the page uses from census to redistricting",
+    "steps": [
+      {
+        "id": "census-conducted",
+        "label": "Bureau conducts decennial census",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Every 10 years, the U.S. Census Bureau conducts a census to determine the number of people living in the United States.",
+        "orderHint": ""
+      },
+      {
+        "id": "census-day-april",
+        "label": "Census held on April first",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The U.S. Census Bureau conducts the census in years ending in zero, on Census Day, which is April 1.",
+        "orderHint": ""
+      },
+      {
+        "id": "notify-congress-subjects",
+        "label": "Bureau notifies Congress of subjects",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Title 13 requires the Census Bureau to notify Congress of the planned subjects for the census no later than three years before that census",
+        "orderHint": ""
+      },
+      {
+        "id": "apportion-seats-states",
+        "label": "Apportion seats among states",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Apportionment is the process of dividing the seats in the House of Representatives among the 50 states",
+        "orderHint": ""
+      },
+      {
+        "id": "redraw-districts",
+        "label": "State officials redraw district boundaries",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095514-fcc537eb:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "1f225814381b4b11b364b36099be07c8",
+    "usage": {
+      "promptTokens": 3209,
+      "completionTokens": 13405,
+      "reasoningTokens": 13058,
+      "cachedTokens": 0
+    },
+    "latencyMs": 65419,
+    "estCostUSD": 0.0609825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095514-fcc537eb:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How census data become new district lines",
+    "sources": [
+      {
+        "id": "census-about-decennial-census",
+        "title": "About the Decennial Census of Population and Housing — U.S. Census Bureau",
+        "locator": "https://www.census.gov/programs-surveys/decennial-census/about.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, 'Decennial Census of Population and Housing, 'About the Decennial Census of Population and Housing''. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotations of the U.S. Constitution are in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "1c9559b79c96a4eccd7d2e58876da4b72cbba0c2de2e199390b7832abe710840"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1f225814381b4b11b364b36099be07c8",
+      "runId": "job-20261031095514-fcc537eb",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:57:45.064Z"
+    },
+    "seed": 4281689205,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the order the page uses from census to redistricting",
+    "steps": [
+      {
+        "id": "census-conducted",
+        "label": "Bureau conducts decennial census",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Every 10 years, the U.S. Census Bureau conducts a census to determine the number of people living in the United States.",
+        "orderHint": ""
+      },
+      {
+        "id": "census-day-april",
+        "label": "Census held on April first",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The U.S. Census Bureau conducts the census in years ending in zero, on Census Day, which is April 1.",
+        "orderHint": ""
+      },
+      {
+        "id": "notify-congress-subjects",
+        "label": "Bureau notifies Congress of subjects",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Title 13 requires the Census Bureau to notify Congress of the planned subjects for the census no later than three years before that census",
+        "orderHint": ""
+      },
+      {
+        "id": "apportion-seats-states",
+        "label": "Apportion seats among states",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Apportionment is the process of dividing the seats in the House of Representatives among the 50 states",
+        "orderHint": ""
+      },
+      {
+        "id": "redraw-districts",
+        "label": "State officials redraw district boundaries",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

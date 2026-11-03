@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recall facts about proposals and ratification",
+    "cards": [
+      {
+        "id": "proposed-count",
+        "stem": "How many amendments were originally proposed to the constitution?",
+        "options": [
+          "12 amendments",
+          "27 amendments",
+          "3 amendments",
+          "2 amendments"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791.",
+        "hint": ""
+      },
+      {
+        "id": "rights-focus",
+        "stem": "What did the amendments define in relation to the newly established government?",
+        "options": [
+          "citizens' rights",
+          "military ranks",
+          "trade agreements",
+          "tax codes"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They defined citizens' rights in relation to the newly established government under the Constitution.",
+        "hint": ""
+      },
+      {
+        "id": "opponents-fear",
+        "stem": "What did opponents charge the draft constitution would open the way to?",
+        "options": [
+          "tyranny",
+          "prosperity",
+          "unity",
+          "stability"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government.",
+        "hint": ""
+      },
+      {
+        "id": "ratification-when",
+        "stem": "When were Articles 3 to 12 ratified to constitute the first 10 amendments?",
+        "options": [
+          "December 15, 1791",
+          "September 25, 1789",
+          "May 7, 1992",
+          "the following year"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101354-3e1508db:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "040e2a32c9a64476969f03ee7f127088",
+    "usage": {
+      "promptTokens": 2583,
+      "completionTokens": 8340,
+      "reasoningTokens": 7992,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52879,
+    "estCostUSD": 0.03867375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101354-3e1508db:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Recall facts about proposals and ratification",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "040e2a32c9a64476969f03ee7f127088",
+      "runId": "job-20261031101354-3e1508db",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:15:49.704Z"
+    },
+    "seed": 3755740296,
+    "cards": [
+      {
+        "id": "proposed-count",
+        "stem": "How many amendments were originally proposed to the constitution?",
+        "options": [
+          "12 amendments",
+          "27 amendments",
+          "3 amendments",
+          "2 amendments"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791.",
+        "hint": ""
+      },
+      {
+        "id": "rights-focus",
+        "stem": "What did the amendments define in relation to the newly established government?",
+        "options": [
+          "citizens' rights",
+          "military ranks",
+          "trade agreements",
+          "tax codes"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They defined citizens' rights in relation to the newly established government under the Constitution.",
+        "hint": ""
+      },
+      {
+        "id": "opponents-fear",
+        "stem": "What did opponents charge the draft constitution would open the way to?",
+        "options": [
+          "tyranny",
+          "prosperity",
+          "unity",
+          "stability"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government.",
+        "hint": ""
+      },
+      {
+        "id": "ratification-when",
+        "stem": "When were Articles 3 to 12 ratified to constitute the first 10 amendments?",
+        "options": [
+          "December 15, 1791",
+          "September 25, 1789",
+          "May 7, 1992",
+          "the following year"
+        ],
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures",
+        "hint": ""
+      }
+    ]
+  }
+}

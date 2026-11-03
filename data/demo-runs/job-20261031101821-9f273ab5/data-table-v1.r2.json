@@ -1,0 +1,459 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Electoral vote allocations from the 2020 census",
+    "labelHeader": "State",
+    "columns": [
+      {
+        "header": "2024",
+        "unit": "votes",
+        "numeric": true,
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "They are effective for the 2024 and 2028 presidential elections."
+      },
+      {
+        "header": "2028",
+        "unit": "votes",
+        "numeric": true,
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "They are effective for the 2024 and 2028 presidential elections."
+      }
+    ],
+    "rows": [
+      {
+        "label": "Alabama",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "9",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Alabama - 9 votes"
+          },
+          {
+            "value": "9",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Alabama - 9 votes"
+          }
+        ]
+      },
+      {
+        "label": "Kentucky",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "8",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Kentucky - 8 votes"
+          },
+          {
+            "value": "8",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Kentucky - 8 votes"
+          }
+        ]
+      },
+      {
+        "label": "North Dakota",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "3",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "North Dakota - 3 votes"
+          },
+          {
+            "value": "3",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "North Dakota - 3 votes"
+          }
+        ]
+      },
+      {
+        "label": "California",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "California - 54 votes",
+        "values": [
+          {
+            "value": "54",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "California - 54 votes"
+          },
+          {
+            "value": "54",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "California - 54 votes"
+          }
+        ]
+      },
+      {
+        "label": "Texas",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Texas - 40 votes",
+        "values": [
+          {
+            "value": "40",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Texas - 40 votes"
+          },
+          {
+            "value": "40",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Texas - 40 votes"
+          }
+        ]
+      },
+      {
+        "label": "Florida",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Florida - 30 votes",
+        "values": [
+          {
+            "value": "30",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Florida - 30 votes"
+          },
+          {
+            "value": "30",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Florida - 30 votes"
+          }
+        ]
+      },
+      {
+        "label": "New York",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "New York - 28 votes",
+        "values": [
+          {
+            "value": "28",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "New York - 28 votes"
+          },
+          {
+            "value": "28",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "New York - 28 votes"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "electoral-votes-lookup-alabama",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 0
+      },
+      {
+        "id": "electoral-votes-largest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "electoral-votes-smallest",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031101821-9f273ab5:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 23 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 14 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 7 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"electoral-votes-lookup-alabama\" (lookup) → rows[0] \"9\"; \"electoral-votes-largest\" (largest) → rows[3] \"54\"; \"electoral-votes-smallest\" (smallest) → rows[2] \"3\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 0 (\"2024\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 18 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "57675859eef74d5caa25988d5a9a5876",
+    "usage": {
+      "promptTokens": 7722,
+      "completionTokens": 4569,
+      "reasoningTokens": 3754,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20288,
+    "estCostUSD": 0.02907075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101821-9f273ab5:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Electoral vote allocations from the 2020 census",
+    "sources": [
+      {
+        "id": "nara-electoral-vote-allocation",
+        "title": "Distribution of Electoral Votes — National Archives, U.S. Electoral College",
+        "locator": "https://www.archives.gov/electoral-college/allocation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'Distribution of Electoral Votes'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "272defde44ff3d32da7dd3f454071e01b7e006aae3e8e661794bad905e992589"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "57675859eef74d5caa25988d5a9a5876",
+      "runId": "job-20261031101821-9f273ab5",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:20:31.469Z"
+    },
+    "seed": 3246273057,
+    "labelHeader": "State",
+    "columns": [
+      {
+        "header": "2024",
+        "unit": "votes",
+        "numeric": true,
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "They are effective for the 2024 and 2028 presidential elections."
+      },
+      {
+        "header": "2028",
+        "unit": "votes",
+        "numeric": true,
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "They are effective for the 2024 and 2028 presidential elections."
+      }
+    ],
+    "rows": [
+      {
+        "label": "Alabama",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "9",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Alabama - 9 votes"
+          },
+          {
+            "value": "9",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Alabama - 9 votes"
+          }
+        ]
+      },
+      {
+        "label": "Kentucky",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "8",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Kentucky - 8 votes"
+          },
+          {
+            "value": "8",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Kentucky - 8 votes"
+          }
+        ]
+      },
+      {
+        "label": "North Dakota",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Alabama - 9 votes | Kentucky - 8 votes | North Dakota - 3 votes",
+        "values": [
+          {
+            "value": "3",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "North Dakota - 3 votes"
+          },
+          {
+            "value": "3",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "North Dakota - 3 votes"
+          }
+        ]
+      },
+      {
+        "label": "California",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "California - 54 votes",
+        "values": [
+          {
+            "value": "54",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "California - 54 votes"
+          },
+          {
+            "value": "54",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "California - 54 votes"
+          }
+        ]
+      },
+      {
+        "label": "Texas",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Texas - 40 votes",
+        "values": [
+          {
+            "value": "40",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Texas - 40 votes"
+          },
+          {
+            "value": "40",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Texas - 40 votes"
+          }
+        ]
+      },
+      {
+        "label": "Florida",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Florida - 30 votes",
+        "values": [
+          {
+            "value": "30",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Florida - 30 votes"
+          },
+          {
+            "value": "30",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "Florida - 30 votes"
+          }
+        ]
+      },
+      {
+        "label": "New York",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "New York - 28 votes",
+        "values": [
+          {
+            "value": "28",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "New York - 28 votes"
+          },
+          {
+            "value": "28",
+            "sourceId": "nara-electoral-vote-allocation",
+            "quote": "New York - 28 votes"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "electoral-votes-lookup-alabama",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 0
+      },
+      {
+        "id": "electoral-votes-largest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "electoral-votes-smallest",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

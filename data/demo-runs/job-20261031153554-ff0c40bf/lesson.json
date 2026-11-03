@@ -1,0 +1,117 @@
+{
+  "jobId": "job-20261031153554-ff0c40bf",
+  "analysisRef": "job-20261031153554-ff0c40bf/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153554-ff0c40bf:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How Congress drafted, revised and signed the independence declaration",
+    "sources": [
+      {
+        "id": "nara-declaration-of-independence",
+        "title": "Declaration of Independence (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/declaration-of-independence",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Declaration of Independence (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "f0322f21a85ef6996de0972f6543cc8ed8e3393aed20b7d086cada9260c1c668"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4db56a604f064c12891bc665a24ed315",
+      "runId": "job-20261031153554-ff0c40bf",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T15:36:37.315Z"
+    },
+    "seed": 1989448482,
+    "headline": "How Congress drafted, revised and signed the independence declaration",
+    "keyPoints": [
+      {
+        "id": "committee-appointment",
+        "point": "Congress appointed a committee of five on June 10 to draft a statement of independence for the colonies.",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies."
+      },
+      {
+        "id": "jefferson-draft",
+        "point": "Jefferson drafted the statement between June 11 and 28 after submitting drafts to Adams and Franklin for changes.",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Jefferson drafted the statement between June 11 and 28, submitted drafts to Adams and Franklin who made some changes"
+      },
+      {
+        "id": "adoption-july4",
+        "point": "The Continental Congress adopted the Declaration on July 4 1776 after completing revisions.",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776."
+      },
+      {
+        "id": "engrossing-order",
+        "point": "Congress ordered on July 19 that the Declaration be engrossed on parchment with a new title for signing.",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "On July 19th, Congress ordered that the Declaration be engrossed on parchment with a new title,"
+      },
+      {
+        "id": "signing-august2",
+        "point": "Although not all delegates were present on August 2, 56 delegates eventually signed the engrossed document.",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Although all delegates were not present on August 2nd, 56 delegates eventually signed the document."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "continental-congress",
+        "term": "Continental Congress",
+        "gloss": "governing body that adopted the Declaration on July 4",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776."
+      },
+      {
+        "id": "committee-of-five",
+        "term": "committee of five",
+        "gloss": "group appointed to draft a statement of independence for the colonies",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies."
+      },
+      {
+        "id": "engrossed",
+        "term": "engrossed",
+        "gloss": "copied in large hand on parchment for delegates to sign",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it."
+      },
+      {
+        "id": "engrossing",
+        "term": "Engrossing",
+        "gloss": "process of copying a document in a large hand",
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Engrossing is the process of copying an official document in a large hand."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-declaration-of-independence-job-20261031153554-ff0c40bf",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031153554-ff0c40bf:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: total-signers-card (Q-06).",
+      "revision": 1
+    }
+  ]
+}

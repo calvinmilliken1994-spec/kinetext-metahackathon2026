@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031095514-fcc537eb",
+  "analysisRef": "job-20261031095514-fcc537eb/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095514-fcc537eb:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How the ten year census shapes House seats and district lines",
+    "sources": [
+      {
+        "id": "census-about-decennial-census",
+        "title": "About the Decennial Census of Population and Housing — U.S. Census Bureau",
+        "locator": "https://www.census.gov/programs-surveys/decennial-census/about.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, 'Decennial Census of Population and Housing, 'About the Decennial Census of Population and Housing''. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotations of the U.S. Constitution are in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "1c9559b79c96a4eccd7d2e58876da4b72cbba0c2de2e199390b7832abe710840"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "88ed47f527084f1d94ab0b1a39db352a",
+      "runId": "job-20261031095514-fcc537eb",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:56:39.641Z"
+    },
+    "seed": 3727530597,
+    "headline": "How the ten year census shapes House seats and district lines",
+    "keyPoints": [
+      {
+        "id": "census-timing",
+        "point": "The census is conducted every ten years on April 1 in years ending in zero.",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The U.S. Census Bureau conducts the census in years ending in zero, on Census Day, which is April 1."
+      },
+      {
+        "id": "census-apportionment-use",
+        "point": "Census data are used to apportion House seats among the states based on population.",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The data collected by the decennial census are used to apportion the number of seats each state has in the U.S. House of Representatives."
+      },
+      {
+        "id": "constitution-enumeration",
+        "point": "The Constitution directs that an enumeration be taken every ten years.",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The Constitution of the United States, Article I, Sections 2 and 9, directs that a census or enumeration be taken."
+      },
+      {
+        "id": "redistricting-after-census",
+        "point": "Redistricting occurs after each census when state officials redraw congressional district boundaries.",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "apportionment",
+        "term": "apportionment",
+        "gloss": "dividing House seats among the states based on population figures",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Apportionment is the process of dividing the seats in the House of Representatives among the 50 states"
+      },
+      {
+        "id": "redistricting",
+        "term": "redistricting",
+        "gloss": "process where state officials redraw district boundaries after population shifts",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census."
+      },
+      {
+        "id": "enumeration",
+        "term": "enumeration",
+        "gloss": "census count that the Constitution directs be taken",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The Constitution of the United States, Article I, Sections 2 and 9, directs that a census or enumeration be taken."
+      },
+      {
+        "id": "decennial-census",
+        "term": "decennial census",
+        "gloss": "census conducted every ten years to apportion seats based on collected population data",
+        "sourceId": "census-about-decennial-census",
+        "quote": "The data collected by the decennial census are used to apportion the number of seats each state has in the U.S. House of Representatives."
+      },
+      {
+        "id": "title-13",
+        "term": "Title 13",
+        "gloss": "federal law that requires congressional notification of census subjects years in advance",
+        "sourceId": "census-about-decennial-census",
+        "quote": "Title 13 requires the Census Bureau to notify Congress of the planned subjects for the census no later than three years before that census"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031095514-fcc537eb:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031095514-fcc537eb:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

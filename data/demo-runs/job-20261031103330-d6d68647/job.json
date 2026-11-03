@@ -1,0 +1,51 @@
+{
+  "jobId": "job-20261031103330-d6d68647",
+  "sourceId": "nasa-grc-lift-equation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:33:30.148Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.14972,
+  "reservedUnknownUSD": 0,
+  "engine": "lift-equation-v1",
+  "revisions": 1,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:33:30.148Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nasa-grc-lift-equation-job-20261031103330-d6d68647",
+  "publishable": true,
+  "checksPassed": 16,
+  "checksTotal": 16,
+  "publishedRevision": 1,
+  "finishedAt": "2026-10-31T10:35:38.735Z"
+}

@@ -59,12 +59,19 @@ import type { ApiMode, RelayControl } from './relay.ts';
 import { buildRelayJobClients } from './relay-clients.ts';
 import { staticDirIfBuilt } from './static.ts';
 import { createApiServer } from './server.ts';
+import { seedDemoRuns } from './demo-seed.ts';
 import type { ApiOptions } from './server.ts';
 
 const portEnv: string | undefined = process.env.PORT;
 const port: number =
   portEnv !== undefined && /^[0-9]+$/.test(portEnv) && Number(portEnv) > 0 ? Number(portEnv) : 8787;
 const storageDir: string = process.env.STORAGE_DIR ?? 'storage';
+
+// A fresh clone has no recorded lessons (storage/ is gitignored): copy the shipped demo runs in, never overwriting.
+{
+  const seeded = seedDemoRuns(storageDir);
+  if (seeded.copied > 0) console.log(`Added ${seeded.copied} recorded lesson run(s) from data/demo-runs`);
+}
 
 // Stage 11: which way this server runs (relay | direct | readonly). Direct mode is exactly today's.
 let mode: ApiMode;

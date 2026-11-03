@@ -1,0 +1,213 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Building a numeric history from atoms and fossils",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order described in the text.",
+    "steps": [
+      {
+        "id": "minerals-contain-radioactive-elements",
+        "label": "Minerals contain radioactive elements for dating",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Now we can use minerals that contain naturally occurring radioactive elements to calculate the numeric age of a rock in years.",
+        "orderHint": ""
+      },
+      {
+        "id": "parent-to-daughter-constant-rate",
+        "label": "Parent atoms change to daughter at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life.",
+        "orderHint": ""
+      },
+      {
+        "id": "half-life-defines-decay-time",
+        "label": "Half-life sets time for half to decay",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+        "orderHint": ""
+      },
+      {
+        "id": "lab-measures-parent-daughter-atoms",
+        "label": "Laboratory counts parent and daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Precise laboratory measurements of the number of remaining atoms of the parent and the number of atoms of the new daughter produced are used",
+        "orderHint": ""
+      },
+      {
+        "id": "isotopic-techniques-date-mineral",
+        "label": "Isotopic methods date mineral formation",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed.",
+        "orderHint": ""
+      },
+      {
+        "id": "datable-rock-paired-with-fossils",
+        "label": "Datable rock paired with fossil relative age",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "a rock that can be dated isotopically is found together with rocks that can be assigned relative ages because of their fossils.",
+        "orderHint": ""
+      },
+      {
+        "id": "many-samples-assign-boundary-age",
+        "label": "Many samples studied to assign boundary age",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110819-77ec442f:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 7 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 7 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5e2ea058f4854a659a4750850049950d",
+    "usage": {
+      "promptTokens": 3053,
+      "completionTokens": 12615,
+      "reasoningTokens": 12121,
+      "cachedTokens": 0
+    },
+    "latencyMs": 62687,
+    "estCostUSD": 0.05743,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110819-77ec442f:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Building a numeric history from atoms and fossils",
+    "sources": [
+      {
+        "id": "usgs-fossils-numeric-time-scale",
+        "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+        "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5e2ea058f4854a659a4750850049950d",
+      "runId": "job-20261031110819-77ec442f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:10:28.628Z"
+    },
+    "seed": 3659019904,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order described in the text.",
+    "steps": [
+      {
+        "id": "minerals-contain-radioactive-elements",
+        "label": "Minerals contain radioactive elements for dating",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Now we can use minerals that contain naturally occurring radioactive elements to calculate the numeric age of a rock in years.",
+        "orderHint": ""
+      },
+      {
+        "id": "parent-to-daughter-constant-rate",
+        "label": "Parent atoms change to daughter at constant rate",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The change from parent to daughter happens at a constant rate, called the half-life.",
+        "orderHint": ""
+      },
+      {
+        "id": "half-life-defines-decay-time",
+        "label": "Half-life sets time for half to decay",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms.",
+        "orderHint": ""
+      },
+      {
+        "id": "lab-measures-parent-daughter-atoms",
+        "label": "Laboratory counts parent and daughter atoms",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Precise laboratory measurements of the number of remaining atoms of the parent and the number of atoms of the new daughter produced are used",
+        "orderHint": ""
+      },
+      {
+        "id": "isotopic-techniques-date-mineral",
+        "label": "Isotopic methods date mineral formation",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Isotopic techniques are used to measure the time at which a particular mineral within a rock was formed.",
+        "orderHint": ""
+      },
+      {
+        "id": "datable-rock-paired-with-fossils",
+        "label": "Datable rock paired with fossil relative age",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "a rock that can be dated isotopically is found together with rocks that can be assigned relative ages because of their fossils.",
+        "orderHint": ""
+      },
+      {
+        "id": "many-samples-assign-boundary-age",
+        "label": "Many samples studied to assign boundary age",
+        "sourceId": "usgs-fossils-numeric-time-scale",
+        "quote": "Many samples, usually from several different places, must be studied before assigning a numeric age to a boundary on the geologic time scale.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

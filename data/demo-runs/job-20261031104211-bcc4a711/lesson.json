@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031104211-bcc4a711",
+  "analysisRef": "job-20261031104211-bcc4a711/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104211-bcc4a711:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "DNA sequencing reveals base order to explore genes and disease",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fd3f1c1d942e4ea09e0e60d5d3432641",
+      "runId": "job-20261031104211-bcc4a711",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:43:10.068Z"
+    },
+    "seed": 2551281582,
+    "headline": "DNA sequencing reveals base order to explore genes and disease",
+    "keyPoints": [
+      {
+        "id": "define-sequencing",
+        "point": "DNA sequencing determines the order of bases in a DNA molecule and reveals genetic information.",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule."
+      },
+      {
+        "id": "base-pairing",
+        "point": "Adenine always pairs with thymine and cytosine always pairs with guanine in the double helix.",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "genome-size",
+        "point": "The human genome contains about 3 billion base pairs that hold instructions for building a human being.",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "nanopore-method",
+        "point": "Nanopore sequencing involves threading single strands through tiny pores in a membrane to read bases one at a time.",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "dna-sequencing",
+        "term": "DNA sequencing",
+        "gloss": "method that determines the order of chemical bases in a molecule",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule."
+      },
+      {
+        "id": "base-pairs",
+        "term": "base pairs",
+        "gloss": "paired bases that provide instructions for a human being",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "genome",
+        "term": "genome",
+        "gloss": "complete set of base pairs that contains instructions for maintaining a human being",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "The human genome contains about 3 billion base pairs that spell out the instructions for making and maintaining a human being."
+      },
+      {
+        "id": "nanopore",
+        "term": "Nanopore",
+        "gloss": "tiny pores in a membrane for threading single strands",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104211-bcc4a711:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: how-large-human-genome (Q-06).",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031104211-bcc4a711:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

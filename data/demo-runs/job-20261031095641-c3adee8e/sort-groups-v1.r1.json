@@ -1,0 +1,266 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sorting income sources for poverty status",
+    "groups": [
+      {
+        "id": "counted-income",
+        "label": "The income used to compute poverty"
+      },
+      {
+        "id": "not-counted",
+        "label": "Money income does not include"
+      }
+    ],
+    "items": [
+      {
+        "id": "dividends",
+        "label": "Dividends",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Dividends"
+      },
+      {
+        "id": "earnings",
+        "label": "Earnings",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Earnings"
+      },
+      {
+        "id": "unemployment-compensation",
+        "label": "Unemployment compensation",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Unemployment compensation"
+      },
+      {
+        "id": "social-security",
+        "label": "Social Security",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Social Security"
+      },
+      {
+        "id": "child-support",
+        "label": "Child support",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Child support"
+      },
+      {
+        "id": "capital-gains",
+        "label": "Capital gains or losses",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Capital gains or losses"
+      },
+      {
+        "id": "noncash-benefits-item",
+        "label": "Noncash benefits",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Noncash benefits (e.g. food stamps and housing subsidies)"
+      },
+      {
+        "id": "tax-credits",
+        "label": "Tax credits",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Tax credits"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095641-c3adee8e:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 8 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "items[0] (dividends): the group label \"The income used to compute poverty\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[1] (earnings): the group label \"The income used to compute poverty\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[2] (unemployment-compensation): the group label \"The income used to compute poverty\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[3] (social-security): the group label \"The income used to compute poverty\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[4] (child-support): the group label \"The income used to compute poverty\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[5] (capital-gains): the group label \"Money income does not include\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[6] (noncash-benefits-item): the group label \"Money income does not include\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote); items[7] (tax-credits): the group label \"Money income does not include\" occurs neither in the quote nor in the same paragraph as the located quote span (item-and-group-in-quote)",
+        "path": "/items/0/groupId",
+        "affected": [
+          "/items/0/groupId",
+          "/items/0/quote",
+          "/items/1/groupId",
+          "/items/1/quote",
+          "/items/2/groupId",
+          "/items/2/quote",
+          "/items/3/groupId",
+          "/items/3/quote",
+          "/items/4/groupId",
+          "/items/4/quote",
+          "/items/5/groupId",
+          "/items/5/quote",
+          "/items/6/groupId",
+          "/items/6/quote",
+          "/items/7/groupId",
+          "/items/7/quote"
+        ]
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 8 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "8b90c13241a1484a91fc8ab09226960e",
+    "usage": {
+      "promptTokens": 3500,
+      "completionTokens": 13261,
+      "reasoningTokens": 12915,
+      "cachedTokens": 0
+    },
+    "latencyMs": 58155,
+    "estCostUSD": 0.06073425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095641-c3adee8e:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sorting income sources for poverty status",
+    "sources": [
+      {
+        "id": "census-poverty-measures",
+        "title": "How the Census Bureau Measures Poverty — U.S. Census Bureau",
+        "locator": "https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, Income and Poverty, 'How the Census Bureau Measures Poverty'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States.' The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4596ea891842c2ee0ed4b34986ca579ae50aef29dbbb308f0ce50b4e3cff0b5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "8b90c13241a1484a91fc8ab09226960e",
+      "runId": "job-20261031095641-c3adee8e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:59:13.788Z"
+    },
+    "seed": 3223632406,
+    "groups": [
+      {
+        "id": "counted-income",
+        "label": "The income used to compute poverty"
+      },
+      {
+        "id": "not-counted",
+        "label": "Money income does not include"
+      }
+    ],
+    "items": [
+      {
+        "id": "dividends",
+        "label": "Dividends",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Dividends"
+      },
+      {
+        "id": "earnings",
+        "label": "Earnings",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Earnings"
+      },
+      {
+        "id": "unemployment-compensation",
+        "label": "Unemployment compensation",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Unemployment compensation"
+      },
+      {
+        "id": "social-security",
+        "label": "Social Security",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Social Security"
+      },
+      {
+        "id": "child-support",
+        "label": "Child support",
+        "groupId": "counted-income",
+        "sourceId": "census-poverty-measures",
+        "quote": "Child support"
+      },
+      {
+        "id": "capital-gains",
+        "label": "Capital gains or losses",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Capital gains or losses"
+      },
+      {
+        "id": "noncash-benefits-item",
+        "label": "Noncash benefits",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Noncash benefits (e.g. food stamps and housing subsidies)"
+      },
+      {
+        "id": "tax-credits",
+        "label": "Tax credits",
+        "groupId": "not-counted",
+        "sourceId": "census-poverty-measures",
+        "quote": "Tax credits"
+      }
+    ]
+  }
+}

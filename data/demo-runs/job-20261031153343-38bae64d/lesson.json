@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031153343-38bae64d",
+  "analysisRef": "job-20261031153343-38bae64d/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153343-38bae64d:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How compound interest earns interest on interest over time",
+    "sources": [
+      {
+        "id": "investorgov-what-is-compound-interest",
+        "title": "What is compound interest? — Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy)",
+        "locator": "https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy), 'What is compound interest?'. Investor.gov is an SEC website and its privacy policy refers users to SEC.gov policy; per the SEC 'Website Dissemination' policy, 'Information presented on sec.gov is considered public information and may be copied or further distributed by users of the web site without the SEC's permission. Please consider appropriate citation to the SEC as the source.' The page's own disclaimer reads: 'The Office of Investor Education and Advocacy has provided this information as a service to investors. It is neither a legal interpretation nor a statement of SEC policy.' The U.S. Securities and Exchange Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "d13f49be2c935e2a5982c1304925d5598d996864a13d60a7614e9e3505480649"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9d97863ca29f4e47b38e47440a4613e9",
+      "runId": "job-20261031153343-38bae64d",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T15:34:20.095Z"
+    },
+    "seed": 2652796406,
+    "headline": "How compound interest earns interest on interest over time",
+    "keyPoints": [
+      {
+        "id": "point-1",
+        "point": "Compound interest means you earn interest on interest already earned from the deposit.",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Compound interest is the interest you earn on interest."
+      },
+      {
+        "id": "point-2",
+        "point": "A $100 deposit that earns 5% interest each year grows to $105 at the end of the first year.",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "if you have $100 and it earns 5% interest each year, you'll have $105 at the end of the first year."
+      },
+      {
+        "id": "point-3",
+        "point": "In the second year the balance reaches $110.25 because you also earn interest on the earlier $5 of interest.",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "At the end of the second year, you'll have $110.25."
+      },
+      {
+        "id": "point-4",
+        "point": "The Rule of 72 estimates doubling time when you divide 72 by the expected rate of return.",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Simply divide the number 72 by your investment’s expected rate of return (interest rate)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-compound-interest",
+        "term": "Compound interest",
+        "gloss": "interest that is earned on interest already added to the account",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Compound interest is the interest you earn on interest."
+      },
+      {
+        "id": "term-interest-rate",
+        "term": "interest rate",
+        "gloss": "expected rate of return used to estimate investment growth",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Simply divide the number 72 by your investment’s expected rate of return (interest rate)."
+      },
+      {
+        "id": "term-rule-of-72",
+        "term": "Rule of 72",
+        "gloss": "way to estimate how long an investment will take to double",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "The Rule of 72 is a great way to estimate how your investment will grow over time."
+      },
+      {
+        "id": "term-investment",
+        "term": "investment",
+        "gloss": "money placed to earn a return and grow over time",
+        "sourceId": "investorgov-what-is-compound-interest",
+        "quote": "Assuming an expected rate of return of 9%, your investment will double in value about every 8 years (72 divided by 9 equals 8)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compound-interest-v1",
+      "specId": "investorgov-what-is-compound-interest-job-20261031153343-38bae64",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031153343-38bae64d:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

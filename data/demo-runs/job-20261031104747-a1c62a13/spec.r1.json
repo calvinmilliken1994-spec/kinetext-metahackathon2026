@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nist-ai-risk-management-framework-job-20261031104747-a1c62a13",
+  "title": "Development of the AI Risk Management Framework",
+  "learningObjectives": [
+    "Students learn that the framework is intended for voluntary use to improve trustworthiness across design, development, use, and evaluation.",
+    "Students learn that the framework helps manage risks to individuals, organizations, and society associated with artificial intelligence.",
+    "Students learn that a generative AI profile helps organizations identify unique risks and proposes actions aligned to their goals."
+  ],
+  "sources": [
+    {
+      "id": "nist-ai-risk-management-framework",
+      "title": "AI Risk Management Framework — NIST Information Technology Laboratory, AI Program",
+      "locator": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NIST Information Technology Laboratory, AI Program, 'AI Risk Management Framework'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+      "sha256": "d76ad1bde2388b029d9a4d6e3dc33f0cfc73a8131ca1a4e1343cbf828a44c8d1"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "The framework is intended for voluntary use and emphasizes incorporating trustworthiness considerations throughout the AI lifecycle.",
+      "evidence": [
+        {
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "to improve the ability to incorporate trustworthiness considerations into the design, development, use, and evaluation"
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "The framework aims to better manage risks to individuals, organizations, and society associated with artificial intelligence.",
+      "evidence": [
+        {
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "framework to better manage risks to individuals, organizations, and society associated with artificial intelligence (AI)"
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "A generative AI profile helps organizations identify unique risks posed by generative AI and proposes actions for risk management.",
+      "evidence": [
+        {
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "unique risks posed by generative AI and proposes actions for generative AI risk management that best aligns"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "AI RMF Request for Information issued",
+        "year": 2021,
+        "month": 7,
+        "day": 29,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "• AI Risk Management Framework Request for Information (July 29, 2021)"
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Draft Taxonomy of AI Risk released",
+        "year": 2021,
+        "month": 10,
+        "day": 15,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "• Draft -Taxonomy of AI Risk (October 15, 2021)"
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Concept paper guiding AI RMF development",
+        "year": 2021,
+        "month": 12,
+        "day": 13,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "• Concept paper to help guide development of the AI Risk Management Framework (December 13, 2021)"
+          }
+        ]
+      },
+      {
+        "id": "e4",
+        "label": "Initial draft of AI RMF published",
+        "year": 2022,
+        "month": 3,
+        "day": 17,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "• Initial draft of the AI Risk Management Framework (March 17, 2022)"
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "Second draft of AI RMF published",
+        "year": 2022,
+        "month": 8,
+        "day": 18,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "• Second draft of the AI Risk Management Framework (August 18, 2022)"
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Generative AI Profile (NIST-AI-600-1) released",
+        "year": 2024,
+        "month": 7,
+        "day": 26,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "On July 26, 2024, NIST released NIST-AI-600-1, Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile."
+          }
+        ]
+      },
+      {
+        "id": "e7",
+        "label": "Concept note for AI RMF Critical Infrastructure Profile",
+        "year": 2026,
+        "month": 4,
+        "day": 7,
+        "evidence": [
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "On April 7, 2026, NIST released a concept note for an AI RMF Profile on Trustworthy AI in Critical Infrastructure."
+          },
+          {
+            "sourceId": "nist-ai-risk-management-framework",
+            "quote": "The profile will guide critical infrastructure operators towards specific risk management practices to consider when engaging AI-enabled capabilities."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "AI Risk Management Framework",
+      "settingLabel": "Trustworthy AI Development, 2021-2026"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "RFI before Initial draft",
+      "earlierEventId": "e1",
+      "laterEventId": "e4"
+    },
+    {
+      "name": "Concept paper before Second draft",
+      "earlierEventId": "e3",
+      "laterEventId": "e5"
+    },
+    {
+      "name": "Second draft before Generative AI Profile",
+      "earlierEventId": "e5",
+      "laterEventId": "e6"
+    },
+    {
+      "name": "Draft Taxonomy before Critical Infrastructure note",
+      "earlierEventId": "e2",
+      "laterEventId": "e7"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: the Initial draft of the AI RMF or the Second draft?",
+      "earlierEventId": "e4",
+      "laterEventId": "e5"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: the Request for Information or the Generative AI Profile?",
+      "earlierEventId": "e1",
+      "laterEventId": "e6"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: the Concept paper or the concept note for Trustworthy AI in Critical Infrastructure?",
+      "earlierEventId": "e3",
+      "laterEventId": "e7"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f2d0383a29b44c799b4d301c4b301693",
+    "runId": "job-20261031104747-a1c62a13",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:50:43.375Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

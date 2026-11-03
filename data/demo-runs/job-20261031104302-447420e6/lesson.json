@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031104302-447420e6",
+  "analysisRef": "job-20261031104302-447420e6/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104302-447420e6:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "PCR amplifies small DNA segments for laboratory analysis",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2f591a70b04f4fef93fc1b041ce7a267",
+      "runId": "job-20261031104302-447420e6",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:44:12.085Z"
+    },
+    "seed": 1845516553,
+    "headline": "PCR amplifies small DNA segments for laboratory analysis",
+    "keyPoints": [
+      {
+        "id": "pcr-definition",
+        "point": "Students learn that PCR is a fast and inexpensive technique used to amplify small segments of DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "the polymerase chain reaction (PCR) is a fast and inexpensive technique used to \"amplify\" - copy - small segments of DNA."
+      },
+      {
+        "id": "pcr-cycling",
+        "point": "Students learn that repeated cycles of denaturing and synthesizing can produce more than one billion exact copies of DNA",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "leading to more than one billion exact copies of the original DNA segment."
+      },
+      {
+        "id": "taq-function",
+        "point": "Students learn that Taq polymerase builds new strands of DNA using original strands as templates",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates."
+      },
+      {
+        "id": "pcr-uses",
+        "point": "Students learn that amplified DNA supports laboratory techniques including DNA fingerprinting and diagnosis of genetic disorders",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "pcr",
+        "term": "PCR",
+        "gloss": "technique that amplifies small segments of DNA for analysis",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA."
+      },
+      {
+        "id": "taq-polymerase",
+        "term": "Taq polymerase",
+        "gloss": "enzyme that builds new DNA strands using original strands as templates",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates."
+      },
+      {
+        "id": "denatures",
+        "term": "denatures",
+        "gloss": "process where heating separates DNA into single stranded pieces",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "To amplify a segment of DNA using PCR, the sample is first heated so the DNA denatures, or separates into two pieces of single-stranded DNA."
+      },
+      {
+        "id": "thermocycler",
+        "term": "thermocycler",
+        "gloss": "machine programmed to alter temperature to allow denaturing and synthesis",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "It is directed by a machine called a thermocycler"
+      },
+      {
+        "id": "dna-fingerprinting",
+        "term": "DNA fingerprinting",
+        "gloss": "clinical technique for detection and identification using amplified DNA samples",
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031104302-447420e6:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104302-447420e6:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

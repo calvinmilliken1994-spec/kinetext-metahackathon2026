@@ -1,0 +1,50 @@
+{
+  "jobId": "job-20261031104356-4e3f996d",
+  "sourceId": "nij-hardy-weinberg-principle",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:43:56.467Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.150933,
+  "reservedUnknownUSD": 0,
+  "engine": "hardy-weinberg-v1",
+  "revisions": 2,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "schema.full"
+      ],
+      "fixed": [
+        "schema.full"
+      ],
+      "remaining": [],
+      "publishable": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:43:56.467Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "specId": "nij-hardy-weinberg-principle-job-20261031104356-4e3f996d",
+  "publishable": true,
+  "checksPassed": 14,
+  "checksTotal": 14,
+  "publishedRevision": 2,
+  "finishedAt": "2026-10-31T10:46:20.553Z"
+}

@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031101821-9f273ab5",
+  "analysisRef": "job-20261031101821-9f273ab5/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101821-9f273ab5:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How electoral votes are allocated and 538 votes decide the presidency",
+    "sources": [
+      {
+        "id": "nara-electoral-vote-allocation",
+        "title": "Distribution of Electoral Votes — National Archives, U.S. Electoral College",
+        "locator": "https://www.archives.gov/electoral-college/allocation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'Distribution of Electoral Votes'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "272defde44ff3d32da7dd3f454071e01b7e006aae3e8e661794bad905e992589"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1873b7f84198438aace3d2e2ae657df0",
+      "runId": "job-20261031101821-9f273ab5",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:19:43.098Z"
+    },
+    "seed": 3417738636,
+    "headline": "How electoral votes are allocated and 538 votes decide the presidency",
+    "keyPoints": [
+      {
+        "id": "electoral-allocation-census",
+        "point": "Electoral votes are allocated among states based on the Census count.",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Electoral votes are allocated among the States based on the Census."
+      },
+      {
+        "id": "senators-and-districts",
+        "point": "Each state receives two votes for its Senators plus additional votes equal to its Congressional districts.",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "two votes for its Senators in the U.S. Senate plus a number of votes equal to the number of its Congressional districts."
+      },
+      {
+        "id": "district-of-columbia-23rd",
+        "point": "The District of Columbia is allocated three electors under the 23rd Amendment and treated like a state.",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "the District of Columbia is allocated three electors"
+      },
+      {
+        "id": "winner-take-all-exception",
+        "point": "All states except Maine and Nebraska have a winner-take-all policy based on the statewide popular vote.",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "All States, except for Maine and Nebraska, have a winner-take-all policy"
+      },
+      {
+        "id": "majority-threshold",
+        "point": "The total number of electoral votes is 538 and 270 are needed to elect a president.",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Total Electoral Votes: 538*; Majority Needed to Elect: 270*"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "census",
+        "term": "Census",
+        "gloss": "count that determines how votes are allocated among states based on the Census",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "Electoral votes are allocated among the States based on the Census."
+      },
+      {
+        "id": "electoral-college",
+        "term": "Electoral College",
+        "gloss": "Body that formally elects the president using electors treated like a state",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "treated like a State for purposes of the Electoral College"
+      },
+      {
+        "id": "senators",
+        "term": "Senators",
+        "gloss": "Elected members of the Senate who provide two votes per state under the allocation rule",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "two votes for its Senators in the U.S. Senate plus a number of votes equal to the number of its Congressional districts."
+      },
+      {
+        "id": "winner-take-all",
+        "term": "winner-take-all",
+        "gloss": "Policy where the statewide popular vote winner receives all of a state's electors",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "have a winner-take-all policy where the State looks only at the overall winner"
+      },
+      {
+        "id": "congressional-district",
+        "term": "Congressional district",
+        "gloss": "Geographic area that awards one elector through popular vote and uses at-large electors for statewide winner",
+        "sourceId": "nara-electoral-vote-allocation",
+        "quote": "based on the winner of the popular vote within each Congressional district"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "threshold-v1",
+      "specId": "job-20261031101821-9f273ab5:threshold-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031101821-9f273ab5:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort climate zone descriptions",
+    "groups": [
+      {
+        "id": "moist-tropical-climates",
+        "label": "Moist tropical climates"
+      },
+      {
+        "id": "moist-continental-climates",
+        "label": "Moist continental mid-latitude climates"
+      },
+      {
+        "id": "polar-climates",
+        "label": "Polar climates"
+      }
+    ],
+    "items": [
+      {
+        "id": "tropical-latitude",
+        "label": "15° to 25° latitude",
+        "groupId": "moist-tropical-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Moist tropical climates extend north and south from the equator to about 15° to 25° latitude."
+      },
+      {
+        "id": "tropical-temp-threshold",
+        "label": "64°F (18°C)",
+        "groupId": "moist-tropical-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59\"."
+      },
+      {
+        "id": "continental-summers",
+        "label": "warm to cool summers and cold winters",
+        "groupId": "moist-continental-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Moist continental mid-latitude climates have warm to cool summers and cold winters."
+      },
+      {
+        "id": "continental-warmest-month",
+        "label": "50°F (10°C)",
+        "groupId": "moist-continental-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The average temperature of the warmest month is greater than 50°F (10°C), while the coldest month average temperature is less than 27°F (-3°C)."
+      },
+      {
+        "id": "polar-cold-year-round",
+        "label": "year-round cold temperatures",
+        "groupId": "polar-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C)."
+      },
+      {
+        "id": "polar-greenland-antarctica",
+        "label": "Greenland and Antarctica",
+        "groupId": "polar-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates are found on the northern coastal areas of North America, Europe, Asia, and on the land masses of Greenland and Antarctica."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105507-909fddee:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 3 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "663c23d63aad47bfb78a626c3000f3fe",
+    "usage": {
+      "promptTokens": 2934,
+      "completionTokens": 9605,
+      "reasoningTokens": 9130,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51370,
+    "estCostUSD": 0.04448875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105507-909fddee:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort climate zone descriptions",
+    "sources": [
+      {
+        "id": "noaa-jetstream-climate-zones",
+        "title": "Climate Zones — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/global/climate-zones",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Climate Zones'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9e8263f9fb048729c92d00c7603e536c248951e07afdff0ba85b66b6fcbff04d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "663c23d63aad47bfb78a626c3000f3fe",
+      "runId": "job-20261031105507-909fddee",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:56:57.204Z"
+    },
+    "seed": 1817659072,
+    "groups": [
+      {
+        "id": "moist-tropical-climates",
+        "label": "Moist tropical climates"
+      },
+      {
+        "id": "moist-continental-climates",
+        "label": "Moist continental mid-latitude climates"
+      },
+      {
+        "id": "polar-climates",
+        "label": "Polar climates"
+      }
+    ],
+    "items": [
+      {
+        "id": "tropical-latitude",
+        "label": "15° to 25° latitude",
+        "groupId": "moist-tropical-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Moist tropical climates extend north and south from the equator to about 15° to 25° latitude."
+      },
+      {
+        "id": "tropical-temp-threshold",
+        "label": "64°F (18°C)",
+        "groupId": "moist-tropical-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59\"."
+      },
+      {
+        "id": "continental-summers",
+        "label": "warm to cool summers and cold winters",
+        "groupId": "moist-continental-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Moist continental mid-latitude climates have warm to cool summers and cold winters."
+      },
+      {
+        "id": "continental-warmest-month",
+        "label": "50°F (10°C)",
+        "groupId": "moist-continental-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The average temperature of the warmest month is greater than 50°F (10°C), while the coldest month average temperature is less than 27°F (-3°C)."
+      },
+      {
+        "id": "polar-cold-year-round",
+        "label": "year-round cold temperatures",
+        "groupId": "polar-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C)."
+      },
+      {
+        "id": "polar-greenland-antarctica",
+        "label": "Greenland and Antarctica",
+        "groupId": "polar-climates",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates are found on the northern coastal areas of North America, Europe, Asia, and on the land masses of Greenland and Antarctica."
+      }
+    ]
+  }
+}

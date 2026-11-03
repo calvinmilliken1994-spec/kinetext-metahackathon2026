@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "cfpb-compound-interest-job-20261031095749-6cd1d9c9",
+  "title": "How does compound interest work? — Consumer Financial Protection Bureau, Ask CFPB",
+  "learningObjectives": [
+    "Understand that compound interest means earning interest on both the money saved and on the interest already earned",
+    "Identify the principal as the amount you start with ($1,000), the interest rate as the percent you earn (5 percent), and the compounding frequency as how often interest is calculated (once a year)",
+    "Explain that increasing the compounding frequency, finding a higher interest rate, and adding to the principal help savings grow faster"
+  ],
+  "sources": [
+    {
+      "id": "cfpb-compound-interest",
+      "title": "How does compound interest work? — Consumer Financial Protection Bureau, Ask CFPB",
+      "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-compound-interest-work-en-1683/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does compound interest work?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+      "sha256": "b53156638f6b191a78c86fac8fa0b2051d61a41f7e64c7bf1e8b7258ae8c411c"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-definition",
+      "text": "Compound interest means you earn interest on the money you have saved and also on the interest you have already earned.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-compound-interest",
+          "quote": "Compound interest is when you earn interest on the money you’ve saved and on the interest you earn along the way."
+        }
+      ]
+    },
+    {
+      "id": "exp-example-terms",
+      "text": "The source example starts with a principal of $1,000 at an interest rate of 5 percent compounded once a year, resulting in $1,050 after one year and $1,102.50 after two years.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-compound-interest",
+          "quote": "| Amount you start with | $1,000 | Also called your principal |"
+        },
+        {
+          "sourceId": "cfpb-compound-interest",
+          "quote": "| How much you earn | 5 percent | Also called your interest rate, or rate of return |"
+        }
+      ]
+    },
+    {
+      "id": "exp-growth-factors",
+      "text": "Savings grow faster when you increase the compounding frequency, seek a higher interest rate, or add to the principal amount.",
+      "evidence": [
+        {
+          "sourceId": "cfpb-compound-interest",
+          "quote": "| How often you calculate interest | Once a year | Also called your compounding frequency |"
+        },
+        {
+          "sourceId": "cfpb-compound-interest",
+          "quote": "Increasing the compounding frequency, finding a higher interest rate, and adding to your principal amount are ways to help your savings grow even faster."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "min": 100,
+      "max": 5000,
+      "default": 1000
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "min": 1,
+      "max": 12,
+      "default": 1
+    },
+    "years": {
+      "unit": "years",
+      "min": 1,
+      "max": 10,
+      "default": 2
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Interest compounded yearly"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Edge case 0% interest",
+      "principalUSD": 1000,
+      "annualRatePercent": 0,
+      "compoundsPerYear": 1,
+      "years": 5,
+      "expectedAmountUSD": 1000,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Source example 2 years yearly",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 2,
+      "expectedAmountUSD": 1102.5,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Monthly compounding 10 years",
+      "principalUSD": 2000,
+      "annualRatePercent": 6,
+      "compoundsPerYear": 12,
+      "years": 10,
+      "expectedAmountUSD": 3638.79,
+      "tolerance": 0.01
+    },
+    {
+      "name": "Quarterly compounding 5 years",
+      "principalUSD": 1500,
+      "annualRatePercent": 4,
+      "compoundsPerYear": 4,
+      "years": 5,
+      "expectedAmountUSD": 1830.29,
+      "tolerance": 0.01
+    }
+  ],
+  "predictions": [
+    {
+      "id": "prediction-1",
+      "prompt": "How long will it take for the savings balance to increase?",
+      "principalUSD": 1000,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 2,
+      "expectedAmountUSD": 1102.5,
+      "tolerance": 0.01
+    },
+    {
+      "id": "prediction-2",
+      "prompt": "If the starting amount is increased and interest is compounded monthly, how much will be saved over a longer period?",
+      "principalUSD": 2000,
+      "annualRatePercent": 4,
+      "compoundsPerYear": 12,
+      "years": 5,
+      "expectedAmountUSD": 2441.99,
+      "tolerance": 0.01
+    },
+    {
+      "id": "prediction-3",
+      "prompt": "How does a smaller starting amount grow with a higher quarterly compounded rate?",
+      "principalUSD": 500,
+      "annualRatePercent": 7,
+      "compoundsPerYear": 4,
+      "years": 3,
+      "expectedAmountUSD": 615.72,
+      "tolerance": 0.01
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9483a2d486c149fa8a4fdfef971f7876",
+    "runId": "job-20261031095749-6cd1d9c9",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:00:39.965Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

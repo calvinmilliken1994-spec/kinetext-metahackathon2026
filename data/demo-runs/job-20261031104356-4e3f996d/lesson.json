@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031104356-4e3f996d",
+  "analysisRef": "job-20261031104356-4e3f996d/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104356-4e3f996d:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Hardy Weinberg equilibrium predicts genotype frequencies from allele frequencies",
+    "sources": [
+      {
+        "id": "nij-hardy-weinberg-principle",
+        "title": "Hardy-Weinberg Principle — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Hardy-Weinberg Principle'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "db613d58d5101a939f34fed65153bc279e823153472574a035a6071032b4ce8c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1fcf129ea0574a36990b16d8e48f1e7f",
+      "runId": "job-20261031104356-4e3f996d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:45:23.796Z"
+    },
+    "seed": 612309000,
+    "headline": "Hardy Weinberg equilibrium predicts genotype frequencies from allele frequencies",
+    "keyPoints": [
+      {
+        "id": "principle-assumptions",
+        "point": "The Hardy Weinberg principle shows allelic frequencies remain the same in a large randomly breeding population without mutation, migration, selection or drift.",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "The Hardy-Weinberg principle states that in a large randomly breeding population, allelic frequencies will remain the same"
+      },
+      {
+        "id": "genotype-prediction",
+        "point": "Frequency of MN genotype is predicted as 2pq, with MM as p squared and NN as q squared.",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Frequency of MN genotype = 2pq"
+      },
+      {
+        "id": "allele-frequency-calculation",
+        "point": "Frequency of allele M equals p and allele N equals q determines that next generation genotypes occur as p squared, 2pq and q squared.",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "If we let the frequency of allele M=p and the frequency of the other allele N=q, then the next generation's genotypes will occur as follows:"
+      },
+      {
+        "id": "equilibrium-testing",
+        "point": "How far a population deviates from equilibrium can be measured using goodness of fit chi squared test.",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "How far a population deviates from HWE can be measured using the \"goodness of fit\" or chi-squared test (χ^2)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "hardy-weinberg-principle",
+        "term": "Hardy-Weinberg principle",
+        "gloss": "principle that predicts how allelic frequencies are inherited in large randomly breeding populations",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "The Hardy-Weinberg principle states that in a large randomly breeding population, allelic frequencies will remain the same"
+      },
+      {
+        "id": "allele",
+        "term": "allele",
+        "gloss": "alternative form of a gene at a locus such as allele M or allele N",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "If we let the frequency of allele M=p and the frequency of the other allele N=q, then the next generation's genotypes will occur as follows:"
+      },
+      {
+        "id": "genotype",
+        "term": "genotype",
+        "gloss": "genotype is the pair of alleles an individual carries such as MM, MN or NN",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Frequency of MN genotype = 2pq"
+      },
+      {
+        "id": "equilibrium",
+        "term": "equilibrium",
+        "gloss": "population state where allele frequencies remain stable from generation to generation",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "In order for a population to be considered to be in equilibrium, it must remain the same from generation to generation."
+      },
+      {
+        "id": "chi-squared-test",
+        "term": "chi-squared test",
+        "gloss": "test that measures goodness of fit between observed and expected genotype numbers",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "How far a population deviates from HWE can be measured using the \"goodness of fit\" or chi-squared test (χ^2)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "hardy-weinberg-v1",
+      "specId": "nij-hardy-weinberg-principle-job-20261031104356-4e3f996d",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031104356-4e3f996d:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "gen": {
+    "schemaVersion": "log-ladder-v1",
+    "title": "pH acidity ladder",
+    "quantity": "pH",
+    "factor": 10,
+    "factorText": "10-fold",
+    "effectPhrase": "more acidic",
+    "increasing": false,
+    "sourceId": "usgs-wss-ph-and-water",
+    "quote": "pH is reported in \"logarithmic units\". Each number represents a 10-fold change in the acidity/basicness of the water.",
+    "rungs": [
+      {
+        "id": "rung-7-neutral",
+        "label": "Neutral water at pH 7",
+        "value": 7,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-6-example",
+        "label": "Water example at pH 6",
+        "value": 6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water having a pH of six."
+      },
+      {
+        "id": "rung-5-example",
+        "label": "Water example at pH 5",
+        "value": 5,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Water with a pH of five is ten times more acidic"
+      },
+      {
+        "id": "rung-5-6-rainfall",
+        "label": "Normal rainfall at pH 5.6",
+        "value": 5.6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere."
+      },
+      {
+        "id": "rung-2-mine",
+        "label": "Mine drainage at pH 2",
+        "value": 2,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water coming out of an abandoned coal mine can have a pH of 2"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-6-to-5",
+        "fromValue": 6,
+        "toValue": 5.6
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101091135-96787516:log-ladder-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every log-ladder title, page-word field, rung/case count, id and label shape is within the frozen limits"
+      },
+      {
+        "id": "LOG-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "LOG-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote states the factor in the page's own words: \"10-fold\" occurs in the quote and means 10 per whole step (factor-stated)"
+      },
+      {
+        "id": "LOG-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the quote names the scale \"pH\" as a whole phrase and the direction of the effect \"more acidic\" (increasing false) is bound to a known scale or stated by the quote (quantity-in-quote)"
+      },
+      {
+        "id": "LOG-04",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rungs[1] (rung-6-example): the value 6 does not occur as a whole number in its quote \"water having a pH of six.\" (a number inside a larger number, like 3 inside 33 or 6 inside 6.3, is a different value) (rung-values-in-quote); rungs[2] (rung-5-example): the value 5 does not occur as a whole number in its quote \"Water with a pH of five is ten times more acidic\" (a number inside a larger number, like 3 inside 33 or 6 inside 6.3, is a different value) (rung-values-in-quote)",
+        "path": "/rungs/1/value",
+        "affected": [
+          "/rungs/1/value",
+          "/rungs/1/quote",
+          "/rungs/2/value",
+          "/rungs/2/quote"
+        ]
+      },
+      {
+        "id": "LOG-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "all 5 rung values are distinct points on the scale (rungs-distinct)"
+      },
+      {
+        "id": "LOG-06",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 1 case(s) move between distinct values that ARE rungs of this ladder (inside the rung range 2 to 7), and every ratio our engine computes (6 → 5.6 is 2.51189 times) stays within 1000000000000 (cases-valid)"
+      },
+      {
+        "id": "LOG-07",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rungs[1].label states the number 6, which does not appear as that whole number on the page or in the same quote (N-01); rungs[2].label states the number 5, which does not appear as that whole number on the page or in the same quote (N-01)",
+        "path": "/rungs/1/label",
+        "affected": [
+          "/rungs/1/label",
+          "/rungs/2/label"
+        ]
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "log-ladder-v1: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "905969a4dce540fb977e672992eb5c7e",
+    "usage": {
+      "promptTokens": 5799,
+      "completionTokens": 3289,
+      "reasoningTokens": 2908,
+      "cachedTokens": 0
+    },
+    "latencyMs": 16564,
+    "estCostUSD": 0.021227,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091135-96787516:log-ladder-v1:r3",
+    "componentId": "log-ladder-v1",
+    "title": "pH acidity ladder",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "905969a4dce540fb977e672992eb5c7e",
+      "runId": "job-20261101091135-96787516",
+      "promptVersion": "s6-v10",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-11-01T09:15:25.107Z"
+    },
+    "seed": 3010217320,
+    "quantity": "pH",
+    "factor": 10,
+    "factorText": "10-fold",
+    "effectPhrase": "more acidic",
+    "increasing": false,
+    "sourceId": "usgs-wss-ph-and-water",
+    "quote": "pH is reported in \"logarithmic units\". Each number represents a 10-fold change in the acidity/basicness of the water.",
+    "rungs": [
+      {
+        "id": "rung-7-neutral",
+        "label": "Neutral water at pH 7",
+        "value": 7,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The range goes from 0 to 14, with 7 being neutral."
+      },
+      {
+        "id": "rung-6-example",
+        "label": "Water example at pH 6",
+        "value": 6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water having a pH of six."
+      },
+      {
+        "id": "rung-5-example",
+        "label": "Water example at pH 5",
+        "value": 5,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Water with a pH of five is ten times more acidic"
+      },
+      {
+        "id": "rung-5-6-rainfall",
+        "label": "Normal rainfall at pH 5.6",
+        "value": 5.6,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Normal rainfall has a pH of about 5.6—slightly acidic due to carbon dioxide gas from the atmosphere."
+      },
+      {
+        "id": "rung-2-mine",
+        "label": "Mine drainage at pH 2",
+        "value": 2,
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "water coming out of an abandoned coal mine can have a pH of 2"
+      }
+    ],
+    "cases": [
+      {
+        "id": "case-6-to-5",
+        "fromValue": 6,
+        "toValue": 5.6
+      }
+    ]
+  }
+}

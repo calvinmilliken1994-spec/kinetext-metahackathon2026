@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031101734-fca565b7",
+  "analysisRef": "job-20261031101734-fca565b7/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101734-fca565b7:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "From election day to inauguration, how electors are appointed and votes counted",
+    "sources": [
+      {
+        "id": "nara-electoral-college-key-dates",
+        "title": "Electoral College Timeline of Events — National Archives, U.S. Electoral College",
+        "locator": "https://www.archives.gov/electoral-college/key-dates",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, U.S. Electoral College, 'Electoral College Timeline of Events'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "9ac1912fead4e5f46874047ee700d8f03c22e505cb77aad9d7230aaf85f4bb98"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b4157d41e3cb444988ad6578f5c9b2b9",
+      "runId": "job-20261031101734-fca565b7",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:18:31.349Z"
+    },
+    "seed": 4138430106,
+    "headline": "From election day to inauguration, how electors are appointed and votes counted",
+    "keyPoints": [
+      {
+        "id": "district-allocation",
+        "point": "Students learn the District of Columbia is allocated three electors under the 23rd Amendment.",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "the District of Columbia is allocated three electors and treated like a State for purposes of the Electoral College."
+      },
+      {
+        "id": "certificates-prepared",
+        "point": "Students learn the state executive prepares seven certificates of ascertainment after certification.",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "Your State's Executive prepares seven Certificates of Ascertainment."
+      },
+      {
+        "id": "electors-meet",
+        "point": "Students learn electors meet in their states to cast separate ballots for president and vice president.",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "The electors meet in their respective States and vote for President and Vice President on separate ballots."
+      },
+      {
+        "id": "congress-counts",
+        "point": "Students learn Congress meets in joint session to count electoral votes and announce results.",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "Congress meets in joint session to count the electoral votes."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "electors-term",
+        "term": "electors",
+        "gloss": "individuals chosen to cast separate ballots for president",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "The electors meet in their respective States and vote for President and Vice President on separate ballots."
+      },
+      {
+        "id": "certificates-ascertainment",
+        "term": "Certificates of Ascertainment",
+        "gloss": "documents the executive prepares to record appointed electors",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "Your State's Executive prepares seven Certificates of Ascertainment."
+      },
+      {
+        "id": "certificates-vote",
+        "term": "Certificates of Vote",
+        "gloss": "forms electors use to record votes for president",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "The electors record their votes on six Certificates of Vote, which are paired with the six remaining Certificates of Ascertainment."
+      },
+      {
+        "id": "popular-vote",
+        "term": "popular vote",
+        "gloss": "general election results reflecting votes cast by citizens",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "The States use these general election results (also known as the popular vote) to appoint their electors."
+      },
+      {
+        "id": "joint-session",
+        "term": "joint session",
+        "gloss": "combined meeting of congress to count electoral votes",
+        "sourceId": "nara-electoral-college-key-dates",
+        "quote": "Congress meets in joint session to count the electoral votes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-electoral-college-key-dates-job-20261031101734-fca565b7",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "threshold-v1",
+      "specId": "job-20261031101734-fca565b7:threshold-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

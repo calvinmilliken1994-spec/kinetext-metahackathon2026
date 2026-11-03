@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How steady speed and time set flight distance",
+    "cards": [
+      {
+        "id": "maximum-distance-calc",
+        "stem": "How is the maximum distance an aircraft can fly calculated?",
+        "options": [
+          "ground speed times the maximum time (tmax)",
+          "twice the distance flown",
+          "extra fuel for climbing to altitude"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": ""
+      },
+      {
+        "id": "combat-radius-round-trip",
+        "stem": "What is the combat radius for a round trip mission?",
+        "options": [
+          "half of the range",
+          "ground speed times the maximum time (tmax)",
+          "wind speed is constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The combat radius would be half of the range as specified here.",
+        "hint": ""
+      },
+      {
+        "id": "ground-speed-constant-wind",
+        "stem": "When does ground speed stay constant during cruise?",
+        "options": [
+          "wind speed is constant",
+          "the thrust is equal to the drag",
+          "half of the range"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": ""
+      },
+      {
+        "id": "level-flight-force-balance",
+        "stem": "What force balance keeps an aircraft in steady level flight?",
+        "options": [
+          "the lift is equal to the weight",
+          "drag then slows the airplane",
+          "weight constantly changes as fuel is burned"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103540-05c9bfc7:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "bd9a6a2653be451dad9b9f46cdb8bcbe",
+    "usage": {
+      "promptTokens": 3049,
+      "completionTokens": 15793,
+      "reasoningTokens": 15444,
+      "cachedTokens": 0
+    },
+    "latencyMs": 89204,
+    "estCostUSD": 0.0709315,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103540-05c9bfc7:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How steady speed and time set flight distance",
+    "sources": [
+      {
+        "id": "nasa-grc-range-constant-velocity",
+        "title": "Range – Constant Velocity — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/range-constant-velocity/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "f1f4102e23398f882264cb387f0c4115207597b855cadae074925c9e7c1a4127"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "bd9a6a2653be451dad9b9f46cdb8bcbe",
+      "runId": "job-20261031103540-05c9bfc7",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:38:10.346Z"
+    },
+    "seed": 913274359,
+    "cards": [
+      {
+        "id": "maximum-distance-calc",
+        "stem": "How is the maximum distance an aircraft can fly calculated?",
+        "options": [
+          "ground speed times the maximum time (tmax)",
+          "twice the distance flown",
+          "extra fuel for climbing to altitude"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The maximum distance that the aircraft can fly is then equal to the ground speed times the maximum time (tmax).",
+        "hint": ""
+      },
+      {
+        "id": "combat-radius-round-trip",
+        "stem": "What is the combat radius for a round trip mission?",
+        "options": [
+          "half of the range",
+          "ground speed times the maximum time (tmax)",
+          "wind speed is constant"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The combat radius would be half of the range as specified here.",
+        "hint": ""
+      },
+      {
+        "id": "ground-speed-constant-wind",
+        "stem": "When does ground speed stay constant during cruise?",
+        "options": [
+          "wind speed is constant",
+          "the thrust is equal to the drag",
+          "half of the range"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "The ground speed remains constant as long as the wind speed is constant.",
+        "hint": ""
+      },
+      {
+        "id": "level-flight-force-balance",
+        "stem": "What force balance keeps an aircraft in steady level flight?",
+        "options": [
+          "the lift is equal to the weight",
+          "drag then slows the airplane",
+          "weight constantly changes as fuel is burned"
+        ],
+        "sourceId": "nasa-grc-range-constant-velocity",
+        "quote": "an airplane can maintain a constant speed and level flight, in which the lift is equal to the weight, and the thrust is equal to the drag.",
+        "hint": ""
+      }
+    ]
+  }
+}

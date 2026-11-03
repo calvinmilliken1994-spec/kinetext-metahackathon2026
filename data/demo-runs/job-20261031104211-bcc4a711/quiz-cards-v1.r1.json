@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Quick check on DNA sequencing and base pairing",
+    "cards": [
+      {
+        "id": "what-does-sequencing-determine",
+        "stem": "What does DNA sequencing determine?",
+        "options": [
+          "four chemical building blocks",
+          "number of cell divisions",
+          "type of microscope used"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule.",
+        "hint": "Recall the definition given in the opening sentence."
+      },
+      {
+        "id": "which-base-pairing-occurs",
+        "stem": "Which base pairing always occurs in the double helix?",
+        "options": [
+          "Adenine (A) always pairs with thymine (T)",
+          "Adenine (A) always pairs with cytosine (C)",
+          "Cytosine (C) always pairs with thymine (T)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G).",
+        "hint": "Think about the fixed partners for A and C."
+      },
+      {
+        "id": "how-nanopore-sequencing-works",
+        "stem": "How is nanopore-based sequencing described as working?",
+        "options": [
+          "threading single DNA strands through extremely tiny pores in a membrane",
+          "copying DNA with colored dyes and a fast camera",
+          "comparing 1 million bases from different people"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane.",
+        "hint": "Focus on the method that threads single strands."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104211-bcc4a711:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4bb40ff894bc40469fbda1f780c330ee",
+    "usage": {
+      "promptTokens": 3363,
+      "completionTokens": 8672,
+      "reasoningTokens": 8221,
+      "cachedTokens": 0
+    },
+    "latencyMs": 45215,
+    "estCostUSD": 0.04105975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 2,
+      "id": "how-large-human-genome",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104211-bcc4a711:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Quick check on DNA sequencing and base pairing",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4bb40ff894bc40469fbda1f780c330ee",
+      "runId": "job-20261031104211-bcc4a711",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:43:55.294Z"
+    },
+    "seed": 4039051675,
+    "cards": [
+      {
+        "id": "what-does-sequencing-determine",
+        "stem": "What does DNA sequencing determine?",
+        "options": [
+          "four chemical building blocks",
+          "number of cell divisions",
+          "type of microscope used"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "DNA sequencing determines the order of the four chemical building blocks - called \"bases\" - that make up the DNA molecule.",
+        "hint": "Recall the definition given in the opening sentence."
+      },
+      {
+        "id": "which-base-pairing-occurs",
+        "stem": "Which base pairing always occurs in the double helix?",
+        "options": [
+          "Adenine (A) always pairs with thymine (T)",
+          "Adenine (A) always pairs with cytosine (C)",
+          "Cytosine (C) always pairs with thymine (T)"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G).",
+        "hint": "Think about the fixed partners for A and C."
+      },
+      {
+        "id": "how-nanopore-sequencing-works",
+        "stem": "How is nanopore-based sequencing described as working?",
+        "options": [
+          "threading single DNA strands through extremely tiny pores in a membrane",
+          "copying DNA with colored dyes and a fast camera",
+          "comparing 1 million bases from different people"
+        ],
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Nanopore-based DNA sequencing involves threading single DNA strands through extremely tiny pores in a membrane.",
+        "hint": "Focus on the method that threads single strands."
+      }
+    ]
+  }
+}

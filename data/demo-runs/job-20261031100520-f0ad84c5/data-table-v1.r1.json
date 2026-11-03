@@ -1,0 +1,532 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Federal funds rate target changes read from the printed history",
+    "labelHeader": "Date",
+    "columns": [
+      {
+        "header": "Increase",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Increase"
+      },
+      {
+        "header": "Decrease",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Decrease"
+      },
+      {
+        "header": "Level",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Level (%)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "July 27, 2023",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "July 27 | 25 | 0 | 5.25-5.50",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "5.25-5.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "5.25-5.50"
+          }
+        ]
+      },
+      {
+        "label": "September 19, 2024",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 19 | 0 | 50 | 4.75-5.00",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "50"
+          },
+          {
+            "value": "4.75-5.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.75-5.00"
+          }
+        ]
+      },
+      {
+        "label": "December 19, 2024",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 19 | 0 | 25 | 4.25-4.50",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "4.25-4.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.25-4.50"
+          }
+        ]
+      },
+      {
+        "label": "September 18, 2025",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 18 | 0 | 25 | 4.00-4.25",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "4.00-4.25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.00-4.25"
+          }
+        ]
+      },
+      {
+        "label": "December 11, 2025",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 11 | 0 | 25 | 3.50-3.75",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "3.50-3.75",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.50-3.75"
+          }
+        ]
+      },
+      {
+        "label": "September 17, 2026",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 17 | 25 | 0 | 3.75-4.00",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "3.75-4.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.75-4.00"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-level-july-2023",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-decrease",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "lookup-increase-sept-2026",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031100520-f0ad84c5:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].values[0].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].values[1].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[1].values[0].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[1].values[1].quote: quote \"50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[2].values[0].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[2].values[1].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[3].values[0].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[3].values[1].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[4].values[0].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[4].values[1].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[5].values[0].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[5].values[1].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\" (expected verbatim quotes of 1-150 characters copied from the cited source)",
+        "path": "/rows/0/values/0/quote",
+        "affected": [
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/quote",
+          "/rows/1/values/0/quote",
+          "/rows/1/values/1/quote",
+          "/rows/2/values/0/quote",
+          "/rows/2/values/1/quote",
+          "/rows/3/values/0/quote",
+          "/rows/3/values/1/quote",
+          "/rows/4/values/0/quote",
+          "/rows/4/values/1/quote",
+          "/rows/5/values/0/quote",
+          "/rows/5/values/1/quote"
+        ]
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0]: the label \"July 27, 2023\" occurs neither in its quote \"July 27 | 25 | 0 | 5.25-5.50\" nor in the same source paragraph (the row must be the page's own row); rows[1]: the label \"September 19, 2024\" occurs neither in its quote \"September 19 | 0 | 50 | 4.75-5.00\" nor in the same source paragraph (the row must be the page's own row); rows[2]: the label \"December 19, 2024\" occurs neither in its quote \"December 19 | 0 | 25 | 4.25-4.50\" nor in the same source paragraph (the row must be the page's own row); rows[3]: the label \"September 18, 2025\" occurs neither in its quote \"September 18 | 0 | 25 | 4.00-4.25\" nor in the same source paragraph (the row must be the page's own row); rows[4]: the label \"December 11, 2025\" occurs neither in its quote \"December 11 | 0 | 25 | 3.50-3.75\" nor in the same source paragraph (the row must be the page's own row); rows[5]: the label \"September 17, 2026\" occurs neither in its quote \"September 17 | 25 | 0 | 3.75-4.00\" nor in the same source paragraph (the row must be the page's own row)",
+        "path": "/rows/0/label",
+        "affected": [
+          "/rows/0/label",
+          "/rows/0/quote",
+          "/rows/1/label",
+          "/rows/1/quote",
+          "/rows/2/label",
+          "/rows/2/quote",
+          "/rows/3/label",
+          "/rows/3/quote",
+          "/rows/4/label",
+          "/rows/4/quote",
+          "/rows/5/label",
+          "/rows/5/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 18 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": false,
+        "message": "rows[0].values[2].value \"5.25-5.50\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\"); rows[1].values[2].value \"4.75-5.00\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\"); rows[2].values[2].value \"4.25-4.50\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\"); rows[3].values[2].value \"4.00-4.25\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\"); rows[4].values[2].value \"3.50-3.75\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\"); rows[5].values[2].value \"3.75-4.00\" is not a number, but the column \"Level\" is numeric: every value in it must parse with parseTableNumber (like \"12,104\", \"$640,600\", \"37%\" or \"-0.5\")",
+        "path": "/rows/0/values/2/value",
+        "affected": [
+          "/rows/0/values/2/value",
+          "/rows/1/values/2/value",
+          "/rows/2/values/2/value",
+          "/rows/3/values/2/value",
+          "/rows/4/values/2/value",
+          "/rows/5/values/2/value"
+        ]
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-level-july-2023\" (lookup) → rows[0] \"5.25-5.50\"; \"largest-decrease\" (largest) → rows[1] \"50\"; \"lookup-increase-sept-2026\" (lookup) → rows[5] \"25\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"Decrease\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e4a439da2eb049798a7df5fff7923a2c",
+    "usage": {
+      "promptTokens": 4218,
+      "completionTokens": 6864,
+      "reasoningTokens": 5950,
+      "cachedTokens": 0
+    },
+    "latencyMs": 47092,
+    "estCostUSD": 0.0344445,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100520-f0ad84c5:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Federal funds rate target changes read from the printed history",
+    "sources": [
+      {
+        "id": "federalreserve-open-market-operations",
+        "title": "Open Market Operations — Board of Governors of the Federal Reserve System, Monetary Policy",
+        "locator": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Board of Governors of the Federal Reserve System, 'Open Market Operations'. Credit: Board of Governors of the Federal Reserve System. Per the Board's website Disclaimer, 'Unless otherwise indicated, information on Board's website is in the public domain and may be copied and distributed without permission. Please cite to the Board as the source of the information.' The Board of Governors of the Federal Reserve System has not reviewed, approved or endorsed this activity.",
+        "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e4a439da2eb049798a7df5fff7923a2c",
+      "runId": "job-20261031100520-f0ad84c5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:06:43.489Z"
+    },
+    "seed": 1742007406,
+    "labelHeader": "Date",
+    "columns": [
+      {
+        "header": "Increase",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Increase"
+      },
+      {
+        "header": "Decrease",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Decrease"
+      },
+      {
+        "header": "Level",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Level (%)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "July 27, 2023",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "July 27 | 25 | 0 | 5.25-5.50",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "5.25-5.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "5.25-5.50"
+          }
+        ]
+      },
+      {
+        "label": "September 19, 2024",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 19 | 0 | 50 | 4.75-5.00",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "50"
+          },
+          {
+            "value": "4.75-5.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.75-5.00"
+          }
+        ]
+      },
+      {
+        "label": "December 19, 2024",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 19 | 0 | 25 | 4.25-4.50",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "4.25-4.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.25-4.50"
+          }
+        ]
+      },
+      {
+        "label": "September 18, 2025",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 18 | 0 | 25 | 4.00-4.25",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "4.00-4.25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.00-4.25"
+          }
+        ]
+      },
+      {
+        "label": "December 11, 2025",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 11 | 0 | 25 | 3.50-3.75",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "3.50-3.75",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.50-3.75"
+          }
+        ]
+      },
+      {
+        "label": "September 17, 2026",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 17 | 25 | 0 | 3.75-4.00",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "25"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "0"
+          },
+          {
+            "value": "3.75-4.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.75-4.00"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-level-july-2023",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-decrease",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "lookup-increase-sept-2026",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031152738-96fad246",
+  "analysisRef": "job-20261031152738-96fad246/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031152738-96fad246:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Using price index changes to adjust payments for escalation",
+    "sources": [
+      {
+        "id": "bls-cpi-escalation",
+        "title": "How to Use the Consumer Price Index for Escalation — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/escalation.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'How to Use the Consumer Price Index for Escalation'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "eb563a53edb7ba595831b970f366b39a5a1efa7b8259280013f29552e37ce6cd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c8ff8d43086d4c33b3939ff547fdd501",
+      "runId": "job-20261031152738-96fad246",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T15:28:47.054Z"
+    },
+    "seed": 27631400,
+    "headline": "Using price index changes to adjust payments for escalation",
+    "keyPoints": [
+      {
+        "id": "cpi-measures-price-change",
+        "point": "Students learn that the Consumer Price Index measures average change in prices for a market basket of goods and services.",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "The Consumer Price Index (CPI) measures the average change in the prices paid for a market basket of goods and services."
+      },
+      {
+        "id": "escalation-adjusts-payments",
+        "point": "Students learn that escalation agreements adjust payments for changes in prices using the most widely used measure of price change.",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "Escalation agreements often use the CPI—the most widely used measure of price change—to adjust payments for changes in prices."
+      },
+      {
+        "id": "choosing-cpi-series",
+        "point": "Students learn that choosing a CPI series requires specifying population coverage, area coverage, series title, and index base period.",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "population coverage (CPI-U or CPI-W), area coverage (U.S. City Average, West Region, Chicago, etc.)"
+      },
+      {
+        "id": "cap-floor-limits",
+        "point": "Students learn that a cap places an upper limit on the increase while a floor promises a minimum increase regardless of CPI change.",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "a “cap” that places an upper limit on the increase in wages, rents, etc., or a “floor” that promises a minimum increase"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "consumer-price-index",
+        "term": "Consumer Price Index",
+        "gloss": "measure of average change in prices paid for a market basket of goods and services",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "The Consumer Price Index (CPI) measures the average change in the prices paid for a market basket of goods and services."
+      },
+      {
+        "id": "cpi-u",
+        "term": "CPI-U",
+        "gloss": "population group representing over 90 percent of urban families based on expenditures in urban areas",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "The CPI-U represents over 90 percent of the total U.S. population and is based on the expenditures of all families living in urban areas."
+      },
+      {
+        "id": "cpi-w",
+        "term": "CPI-W",
+        "gloss": "subset of urban population based on expenditures of families living in urban areas",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "The CPI-W is a subset of the CPI-U and is based on the expenditures of families living in urban areas"
+      },
+      {
+        "id": "cap",
+        "term": "cap",
+        "gloss": "contract allowance that places an upper limit on the increase in wages and rents",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "a “cap” that places an upper limit on the increase in wages, rents, etc., or a “floor” that promises a minimum increase"
+      },
+      {
+        "id": "floor",
+        "term": "floor",
+        "gloss": "contract allowance that promises a minimum increase regardless of price change",
+        "sourceId": "bls-cpi-escalation",
+        "quote": "a “cap” that places an upper limit on the increase in wages, rents, etc., or a “floor” that promises a minimum increase"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031152738-96fad246:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031152738-96fad246:formula-explorer-v1:r1",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    }
+  ]
+}

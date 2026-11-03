@@ -1,0 +1,92 @@
+{
+  "artifactId": "nasa-apollo-11-mission-overview-job-20261031154129-67bdf09c",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.timeline-v1.json (draft-07)"
+    },
+    {
+      "id": "timeline.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "event ids, explanation ids, prediction ids and behavioral test names are unique, and all 3 behavioral test(s) and 2 prediction(s) reference two different existing events"
+    },
+    {
+      "id": "timeline.approximate-date",
+      "kind": "grounding",
+      "passed": true,
+      "message": "no approximate dates: none of the 6 event quote(s) across 6 event(s) — nor any FULL source sentence/heading unit containing one — states a decade form (\"1770s\") or attaches an approximation qualifier (\"circa\", \"c.\", \"ca.\", \"approx.\", \"around\", \"about\", \"roughly\", \"sometime in\", \"early/mid/late\" — including article and day-first forms like \"around the 4th of July 1776\") to a date expression"
+    },
+    {
+      "id": "timeline.date-grounded",
+      "kind": "grounding",
+      "passed": false,
+      "message": "event \"e1\" (68-11-21): date not grounded — quote \"11/21/68 – LM-5 integrated systems test\" contains no COMPLETE source date expression stating 68-11-21 as ONE connected expression in a CLEAN context — the quote contains \"68\" (the preceding words \"21 /\" continue an unsupported ran but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the complete, clean-context source expressions inside the quote state: \"5\"); event \"e2\" (68-12-06): date not grounded — quote \"12/6/68 – CSM-107 integrated systems test\" contains no COMPLETE source date expression stating 68-12-06 as ONE connected expression in a CLEAN context — the quote contains \"68\" (the preceding words \"6 /\" continue an unsupported rang but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the complete, clean-context source expressions inside the quote state: \"107\"); event \"e3\" (69-01-08): date not grounded — quote \"1/8/69 – LM-5 ascent stage delivered to Kennedy\" contains no COMPLETE source date expression stating 69-01-08 as ONE connected expression in a CLEAN context — the quote contains \"69\" (the preceding words \"8 /\" continue an unsupported rang but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the complete, clean-context source expressions inside the quote state: \"5\"); event \"e4\" (69-05-20): date not grounded — quote \"5/20/69 – rollout to Launch Pad 39A\" contains no COMPLETE source date expression stating 69-05-20 as ONE connected expression in a CLEAN context — the quote contains \"69\" (the preceding words \"20 /\" continue an unsupported ran but that expression's source context is NOT clean (an approximation qualifier, temporal bound, unconsumed era token, century wording, alternative, range connector + number, '?' or markup within two words of it grounds nothing — fail closed) (the quote contains no complete clean-context source date expression at all) (expected each event's full stated date in ONE COMPLETE connected source date expression IN A CLEAN CONTEXT inside ONE sentence unit of the quote's located source span — a quote edge cutting a source token grounds nothing, an unrecognised or unclean form fails closed, and the year may come from the source title only under the title-year rule)",
+      "path": "/simulation/events/0",
+      "affected": [
+        "/simulation/events/0/year",
+        "/simulation/events/0/month",
+        "/simulation/events/0/day",
+        "/simulation/events/0/evidence",
+        "/simulation/events/1/year",
+        "/simulation/events/1/month",
+        "/simulation/events/1/day",
+        "/simulation/events/1/evidence",
+        "/simulation/events/2/year",
+        "/simulation/events/2/month",
+        "/simulation/events/2/day",
+        "/simulation/events/2/evidence",
+        "/simulation/events/3/year",
+        "/simulation/events/3/month",
+        "/simulation/events/3/day",
+        "/simulation/events/3/evidence"
+      ]
+    },
+    {
+      "id": "timeline.distinct-dates",
+      "kind": "semantic",
+      "passed": true,
+      "message": "all 6 event (year, month, day) tuples are distinct"
+    },
+    {
+      "id": "timeline.case-order",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 3 behavioral test(s) and 2 prediction(s) recomputed from the event dates: earlierEventId is strictly earlier than laterEventId at the precision both events state"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 10 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 10 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation and every event has >= 1 counted quote"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": true,
+      "message": "no generated display field (title, objectives, explanations, prediction prompts, behavioral test names, event labels, scenario labels) mentions the publisher or uses attribution/endorsement wording naming a source or authority; evidence quotes are exempt"
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": false
+}

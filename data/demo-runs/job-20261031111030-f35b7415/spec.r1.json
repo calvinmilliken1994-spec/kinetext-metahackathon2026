@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-geologic-age-job-20261031111030-f35b7415",
+  "title": "Radioactive Decay Dating with Half-Life",
+  "learningObjectives": [
+    "Interpret half-life as the time for one-half of a parent isotope to decay and apply it as a geologic clock.",
+    "Use the decay law N=N0*(1/2)^(t/T) to calculate the amount of parent isotope remaining after elapsed time t.",
+    "Compare remaining amounts for different half-lives and elapsed times to estimate geologic age."
+  ],
+  "sources": [
+    {
+      "id": "usgs-geologic-age",
+      "title": "Geologic Age: Using Radioactive Decay to Determine Geologic Age — U.S. Geological Survey",
+      "locator": "https://www.usgs.gov/educational-resources/geologic-age-using-radioactive-decay-determine-geologic-age",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Geologic Age: Using Radioactive Decay to Determine Geologic Age' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "6e5bf0115bcc99d56d14dbecdc9d5ce23538b3bf71393efa1f5f77b6969614c2"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-isotopes-decay",
+      "text": "A chemical element can exist as different isotopes with the same number of protons but different atomic weights. Radioactive decay is a spontaneous nuclear process where a parent isotope loses particles to form a daughter isotope of a new element.",
+      "evidence": [
+        {
+          "sourceId": "usgs-geologic-age",
+          "quote": "Atoms of the same element with differing atomic weights are called isotopes."
+        },
+        {
+          "sourceId": "usgs-geologic-age",
+          "quote": "Radioactive decay is a spontaneous process in which an isotope (the parent) loses particles from its nucleus to form an isotope of a new element (the daughter)."
+        }
+      ]
+    },
+    {
+      "id": "exp-half-life",
+      "text": "The decay rate is described by half-life: the time required for one-half of the radioactive atoms in a sample to decay. After each half-life the remaining amount is halved.",
+      "evidence": [
+        {
+          "sourceId": "usgs-geologic-age",
+          "quote": "The rate of decay is conveniently expressed in terms of an isotope's half-life, or the time it takes for one-half"
+        }
+      ]
+    },
+    {
+      "id": "exp-geologic-clocks",
+      "text": "Most isotopes decay quickly within days or years, but a few decay slowly over billions of years. Those slow-decaying isotopes serve as geologic clocks for dating ancient rocks.",
+      "evidence": [
+        {
+          "sourceId": "usgs-geologic-age",
+          "quote": "Most radioactive isotopes have rapid rates of decay (that is, short half-lives) and lose their radioactivity within a few days or years."
+        },
+        {
+          "sourceId": "usgs-geologic-age",
+          "quote": "Some isotopes, however, decay slowly, and several of these are used as geologic clocks."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 10,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 0.5,
+      "max": 10,
+      "default": 4.5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 22.5,
+      "default": 4.5
+    },
+    "scenario": {
+      "objectLabel": "Uranium-238 sample (grams)",
+      "settingLabel": "Time in billion years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "one half-life remains one half",
+      "initialAmount": 100,
+      "halfLife": 4.5,
+      "elapsedTime": 4.5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "two half-lives remain one quarter",
+      "initialAmount": 100,
+      "halfLife": 4.5,
+      "elapsedTime": 9,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    },
+    {
+      "name": "zero time no decay",
+      "initialAmount": 200,
+      "halfLife": 1.25,
+      "elapsedTime": 0,
+      "expectedRemaining": 200,
+      "tolerance": 0.1
+    },
+    {
+      "name": "three half-lives fractional decay",
+      "initialAmount": 80,
+      "halfLife": 2,
+      "elapsedTime": 6,
+      "expectedRemaining": 10,
+      "tolerance": 0.02
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-01-opening-uranium238-one-halflife",
+      "prompt": "A 100-gram Uranium-238 sample is buried. Uranium-238 has a half-life of 4.5 billion years. How much remains after 4.5 billion years?",
+      "initialAmount": 100,
+      "halfLife": 4.5,
+      "elapsedTime": 4.5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-02-two-halflives",
+      "prompt": "Same 100-gram Uranium-238 sample after 9.0 billion years (two half-lives).",
+      "initialAmount": 100,
+      "halfLife": 4.5,
+      "elapsedTime": 9,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pred-03-potassium40-two-halflives",
+      "prompt": "A 200-gram Potassium-40 sample (half-life 1.25 billion years) after 2.5 billion years.",
+      "initialAmount": 200,
+      "halfLife": 1.25,
+      "elapsedTime": 2.5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ab257c90674e45a888030bb9c28c026e",
+    "runId": "job-20261031111030-f35b7415",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T11:12:04.093Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

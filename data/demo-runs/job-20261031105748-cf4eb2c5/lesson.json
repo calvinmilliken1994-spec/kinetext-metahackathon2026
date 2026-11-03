@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031105748-cf4eb2c5",
+  "analysisRef": "job-20261031105748-cf4eb2c5/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105748-cf4eb2c5:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Vertical structure of the atmosphere and how temperature varies with height",
+    "sources": [
+      {
+        "id": "noaa-jetstream-layers-of-atmosphere",
+        "title": "Layers of the Atmosphere — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Layers of the Atmosphere'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "75a26a66f8c260bac9fb18573281be8d0a62c9cc36a790a7c00e5129e643fdba"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3b350e669bb24a71bd69665b39aae471",
+      "runId": "job-20261031105748-cf4eb2c5",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:59:22.380Z"
+    },
+    "seed": 3230121917,
+    "headline": "Vertical structure of the atmosphere and how temperature varies with height",
+    "keyPoints": [
+      {
+        "id": "kp-envelope",
+        "point": "Students learn that the envelope of gas surrounding Earth changes from the ground up through layered structure.",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The envelope of gas surrounding the Earth changes from the ground up."
+      },
+      {
+        "id": "kp-absorption",
+        "point": "Students learn that absorption in the thermosphere causes temperature to increase with height.",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Because of this absorption, the temperature increases with height."
+      },
+      {
+        "id": "kp-stratosphere-temp",
+        "point": "Students learn that temperature increases with height in the stratosphere due to ozone formation.",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "In this region, the temperature increases with height."
+      },
+      {
+        "id": "kp-density",
+        "point": "Students learn that as density of gases decrease with height the air becomes thinner in the troposphere.",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "As the density of the gases in this layer decrease with height, the air becomes thinner."
+      },
+      {
+        "id": "kp-mesosphere-meteors",
+        "point": "Students learn that gases in the mesosphere are thick enough to slow meteors which burn up as fiery trails.",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The gases in the mesosphere are now thick enough to slow down meteors"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-troposphere",
+        "term": "troposphere",
+        "gloss": "lowest layer where weather occurs and height varies with latitude",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The troposphere begins at the Earth's surface, but the height of the troposphere varies."
+      },
+      {
+        "id": "kt-stratosphere",
+        "term": "stratosphere",
+        "gloss": "middle layer that extends above the surface and holds ozone that warms the air",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The stratosphere extends from 4 -12 miles (6-20 km) above the Earth's surface to around 31 miles (50 km)."
+      },
+      {
+        "id": "kt-mesosphere",
+        "term": "mesosphere",
+        "gloss": "middle layer where meteors slow and burn leaving fiery trails",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The gases in the mesosphere are now thick enough to slow down meteors"
+      },
+      {
+        "id": "kt-thermosphere",
+        "term": "thermosphere",
+        "gloss": "upper atmosphere layer known for rising temperature due to solar radiation absorption",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Between about 53 miles (85 km) and 375 miles (600 km) lies the thermosphere, known as the upper atmosphere."
+      },
+      {
+        "id": "kt-tropopause",
+        "term": "tropopause",
+        "gloss": "transition boundary that marks the bottom of the stratosphere",
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The transition layer at the bottom of the stratosphere is called the tropopause."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031105748-cf4eb2c5:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105748-cf4eb2c5:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

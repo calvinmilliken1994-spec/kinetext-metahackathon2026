@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Check recall of drafting and signing facts",
+    "cards": [
+      {
+        "id": "committee-size-card",
+        "stem": "What group did Congress appoint on June 10 to draft a statement for the colonies?",
+        "options": [
+          "committee of five",
+          "committee of three",
+          "committee of seven",
+          "committee of nine"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies.",
+        "hint": "Think about the size named in the appointment"
+      },
+      {
+        "id": "signing-start-card",
+        "stem": "When did delegates begin signing the engrossed parchment copy?",
+        "options": [
+          "August 2, 1776",
+          "July 4, 1776",
+          "July 19th",
+          "June 10"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it.",
+        "hint": "Remember the date in early August when signing started"
+      },
+      {
+        "id": "adoption-date-card",
+        "stem": "When did Congress adopt the statement after completing revisions?",
+        "options": [
+          "July 4, 1776",
+          "July 2",
+          "July 5th",
+          "June 10"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+        "hint": "Think about the afternoon in early July when adoption occurred"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031153554-ff0c40bf:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9394989cd29d4062b97494a93e97259a",
+    "usage": {
+      "promptTokens": 2780,
+      "completionTokens": 8789,
+      "reasoningTokens": 8412,
+      "cachedTokens": 0
+    },
+    "latencyMs": 27772,
+    "estCostUSD": 0.04082825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "total-signers-card",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153554-ff0c40bf:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Check recall of drafting and signing facts",
+    "sources": [
+      {
+        "id": "nara-declaration-of-independence",
+        "title": "Declaration of Independence (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/declaration-of-independence",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Declaration of Independence (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "f0322f21a85ef6996de0972f6543cc8ed8e3393aed20b7d086cada9260c1c668"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9394989cd29d4062b97494a93e97259a",
+      "runId": "job-20261031153554-ff0c40bf",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T15:37:05.126Z"
+    },
+    "seed": 2966017940,
+    "cards": [
+      {
+        "id": "committee-size-card",
+        "stem": "What group did Congress appoint on June 10 to draft a statement for the colonies?",
+        "options": [
+          "committee of five",
+          "committee of three",
+          "committee of seven",
+          "committee of nine"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "Congress appointed on June 10 a committee of five to draft a statement of independence for the colonies.",
+        "hint": "Think about the size named in the appointment"
+      },
+      {
+        "id": "signing-start-card",
+        "stem": "When did delegates begin signing the engrossed parchment copy?",
+        "options": [
+          "August 2, 1776",
+          "July 4, 1776",
+          "July 19th",
+          "June 10"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "It was engrossed on parchment and on August 2, 1776, delegates began signing it.",
+        "hint": "Remember the date in early August when signing started"
+      },
+      {
+        "id": "adoption-date-card",
+        "stem": "When did Congress adopt the statement after completing revisions?",
+        "options": [
+          "July 4, 1776",
+          "July 2",
+          "July 5th",
+          "June 10"
+        ],
+        "sourceId": "nara-declaration-of-independence",
+        "quote": "The Continental Congress adopted the Declaration of Independence on July 4, 1776.",
+        "hint": "Think about the afternoon in early July when adoption occurred"
+      }
+    ]
+  }
+}

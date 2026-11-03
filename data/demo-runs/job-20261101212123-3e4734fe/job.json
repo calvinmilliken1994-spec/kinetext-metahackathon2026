@@ -1,0 +1,31 @@
+{
+  "jobId": "job-20261101212123-3e4734fe",
+  "sourceId": "noaa-jetstream-hydrologic-cycle",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-11-01T21:21:23.040Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.137436,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 49112,
+    "startedAt": "2026-11-01T21:21:23.040Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-11-01T21:23:47.021Z"
+}

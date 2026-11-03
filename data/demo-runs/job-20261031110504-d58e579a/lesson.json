@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031110504-d58e579a",
+  "analysisRef": "job-20261031110504-d58e579a/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110504-d58e579a:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How Congress charges, tries and removes federal officials",
+    "sources": [
+      {
+        "id": "usagov-impeachment",
+        "title": "How federal impeachment works — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/impeachment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How federal impeachment works'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "e2ad6fbbadad11e3751966452191cdcf57c63d5a5c31609f144004e3226733de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "557a6442206c41199f828d81f810b86e",
+      "runId": "job-20261031110504-d58e579a",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:06:34.185Z"
+    },
+    "seed": 1674488015,
+    "headline": "How Congress charges, tries and removes federal officials",
+    "keyPoints": [
+      {
+        "id": "defining-impeachment",
+        "point": "Impeachment is the process of bringing charges against a person in office for wrongdoing before any trial.",
+        "sourceId": "usagov-impeachment",
+        "quote": "Impeachment is the process of bringing charges against a government official for wrongdoing."
+      },
+      {
+        "id": "grounds-for-impeachment",
+        "point": "A person holding federal office can be impeached for treason, bribery and other high crimes and misdemeanors.",
+        "sourceId": "usagov-impeachment",
+        "quote": "An official can be impeached for treason, bribery, and “other high crimes and misdemeanors.”"
+      },
+      {
+        "id": "senate-trial-role",
+        "point": "The Senate holds an impeachment trial and the chief justice presides when a president is tried.",
+        "sourceId": "usagov-impeachment",
+        "quote": "The Senate holds an impeachment trial."
+      },
+      {
+        "id": "historical-frequency",
+        "point": "The House has initiated impeachment proceedings more than 60 times but recorded only 21 impeachments.",
+        "sourceId": "usagov-impeachment",
+        "quote": "The House has initiated impeachment proceedings more than 60 times. But there have been only 21 impeachments."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-impeachment",
+        "term": "Impeachment",
+        "gloss": "Process of bringing charges against a person in office for wrongdoing",
+        "sourceId": "usagov-impeachment",
+        "quote": "Impeachment is the process of bringing charges against a government official for wrongdoing."
+      },
+      {
+        "id": "term-articles",
+        "term": "articles",
+        "gloss": "Formal charges the House brings to start an impeachment case",
+        "sourceId": "usagov-impeachment",
+        "quote": "The House of Representatives brings articles (charges) of impeachment against an official."
+      },
+      {
+        "id": "term-treason",
+        "term": "treason",
+        "gloss": "Betrayal of the country listed with bribery as grounds for impeachment that includes treason",
+        "sourceId": "usagov-impeachment",
+        "quote": "An official can be impeached for treason, bribery, and “other high crimes and misdemeanors.”"
+      },
+      {
+        "id": "term-senate",
+        "term": "Senate",
+        "gloss": "Chamber that holds the impeachment trial after the House vote",
+        "sourceId": "usagov-impeachment",
+        "quote": "The Senate holds an impeachment trial."
+      },
+      {
+        "id": "term-acquittals",
+        "term": "acquittals",
+        "gloss": "Senate decisions of not guilty that let presidents remain in office after trial",
+        "sourceId": "usagov-impeachment",
+        "quote": "Presidents Johnson, Clinton, and Trump remained in office following acquittals by the Senate on all charges."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110504-d58e579a:sequence-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031110504-d58e579a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

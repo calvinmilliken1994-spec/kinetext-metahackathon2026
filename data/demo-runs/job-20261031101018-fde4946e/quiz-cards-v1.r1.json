@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Cell parts and their functions",
+    "cards": [
+      {
+        "id": "card-building-blocks",
+        "stem": "What are the basic building blocks of all living things?",
+        "options": [
+          "Cells",
+          "Tissues",
+          "Organs",
+          "Molecules"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Cells are the basic building blocks of all living things.",
+        "hint": ""
+      },
+      {
+        "id": "card-nucleus-command",
+        "stem": "Which part serves as the command center that directs a cell to grow and divide?",
+        "options": [
+          "nucleus",
+          "mitochondria",
+          "ribosomes",
+          "cytoplasm"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The nucleus serves as the cell’s command center, sending directions to the cell to grow, mature, divide, or die.",
+        "hint": "Think about which part houses hereditary material."
+      },
+      {
+        "id": "card-mitochondria-energy",
+        "stem": "Which organelles convert energy from food into a usable form for the cell?",
+        "options": [
+          "Mitochondria",
+          "Golgi apparatus",
+          "lysosomes",
+          "plasma membrane"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Mitochondria are complex organelles that convert energy from food into a form that the cell can use.",
+        "hint": ""
+      },
+      {
+        "id": "card-cytoplasm-fluid",
+        "stem": "Which jelly-like fluid and structures surround the nucleus within cells?",
+        "options": [
+          "cytoplasm",
+          "cytoskeleton",
+          "nuclear envelope",
+          "ribosomes"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Within cells, the cytoplasm is made up of a jelly-like fluid (called the cytosol) and other structures that surround the nucleus.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101018-fde4946e:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5698437e1ce84f6c95913b27efa61445",
+    "usage": {
+      "promptTokens": 2905,
+      "completionTokens": 6574,
+      "reasoningTokens": 6233,
+      "cachedTokens": 0
+    },
+    "latencyMs": 39802,
+    "estCostUSD": 0.03157075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101018-fde4946e:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Cell parts and their functions",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-cell",
+        "title": "What is a cell? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/cell/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "e1e13e682d36c67bceb40f4665d1bb179174796619028f4cd49b9ec874b4f2b3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5698437e1ce84f6c95913b27efa61445",
+      "runId": "job-20261031101018-fde4946e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:45.296Z"
+    },
+    "seed": 2851051733,
+    "cards": [
+      {
+        "id": "card-building-blocks",
+        "stem": "What are the basic building blocks of all living things?",
+        "options": [
+          "Cells",
+          "Tissues",
+          "Organs",
+          "Molecules"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Cells are the basic building blocks of all living things.",
+        "hint": ""
+      },
+      {
+        "id": "card-nucleus-command",
+        "stem": "Which part serves as the command center that directs a cell to grow and divide?",
+        "options": [
+          "nucleus",
+          "mitochondria",
+          "ribosomes",
+          "cytoplasm"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "The nucleus serves as the cell’s command center, sending directions to the cell to grow, mature, divide, or die.",
+        "hint": "Think about which part houses hereditary material."
+      },
+      {
+        "id": "card-mitochondria-energy",
+        "stem": "Which organelles convert energy from food into a usable form for the cell?",
+        "options": [
+          "Mitochondria",
+          "Golgi apparatus",
+          "lysosomes",
+          "plasma membrane"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Mitochondria are complex organelles that convert energy from food into a form that the cell can use.",
+        "hint": ""
+      },
+      {
+        "id": "card-cytoplasm-fluid",
+        "stem": "Which jelly-like fluid and structures surround the nucleus within cells?",
+        "options": [
+          "cytoplasm",
+          "cytoskeleton",
+          "nuclear envelope",
+          "ribosomes"
+        ],
+        "sourceId": "medlineplus-what-is-a-cell",
+        "quote": "Within cells, the cytoplasm is made up of a jelly-like fluid (called the cytosol) and other structures that surround the nucleus.",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031110138-07eabea7",
+  "analysisRef": "job-20261031110138-07eabea7/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110138-07eabea7:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How decades of AI research built tools for vision, prediction and learning",
+    "sources": [
+      {
+        "id": "nsf-building-foundations-of-ai",
+        "title": "Building the Foundations of Artificial Intelligence — U.S. National Science Foundation, NSF Impacts",
+        "locator": "https://www.nsf.gov/impacts/ai",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. National Science Foundation, NSF Impacts, 'Building the Foundations of Artificial Intelligence'. Courtesy: U.S. National Science Foundation. Per the NSF Web Policies, 'Most text appearing on NSF webpages was either prepared by employees of the U.S. government as part of their official duties and therefore not subject to copyright or prepared under contracts that gave NSF the right to place the text into the public domain. … You may freely copy that material and, at your discretion, credit NSF with a \"Courtesy: U.S. National Science Foundation\" notation.' The U.S. National Science Foundation has not reviewed, approved or endorsed this activity.",
+        "sha256": "567b4f973b2805f389f8f63701026bd750e17c11eb4ae3bea26d3aeab2cd4f52"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3ce79a3bfacd4a7e84f4487653f1e959",
+      "runId": "job-20261031110138-07eabea7",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:03:19.274Z"
+    },
+    "seed": 2808289971,
+    "headline": "How decades of AI research built tools for vision, prediction and learning",
+    "keyPoints": [
+      {
+        "id": "ai-definition",
+        "point": "Students explain that AI is technology enabling computer systems to learn and reason to make decisions.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "AI is a technology that enables computer systems to learn, reason and make decisions"
+      },
+      {
+        "id": "vision-imagenet",
+        "point": "Students describe how techniques perfected on the ImageNet database became central to everyday recognition technologies.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Techniques perfected on this database became central to technologies like Face ID, tagging friends in photos and detecting tumors in MRI scans."
+      },
+      {
+        "id": "stochastic-modeling",
+        "point": "Students explain stochastic modeling as capturing real-world randomness to improve navigation and communication systems.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "stochastic modeling is the idea of capturing real-world randomness mathematically."
+      },
+      {
+        "id": "neural-reinforcement",
+        "point": "Students trace how reinforcement learning advances through trial and error and reward-based decision optimization.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Reinforcement learning is a type of machine learning where an AI system learns from trial and error"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "computer-vision",
+        "term": "Computer vision",
+        "gloss": "Systems that interpret pixels as meaningful patterns to recognize objects and faces.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Computer vision emerged in the early 1960s as researchers began exploring whether machines could learn to see and interpret"
+      },
+      {
+        "id": "imagenet",
+        "term": "ImageNet",
+        "gloss": "Publicly available image collection used to train and test vision models for comparison.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "and her team launched ImageNet, a publicly available database containing more than 3 million images"
+      },
+      {
+        "id": "stochastic-modeling-term",
+        "term": "stochastic modeling",
+        "gloss": "Mathematical approach for capturing randomness to model unpredictable natural and technical processes.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "stochastic modeling is the idea of capturing real-world randomness mathematically."
+      },
+      {
+        "id": "neural-networks",
+        "term": "Neural networks",
+        "gloss": "Computational models inspired by the brain that power photo generation and drug design applications.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Neural networks — computational models inspired by the human brain"
+      },
+      {
+        "id": "reinforcement-learning",
+        "term": "Reinforcement learning",
+        "gloss": "Machine learning approach where a system learns from trial and error using rewards for actions.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Reinforcement learning is a type of machine learning where an AI system learns from trial and error"
+      },
+      {
+        "id": "intelligent-tutoring",
+        "term": "intelligent tutoring systems",
+        "gloss": "AI-driven tutoring that bridges student ability and expert problem solving with personalized actions.",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "intelligent tutoring systems, which aim to bridge the gap between students' current ability and expert-level problem-solving"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031110138-07eabea7:compare-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110138-07eabea7:sequence-v1:r1",
+      "status": "passed",
+      "reason": "2 steps were left out because they could not be verified against the page: researchers-explore-machine-sight (SEQ-01), tools-detect-image-edges (SEQ-01).",
+      "revision": 1
+    }
+  ]
+}

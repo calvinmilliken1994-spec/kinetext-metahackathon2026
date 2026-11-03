@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031154129-67bdf09c",
+  "analysisRef": "job-20261031154129-67bdf09c/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031154129-67bdf09c:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "First crewed lunar landing and return flight from launch to splashdown",
+    "sources": [
+      {
+        "id": "nasa-apollo-11-mission-overview",
+        "title": "Apollo 11 Mission Overview — NASA",
+        "locator": "https://www.nasa.gov/missions/apollo/apollo-11/apollo-11-mission-overview/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA, 'Apollo 11 Mission Overview'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; no NASA images or logos are stored and this activity is labelled AI-generated. NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4b29539152f1ed2229358538d39df45198fafd17251631e6efc9561260db7e1"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0985dd9908ac44cb8466ac2ff42ec10b",
+      "runId": "job-20261031154129-67bdf09c",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T15:42:02.668Z"
+    },
+    "seed": 2016229729,
+    "headline": "First crewed lunar landing and return flight from launch to splashdown",
+    "keyPoints": [
+      {
+        "id": "objective-lunar-landing",
+        "point": "Students learn the primary goal was a crewed lunar landing and safe return to Earth.",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "perform a crewed lunar landing and return to Earth."
+      },
+      {
+        "id": "launch-crew-date",
+        "point": "Students learn the crew launched from Cape Kennedy on July 16, 1969 carrying Commander Neil Armstrong aboard.",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "Apollo 11 launched from Cape Kennedy on July 16, 1969, carrying Commander Neil Armstrong"
+      },
+      {
+        "id": "science-deployment-objective",
+        "point": "Students learn astronauts completed deployment of solar wind composition experiment and seismic experiment package on the surface.",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "deployment of a solar wind composition experiment, seismic experiment package and a Laser Ranging Retroreflector."
+      },
+      {
+        "id": "landing-site-tranquility",
+        "point": "Students learn the Eagle landed in the Sea of Tranquility at the documented latitude on July 20, 1969.",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "the Eagle landed in the Sea of Tranquility in Site 2 at 0 degrees, 41 minutes, 15 seconds north latitude"
+      },
+      {
+        "id": "splashdown-return",
+        "point": "Students learn the capsule splashed down in the Pacific Ocean near the recovery ship after the return flight.",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "Apollo 11 splashed down in the Pacific Ocean, 13 miles from the recovery ship USS Hornet."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "free-return",
+        "term": "free-return",
+        "gloss": "trajectory that allows return to Earth without engine firing if needed",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "This was to be the last Apollo mission to fly a “free-return” trajectory"
+      },
+      {
+        "id": "midcourse-corrections",
+        "term": "midcourse corrections",
+        "gloss": "planned engine burns to adjust course during flight between Earth and moon",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "the second of four scheduled midcourse corrections programmed for the flight."
+      },
+      {
+        "id": "lunar-orbit",
+        "term": "lunar orbit",
+        "gloss": "insertion maneuver that placed spacecraft into lunar orbit",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "first lunar orbit insertion maneuver."
+      },
+      {
+        "id": "sea-of-tranquility",
+        "term": "Sea of Tranquility",
+        "gloss": "lunar plain where the Eagle landed and astronauts walked",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "the Eagle landed in the Sea of Tranquility in Site 2 at 0 degrees, 41 minutes, 15 seconds north latitude"
+      },
+      {
+        "id": "translunar-orbit",
+        "term": "translunar orbit",
+        "gloss": "orbit that carries the spacecraft from Earth toward the moon",
+        "sourceId": "nasa-apollo-11-mission-overview",
+        "quote": "placing Apollo 11 into a translunar orbit."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nasa-apollo-11-mission-overview-job-20261031154129-67bdf09c",
+      "status": "failed",
+      "reason": "Muse ran out of room while writing this part, so it was left out.",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031154129-67bdf09c:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

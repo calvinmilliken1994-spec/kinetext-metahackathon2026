@@ -1,0 +1,190 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From early vision research to modern language learning",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the article order from early vision to today's learning tools",
+    "steps": [
+      {
+        "id": "imagenet-database-launched",
+        "label": "ImageNet database is launched",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "A pivotal moment came in 2009, when Fei-Fei Li, supported by an NSF Faculty Early Career Development award, and her team launched ImageNet",
+        "orderHint": ""
+      },
+      {
+        "id": "graphics-processors-speed",
+        "label": "Graphics processors speed up learning",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "By the 2010s, researchers discovered how to use high-performance graphics-processing units to dramatically improve the speed and accuracy",
+        "orderHint": ""
+      },
+      {
+        "id": "language-app-launches",
+        "label": "Language app launches for learners",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Launched in 2011, Duolingo is rooted in decades of NSF-supported linguistic and AI-driven learning research.",
+        "orderHint": ""
+      },
+      {
+        "id": "virtual-teachers-advance",
+        "label": "Virtual teachers advance learning experiences",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "including virtual teachers (both digital and robotic) that incorporate speech, gesture, gaze and facial expression.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110138-07eabea7:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "805f779bed4a4fa0911425b1c2ecf259",
+    "usage": {
+      "promptTokens": 3647,
+      "completionTokens": 8893,
+      "reasoningTokens": 8481,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40575,
+    "estCostUSD": 0.042354,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "researchers-explore-machine-sight",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    },
+    {
+      "index": 1,
+      "id": "tools-detect-image-edges",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110138-07eabea7:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From early vision research to modern language learning",
+    "sources": [
+      {
+        "id": "nsf-building-foundations-of-ai",
+        "title": "Building the Foundations of Artificial Intelligence — U.S. National Science Foundation, NSF Impacts",
+        "locator": "https://www.nsf.gov/impacts/ai",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. National Science Foundation, NSF Impacts, 'Building the Foundations of Artificial Intelligence'. Courtesy: U.S. National Science Foundation. Per the NSF Web Policies, 'Most text appearing on NSF webpages was either prepared by employees of the U.S. government as part of their official duties and therefore not subject to copyright or prepared under contracts that gave NSF the right to place the text into the public domain. … You may freely copy that material and, at your discretion, credit NSF with a \"Courtesy: U.S. National Science Foundation\" notation.' The U.S. National Science Foundation has not reviewed, approved or endorsed this activity.",
+        "sha256": "567b4f973b2805f389f8f63701026bd750e17c11eb4ae3bea26d3aeab2cd4f52"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "805f779bed4a4fa0911425b1c2ecf259",
+      "runId": "job-20261031110138-07eabea7",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:03:59.883Z"
+    },
+    "seed": 986002135,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow the article order from early vision to today's learning tools",
+    "steps": [
+      {
+        "id": "imagenet-database-launched",
+        "label": "ImageNet database is launched",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "A pivotal moment came in 2009, when Fei-Fei Li, supported by an NSF Faculty Early Career Development award, and her team launched ImageNet",
+        "orderHint": ""
+      },
+      {
+        "id": "graphics-processors-speed",
+        "label": "Graphics processors speed up learning",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "By the 2010s, researchers discovered how to use high-performance graphics-processing units to dramatically improve the speed and accuracy",
+        "orderHint": ""
+      },
+      {
+        "id": "language-app-launches",
+        "label": "Language app launches for learners",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "Launched in 2011, Duolingo is rooted in decades of NSF-supported linguistic and AI-driven learning research.",
+        "orderHint": ""
+      },
+      {
+        "id": "virtual-teachers-advance",
+        "label": "Virtual teachers advance learning experiences",
+        "sourceId": "nsf-building-foundations-of-ai",
+        "quote": "including virtual teachers (both digital and robotic) that incorporate speech, gesture, gaze and facial expression.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

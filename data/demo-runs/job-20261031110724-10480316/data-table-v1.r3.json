@@ -1,0 +1,533 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Comparing recurrence intervals and yearly flood chance",
+    "labelHeader": "Return period",
+    "columns": [
+      {
+        "header": "Recurrence interval",
+        "unit": "years",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      },
+      {
+        "header": "Annual exceedance probability",
+        "unit": "percent",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "2 | 50",
+        "values": [
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "2 | 50"
+          },
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "2 | 50"
+          }
+        ]
+      },
+      {
+        "label": "5-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "5 | 20",
+        "values": [
+          {
+            "value": "5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "5 | 20"
+          },
+          {
+            "value": "20",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "5 | 20"
+          }
+        ]
+      },
+      {
+        "label": "10-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "10 | 10",
+        "values": [
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "10 | 10"
+          },
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "10 | 10"
+          }
+        ]
+      },
+      {
+        "label": "25-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "25 | 4",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "25 | 4"
+          },
+          {
+            "value": "4",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "25 | 4"
+          }
+        ]
+      },
+      {
+        "label": "50-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "50 | 2",
+        "values": [
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "50 | 2"
+          },
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "50 | 2"
+          }
+        ]
+      },
+      {
+        "label": "100-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "100 | 1",
+        "values": [
+          {
+            "value": "100",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "100 | 1"
+          },
+          {
+            "value": "1",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "100 | 1"
+          }
+        ]
+      },
+      {
+        "label": "200-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "200 | 0.5",
+        "values": [
+          {
+            "value": "200",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          },
+          {
+            "value": "0.5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          }
+        ]
+      },
+      {
+        "label": "500-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "500 | 0.2",
+        "values": [
+          {
+            "value": "500",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          },
+          {
+            "value": "0.2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "which-500-year-is-rarest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "which-2-year-is-most-likely",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "what-chance-for-100-year",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031110724-10480316:data-table-v1:r3",
+    "revision": 3,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].quote: quote \"2 | 50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].values[0].quote: quote \"2 | 50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].values[1].quote: quote \"2 | 50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[1].quote: quote \"5 | 20\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[1].values[0].quote: quote \"5 | 20\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[1].values[1].quote: quote \"5 | 20\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[2].quote: quote \"10 | 10\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[2].values[0].quote: quote \"10 | 10\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[2].values[1].quote: quote \"10 | 10\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[3].quote: quote \"25 | 4\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[3].values[0].quote: quote \"25 | 4\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[3].values[1].quote: quote \"25 | 4\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[4].quote: quote \"50 | 2\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[4].values[0].quote: quote \"50 | 2\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[4].values[1].quote: quote \"50 | 2\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[5].quote: quote \"100 | 1\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[5].values[0].quote: quote \"100 | 1\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[5].values[1].quote: quote \"100 | 1\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\" (expected verbatim quotes of 1-150 characters copied from the cited source)",
+        "path": "/rows/0/quote",
+        "affected": [
+          "/rows/0/quote",
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/quote",
+          "/rows/1/quote",
+          "/rows/1/values/0/quote",
+          "/rows/1/values/1/quote",
+          "/rows/2/quote",
+          "/rows/2/values/0/quote",
+          "/rows/2/values/1/quote",
+          "/rows/3/quote",
+          "/rows/3/values/0/quote",
+          "/rows/3/values/1/quote",
+          "/rows/4/quote",
+          "/rows/4/values/0/quote",
+          "/rows/4/values/1/quote",
+          "/rows/5/quote",
+          "/rows/5/values/0/quote",
+          "/rows/5/values/1/quote"
+        ]
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0]: the label \"2-year flood\" occurs neither in its quote \"2 | 50\" nor in the same source paragraph (the row must be the page's own row); rows[1]: the label \"5-year flood\" occurs neither in its quote \"5 | 20\" nor in the same source paragraph (the row must be the page's own row); rows[2]: the label \"10-year flood\" occurs neither in its quote \"10 | 10\" nor in the same source paragraph (the row must be the page's own row); rows[3]: the label \"25-year flood\" occurs neither in its quote \"25 | 4\" nor in the same source paragraph (the row must be the page's own row); rows[4]: the label \"50-year flood\" occurs neither in its quote \"50 | 2\" nor in the same source paragraph (the row must be the page's own row); rows[5]: the label \"100-year flood\" occurs neither in its quote \"100 | 1\" nor in the same source paragraph (the row must be the page's own row); rows[6]: the label \"200-year flood\" occurs neither in its quote \"200 | 0.5\" nor in the same source paragraph (the row must be the page's own row); rows[7]: the label \"500-year flood\" occurs neither in its quote \"500 | 0.2\" nor in the same source paragraph (the row must be the page's own row)",
+        "path": "/rows/0/label",
+        "affected": [
+          "/rows/0/label",
+          "/rows/0/quote",
+          "/rows/1/label",
+          "/rows/1/quote",
+          "/rows/2/label",
+          "/rows/2/quote",
+          "/rows/3/label",
+          "/rows/3/quote",
+          "/rows/4/label",
+          "/rows/4/quote",
+          "/rows/5/label",
+          "/rows/5/quote",
+          "/rows/6/label",
+          "/rows/6/quote",
+          "/rows/7/label",
+          "/rows/7/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 16 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 8 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"which-500-year-is-rarest\" (largest) → rows[7] \"500\"; \"which-2-year-is-most-likely\" (smallest) → rows[0] \"2\"; \"what-chance-for-100-year\" (lookup) → rows[5] \"1\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"Annual exceedance probability\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5327bf5237214ab589a949b5f52e8a49",
+    "usage": {
+      "promptTokens": 8758,
+      "completionTokens": 2539,
+      "reasoningTokens": 1723,
+      "cachedTokens": 0
+    },
+    "latencyMs": 14087,
+    "estCostUSD": 0.02173825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110724-10480316:data-table-v1:r3",
+    "componentId": "data-table-v1",
+    "title": "Comparing recurrence intervals and yearly flood chance",
+    "sources": [
+      {
+        "id": "usgs-100-year-flood",
+        "title": "The 100-Year Flood — U.S. Geological Survey, Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/100-year-flood",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'The 100-Year Flood'. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5327bf5237214ab589a949b5f52e8a49",
+      "runId": "job-20261031110724-10480316",
+      "promptVersion": "s6-v10",
+      "revision": 3,
+      "repairOf": 2,
+      "generatedAt": "2026-10-31T11:11:23.360Z"
+    },
+    "seed": 1676846271,
+    "labelHeader": "Return period",
+    "columns": [
+      {
+        "header": "Recurrence interval",
+        "unit": "years",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      },
+      {
+        "header": "Annual exceedance probability",
+        "unit": "percent",
+        "numeric": true,
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Recurrence interval, years | Annual exceedance probability, percent"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "2 | 50",
+        "values": [
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "2 | 50"
+          },
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "2 | 50"
+          }
+        ]
+      },
+      {
+        "label": "5-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "5 | 20",
+        "values": [
+          {
+            "value": "5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "5 | 20"
+          },
+          {
+            "value": "20",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "5 | 20"
+          }
+        ]
+      },
+      {
+        "label": "10-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "10 | 10",
+        "values": [
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "10 | 10"
+          },
+          {
+            "value": "10",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "10 | 10"
+          }
+        ]
+      },
+      {
+        "label": "25-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "25 | 4",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "25 | 4"
+          },
+          {
+            "value": "4",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "25 | 4"
+          }
+        ]
+      },
+      {
+        "label": "50-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "50 | 2",
+        "values": [
+          {
+            "value": "50",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "50 | 2"
+          },
+          {
+            "value": "2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "50 | 2"
+          }
+        ]
+      },
+      {
+        "label": "100-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "100 | 1",
+        "values": [
+          {
+            "value": "100",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "100 | 1"
+          },
+          {
+            "value": "1",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "100 | 1"
+          }
+        ]
+      },
+      {
+        "label": "200-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "200 | 0.5",
+        "values": [
+          {
+            "value": "200",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          },
+          {
+            "value": "0.5",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "200 | 0.5"
+          }
+        ]
+      },
+      {
+        "label": "500-year flood",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "500 | 0.2",
+        "values": [
+          {
+            "value": "500",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          },
+          {
+            "value": "0.2",
+            "sourceId": "usgs-100-year-flood",
+            "quote": "500 | 0.2"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "which-500-year-is-rarest",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "which-2-year-is-most-likely",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 0
+      },
+      {
+        "id": "what-chance-for-100-year",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

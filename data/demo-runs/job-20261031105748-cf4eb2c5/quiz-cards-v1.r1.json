@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Pauses and thermal changes in the vertical structure",
+    "cards": [
+      {
+        "id": "card-pauses-boundary",
+        "stem": "What term is used for the boundaries where layers show the greatest changes in thermal characteristics and related properties?",
+        "options": [
+          "pauses",
+          "fronts",
+          "eddies",
+          "jets"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Each of the layers are bounded by \"pauses\" where the greatest changes in thermal characteristics, chemical composition, movement, and density occur.",
+        "hint": "Recall the name given to transition zones between layers."
+      },
+      {
+        "id": "card-thermosphere-increase",
+        "stem": "How does the thermal structure change vertically after high energy radiation is absorbed in this upper layer?",
+        "options": [
+          "temperature increases with height",
+          "temperature decreases with height",
+          "temperature remains constant",
+          "temperature fluctuates randomly"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Because of this absorption, the temperature increases with height.",
+        "hint": "Think about the effect of absorption on the thermal profile."
+      },
+      {
+        "id": "card-tropopause-name",
+        "stem": "What is the name of the transition layer at the bottom of the stratosphere?",
+        "options": [
+          "tropopause",
+          "stratopause",
+          "mesopause",
+          "thermopause"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The transition layer at the bottom of the stratosphere is called the tropopause.",
+        "hint": "This boundary separates the lowest two layers."
+      },
+      {
+        "id": "card-density-thinner",
+        "stem": "What happens to the air as gas density decreases with height in the lower atmosphere?",
+        "options": [
+          "air becomes thinner",
+          "air becomes denser",
+          "air becomes saturated",
+          "air becomes still"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "As the density of the gases in this layer decrease with height, the air becomes thinner.",
+        "hint": "Consider how density relates to air thickness."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105748-cf4eb2c5:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "1ddbf8d8436f46859a310d511d4cca35",
+    "usage": {
+      "promptTokens": 3309,
+      "completionTokens": 9164,
+      "reasoningTokens": 8767,
+      "cachedTokens": 0
+    },
+    "latencyMs": 62406,
+    "estCostUSD": 0.04308325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105748-cf4eb2c5:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Pauses and thermal changes in the vertical structure",
+    "sources": [
+      {
+        "id": "noaa-jetstream-layers-of-atmosphere",
+        "title": "Layers of the Atmosphere — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Layers of the Atmosphere'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "75a26a66f8c260bac9fb18573281be8d0a62c9cc36a790a7c00e5129e643fdba"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1ddbf8d8436f46859a310d511d4cca35",
+      "runId": "job-20261031105748-cf4eb2c5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:00:24.815Z"
+    },
+    "seed": 4047626813,
+    "cards": [
+      {
+        "id": "card-pauses-boundary",
+        "stem": "What term is used for the boundaries where layers show the greatest changes in thermal characteristics and related properties?",
+        "options": [
+          "pauses",
+          "fronts",
+          "eddies",
+          "jets"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Each of the layers are bounded by \"pauses\" where the greatest changes in thermal characteristics, chemical composition, movement, and density occur.",
+        "hint": "Recall the name given to transition zones between layers."
+      },
+      {
+        "id": "card-thermosphere-increase",
+        "stem": "How does the thermal structure change vertically after high energy radiation is absorbed in this upper layer?",
+        "options": [
+          "temperature increases with height",
+          "temperature decreases with height",
+          "temperature remains constant",
+          "temperature fluctuates randomly"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "Because of this absorption, the temperature increases with height.",
+        "hint": "Think about the effect of absorption on the thermal profile."
+      },
+      {
+        "id": "card-tropopause-name",
+        "stem": "What is the name of the transition layer at the bottom of the stratosphere?",
+        "options": [
+          "tropopause",
+          "stratopause",
+          "mesopause",
+          "thermopause"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "The transition layer at the bottom of the stratosphere is called the tropopause.",
+        "hint": "This boundary separates the lowest two layers."
+      },
+      {
+        "id": "card-density-thinner",
+        "stem": "What happens to the air as gas density decreases with height in the lower atmosphere?",
+        "options": [
+          "air becomes thinner",
+          "air becomes denser",
+          "air becomes saturated",
+          "air becomes still"
+        ],
+        "sourceId": "noaa-jetstream-layers-of-atmosphere",
+        "quote": "As the density of the gases in this layer decrease with height, the air becomes thinner.",
+        "hint": "Consider how density relates to air thickness."
+      }
+    ]
+  }
+}

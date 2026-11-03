@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031095603-40b65657",
+  "analysisRef": "job-20261031095603-40b65657/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095603-40b65657:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How the house apportions 435 seats by equal proportions",
+    "sources": [
+      {
+        "id": "census-computing-apportionment",
+        "title": "Computing Apportionment — U.S. Census Bureau, Congressional Apportionment",
+        "locator": "https://www.census.gov/topics/public-sector/congressional-apportionment/about/computing.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, Congressional Apportionment, 'Computing Apportionment'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotation of Article 1, Section 2 of the U.S. Constitution is in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "aebb6d0187c5e1990d7aded30e76276837744417fba607704f46e82a7db34bf0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a9d7ec722506464496d2b90e25f08c86",
+      "runId": "job-20261031095603-40b65657",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:57:37.362Z"
+    },
+    "seed": 777256939,
+    "headline": "How the house apportions 435 seats by equal proportions",
+    "keyPoints": [
+      {
+        "id": "constitutional-enumeration",
+        "point": "Enumeration is required within every subsequent Term after the first Meeting of the Congress to apportion seats.",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States,"
+      },
+      {
+        "id": "equal-proportions-adoption",
+        "point": "The Method of Equal Proportions was adopted in 1941 to assign seats by priority value using population.",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The current method used, the Method of Equal Proportions, was adopted by congress in 1941 following the census of 1940."
+      },
+      {
+        "id": "automatic-seat",
+        "point": "Each of the 50 states is given one seat before remaining seats up to 435 are assigned by priority.",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Each of the 50 states is given one seat out of the current total of 435."
+      },
+      {
+        "id": "multiplier-formula",
+        "point": "The multiplier for each seat is one divided by the square root of n times n minus one.",
+        "sourceId": "census-computing-apportionment",
+        "quote": "1 divided by the square root of n(n-1)"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "apportionment",
+        "term": "apportionment",
+        "gloss": "Allocation of House seats among states based on population counts",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Therein lies the primary mandate of the U.S. census, apportionment of the House of Representatives."
+      },
+      {
+        "id": "enumeration",
+        "term": "Enumeration",
+        "gloss": "Required population count conducted within every subsequent term of ten years",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The actual Enumeration shall be made within three Years after the first Meeting of the Congress of the United States"
+      },
+      {
+        "id": "method-equal-proportions",
+        "term": "Method of Equal Proportions",
+        "gloss": "current apportionment method that assigns seats by priority values from population and multiplier",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The current method used, the Method of Equal Proportions, was adopted by congress in 1941 following the census of 1940."
+      },
+      {
+        "id": "priority-value",
+        "term": "priority value",
+        "gloss": "Number obtained by multiplying state population by its seat multiplier to rank seat assignment",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The priority value is determined by multiplying the population of a state by a \"multiplier.\""
+      },
+      {
+        "id": "multiplier",
+        "term": "multiplier",
+        "gloss": "Factor that equals reciprocal weighting for each potential seat",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The multiplier equals:"
+      },
+      {
+        "id": "geometric-mean",
+        "term": "geometric mean",
+        "gloss": "Measure whose reciprocal is used to compute seat multiplier",
+        "sourceId": "census-computing-apportionment",
+        "quote": "[which is called the reciprocal of the geometric mean]."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031095603-40b65657:sequence-v1:r1",
+      "status": "passed",
+      "reason": "1 step was left out because they could not be verified against the page: define-priority (SEQ-03).",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031095603-40b65657:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

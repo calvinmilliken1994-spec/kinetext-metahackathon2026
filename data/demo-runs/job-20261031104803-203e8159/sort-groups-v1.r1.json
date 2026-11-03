@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Sort framework resources and core functions",
+    "groups": [
+      {
+        "id": "quick-start-guides",
+        "label": "Quick-start guides"
+      },
+      {
+        "id": "six-key-functions",
+        "label": "Six key functions"
+      }
+    ],
+    "items": [
+      {
+        "id": "small-businesses",
+        "label": "Small businesses",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "quick-start guides designed for specific types of users, such as small businesses"
+      },
+      {
+        "id": "enterprise-risk-managers",
+        "label": "Enterprise risk managers",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "quick-start guides designed for specific types of users, such as small businesses, enterprise risk managers"
+      },
+      {
+        "id": "supply-chain-orgs",
+        "label": "Organizations seeking to secure their supply chains",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "enterprise risk managers, and organizations seeking to secure their supply chains"
+      },
+      {
+        "id": "func-identify",
+        "label": "Identify",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "six key functions: Identify, Protect, Detect, Respond and Recover"
+      },
+      {
+        "id": "func-protect",
+        "label": "Protect",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "organized around six key functions: Identify, Protect, Detect"
+      },
+      {
+        "id": "func-govern",
+        "label": "Govern",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "along with CSF 2.0’s newly added Govern function"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104803-203e8159:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6dd90a250cf84c64b5d7881f075cacf9",
+    "usage": {
+      "promptTokens": 3507,
+      "completionTokens": 9789,
+      "reasoningTokens": 9448,
+      "cachedTokens": 0
+    },
+    "latencyMs": 63335,
+    "estCostUSD": 0.045987,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104803-203e8159:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Sort framework resources and core functions",
+    "sources": [
+      {
+        "id": "nist-csf-2-0-release",
+        "title": "NIST Releases Version 2.0 of Landmark Cybersecurity Framework — NIST News",
+        "locator": "https://www.nist.gov/news-events/news/2024/02/nist-releases-version-20-landmark-cybersecurity-framework",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, 'NIST Releases Version 2.0 of Landmark Cybersecurity Framework' (NIST News). Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4c7ce2ca7d3c035aeb3f9dac0d3c8d25b6931ef97d0f90e3896e16d384eb6ee"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6dd90a250cf84c64b5d7881f075cacf9",
+      "runId": "job-20261031104803-203e8159",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:50:45.422Z"
+    },
+    "seed": 2693512243,
+    "groups": [
+      {
+        "id": "quick-start-guides",
+        "label": "Quick-start guides"
+      },
+      {
+        "id": "six-key-functions",
+        "label": "Six key functions"
+      }
+    ],
+    "items": [
+      {
+        "id": "small-businesses",
+        "label": "Small businesses",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "quick-start guides designed for specific types of users, such as small businesses"
+      },
+      {
+        "id": "enterprise-risk-managers",
+        "label": "Enterprise risk managers",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "quick-start guides designed for specific types of users, such as small businesses, enterprise risk managers"
+      },
+      {
+        "id": "supply-chain-orgs",
+        "label": "Organizations seeking to secure their supply chains",
+        "groupId": "quick-start-guides",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "enterprise risk managers, and organizations seeking to secure their supply chains"
+      },
+      {
+        "id": "func-identify",
+        "label": "Identify",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "six key functions: Identify, Protect, Detect, Respond and Recover"
+      },
+      {
+        "id": "func-protect",
+        "label": "Protect",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "organized around six key functions: Identify, Protect, Detect"
+      },
+      {
+        "id": "func-govern",
+        "label": "Govern",
+        "groupId": "six-key-functions",
+        "sourceId": "nist-csf-2-0-release",
+        "quote": "along with CSF 2.0’s newly added Govern function"
+      }
+    ]
+  }
+}

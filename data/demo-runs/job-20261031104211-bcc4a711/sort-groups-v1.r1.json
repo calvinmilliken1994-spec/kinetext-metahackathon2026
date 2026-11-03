@@ -1,0 +1,219 @@
+{
+  "gen": {
+    "schemaVersion": "sort-groups-v1",
+    "title": "Base pairing sort",
+    "groups": [
+      {
+        "id": "adenine-pair",
+        "label": "Adenine (A) always pairs"
+      },
+      {
+        "id": "cytosine-pair",
+        "label": "cytosine (C) always pairs"
+      }
+    ],
+    "items": [
+      {
+        "id": "adenine-a",
+        "label": "Adenine (A)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "thymine-t",
+        "label": "thymine (T)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "adenine-thymine-phrase",
+        "label": "Adenine (A) always pairs with thymine (T)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-c",
+        "label": "cytosine (C)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "guanine-g",
+        "label": "guanine (G)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-guanine-phrase",
+        "label": "cytosine (C) always pairs with guanine (G)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104211-bcc4a711:sort-groups-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sort text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SORT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 item quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SORT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every item label occurs in its quote and every group label occurs in the quote or the same source paragraph (item-and-group-in-quote; the design discloses the weak-link false accept on long paragraphs — every quote is shown to the teacher)"
+      },
+      {
+        "id": "SORT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every declared group is referenced by >= 2 items and every item groupId resolves (groups-covered)"
+      },
+      {
+        "id": "SORT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every item has a distinct label after normalisation (distinct-items)"
+      },
+      {
+        "id": "SORT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "groups 2 (2-4) and items 6 (6-12) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "SORT-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in group and item labels appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "517164d085c44c9a8491c66097a970dd",
+    "usage": {
+      "promptTokens": 3334,
+      "completionTokens": 6034,
+      "reasoningTokens": 5557,
+      "cachedTokens": 0
+    },
+    "latencyMs": 31265,
+    "estCostUSD": 0.029812,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104211-bcc4a711:sort-groups-v1:r1",
+    "componentId": "sort-groups-v1",
+    "title": "Base pairing sort",
+    "sources": [
+      {
+        "id": "nhgri-dna-sequencing-fact-sheet",
+        "title": "DNA Sequencing Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'DNA Sequencing Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "3555c872ba407e81cd9059ac95d10207f341baaee7a4cb05c878f68df181052e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "517164d085c44c9a8491c66097a970dd",
+      "runId": "job-20261031104211-bcc4a711",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:43:41.362Z"
+    },
+    "seed": 959933810,
+    "groups": [
+      {
+        "id": "adenine-pair",
+        "label": "Adenine (A) always pairs"
+      },
+      {
+        "id": "cytosine-pair",
+        "label": "cytosine (C) always pairs"
+      }
+    ],
+    "items": [
+      {
+        "id": "adenine-a",
+        "label": "Adenine (A)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "thymine-t",
+        "label": "thymine (T)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "adenine-thymine-phrase",
+        "label": "Adenine (A) always pairs with thymine (T)",
+        "groupId": "adenine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-c",
+        "label": "cytosine (C)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "guanine-g",
+        "label": "guanine (G)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      },
+      {
+        "id": "cytosine-guanine-phrase",
+        "label": "cytosine (C) always pairs with guanine (G)",
+        "groupId": "cytosine-pair",
+        "sourceId": "nhgri-dna-sequencing-fact-sheet",
+        "quote": "Adenine (A) always pairs with thymine (T); cytosine (C) always pairs with guanine (G)."
+      }
+    ]
+  }
+}

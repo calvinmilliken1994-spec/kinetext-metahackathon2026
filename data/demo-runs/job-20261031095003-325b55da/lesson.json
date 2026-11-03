@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031095003-325b55da",
+  "analysisRef": "job-20261031095003-325b55da/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095003-325b55da:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Calculating monthly, yearly and annual average percent change from index values",
+    "sources": [
+      {
+        "id": "bls-calculating-percent-changes",
+        "title": "Calculating percent changes — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/calculating-percent-changes.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Calculating percent changes'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "829533faa09f497cfa3c6b4a03b5afbd5c44b73ae3194ed951f4d6d61e19f6de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2d6c94cdfbbc4afdacce6954124a7908",
+      "runId": "job-20261031095003-325b55da",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:51:23.978Z"
+    },
+    "seed": 171994422,
+    "headline": "Calculating monthly, yearly and annual average percent change from index values",
+    "keyPoints": [
+      {
+        "id": "percent-change-steps",
+        "point": "Students learn that percent change is found when you subtract the earlier index value from the later value, divide that difference by the earlier index value and multiply by 100",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "you first subtract the earlier index value from the later one, then divide that difference by the earlier index value"
+      },
+      {
+        "id": "twelve-month-same-month",
+        "point": "Students learn that a twelve-month percent change must use the same month for beginning and ending periods, such as December to December",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "the beginning and ending periods of a CPI series must always be the same month, such as December 2021 and December 2022"
+      },
+      {
+        "id": "annual-average-sum",
+        "point": "Students learn that an annual average is the sum of the 12 monthly index values divided by 12",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Annual averages are the sum of the 12 monthly data points (i.e. index values), divided by 12"
+      },
+      {
+        "id": "year-change-not-sum",
+        "point": "Students learn that an over-the-year percent change is not equal to the sum of the over-the-month changes between those periods",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "is not equal to the sum of the over-the-month changes between those two time periods"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "percent-changes-term",
+        "term": "percent changes",
+        "gloss": "change in an index expressed as a percentage of the earlier value",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Movements of an index from one month to another are usually expressed as percent changes rather than as changes in the index value"
+      },
+      {
+        "id": "index-value-term",
+        "term": "index value",
+        "gloss": "value of the index for a single month that is used when you subtract the earlier value and divide by it",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "you first subtract the earlier index value from the later one, then divide that difference by the earlier index value"
+      },
+      {
+        "id": "annual-averages-term",
+        "term": "Annual averages",
+        "gloss": "average level for a year found by adding monthly data points and divided by 12",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Annual averages are the sum of the 12 monthly data points (i.e. index values), divided by 12"
+      },
+      {
+        "id": "base-period-term",
+        "term": "base period",
+        "gloss": "reference period with index set to 100 used as consistent base for comparison",
+        "sourceId": "bls-calculating-percent-changes",
+        "quote": "Always use the same reference base period for all calculations"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031095003-325b55da:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031095003-325b55da:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

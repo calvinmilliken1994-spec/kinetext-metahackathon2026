@@ -1,0 +1,206 @@
+{
+  "gen": {
+    "schemaVersion": "algorithm-trace-v1",
+    "title": "How quicksort partitions around a pivot and recursively sorts",
+    "algorithm": "quicksort",
+    "algorithmName": "quicksort",
+    "sourceId": "nist-dads-quicksort",
+    "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+    "input": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": [
+      {
+        "id": "claim-worst-case",
+        "kind": "property",
+        "text": "Quicksort has running time Θ(n²) in the worst case",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n)."
+      },
+      {
+        "id": "claim-select-pivot",
+        "kind": "property",
+        "text": "Select can be used to always pick good pivots",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time."
+      },
+      {
+        "id": "claim-variants",
+        "kind": "property",
+        "text": "There are many variants of the basic scheme above",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "There are many variants of the basic scheme above: to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions, etc."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105249-476085b9:algorithm-trace-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every algorithm-trace title, name length and claim id/kind/text shape is within the frozen limits"
+      },
+      {
+        "id": "ALG-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "claims[2] (claim-variants): quote \"There are many variants of the basic scheme above: to select\" is 175 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/claims/2/quote",
+        "affected": [
+          "/claims/2/quote"
+        ]
+      },
+      {
+        "id": "ALG-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "algorithmName \"quicksort\" does not occur as a whole phrase in the quote \"Pick an element from the array (the pivot), partition the re\" — the quote must contain the page's own name for the algorithm (algorithm-named-in-quote)",
+        "path": "/algorithmName",
+        "affected": [
+          "/algorithmName",
+          "/quote"
+        ]
+      },
+      {
+        "id": "ALG-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "input[0] is -1, expected an integer 0-99; input[1] is -1, expected an integer 0-99; input[2] is -1, expected an integer 0-99; input[3] is -1, expected an integer 0-99; input[4] is -1, expected an integer 0-99",
+        "path": "/input/0",
+        "affected": [
+          "/input/0",
+          "/input/1",
+          "/input/2",
+          "/input/3",
+          "/input/4"
+        ]
+      },
+      {
+        "id": "ALG-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our tracer ran quicksort to completion in 16 frame(s) (limit 400) and the sorted result [-1, -1, -1, -1, -1] is ascending and holds every input value — computed by our tested engine, never by the model (trace-runs)"
+      },
+      {
+        "id": "ALG-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 claim text(s) occur in their own quote after whitespace normalisation, with every number matching as the same whole number (claims-in-quote)"
+      },
+      {
+        "id": "ALG-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the algorithm name and the claim texts appears on the cited page as that whole number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "ALG-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the counts are valid: 5 input values (4-10) and 3 claim(s) (0-3) (counts-valid)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b253979505f04d1c9377b0a2a6d2f3dd",
+    "usage": {
+      "promptTokens": 2933,
+      "completionTokens": 7044,
+      "reasoningTokens": 6746,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40108,
+    "estCostUSD": 0.03360325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105249-476085b9:algorithm-trace-v1:r1",
+    "componentId": "algorithm-trace-v1",
+    "title": "How quicksort partitions around a pivot and recursively sorts",
+    "sources": [
+      {
+        "id": "nist-dads-quicksort",
+        "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b253979505f04d1c9377b0a2a6d2f3dd",
+      "runId": "job-20261031105249-476085b9",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:54:26.184Z"
+    },
+    "seed": 2263077362,
+    "algorithm": "quicksort",
+    "algorithmName": "quicksort",
+    "sourceId": "nist-dads-quicksort",
+    "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+    "input": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "hasTarget": false,
+    "target": 0,
+    "claims": [
+      {
+        "id": "claim-worst-case",
+        "kind": "property",
+        "text": "Quicksort has running time Θ(n²) in the worst case",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n)."
+      },
+      {
+        "id": "claim-select-pivot",
+        "kind": "property",
+        "text": "Select can be used to always pick good pivots",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time."
+      },
+      {
+        "id": "claim-variants",
+        "kind": "property",
+        "text": "There are many variants of the basic scheme above",
+        "sourceId": "nist-dads-quicksort",
+        "quote": "There are many variants of the basic scheme above: to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions, etc."
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "jobId": "job-20261031104201-18fd068d",
+  "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:42:01.365Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.185942,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:42:01.365Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 1,
+    "componentsPublished": 1,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "data-table-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "DT-02",
+        "DT-05"
+      ],
+      "fixed": [
+        "DT-02",
+        "DT-05"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "finishedAt": "2026-10-31T10:45:15.602Z"
+}

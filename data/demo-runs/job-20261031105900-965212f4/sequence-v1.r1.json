@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How carbon dioxide uptake changes ocean chemistry and marine life",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Arrange events in the order the chemistry changes are taught",
+    "steps": [
+      {
+        "id": "ocean-takes-in-carbon",
+        "label": "Ocean takes in atmospheric carbon dioxide",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere",
+        "orderHint": ""
+      },
+      {
+        "id": "seawater-creates-hydrogen",
+        "label": "Seawater chemistry produces more hydrogen ions",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "When CO2 is absorbed by seawater, a series of chemical reactions occur resulting in the increased concentration of hydrogen ions.",
+        "orderHint": ""
+      },
+      {
+        "id": "water-becomes-acidic",
+        "label": "Seawater turns more acidic and loses carbonate",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "This increase causes the seawater to become more acidic and causes carbonate ions to be relatively less abundant.",
+        "orderHint": ""
+      },
+      {
+        "id": "shell-building-harder",
+        "label": "Shell building grows harder for calcifying organisms",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Decreases in carbonate ions can make building and maintaining shells and other calcium carbonate structures difficult for calcifying organisms",
+        "orderHint": ""
+      },
+      {
+        "id": "fish-lose-predator-sense",
+        "label": "Fish lose ability to sense predators",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Certain fish's ability to detect predators is decreased in more acidic waters.",
+        "orderHint": ""
+      },
+      {
+        "id": "food-web-at-risk",
+        "label": "Entire food web faces growing risk",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "When these organisms are at risk, the entire food web may also be at risk.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105900-965212f4:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "85adb3a169bd4fe6b35a1d03fab8abfb",
+    "usage": {
+      "promptTokens": 2837,
+      "completionTokens": 7609,
+      "reasoningTokens": 7201,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38503,
+    "estCostUSD": 0.0358845,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105900-965212f4:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How carbon dioxide uptake changes ocean chemistry and marine life",
+    "sources": [
+      {
+        "id": "noaa-oceanservice-ocean-acidification",
+        "title": "What is Ocean Acidification? — NOAA National Ocean Service, Ocean Facts",
+        "locator": "https://oceanservice.noaa.gov/facts/acidification.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Ocean Service, Ocean Facts, 'What is Ocean Acidification?'. Credit: NOAA National Ocean Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "2fd351cd28a1bf3be2f402200128f20d39c708536b13ea27329611fbaaf63c7c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "85adb3a169bd4fe6b35a1d03fab8abfb",
+      "runId": "job-20261031105900-965212f4",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:00:21.258Z"
+    },
+    "seed": 729445895,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Arrange events in the order the chemistry changes are taught",
+    "steps": [
+      {
+        "id": "ocean-takes-in-carbon",
+        "label": "Ocean takes in atmospheric carbon dioxide",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere",
+        "orderHint": ""
+      },
+      {
+        "id": "seawater-creates-hydrogen",
+        "label": "Seawater chemistry produces more hydrogen ions",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "When CO2 is absorbed by seawater, a series of chemical reactions occur resulting in the increased concentration of hydrogen ions.",
+        "orderHint": ""
+      },
+      {
+        "id": "water-becomes-acidic",
+        "label": "Seawater turns more acidic and loses carbonate",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "This increase causes the seawater to become more acidic and causes carbonate ions to be relatively less abundant.",
+        "orderHint": ""
+      },
+      {
+        "id": "shell-building-harder",
+        "label": "Shell building grows harder for calcifying organisms",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Decreases in carbonate ions can make building and maintaining shells and other calcium carbonate structures difficult for calcifying organisms",
+        "orderHint": ""
+      },
+      {
+        "id": "fish-lose-predator-sense",
+        "label": "Fish lose ability to sense predators",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Certain fish's ability to detect predators is decreased in more acidic waters.",
+        "orderHint": ""
+      },
+      {
+        "id": "food-web-at-risk",
+        "label": "Entire food web faces growing risk",
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "When these organisms are at risk, the entire food web may also be at risk.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

@@ -5,3 +5,5 @@ data/sources/*.txt -text
 *.png binary
 *.jpg binary
 data/figures/*.json -text
+# Shipped demo runs and project-authored user sources: kept byte-for-byte (stored runs are evidence).
+data/demo-runs/** -text

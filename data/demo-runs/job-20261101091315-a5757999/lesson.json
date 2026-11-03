@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261101091315-a5757999",
+  "analysisRef": "job-20261101091315-a5757999/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091315-a5757999:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Comparing chemical equations for photosynthesis and chemosynthesis",
+    "sources": [
+      {
+        "id": "noaa-oceanexplorer-fueling-life-on-earth",
+        "title": "Fueling Life on Earth: Chemosynthesis versus Photosynthesis — NOAA Office of Ocean Exploration, Educator Guide and Teacher Key (grades 9-12 chemistry)",
+        "locator": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/educator-guide-fueling-life-on-earth.pdf",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Office of Ocean Exploration and Research (NOAA Ocean Exploration), education materials, 'Fueling Life on Earth: Chemosynthesis versus Photosynthesis' educator guide. NOAA's Education and Outreach FAQ (https://www.noaa.gov/office-education/outreach-communication/faq) states: 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', and requires credit to NOAA without claiming or endorsing; edits and generative-AI outputs must not be presented as official NOAA material. The document itself asks: 'If reproducing this activity, please cite NOAA as the source, and provide the following URL: https://oceanexplorer.noaa.gov.' Text only: the third-party photo credit printed on page 1 ('Image courtesy of NOAA Ocean Exploration, NSF/NOAA, Jason, Copyright WHOI') and the video/image links on the resources page are not stored. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9b2415e432e49be30eed9aa244d306d6231675cab53c566a4a4c874215b23c92"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3cb7e83ec409437ebff586a731b5af4a",
+      "runId": "job-20261101091315-a5757999",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-11-01T09:14:23.593Z"
+    },
+    "seed": 2062978258,
+    "headline": "Comparing chemical equations for photosynthesis and chemosynthesis",
+    "keyPoints": [
+      {
+        "id": "photosynthesis-energy",
+        "point": "Students learn that photosynthesis uses solar energy to turn carbon dioxide and water into sugar and oxygen.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "All photosynthetic organisms use solar energy to turn carbon dioxide and water into sugar (food) and oxygen."
+      },
+      {
+        "id": "chemosynthesis-vent",
+        "point": "Students learn that a common vent form of chemosynthesis found at hydrothermal vents uses hydrogen sulfide to produce food.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "One common form of chemosynthesis found at hydrothermal vents uses hydrogen sulfide."
+      },
+      {
+        "id": "conservation-matter",
+        "point": "Students learn that the conservation of matter means matter cannot be created or destroyed during chemical reactions.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Remind students that the law of conservation of matter states that matter cannot be created or destroyed."
+      },
+      {
+        "id": "common-sugar-product",
+        "point": "Students learn that both processes produce a sugar compound made of carbon, hydrogen and oxygen as food.",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Both include a compound made of carbon, hydrogen, and oxygen as a product (1:2:1) = simple sugar = food."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "photosynthesis",
+        "term": "Photosynthesis",
+        "gloss": "process that converts carbon dioxide into sugars using energy from the sun",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Photosynthesis: The process used by plants to convert carbon dioxide and water into oxygen and sugars (food), using energy from the sun."
+      },
+      {
+        "id": "chemosynthesis",
+        "term": "Chemosynthesis",
+        "gloss": "process where microbes create sugars using energy released from chemical reactions",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Chemosynthesis: The process by which microbes create sugars (food) using energy released from chemical reactions."
+      },
+      {
+        "id": "autotroph",
+        "term": "Autotroph",
+        "gloss": "organisms able to make their own food from raw materials and energy",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Autotroph: Organisms that are able to make their own food from raw materials and energy, also known as producers."
+      },
+      {
+        "id": "heterotroph",
+        "term": "Heterotroph",
+        "gloss": "organisms that consume producers or other consumers for energy",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Heterotroph: Organisms that consume producers or other consumers, also known as consumers."
+      },
+      {
+        "id": "reactants",
+        "term": "Reactants",
+        "gloss": "substance that changes during a chemical reaction as starting material",
+        "sourceId": "noaa-oceanexplorer-fueling-life-on-earth",
+        "quote": "Reactants: A substance that changes in a chemical reaction."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "balance-equation-v1",
+      "specId": "job-20261101091315-a5757999:balance-equation-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261101091315-a5757999:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

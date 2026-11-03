@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Which fixed constant defines each base unit",
+    "cards": [
+      {
+        "id": "second-constant",
+        "stem": "Which fixed quantity defines the unit of time?",
+        "options": [
+          "cesium frequency ∆νCs",
+          "Planck constant h",
+          "Boltzmann constant k",
+          "Avogadro constant NA"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency",
+        "hint": ""
+      },
+      {
+        "id": "meter-constant",
+        "stem": "Which fixed quantity defines the unit of length?",
+        "options": [
+          "speed of light in vacuum c",
+          "cesium frequency ∆νCs",
+          "elementary charge e",
+          "Avogadro constant NA"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1",
+        "hint": ""
+      },
+      {
+        "id": "kilogram-constant",
+        "stem": "Which fixed quantity defines the unit of mass?",
+        "options": [
+          "Planck constant h",
+          "speed of light in vacuum c",
+          "Boltzmann constant k",
+          "luminous efficacy Kcd"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s",
+        "hint": ""
+      },
+      {
+        "id": "ampere-constant",
+        "stem": "Which fixed quantity defines the unit of electric current?",
+        "options": [
+          "elementary charge e",
+          "Planck constant h",
+          "cesium frequency ∆νCs",
+          "Boltzmann constant k"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105332-a4d69158:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f03c3f45a6154938b6faa40f2d250ac7",
+    "usage": {
+      "promptTokens": 3112,
+      "completionTokens": 7205,
+      "reasoningTokens": 6811,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37136,
+    "estCostUSD": 0.03451125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105332-a4d69158:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Which fixed constant defines each base unit",
+    "sources": [
+      {
+        "id": "nist-si-base-unit-definitions",
+        "title": "Definitions of SI Base Units — NIST, SI Redefinition",
+        "locator": "https://www.nist.gov/si-redefinition/definitions-si-base-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, SI Redefinition, 'Definitions of SI Base Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "cb4b3a449af325e676ebf2069948e47aa6c8d58a0463a26e8f0d5a207fbafc9c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f03c3f45a6154938b6faa40f2d250ac7",
+      "runId": "job-20261031105332-a4d69158",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:54:58.919Z"
+    },
+    "seed": 2909821881,
+    "cards": [
+      {
+        "id": "second-constant",
+        "stem": "Which fixed quantity defines the unit of time?",
+        "options": [
+          "cesium frequency ∆νCs",
+          "Planck constant h",
+          "Boltzmann constant k",
+          "Avogadro constant NA"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency",
+        "hint": ""
+      },
+      {
+        "id": "meter-constant",
+        "stem": "Which fixed quantity defines the unit of length?",
+        "options": [
+          "speed of light in vacuum c",
+          "cesium frequency ∆νCs",
+          "elementary charge e",
+          "Avogadro constant NA"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1",
+        "hint": ""
+      },
+      {
+        "id": "kilogram-constant",
+        "stem": "Which fixed quantity defines the unit of mass?",
+        "options": [
+          "Planck constant h",
+          "speed of light in vacuum c",
+          "Boltzmann constant k",
+          "luminous efficacy Kcd"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s",
+        "hint": ""
+      },
+      {
+        "id": "ampere-constant",
+        "stem": "Which fixed quantity defines the unit of electric current?",
+        "options": [
+          "elementary charge e",
+          "Planck constant h",
+          "cesium frequency ∆νCs",
+          "Boltzmann constant k"
+        ],
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C",
+        "hint": ""
+      }
+    ]
+  }
+}

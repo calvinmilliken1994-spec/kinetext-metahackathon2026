@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Quiz on 2026 tax inflation adjustments",
+    "cards": [
+      {
+        "id": "standard-deduction-joint-2026",
+        "stem": "What is the 2026 standard deduction for married couples filing jointly?",
+        "options": [
+          "$32,200",
+          "$31,500",
+          "$16,100",
+          "$24,150"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly.",
+        "hint": "Look for the married filing jointly amount in 2026."
+      },
+      {
+        "id": "top-rate-2026",
+        "stem": "What top marginal rate applies in 2026 for single taxpayers above the highest threshold?",
+        "options": [
+          "37%",
+          "35%",
+          "32%",
+          "24%"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600",
+        "hint": "Check the highest bracket rate listed for 2026."
+      },
+      {
+        "id": "estate-exclusion-2026",
+        "stem": "What is the basic estate exclusion amount for decedents who die in 2026?",
+        "options": [
+          "$15,000,000",
+          "$13,990,000",
+          "$1,000,000",
+          "$500,000"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Estates of decedents who die during 2026 have a basic exclusion amount of $15,000,000,",
+        "hint": "Find the basic exclusion for estates in 2026."
+      },
+      {
+        "id": "eitc-maximum-2026",
+        "stem": "What is the 2026 maximum earned income credit for taxpayers with three or more qualifying children?",
+        "options": [
+          "$8,231",
+          "$8,046",
+          "$17,670",
+          "$132,900"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231 for qualifying taxpayers who have three or more qualifying children,",
+        "hint": "Locate the maximum credit for three or more qualifying children."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100746-032ca0d8:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e09a6b6d935c4ad18994910cf7af5110",
+    "usage": {
+      "promptTokens": 4103,
+      "completionTokens": 8411,
+      "reasoningTokens": 7954,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38858,
+    "estCostUSD": 0.0408755,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100746-032ca0d8:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Quiz on 2026 tax inflation adjustments",
+    "sources": [
+      {
+        "id": "irs-tax-inflation-adjustments-2026",
+        "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+        "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+        "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e09a6b6d935c4ad18994910cf7af5110",
+      "runId": "job-20261031100746-032ca0d8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:09:21.805Z"
+    },
+    "seed": 4025237192,
+    "cards": [
+      {
+        "id": "standard-deduction-joint-2026",
+        "stem": "What is the 2026 standard deduction for married couples filing jointly?",
+        "options": [
+          "$32,200",
+          "$31,500",
+          "$16,100",
+          "$24,150"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly.",
+        "hint": "Look for the married filing jointly amount in 2026."
+      },
+      {
+        "id": "top-rate-2026",
+        "stem": "What top marginal rate applies in 2026 for single taxpayers above the highest threshold?",
+        "options": [
+          "37%",
+          "35%",
+          "32%",
+          "24%"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600",
+        "hint": "Check the highest bracket rate listed for 2026."
+      },
+      {
+        "id": "estate-exclusion-2026",
+        "stem": "What is the basic estate exclusion amount for decedents who die in 2026?",
+        "options": [
+          "$15,000,000",
+          "$13,990,000",
+          "$1,000,000",
+          "$500,000"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Estates of decedents who die during 2026 have a basic exclusion amount of $15,000,000,",
+        "hint": "Find the basic exclusion for estates in 2026."
+      },
+      {
+        "id": "eitc-maximum-2026",
+        "stem": "What is the 2026 maximum earned income credit for taxpayers with three or more qualifying children?",
+        "options": [
+          "$8,231",
+          "$8,046",
+          "$17,670",
+          "$132,900"
+        ],
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231 for qualifying taxpayers who have three or more qualifying children,",
+        "hint": "Locate the maximum credit for three or more qualifying children."
+      }
+    ]
+  }
+}

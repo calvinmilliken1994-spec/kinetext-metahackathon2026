@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How seats are shared among states",
+    "cards": [
+      {
+        "id": "card-year-adopted",
+        "stem": "In what year was the current method for sharing seats adopted?",
+        "options": [
+          "1941",
+          "1790",
+          "51",
+          "60"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "was adopted by congress in 1941",
+        "hint": ""
+      },
+      {
+        "id": "card-total-seats",
+        "stem": "How many seats are in the House of Representatives in total?",
+        "options": [
+          "435",
+          "51",
+          "60",
+          "70"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "Each of the 50 states is given one seat out of the current total of 435.",
+        "hint": ""
+      },
+      {
+        "id": "card-multiplier-formula",
+        "stem": "How is the multiplier for a seat calculated?",
+        "options": [
+          "1 divided by the square root of n(n-1)",
+          "1 divided by the square root of 2(2-1)",
+          "1 divided by the square root of 3(3-1)",
+          "1 divided by the square root of 4(4-1)"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "1 divided by the square root of n(n-1)",
+        "hint": ""
+      },
+      {
+        "id": "card-enumeration-timing",
+        "stem": "How often must the count be conducted after the first meeting?",
+        "options": [
+          "ten Years",
+          "three Years",
+          "51",
+          "60"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "and within every subsequent Term of ten Years, in such Manner as they shall by Law direct.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095603-40b65657:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c60c2a78f1cb41f7b7604ca4194d1380",
+    "usage": {
+      "promptTokens": 3155,
+      "completionTokens": 8726,
+      "reasoningTokens": 8391,
+      "cachedTokens": 0
+    },
+    "latencyMs": 74763,
+    "estCostUSD": 0.04102925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095603-40b65657:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How seats are shared among states",
+    "sources": [
+      {
+        "id": "census-computing-apportionment",
+        "title": "Computing Apportionment — U.S. Census Bureau, Congressional Apportionment",
+        "locator": "https://www.census.gov/topics/public-sector/congressional-apportionment/about/computing.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, Congressional Apportionment, 'Computing Apportionment'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotation of Article 1, Section 2 of the U.S. Constitution is in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "aebb6d0187c5e1990d7aded30e76276837744417fba607704f46e82a7db34bf0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c60c2a78f1cb41f7b7604ca4194d1380",
+      "runId": "job-20261031095603-40b65657",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:58:52.153Z"
+    },
+    "seed": 2349130865,
+    "cards": [
+      {
+        "id": "card-year-adopted",
+        "stem": "In what year was the current method for sharing seats adopted?",
+        "options": [
+          "1941",
+          "1790",
+          "51",
+          "60"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "was adopted by congress in 1941",
+        "hint": ""
+      },
+      {
+        "id": "card-total-seats",
+        "stem": "How many seats are in the House of Representatives in total?",
+        "options": [
+          "435",
+          "51",
+          "60",
+          "70"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "Each of the 50 states is given one seat out of the current total of 435.",
+        "hint": ""
+      },
+      {
+        "id": "card-multiplier-formula",
+        "stem": "How is the multiplier for a seat calculated?",
+        "options": [
+          "1 divided by the square root of n(n-1)",
+          "1 divided by the square root of 2(2-1)",
+          "1 divided by the square root of 3(3-1)",
+          "1 divided by the square root of 4(4-1)"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "1 divided by the square root of n(n-1)",
+        "hint": ""
+      },
+      {
+        "id": "card-enumeration-timing",
+        "stem": "How often must the count be conducted after the first meeting?",
+        "options": [
+          "ten Years",
+          "three Years",
+          "51",
+          "60"
+        ],
+        "sourceId": "census-computing-apportionment",
+        "quote": "and within every subsequent Term of ten Years, in such Manner as they shall by Law direct.",
+        "hint": ""
+      }
+    ]
+  }
+}

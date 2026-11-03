@@ -1,0 +1,183 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Federal and private loan terms compared",
+    "attributes": [
+      "Interest rate type",
+      "Repayment flexibility"
+    ],
+    "rows": [
+      {
+        "entity": "federal loans",
+        "values": [
+          {
+            "value": "Fixed interest rates",
+            "sourceId": "cfpb-ways-to-pay-for-college",
+            "quote": "Fixed interest rates, meaning your interest rate will stay the same over time"
+          },
+          {
+            "value": "Income-driven repayment plans",
+            "sourceId": "cfpb-ways-to-pay-for-college",
+            "quote": "Income-driven repayment plans base the amount you owe each month on your income"
+          }
+        ]
+      },
+      {
+        "entity": "Private loans",
+        "values": [
+          {
+            "value": "variable interest rates",
+            "sourceId": "cfpb-ways-to-pay-for-college",
+            "quote": "Some have variable interest rates, meaning your payments can change and increase over time if your interest rate changes"
+          },
+          {
+            "value": "not as flexible as federal student loans",
+            "sourceId": "cfpb-ways-to-pay-for-college",
+            "quote": "Repayment terms are generally not as flexible as federal student loans and vary by lender"
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100307-b8f6586d:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "34f2d5a4ede9453294b31cb319049d95",
+    "usage": {
+      "promptTokens": 3532,
+      "completionTokens": 11736,
+      "reasoningTokens": 11524,
+      "cachedTokens": 0
+    },
+    "latencyMs": 95833,
+    "estCostUSD": 0.054293,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100307-b8f6586d:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Federal and private loan terms compared",
+    "sources": [
+      {
+        "id": "cfpb-ways-to-pay-for-college",
+        "title": "What are the different ways to pay for college or graduate school? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/what-are-the-different-ways-to-pay-for-college-or-graduate-school-en-545/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'What are the different ways to pay for college or graduate school?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "c2f41ceeb5a9c980341ce04560a1baa319fe6ab50aac7e281e775f5d9b26f4cd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "34f2d5a4ede9453294b31cb319049d95",
+      "runId": "job-20261031100307-b8f6586d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:05:58.387Z"
+    },
+    "seed": 429330672,
+    "entities": [
+      "federal loans",
+      "Private loans"
+    ],
+    "attributes": [
+      "Interest rate type",
+      "Repayment flexibility"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "Fixed interest rates",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Fixed interest rates, meaning your interest rate will stay the same over time"
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "Income-driven repayment plans",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Income-driven repayment plans base the amount you owe each month on your income"
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "variable interest rates",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Some have variable interest rates, meaning your payments can change and increase over time if your interest rate changes"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "not as flexible as federal student loans",
+        "sourceId": "cfpb-ways-to-pay-for-college",
+        "quote": "Repayment terms are generally not as flexible as federal student loans and vary by lender"
+      }
+    ]
+  }
+}

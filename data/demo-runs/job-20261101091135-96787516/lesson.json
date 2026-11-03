@@ -1,0 +1,138 @@
+{
+  "jobId": "job-20261101091135-96787516",
+  "analysisRef": "job-20261101091135-96787516/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101091135-96787516:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How pH measures acidity in water and why it matters for quality",
+    "sources": [
+      {
+        "id": "usgs-wss-ph-and-water",
+        "title": "pH and Water — USGS Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/ph-and-water",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'pH and Water'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "0a7704fb9e90edf2d06709108c1312fadfa47a21b994347f76f3072e3ae939ff"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2b56a517ead441198102738a1200d0f4",
+      "runId": "job-20261101091135-96787516",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T09:13:03.115Z"
+    },
+    "seed": 666223841,
+    "headline": "How pH measures acidity in water and why it matters for quality",
+    "keyPoints": [
+      {
+        "id": "ph-scale-neutral",
+        "point": "Students learn that pH is a measure of how acidic water is on a scale where 7 is neutral.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH is a measure of how acidic/basic water is."
+      },
+      {
+        "id": "ph-logarithmic-change",
+        "point": "Students learn that each pH number represents a 10-fold change in acidity of the water.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Each number represents a 10-fold change in the acidity/basicness of the water."
+      },
+      {
+        "id": "aqueous-requirement",
+        "point": "Students learn that a solution must be aqueous and contain water to have a pH value.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "for a solution to have a pH, it has to be aqueous (contains water)."
+      },
+      {
+        "id": "solubility-availability",
+        "point": "Students learn that water pH determines solubility and whether nutrients remain available for aquatic life.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The pH of water determines the solubility (amount that can be dissolved in the water)"
+      },
+      {
+        "id": "mine-drainage-acidity",
+        "point": "Students learn that mine-drainage water at pH 2 is 100,000 times more acidic than neutral water and can harm fish.",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "this mine-drainage water would be 100,000 times more acidic than neutral water"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-ph",
+        "term": "pH",
+        "gloss": "measure of how acidic or basic an aqueous solution is based on hydrogen ions",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH is a measure of how acidic/basic water is."
+      },
+      {
+        "id": "term-acidity",
+        "term": "acidity",
+        "gloss": "relative amount of acidic ions that changes with each pH unit in water",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "Each number represents a 10-fold change in the acidity/basicness of the water."
+      },
+      {
+        "id": "term-aqueous",
+        "term": "aqueous",
+        "gloss": "solution that contains water as the solvent for hydrogen ions",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "for a solution to have a pH, it has to be aqueous (contains water)."
+      },
+      {
+        "id": "term-logarithmic-units",
+        "term": "logarithmic units",
+        "gloss": "units reported for pH where each number reflects a tenfold change",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "pH is reported in \"logarithmic units\"."
+      },
+      {
+        "id": "term-solubility",
+        "term": "solubility",
+        "gloss": "amount of a chemical that can be dissolved in water at a given pH",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "The pH of water determines the solubility (amount that can be dissolved in the water)"
+      },
+      {
+        "id": "term-acid-rain",
+        "term": "acid rain",
+        "gloss": "precipitation that is more acidic than normal rain and can harm the environment",
+        "sourceId": "usgs-wss-ph-and-water",
+        "quote": "You can see that acid rain can be very acidic, and it can affect the environment in a negative way."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261101091135-96787516:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "log-ladder-v1",
+      "specId": "job-20261101091135-96787516:log-ladder-v1:r3",
+      "status": "failed",
+      "reason": "LOG-04, LOG-07: rungs[1] (rung-6-example): the value 6 does not occur as a whole number in its quote \"water having a pH of six.\" (a number inside a larger number, like 3 inside 33 or 6 inside 6.3, is a different value) (rung-values-in-quote); rungs[2] (rung-5-example): the value 5 does not occur as a whole number i",
+      "revision": 3
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261101091135-96787516:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

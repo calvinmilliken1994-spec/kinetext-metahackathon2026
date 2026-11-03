@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105047-d97bab36",
+  "analysisRef": "job-20261031105047-d97bab36/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105047-d97bab36:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Binary search by halving a sorted interval",
+    "sources": [
+      {
+        "id": "nist-dads-binary-search",
+        "title": "binary search — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/binarySearch.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'binary search'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "61d27dc69db770ce1bfe2d15276cf22cb9e6e33120855967d41d6615ce692b53"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "bc61d79f11b349d48ee5e2635d462f11",
+      "runId": "job-20261031105047-d97bab36",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:51:24.334Z"
+    },
+    "seed": 3813972230,
+    "headline": "Binary search by halving a sorted interval",
+    "keyPoints": [
+      {
+        "id": "sorted-interval-halving",
+        "point": "Students learn that binary search operates on a sorted array by repeatedly dividing the interval in half.",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half."
+      },
+      {
+        "id": "narrow-by-comparison",
+        "point": "Students learn that if the search key is less than the middle item the interval narrows to the lower half and otherwise to the upper half.",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half."
+      },
+      {
+        "id": "linked-list-costs",
+        "point": "Students learn that binary search on an ordered linked list still needs linear traversals but performs only logarithmic comparisons.",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "It makes O(n) traversals, as does linear search, but it only performs O(log n) comparisons."
+      },
+      {
+        "id": "overflow-safe-mid",
+        "point": "Students learn that the midpoint calculation can overflow when high and low are near the largest expressible integer and a safe alternative exists.",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "This overflows if high and low are close to the largest expressible integer."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "sorted-array",
+        "term": "sorted array",
+        "gloss": "Ordered array where binary search repeatedly divides the search interval",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half."
+      },
+      {
+        "id": "interval",
+        "term": "interval",
+        "gloss": "Current search interval that begins covering the whole array and then narrows",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Begin with an interval covering the whole array."
+      },
+      {
+        "id": "divide-and-conquer",
+        "term": "divide and conquer",
+        "gloss": "General strategy that uses divide to break a problem into smaller parts",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "divide and conquer."
+      },
+      {
+        "id": "overflows",
+        "term": "overflows",
+        "gloss": "Failure when calculation exceeds the largest expressible integer for high and low",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "This overflows if high and low are close to the largest expressible integer."
+      },
+      {
+        "id": "comparisons",
+        "term": "comparisons",
+        "gloss": "Checks of the search key against middle items that the search performs",
+        "sourceId": "nist-dads-binary-search",
+        "quote": "It makes O(n) traversals, as does linear search, but it only performs O(log n) comparisons."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "algorithm-trace-v1",
+      "specId": "job-20261031105047-d97bab36:algorithm-trace-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105047-d97bab36:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

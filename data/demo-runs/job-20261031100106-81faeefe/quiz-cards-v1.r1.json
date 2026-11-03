@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Finding your total monthly payment and what affects it",
+    "cards": [
+      {
+        "id": "escrow-function",
+        "stem": "What does the mortgage company do with money held in your escrow account?",
+        "options": [
+          "holds the money in the escrow account",
+          "invests it in the stock market",
+          "applies it directly to reduce principal",
+          "returns it as cash each month"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Your mortgage company typically holds the money in the escrow account until those insurance and tax bills are due, and then pays them on your behalf",
+        "hint": "Think about when taxes and insurance are paid."
+      },
+      {
+        "id": "payment-stability",
+        "stem": "Which part of your mortgage payment generally stays the same if you pay on time?",
+        "options": [
+          "principal and interest payment",
+          "escrow payment",
+          "homeowners association fee",
+          "property tax bill"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your principal and interest payment will generally remain the same as long as you make regular payments on time",
+        "hint": "This part covers what you borrowed and the charge for borrowing."
+      },
+      {
+        "id": "total-includes-costs",
+        "stem": "What kinds of additional costs can be included in your total monthly payment beyond principal and interest?",
+        "options": [
+          "homeowners insurance",
+          "down payment refund",
+          "credit card debt",
+          "student loan balance"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your total monthly payment usually includes additional costs like homeowners insurance, taxes, and possibly mortgage insurance",
+        "hint": "Think about costs for protecting the home and local taxes."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100106-81faeefe:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "34400dbe78594e29a24ef13fa225cdf9",
+    "usage": {
+      "promptTokens": 2925,
+      "completionTokens": 4022,
+      "reasoningTokens": 3582,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17440,
+    "estCostUSD": 0.02074975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 0,
+      "id": "locate-total-payment",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100106-81faeefe:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Finding your total monthly payment and what affects it",
+    "sources": [
+      {
+        "id": "cfpb-mortgage-total-monthly-payment",
+        "title": "On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/on-a-mortgage-whats-the-difference-between-my-principal-and-interest-payment-and-my-total-monthly-payment-en-1941/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'On a mortgage, what’s the difference between my principal and interest payment and my total monthly payment?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "54e2133fc95a619dc83b68fb7b37f0db5f648e72b4ecb95056ce80de11963d02"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "34400dbe78594e29a24ef13fa225cdf9",
+      "runId": "job-20261031100106-81faeefe",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:02:10.355Z"
+    },
+    "seed": 2808345065,
+    "cards": [
+      {
+        "id": "escrow-function",
+        "stem": "What does the mortgage company do with money held in your escrow account?",
+        "options": [
+          "holds the money in the escrow account",
+          "invests it in the stock market",
+          "applies it directly to reduce principal",
+          "returns it as cash each month"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "Your mortgage company typically holds the money in the escrow account until those insurance and tax bills are due, and then pays them on your behalf",
+        "hint": "Think about when taxes and insurance are paid."
+      },
+      {
+        "id": "payment-stability",
+        "stem": "Which part of your mortgage payment generally stays the same if you pay on time?",
+        "options": [
+          "principal and interest payment",
+          "escrow payment",
+          "homeowners association fee",
+          "property tax bill"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your principal and interest payment will generally remain the same as long as you make regular payments on time",
+        "hint": "This part covers what you borrowed and the charge for borrowing."
+      },
+      {
+        "id": "total-includes-costs",
+        "stem": "What kinds of additional costs can be included in your total monthly payment beyond principal and interest?",
+        "options": [
+          "homeowners insurance",
+          "down payment refund",
+          "credit card debt",
+          "student loan balance"
+        ],
+        "sourceId": "cfpb-mortgage-total-monthly-payment",
+        "quote": "your total monthly payment usually includes additional costs like homeowners insurance, taxes, and possibly mortgage insurance",
+        "hint": "Think about costs for protecting the home and local taxes."
+      }
+    ]
+  }
+}

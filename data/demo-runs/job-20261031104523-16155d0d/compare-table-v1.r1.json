@@ -1,0 +1,215 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Comparing population grouping concepts",
+    "attributes": [
+      "Definition",
+      "Classification note"
+    ],
+    "rows": [
+      {
+        "entity": "population",
+        "values": [
+          {
+            "value": "collection of people or organisms",
+            "sourceId": "nij-population-genetics",
+            "quote": "it is a collection of people or organisms of a particular species living in a geographic area"
+          },
+          {
+            "value": "living in a geographic area",
+            "sourceId": "nij-population-genetics",
+            "quote": "of a particular species living in a geographic area"
+          }
+        ]
+      },
+      {
+        "entity": "Racial groups",
+        "values": [
+          {
+            "value": "between 3 and 200 races",
+            "sourceId": "nij-population-genetics",
+            "quote": "there can be between 3 and 200 races in the human population"
+          },
+          {
+            "value": "inadequate descriptors",
+            "sourceId": "nij-population-genetics",
+            "quote": "racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+          }
+        ]
+      },
+      {
+        "entity": "ethnicity",
+        "values": [
+          {
+            "value": "divide them by ethnicity",
+            "sourceId": "nij-population-genetics",
+            "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+          },
+          {
+            "value": "same classification issues",
+            "sourceId": "nij-population-genetics",
+            "quote": "Dividing populations along ethnic origins can present some of the same classification issues"
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104523-16155d0d:compare-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "predict mode is available: attribute \"Definition\" offers >= 3 distinct seeded same-column options (predict-cell-valid)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d41a1bc0a582436e94a44c757ff32de3",
+    "usage": {
+      "promptTokens": 2761,
+      "completionTokens": 7475,
+      "reasoningTokens": 7214,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44459,
+    "estCostUSD": 0.03522,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104523-16155d0d:compare-table-v1:r1",
+    "componentId": "compare-table-v1",
+    "title": "Comparing population grouping concepts",
+    "sources": [
+      {
+        "id": "nij-population-genetics",
+        "title": "Population Genetics — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Population Genetics'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "3b67b8bbab70fa3f03067b217df5601f05ff044f0f6c0c6cad7b44b5191a29db"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d41a1bc0a582436e94a44c757ff32de3",
+      "runId": "job-20261031104523-16155d0d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:46:44.393Z"
+    },
+    "seed": 4230535961,
+    "entities": [
+      "population",
+      "Racial groups",
+      "ethnicity"
+    ],
+    "attributes": [
+      "Definition",
+      "Classification note"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "collection of people or organisms",
+        "sourceId": "nij-population-genetics",
+        "quote": "it is a collection of people or organisms of a particular species living in a geographic area"
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "living in a geographic area",
+        "sourceId": "nij-population-genetics",
+        "quote": "of a particular species living in a geographic area"
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "between 3 and 200 races",
+        "sourceId": "nij-population-genetics",
+        "quote": "there can be between 3 and 200 races in the human population"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "inadequate descriptors",
+        "sourceId": "nij-population-genetics",
+        "quote": "racial classifications are inadequate descriptors of the distribution of genetic variation in the human species"
+      },
+      {
+        "id": "cell-2-0",
+        "entityIndex": 2,
+        "attributeIndex": 0,
+        "value": "divide them by ethnicity",
+        "sourceId": "nij-population-genetics",
+        "quote": "An alternative to classifying the human species by race is to divide them by ethnicity"
+      },
+      {
+        "id": "cell-2-1",
+        "entityIndex": 2,
+        "attributeIndex": 1,
+        "value": "same classification issues",
+        "sourceId": "nij-population-genetics",
+        "quote": "Dividing populations along ethnic origins can present some of the same classification issues"
+      }
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps to propose and ratify amendments",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Arrange the actions from earliest demand to final ratification",
+    "steps": [
+      {
+        "id": "opponents-warn-tyranny",
+        "label": "Opponents warn about tyranny",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government.",
+        "orderHint": ""
+      },
+      {
+        "id": "demand-bill-of-rights",
+        "label": "Citizens demand bill of rights protections",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens.",
+        "orderHint": ""
+      },
+      {
+        "id": "state-conventions-request",
+        "label": "State conventions request amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-proposes-amendments",
+        "label": "Congress proposes amendments to states",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "orderHint": ""
+      },
+      {
+        "id": "states-ratify-amendments",
+        "label": "States ratify amendments as bill of rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments of the Constitution,",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101354-3e1508db:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4aa3fff3973b4fc1ae8b9fd5ab6ceb14",
+    "usage": {
+      "promptTokens": 2677,
+      "completionTokens": 6045,
+      "reasoningTokens": 5692,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29434,
+    "estCostUSD": 0.0290375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101354-3e1508db:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps to propose and ratify amendments",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4aa3fff3973b4fc1ae8b9fd5ab6ceb14",
+      "runId": "job-20261031101354-3e1508db",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:15:26.237Z"
+    },
+    "seed": 3727837379,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Arrange the actions from earliest demand to final ratification",
+    "steps": [
+      {
+        "id": "opponents-warn-tyranny",
+        "label": "Opponents warn about tyranny",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government.",
+        "orderHint": ""
+      },
+      {
+        "id": "demand-bill-of-rights",
+        "label": "Citizens demand bill of rights protections",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They demanded a \"bill of rights\" that would spell out the immunities of individual citizens.",
+        "orderHint": ""
+      },
+      {
+        "id": "state-conventions-request",
+        "label": "State conventions request amendments",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Several state conventions in their formal ratification of the Constitution asked for such amendments",
+        "orderHint": ""
+      },
+      {
+        "id": "congress-proposes-amendments",
+        "label": "Congress proposes amendments to states",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "On September 25, 1789, the First Congress of the United States therefore proposed to the state legislatures 12 amendments to the Constitution",
+        "orderHint": ""
+      },
+      {
+        "id": "states-ratify-amendments",
+        "label": "States ratify amendments as bill of rights",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments of the Constitution,",
+        "orderHint": ""
+      }
+    ]
+  }
+}

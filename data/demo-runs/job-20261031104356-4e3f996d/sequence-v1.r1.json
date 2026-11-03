@@ -1,0 +1,171 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Testing a population for Hardy Weinberg equilibrium",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "pose-equilibrium-question",
+        "label": "Pose the equilibrium question",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Is this population in Hardy-Weinberg equilibrium?",
+        "orderHint": ""
+      },
+      {
+        "id": "count-alleles-current-generation",
+        "label": "Count alleles in current generation",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 1: Determine the gene frequencies of the current generation.",
+        "orderHint": ""
+      },
+      {
+        "id": "predict-next-generation-genotypes",
+        "label": "Predict next generation genotypes",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 2: Determine the expected genotype frequencies for the next generation.",
+        "orderHint": ""
+      },
+      {
+        "id": "evaluate-observed-versus-predicted",
+        "label": "Evaluate observed versus predicted counts",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 3: Compare the expected frequency with the original population numbers.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104356-4e3f996d:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "315773ccc23e4c058d8159223a203a93",
+    "usage": {
+      "promptTokens": 4078,
+      "completionTokens": 4340,
+      "reasoningTokens": 4111,
+      "cachedTokens": 0
+    },
+    "latencyMs": 25317,
+    "estCostUSD": 0.0235425,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104356-4e3f996d:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Testing a population for Hardy Weinberg equilibrium",
+    "sources": [
+      {
+        "id": "nij-hardy-weinberg-principle",
+        "title": "Hardy-Weinberg Principle — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Hardy-Weinberg Principle'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "db613d58d5101a939f34fed65153bc279e823153472574a035a6071032b4ce8c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "315773ccc23e4c058d8159223a203a93",
+      "runId": "job-20261031104356-4e3f996d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:45:49.143Z"
+    },
+    "seed": 1871286085,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "pose-equilibrium-question",
+        "label": "Pose the equilibrium question",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Is this population in Hardy-Weinberg equilibrium?",
+        "orderHint": ""
+      },
+      {
+        "id": "count-alleles-current-generation",
+        "label": "Count alleles in current generation",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 1: Determine the gene frequencies of the current generation.",
+        "orderHint": ""
+      },
+      {
+        "id": "predict-next-generation-genotypes",
+        "label": "Predict next generation genotypes",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 2: Determine the expected genotype frequencies for the next generation.",
+        "orderHint": ""
+      },
+      {
+        "id": "evaluate-observed-versus-predicted",
+        "label": "Evaluate observed versus predicted counts",
+        "sourceId": "nij-hardy-weinberg-principle",
+        "quote": "Step 3: Compare the expected frequency with the original population numbers.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

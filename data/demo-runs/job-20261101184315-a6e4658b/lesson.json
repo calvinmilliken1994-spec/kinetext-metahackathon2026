@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261101184315-a6e4658b",
+  "analysisRef": "job-20261101184315-a6e4658b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101184315-a6e4658b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Continuous circulation of water between ground and atmosphere",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1986c-ba39-74dd-8afc-311462a772d7",
+      "runId": "job-20261101184315-a6e4658b",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T18:43:44.922Z"
+    },
+    "seed": 2726133456,
+    "headline": "Continuous circulation of water between ground and atmosphere",
+    "keyPoints": [
+      {
+        "id": "hydrologic-circulation",
+        "point": "Students learn that continuous circulation moves water through the Earth-Atmosphere system in the hydrologic cycle.",
+        "quote": "The hydrologic cycle involves the continuous circulation of water in the Earth-Atmosphere system.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "evaporation-energy",
+        "point": "Students learn that energy is required for evaporation to take place from liquid water.",
+        "quote": "For evaporation to take place, energy is required.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "foggy-conditions",
+        "point": "Students learn that foggy conditions occur when air temperature equals the dew point temperature.",
+        "quote": "Foggy conditions often occur when air temperature and dew point are equal.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "runoff-saturation",
+        "point": "Students learn that runoff occurs when excessive precipitation leaves the ground saturated and unable to absorb more water.",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Change from liquid to gas that requires energy input",
+        "id": "evaporation",
+        "quote": "For evaporation to take place, energy is required.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "evaporation"
+      },
+      {
+        "gloss": "Passive loss of water vapor from plants controlled by humidity",
+        "id": "transpiration",
+        "quote": "In most plants, transpiration is a passive process largely controlled by the humidity of the atmosphere and the moisture content of the soil.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "transpiration"
+      },
+      {
+        "gloss": "Change from vapor to liquid that may appear as clouds or dew",
+        "id": "condensation",
+        "quote": "In the atmosphere, condensation may appear as clouds or dew.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "condensation"
+      },
+      {
+        "gloss": "Water falling to Earth when precipitation particles grow too large to stay aloft",
+        "id": "precipitation",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "precipitation"
+      },
+      {
+        "gloss": "Excess water that forms rivers and lakes when ground cannot absorb more",
+        "id": "runoff",
+        "quote": "Rivers and lakes are results of runoff.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "runoff"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101184315-a6e4658b:label-diagram-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261101184315-a6e4658b:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Limits of confederation government",
+    "cards": [
+      {
+        "id": "tax-power",
+        "stem": "What limit on central power is described in the source?",
+        "options": [
+          "It could not tax",
+          "It could regulate trade effectively",
+          "It could settle disputes between states easily"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "It could not tax and was generally impotent in setting commercial policy.",
+        "hint": ""
+      },
+      {
+        "id": "commerce-power",
+        "stem": "What power did the central government lack according to the source?",
+        "options": [
+          "insufficient power to regulate commerce",
+          "full power to tax citizens directly",
+          "power to support a war effort effectively"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "With the states retaining considerable power, the central government had insufficient power to regulate commerce.",
+        "hint": ""
+      },
+      {
+        "id": "voting-rule",
+        "stem": "How was voting structured in the Confederation Congress?",
+        "options": [
+          "each state would have one vote",
+          "votes allocated by population size",
+          "representation based on wealth"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "The Articles of Confederation also outlined a Congress with representation not based on population – each state would have one vote in Congress.",
+        "hint": ""
+      },
+      {
+        "id": "alliance-phrase",
+        "stem": "What phrase was used to describe the alliance of sovereign states?",
+        "options": [
+          "league of friendship",
+          "perpetual national union",
+          "centralized governing authority"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "This \"first constitution of the United States\" established a \"league of friendship\" for the 13 sovereign and independent states.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101350-d7a71497:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c3051d8be284481ea4100a85ce608c68",
+    "usage": {
+      "promptTokens": 3058,
+      "completionTokens": 14234,
+      "reasoningTokens": 13896,
+      "cachedTokens": 0
+    },
+    "latencyMs": 69273,
+    "estCostUSD": 0.064317,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101350-d7a71497:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Limits of confederation government",
+    "sources": [
+      {
+        "id": "nara-articles-of-confederation",
+        "title": "Articles of Confederation (1777) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/articles-of-confederation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Articles of Confederation (1777)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "254310acbd3a0b3352ae85953f18138ed309fe49fa6c7841387e92394766c73f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c3051d8be284481ea4100a85ce608c68",
+      "runId": "job-20261031101350-d7a71497",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:15:31.553Z"
+    },
+    "seed": 1716391901,
+    "cards": [
+      {
+        "id": "tax-power",
+        "stem": "What limit on central power is described in the source?",
+        "options": [
+          "It could not tax",
+          "It could regulate trade effectively",
+          "It could settle disputes between states easily"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "It could not tax and was generally impotent in setting commercial policy.",
+        "hint": ""
+      },
+      {
+        "id": "commerce-power",
+        "stem": "What power did the central government lack according to the source?",
+        "options": [
+          "insufficient power to regulate commerce",
+          "full power to tax citizens directly",
+          "power to support a war effort effectively"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "With the states retaining considerable power, the central government had insufficient power to regulate commerce.",
+        "hint": ""
+      },
+      {
+        "id": "voting-rule",
+        "stem": "How was voting structured in the Confederation Congress?",
+        "options": [
+          "each state would have one vote",
+          "votes allocated by population size",
+          "representation based on wealth"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "The Articles of Confederation also outlined a Congress with representation not based on population – each state would have one vote in Congress.",
+        "hint": ""
+      },
+      {
+        "id": "alliance-phrase",
+        "stem": "What phrase was used to describe the alliance of sovereign states?",
+        "options": [
+          "league of friendship",
+          "perpetual national union",
+          "centralized governing authority"
+        ],
+        "sourceId": "nara-articles-of-confederation",
+        "quote": "This \"first constitution of the United States\" established a \"league of friendship\" for the 13 sovereign and independent states.",
+        "hint": ""
+      }
+    ]
+  }
+}

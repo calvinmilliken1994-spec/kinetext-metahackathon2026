@@ -1,0 +1,66 @@
+{
+  "jobId": "job-20261031101350-d7a71497",
+  "sourceId": "nara-articles-of-confederation",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:13:50.718Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.306481,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 3,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [],
+      "remaining": [
+        "schema.full",
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    },
+    {
+      "revision": 3,
+      "repairOf": 2,
+      "targeted": [
+        "schema.full",
+        "repair.no-weakening"
+      ],
+      "fixed": [
+        "schema.full"
+      ],
+      "remaining": [
+        "timeline.date-grounded",
+        "repair.no-weakening"
+      ],
+      "publishable": false,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:13:50.718Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 1,
+    "componentsFailed": 1,
+    "partialPublish": true
+  },
+  "componentRepairs": [],
+  "bestRevision": 1,
+  "checksPassed": 10,
+  "checksTotal": 11,
+  "finishedAt": "2026-10-31T10:18:16.364Z"
+}

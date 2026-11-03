@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recall key facts about PCR",
+    "cards": [
+      {
+        "id": "card-thermocycler-machine",
+        "stem": "What machine directs the cycling process of PCR?",
+        "options": [
+          "thermocycler",
+          "centrifuge",
+          "micropipette",
+          "incubator"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "It is directed by a machine called a thermocycler",
+        "hint": "Think about temperature control."
+      },
+      {
+        "id": "card-taq-polymerase-enzyme",
+        "stem": "Which enzyme builds new DNA strands using original strands as templates?",
+        "options": [
+          "Taq polymerase",
+          "DNA ligase",
+          "helicase",
+          "RNA primase"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "hint": ""
+      },
+      {
+        "id": "card-dna-fingerprinting-use",
+        "stem": "Which laboratory technique uses amplified DNA to identify samples?",
+        "options": [
+          "DNA fingerprinting",
+          "gel staining",
+          "cell culturing",
+          "protein folding"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders.",
+        "hint": ""
+      },
+      {
+        "id": "card-pcr-technique",
+        "stem": "Which technique copies small segments of DNA?",
+        "options": [
+          "PCR",
+          "gel electrophoresis",
+          "microscopy",
+          "centrifugation"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104302-447420e6:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ca540f5d0a4645b0a4bfe2446a5b8c65",
+    "usage": {
+      "promptTokens": 2764,
+      "completionTokens": 11473,
+      "reasoningTokens": 11135,
+      "cachedTokens": 0
+    },
+    "latencyMs": 70126,
+    "estCostUSD": 0.05221525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104302-447420e6:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Recall key facts about PCR",
+    "sources": [
+      {
+        "id": "nhgri-pcr-fact-sheet",
+        "title": "Polymerase Chain Reaction (PCR) Fact Sheet — National Human Genome Research Institute, genome.gov",
+        "locator": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Human Genome Research Institute (NHGRI), genome.gov, 'Polymerase Chain Reaction (PCR) Fact Sheet'. Per the NHGRI Copyright Policy, 'Text, graphics, videos, illustrations and other information on National Human Genome Research Institute (NHGRI) websites are in the public domain, unless otherwise indicated'. Courtesy: National Human Genome Research Institute. The National Human Genome Research Institute has not reviewed, approved or endorsed this activity.",
+        "sha256": "d4a11c85387eeb3080dfdf528b93202d09a5e14654d7b3cb2d92ac557369748b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ca540f5d0a4645b0a4bfe2446a5b8c65",
+      "runId": "job-20261031104302-447420e6",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:45:22.240Z"
+    },
+    "seed": 1233263201,
+    "cards": [
+      {
+        "id": "card-thermocycler-machine",
+        "stem": "What machine directs the cycling process of PCR?",
+        "options": [
+          "thermocycler",
+          "centrifuge",
+          "micropipette",
+          "incubator"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "It is directed by a machine called a thermocycler",
+        "hint": "Think about temperature control."
+      },
+      {
+        "id": "card-taq-polymerase-enzyme",
+        "stem": "Which enzyme builds new DNA strands using original strands as templates?",
+        "options": [
+          "Taq polymerase",
+          "DNA ligase",
+          "helicase",
+          "RNA primase"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Next, an enzyme called \"Taq polymerase\" synthesizes - builds - two new strands of DNA, using the original strands as templates.",
+        "hint": ""
+      },
+      {
+        "id": "card-dna-fingerprinting-use",
+        "stem": "Which laboratory technique uses amplified DNA to identify samples?",
+        "options": [
+          "DNA fingerprinting",
+          "gel staining",
+          "cell culturing",
+          "protein folding"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "including DNA fingerprinting, detection of bacteria or viruses (particularly AIDS), and diagnosis of genetic disorders.",
+        "hint": ""
+      },
+      {
+        "id": "card-pcr-technique",
+        "stem": "Which technique copies small segments of DNA?",
+        "options": [
+          "PCR",
+          "gel electrophoresis",
+          "microscopy",
+          "centrifugation"
+        ],
+        "sourceId": "nhgri-pcr-fact-sheet",
+        "quote": "Polymerase chain reaction (PCR) is a technique used to \"amplify\" small segments of DNA.",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "jobId": "job-20261031095514-fcc537eb",
+  "sourceId": "census-about-decennial-census",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T09:55:14.123Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.181647,
+  "reservedUnknownUSD": 0,
+  "engine": null,
+  "revisions": 0,
+  "repairs": [],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "A-09",
+        "OV-01",
+        "OV-03"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "A-09",
+        "OV-01",
+        "OV-03"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T09:55:14.123Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [],
+  "finishedAt": "2026-10-31T09:57:45.070Z"
+}

@@ -1,12 +1,18 @@
-# Make knowledge interactive.
+# Kinetext · Make knowledge interactive
 
-Product name provisional. Solo entry (Indie Developer) to the Meta Global AI Developer Hackathon 2026
-(Cerebral Valley), track **Build for Your World**.
+Kinetext turns a licensed page into a short, checked, interactive lesson for teachers, built by Meta's models:
+Muse Spark writes the lesson, SAM 3.1 confirms the parts of a diagram, and deterministic code checks every quote,
+number and formula before anything is shown. Solo entry (Indie Developer) to the Meta Global AI Developer Hackathon
+2026 (Cerebral Valley), track **Build for Your World**.
 
-## Quick start
+## Run the demo (judges)
 
-You need **Node.js 24** (22.18 or newer also works; check with `node --version`) and npm. Node runs this
-project's TypeScript directly, so there is no server build step.
+### 1. You need
+
+- **Node.js 24** (22.18 or newer also works). Check with `node --version`; download from https://nodejs.org.
+- **Git** and an internet connection. Windows, macOS and Linux all work. Nothing else to install.
+
+### 2. Start it
 
 ```bash
 git clone https://github.com/calvinmilliken1994-spec/meta-hackathon-2026.git
@@ -15,35 +21,42 @@ npm install
 npm start
 ```
 
-`npm start` builds the web app on the first run (about a minute; it installs the web packages itself),
-starts the app and its API on **one local port**, prints the address (default `http://127.0.0.1:8787`; the
-next free port is used when that one is taken, or set `PORT`) and opens your browser. Stop it with Ctrl+C.
-Later starts skip the build unless the web sources changed (`npm start -- --rebuild` forces one).
+The first `npm start` builds the web app (about a minute), then opens **http://127.0.0.1:8787** in your browser.
+Leave the terminal open; press **Ctrl+C** in it to stop. The recorded lessons are included, so the app is full the
+first time it opens.
 
-**Build your own lessons: enter the access code.** The submission notes contain an access code. Paste it into
-the welcome screen's "Judge access code" box and press Unlock (the New lesson page has the same box). The app then builds
-lessons with Muse Spark 1.3 and Muse Spark Open through a small relay that holds the model keys, so nothing
-about the keys is ever on your machine. The code lives only in the running server's memory: it is not written
-to disk or logs and is forgotten when you sign out or stop the server. The sidebar footer shows the
-dollars left on the shared judging budget.
+### 3. Choose how to use it (on the welcome screen)
 
-**Without a code the app is read-only, and still shows the product:** browse the recorded lessons, watch the
-Demo walkthrough, open Results (the evaluation tables), and present a lesson full-screen. Pressing
-"Explore read-only" on the welcome screen is all it takes. Building a new lesson needs a code or your own key.
+| You have | Do this | What works |
+|---|---|---|
+| **The judge access code** (in the submission notes) | Paste it into **Judge access code** and press **Unlock** | Everything, including **live builds** on Muse Spark 1.3 and Muse Spark Open, and SAM 3.1 diagrams. The model keys stay on our relay; the code is held only in your local server's memory. A shared judging budget is shown in the sidebar. |
+| Nothing | Press **Explore read-only** | Every recorded lesson, the Demo, Results and presenting. No new builds. |
+| **Your own Meta Model API key** | Copy `.env.example` to `.env`, set `MODEL_API_KEY=`, then `npm start` again | Live builds on Muse Spark 1.3 and SAM 3.1 on your own credit. Muse Spark Open runs on our Modal deployment, so in this mode it shows its recorded lessons only. |
 
-**Using your own Meta key instead.** Copy `.env.example` to `.env` in the repo folder, set
-`MODEL_API_KEY=` to your Meta Model API key, and run `npm start`. `npm start` reads `.env` (and `.env.local`) from
-the repo root; variables already set in your shell win, and values are never printed. With your own key the app
-is in direct mode: live builds run on Muse Spark 1.3 and SAM 3.1 against your Meta credit, no access code is
-asked for, and the key stays in your local server process. Muse Spark Open runs on our Modal deployment, so
-without the access code it shows its recorded lessons and Results only.
+### 4. A five-minute tour
 
-The relay is a thin proxy on Modal that forwards model calls and keeps a spend counter; it stores no lessons,
-pages or student data. Text you paste as a source is sent to Meta's model API (and to Modal for Spark Open) to
-build the lesson, so paste only text you may share.
+1. **Demo** (sidebar): replays a real recorded build step by step, including a check that failed and Muse's repair.
+2. **All lessons**: open any lesson on the **Published** shelf. Try the activity (drag the names onto the diagram,
+   then **Check**), then open **Checks and run details** to see every check behind it and, where Muse revised a part,
+   what failed and what changed.
+3. **New lesson** (needs the code or your key): pick a page, for example *What Are Volcano Hazards?* (Earth & space),
+   keep **Muse Spark 1.3**, press **Build lesson** and watch each Meta call in the strip. A build takes 1 to 4 minutes
+   and costs about USD 0.20 of the judging budget.
+4. **Your own source** (on New lesson): paste a page you have the rights to use, and optionally paste a diagram
+   screenshot (beta: Muse reads its printed labels before building the diagram part).
+5. **Review and publish**: a lesson says *Needs review* until a teacher ticks each part and publishes it.
+6. **Results**: the evaluation of both Muse models over 194 lessons each.
 
-Trouble? `npm start` prints the reason when it stops. A busy port: set `PORT=8800`. A web build that fails: run
-`npm install` again. Live builds say "unavailable": there is no key in `.env`, and no code was entered.
+### If something goes wrong
+
+- **`npm start` stops with an error:** it prints the reason. Most often Node is too old (install Node 24) or
+  `npm install` was skipped.
+- **Port 8787 is busy:** the next free port is used automatically and printed; or set one, e.g. `PORT=8800 npm start`
+  (PowerShell: `$env:PORT=8800; npm start`).
+- **The web build fails:** run `npm install` again, then `npm start -- --rebuild`.
+- **"Live builds are unavailable":** no code was entered and there is no key in `.env`. Read-only still works.
+- **Privacy:** text you paste is sent to Meta's model API (and to Modal for Spark Open) to build the lesson. The relay
+  forwards model calls and keeps a spend counter; it stores no lessons, pages or student data.
 
 ## What it is
 
@@ -113,7 +126,7 @@ Pipeline: source → Muse analysis v2 (subject, overview, component plan) → pe
 deterministic checks (63 Stage 6 check ids; `SEQ-02 labels-in-quotes` was retired in Stage 7e —
 sequence step labels are AI-written short event names, each still grounded by its verbatim quote)
 → bounded Muse repair → prune → partial publish.
-Live events, artifacts and costs are stored per job under `storage/runs/` (gitignored).
+Live events, artifacts and costs are stored per job under `storage/runs/` (gitignored). A curated set of real recorded runs ships in `data/demo-runs/` and is copied into `storage/runs/` on first start (never overwriting a run).
 
 | Path | Responsibility |
 |---|---|

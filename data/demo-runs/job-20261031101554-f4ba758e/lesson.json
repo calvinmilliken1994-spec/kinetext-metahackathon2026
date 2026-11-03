@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031101554-f4ba758e",
+  "analysisRef": "job-20261031101554-f4ba758e/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101554-f4ba758e:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How amendments are proposed, sent to states, and ratified",
+    "sources": [
+      {
+        "id": "nara-constitutional-amendment-process",
+        "title": "Constitutional Amendment Process — National Archives, Office of the Federal Register",
+        "locator": "https://www.archives.gov/federal-register/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Office of the Federal Register, 'Constitutional Amendment Process'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "0700da6350974f019703ff0fc39193dc",
+      "runId": "job-20261031101554-f4ba758e",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:16:52.376Z"
+    },
+    "seed": 2485879666,
+    "headline": "How amendments are proposed, sent to states, and ratified",
+    "keyPoints": [
+      {
+        "id": "proposal-pathways",
+        "point": "Students learn that the Constitution provides that an amendment may be proposed by Congress with a two-thirds vote or by a convention.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Constitution provides that an amendment may be proposed either by the Congress with a two-thirds majority vote"
+      },
+      {
+        "id": "presidential-role",
+        "point": "Students learn that the President has no constitutional role in the amendment process and does not sign the joint resolution.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "Since the President does not have a constitutional role in the amendment process"
+      },
+      {
+        "id": "archivist-submission",
+        "point": "Students learn that the Archivist submits the proposed amendment to each Governor for consideration by the states.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor"
+      },
+      {
+        "id": "ratification-threshold",
+        "point": "Students learn that a proposed amendment becomes part of the Constitution when ratified by three-fourths of the states.",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "article-v",
+        "term": "Article V",
+        "gloss": "Constitutional provision that authorizes the amendment authority and process",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The authority to amend the Constitution of the United States is derived from Article V of the Constitution."
+      },
+      {
+        "id": "joint-resolution",
+        "term": "joint resolution",
+        "gloss": "Legislative form Congress uses to propose an amendment",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution."
+      },
+      {
+        "id": "archivist-term",
+        "term": "Archivist",
+        "gloss": "Person who submits the proposed amendment to governors and later certifies ratification",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor"
+      },
+      {
+        "id": "ratification-term",
+        "term": "ratification",
+        "gloss": "Review of ratification documents for legal sufficiency before acknowledgment",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The OFR examines ratification documents for facial legal sufficiency and an authenticating signature."
+      },
+      {
+        "id": "three-fourths-term",
+        "term": "three-fourths",
+        "gloss": "Required share of states that must ratify for an amendment to be adopted",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031101554-f4ba758e:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "threshold-v1",
+      "specId": "job-20261031101554-f4ba758e:threshold-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

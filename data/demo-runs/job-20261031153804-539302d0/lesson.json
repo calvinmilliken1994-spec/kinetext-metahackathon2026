@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031153804-539302d0",
+  "analysisRef": "job-20261031153804-539302d0/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031153804-539302d0:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "Independence proposed and debated in the Second Continental Congress",
+    "sources": [
+      {
+        "id": "nara-lee-resolution",
+        "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "bcb0049d1ba94ba185bcb72e11ed4574",
+      "runId": "job-20261031153804-539302d0",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T15:38:47.143Z"
+    },
+    "seed": 2605075923,
+    "headline": "Independence proposed and debated in the Second Continental Congress",
+    "keyPoints": [
+      {
+        "id": "lee-introduction",
+        "point": "Richard Henry Lee introduced a resolution that the united colonies ought to be free and independent states.",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 7, 1776, Richard Henry Lee introduced a resolution \"that these united colonies are and of right ought to be free and independent states,\""
+      },
+      {
+        "id": "three-parts",
+        "point": "The Lee Resolution contained three parts including a declaration of independence and a call to form foreign alliances.",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "committees-appointed",
+        "point": "On June 11, 1776 Congress appointed three concurrent committees to draft declarations, alliances and a confederation plan.",
+        "sourceId": "nara-lee-resolution",
+        "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution"
+      },
+      {
+        "id": "vote-count",
+        "point": "The vote on the Lee Resolution showed affirmative votes from 12 colonies while New York did not vote until July 9, 1776.",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "lee-resolution",
+        "term": "Lee Resolution",
+        "gloss": "Proposal that contained three parts for independence and foreign alliances",
+        "sourceId": "nara-lee-resolution",
+        "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+      },
+      {
+        "id": "virginia-convention",
+        "term": "Virginia Convention",
+        "gloss": "Colonial body in Virginia that gave instruction for introducing the resolution",
+        "sourceId": "nara-lee-resolution",
+        "quote": "acting under the instruction of the Virginia Convention."
+      },
+      {
+        "id": "continental-congress",
+        "term": "Continental Congress",
+        "gloss": "Governing body that met in Philadelphia and considered proposing independence for colonies",
+        "sourceId": "nara-lee-resolution",
+        "quote": "to attend a Continental Congress that eventually became the governing body"
+      },
+      {
+        "id": "confederation",
+        "term": "confederation",
+        "gloss": "Plan for union that took the form of a confederation for the states",
+        "sourceId": "nara-lee-resolution",
+        "quote": "\"prepare and digest the form of a confederation.\""
+      },
+      {
+        "id": "reconciliation",
+        "term": "reconciliation",
+        "gloss": "Hope of restored relations with Britain that delegates abandoned",
+        "sourceId": "nara-lee-resolution",
+        "quote": "In less than a year, most of the delegates abandoned hope of reconciliation with Britain."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "timeline-v1",
+      "specId": "nara-lee-resolution-job-20261031153804-539302d0",
+      "status": "failed",
+      "reason": "timeline.date-grounded, repair.no-weakening: event \"e6\" (1776): date not grounded — quote \"The plan for making treaties was not approved until Septembe\" contains no COMPLETE source date expression stating 1776 as ONE connected expression in a CLEAN context — the quote contains \"September of 1776\" (the preceding word \"until\" is an approx but th",
+      "revision": 3
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031153804-539302d0:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

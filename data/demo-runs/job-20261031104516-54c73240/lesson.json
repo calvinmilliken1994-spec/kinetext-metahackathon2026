@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031104516-54c73240",
+  "analysisRef": "job-20261031104516-54c73240/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104516-54c73240:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How allele variation and gene pools shape genetic diversity in populations",
+    "sources": [
+      {
+        "id": "nij-heterozygosity",
+        "title": "Heterozygosity — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+        "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/population-genetics/heterozygosity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Heterozygosity'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+        "sha256": "b88d68137ace380387528e9b0d424ad162ee448ea6d48d6646cb090dbfc4e1e9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3fd1bd6220bd494a98dff10083d1b8bb",
+      "runId": "job-20261031104516-54c73240",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:46:35.932Z"
+    },
+    "seed": 3865300098,
+    "headline": "How allele variation and gene pools shape genetic diversity in populations",
+    "keyPoints": [
+      {
+        "id": "kp-variation-survival",
+        "point": "Students learn that variation in alleles is critical for survival because it allows organisms to adapt to changing environments.",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The variation in alleles is critical to the survival of a species and allows organisms to adapt to changing environments."
+      },
+      {
+        "id": "kp-allele-frequency",
+        "point": "Students learn that allele frequency at a locus of interest can be used to estimate the frequency of a given genetic profile.",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency, or the frequency at which alleles are found at any locus of interest, is used to estimate the frequency of a given genetic profile."
+      },
+      {
+        "id": "kp-heterozygous-definition",
+        "point": "Students learn that an individual who inherits two different alleles at a specific locus is defined as heterozygous at that locus.",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "kp-genotype-count",
+        "point": "Students learn that the number of possible genotypes from a few loci can be calculated using the formula based on the number of alleles.",
+        "sourceId": "nij-heterozygosity",
+        "quote": "The number of possible genotypes from only a few loci is great, and can be calculated using the formula k(k+1)/2"
+      },
+      {
+        "id": "kp-gene-pool-diversity",
+        "point": "Students learn that a large gene pool is linked to considerable genetic diversity while a small gene pool is linked to poor genetic diversity and decreased fitness.",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A large gene pool is often associated with considerable genetic diversity whereas a small gene pool is associated with poor genetic diversity"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "kt-gene-pool",
+        "term": "gene pool",
+        "gloss": "Unique set of alleles found in every member of a species or population",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A gene pool is the unique set of alleles that could be found by analyzing the DNA from every member of a species or population."
+      },
+      {
+        "id": "kt-allele-frequency",
+        "term": "Allele frequency",
+        "gloss": "Measure used to characterize genetic diversity and richness of the gene pool",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Allele frequency is used to characterize the genetic diversity, or richness of the gene pool, in a population."
+      },
+      {
+        "id": "kt-heterozygous",
+        "term": "heterozygous",
+        "gloss": "Having two different alleles at a specific locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "If an individual has two different alleles at a specific locus, the individual is heterozygous at that locus"
+      },
+      {
+        "id": "kt-homozygous",
+        "term": "homozygous",
+        "gloss": "Having two identical alleles that are the same at a locus",
+        "sourceId": "nij-heterozygosity",
+        "quote": "if the two alleles are the same, the individual is homozygous."
+      },
+      {
+        "id": "kt-fitness",
+        "term": "Fitness",
+        "gloss": "Probability of transmitting genes to the next generation relative to the population average",
+        "sourceId": "nij-heterozygosity",
+        "quote": "Fitness is the probability of transmitting one's genes to the next generation in relation to the average probability for that population."
+      },
+      {
+        "id": "kt-punnett-square",
+        "term": "Punnett square",
+        "gloss": "Grid that shows expected genotypes visually",
+        "sourceId": "nij-heterozygosity",
+        "quote": "A Punnett square is simply a grid that graphically represents expected genotypes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031104516-54c73240:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "1 item was left out because they could not be verified against the page: expected-heterozygosity (SORT-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031104516-54c73240:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

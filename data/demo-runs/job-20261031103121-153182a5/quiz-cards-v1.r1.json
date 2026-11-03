@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Check core ideas about gas molecules",
+    "cards": [
+      {
+        "id": "assumption-spacing-card",
+        "stem": "What does the kinetic theory assume about molecules compared to their spacing?",
+        "options": [
+          "very small relative to the distance between molecules",
+          "tightly packed with fixed positions",
+          "large enough to fill the container",
+          "identical in mass to the container walls"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The model, called the kinetic theory of gases, assumes that the molecules are very small relative to the distance between molecules.",
+        "hint": ""
+      },
+      {
+        "id": "density-definition-card",
+        "stem": "How is the density of a gas defined?",
+        "options": [
+          "mass of the molecules divided by the volume",
+          "linear momentum of the molecules",
+          "mean kinetic energy of the gas",
+          "force divided by the area"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The density of a gas is simply the sum of the mass of the molecules divided by the volume which the gas occupies.",
+        "hint": ""
+      },
+      {
+        "id": "pressure-measure-card",
+        "stem": "What physical property does gas pressure measure at the molecular level?",
+        "options": [
+          "linear momentum",
+          "mean kinetic energy",
+          "volume of the container",
+          "mass of individual molecules"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The pressure of a gas is a measure of the linear momentum of the molecules.",
+        "hint": ""
+      },
+      {
+        "id": "temperature-meaning-card",
+        "stem": "What does temperature indicate about gas molecules?",
+        "options": [
+          "mean kinetic energy",
+          "linear momentum",
+          "total pressure",
+          "density over volume"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The temperature of a gas is a measure of the mean kinetic energy of the gas.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103121-153182a5:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ed70ec5e7464427484edd83c745613d7",
+    "usage": {
+      "promptTokens": 2795,
+      "completionTokens": 10605,
+      "reasoningTokens": 10242,
+      "cachedTokens": 0
+    },
+    "latencyMs": 64890,
+    "estCostUSD": 0.048565,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103121-153182a5:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Check core ideas about gas molecules",
+    "sources": [
+      {
+        "id": "nasa-grc-kinetic-theory-of-gasses",
+        "title": "Kinetic Theory of Gases — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/kinetic-theory-of-gasses/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d348d7fadb5d1d605627298358bc29f9b9041782d38636f0968fb21659df5ea4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ed70ec5e7464427484edd83c745613d7",
+      "runId": "job-20261031103121-153182a5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:33:17.517Z"
+    },
+    "seed": 4048677612,
+    "cards": [
+      {
+        "id": "assumption-spacing-card",
+        "stem": "What does the kinetic theory assume about molecules compared to their spacing?",
+        "options": [
+          "very small relative to the distance between molecules",
+          "tightly packed with fixed positions",
+          "large enough to fill the container",
+          "identical in mass to the container walls"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The model, called the kinetic theory of gases, assumes that the molecules are very small relative to the distance between molecules.",
+        "hint": ""
+      },
+      {
+        "id": "density-definition-card",
+        "stem": "How is the density of a gas defined?",
+        "options": [
+          "mass of the molecules divided by the volume",
+          "linear momentum of the molecules",
+          "mean kinetic energy of the gas",
+          "force divided by the area"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The density of a gas is simply the sum of the mass of the molecules divided by the volume which the gas occupies.",
+        "hint": ""
+      },
+      {
+        "id": "pressure-measure-card",
+        "stem": "What physical property does gas pressure measure at the molecular level?",
+        "options": [
+          "linear momentum",
+          "mean kinetic energy",
+          "volume of the container",
+          "mass of individual molecules"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The pressure of a gas is a measure of the linear momentum of the molecules.",
+        "hint": ""
+      },
+      {
+        "id": "temperature-meaning-card",
+        "stem": "What does temperature indicate about gas molecules?",
+        "options": [
+          "mean kinetic energy",
+          "linear momentum",
+          "total pressure",
+          "density over volume"
+        ],
+        "sourceId": "nasa-grc-kinetic-theory-of-gasses",
+        "quote": "The temperature of a gas is a measure of the mean kinetic energy of the gas.",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031100603-3a2687b8",
+  "analysisRef": "job-20261031100603-3a2687b8/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100603-3a2687b8:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How to recognize phishing messages and protect your accounts",
+    "sources": [
+      {
+        "id": "ftc-phishing-scams",
+        "title": "How To Recognize and Avoid Phishing Scams — FTC Consumer Advice",
+        "locator": "https://consumer.ftc.gov/articles/how-recognize-avoid-phishing-scams",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: FTC Consumer Advice, 'How To Recognize and Avoid Phishing Scams'. Source: United States Federal Trade Commission, www.ftc.gov. Per the FTC Website Policy, 'Most material on the FTC's website is considered work of the United States Government, meaning that the material is in the public domain and is not subject to copyright restrictions (17 U.S.C. 105). The use, duplication, or redistribution of such material should be accompanied by appropriate attribution, where feasible.' The Federal Trade Commission has not reviewed, approved or endorsed this activity.",
+        "sha256": "00f4ee7c44edc99f06bb6aa3167c8aed6947b565d62c5d776486741caa206b0c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4f07ba5dd03443acb66cb1cf0eb09cb5",
+      "runId": "job-20261031100603-3a2687b8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:06:56.254Z"
+    },
+    "seed": 2377387253,
+    "headline": "How to recognize phishing messages and protect your accounts",
+    "keyPoints": [
+      {
+        "id": "phishing-theft",
+        "point": "Students learn that scammers use email and text messages to steal passwords and account numbers.",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Scammers use email or text messages to try to steal your passwords, account numbers, or Social Security numbers."
+      },
+      {
+        "id": "suspicious-activity-trick",
+        "point": "Phishing emails often report suspicious activity to trick recipients into clicking links.",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "say they’ve noticed some suspicious activity or log-in attempts — they haven’t"
+      },
+      {
+        "id": "generic-greeting-sign",
+        "point": "A generic greeting and a fake billing problem are signs of a phishing scam email.",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "The email has a generic greeting."
+      },
+      {
+        "id": "multi-factor-protection",
+        "point": "Multi-factor authentication makes it harder for scammers to access accounts even with stolen passwords.",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Multi-factor authentication makes it harder for scammers to log in to your accounts if they do get your username and password."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "phishing",
+        "term": "phishing",
+        "gloss": "phishing attacks that use deceptive messages to steal personal information",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Scammers launch thousands of phishing attacks like these every day — and they’re often successful."
+      },
+      {
+        "id": "multi-factor-authentication",
+        "term": "multi-factor authentication",
+        "gloss": "authentication requiring two or more credentials to protect accounts",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Protect your accounts by using multi-factor authentication."
+      },
+      {
+        "id": "malware",
+        "term": "malware",
+        "gloss": "malware is harmful software installed when you click a deceptive link",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "want you to click on a link to make a payment — but the link has malware"
+      },
+      {
+        "id": "spam-filters",
+        "term": "spam filters",
+        "gloss": "spam filters that help keep phishing emails out of the inbox",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Your email spam filters might keep many phishing emails out of your inbox."
+      },
+      {
+        "id": "identity-theft",
+        "term": "identity theft",
+        "gloss": "identity theft occurs when scammers use stolen personal information to access accounts",
+        "sourceId": "ftc-phishing-scams",
+        "quote": "Phishing emails can often have real consequences for people who give scammers their information, including identity theft."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031100603-3a2687b8:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031100603-3a2687b8:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

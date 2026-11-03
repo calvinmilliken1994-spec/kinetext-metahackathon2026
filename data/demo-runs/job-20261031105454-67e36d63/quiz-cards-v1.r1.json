@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Check recent carbon dioxide records and drivers",
+    "cards": [
+      {
+        "id": "global-co2-2024-level",
+        "stem": "What was the global average atmospheric carbon dioxide level reported for 2024?",
+        "options": [
+          "422.8 parts per million",
+          "315 ppm",
+          "280 ppm",
+          "300 ppm"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "global average atmospheric carbon dioxide was 422.8 parts per million (“ppm,” for short) in 2024, a new record high",
+        "hint": "Recall the new record high noted for the most recent year."
+      },
+      {
+        "id": "main-driver-of-rise",
+        "stem": "What is the main cause of the current rise in atmospheric carbon dioxide concentrations?",
+        "options": [
+          "fossil fuels",
+          "volcanic activity",
+          "solar variability",
+          "ocean outgassing"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "Carbon dioxide concentrations are rising mostly because of the fossil fuels that people have been burning for energy",
+        "hint": "Think about what human energy use releases."
+      },
+      {
+        "id": "growth-rate-1960s",
+        "stem": "How fast did atmospheric carbon dioxide increase on average in the 1960s?",
+        "options": [
+          "0.8 ppm per year",
+          "1.6 ppm per year",
+          "1.5 ppm per year",
+          "2.6 ppm per year"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "In the 1960s, atmospheric carbon dioxide increased by about 0.8 ppm per year on average",
+        "hint": "Look at the earliest decade of continuous measurements."
+      },
+      {
+        "id": "ph-drop-term",
+        "stem": "What is the term for the drop in ocean pH that harms marine shell formation?",
+        "options": [
+          "ocean acidification",
+          "thermal expansion",
+          "carbon fertilization",
+          "El Nino warming"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "This drop in pH is called ocean acidification, and it interferes with the ability of marine life",
+        "hint": "Recall the effect of added carbon dioxide on seawater chemistry."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105454-67e36d63:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3c7e0824707744f689755252f37701f8",
+    "usage": {
+      "promptTokens": 5310,
+      "completionTokens": 3553,
+      "reasoningTokens": 3112,
+      "cachedTokens": 0
+    },
+    "latencyMs": 20000,
+    "estCostUSD": 0.02173775,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105454-67e36d63:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Check recent carbon dioxide records and drivers",
+    "sources": [
+      {
+        "id": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "title": "Climate change: atmospheric carbon dioxide — NOAA Climate.gov",
+        "locator": "https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Climate.gov, 'Climate change: atmospheric carbon dioxide'. Credit: NOAA Climate.gov. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "407ee5d0a24d391a0d9c368c628007f1d8c75de1105ea65a2948570abc7ce770"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "3c7e0824707744f689755252f37701f8",
+      "runId": "job-20261031105454-67e36d63",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:57:11.403Z"
+    },
+    "seed": 363826662,
+    "cards": [
+      {
+        "id": "global-co2-2024-level",
+        "stem": "What was the global average atmospheric carbon dioxide level reported for 2024?",
+        "options": [
+          "422.8 parts per million",
+          "315 ppm",
+          "280 ppm",
+          "300 ppm"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "global average atmospheric carbon dioxide was 422.8 parts per million (“ppm,” for short) in 2024, a new record high",
+        "hint": "Recall the new record high noted for the most recent year."
+      },
+      {
+        "id": "main-driver-of-rise",
+        "stem": "What is the main cause of the current rise in atmospheric carbon dioxide concentrations?",
+        "options": [
+          "fossil fuels",
+          "volcanic activity",
+          "solar variability",
+          "ocean outgassing"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "Carbon dioxide concentrations are rising mostly because of the fossil fuels that people have been burning for energy",
+        "hint": "Think about what human energy use releases."
+      },
+      {
+        "id": "growth-rate-1960s",
+        "stem": "How fast did atmospheric carbon dioxide increase on average in the 1960s?",
+        "options": [
+          "0.8 ppm per year",
+          "1.6 ppm per year",
+          "1.5 ppm per year",
+          "2.6 ppm per year"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "In the 1960s, atmospheric carbon dioxide increased by about 0.8 ppm per year on average",
+        "hint": "Look at the earliest decade of continuous measurements."
+      },
+      {
+        "id": "ph-drop-term",
+        "stem": "What is the term for the drop in ocean pH that harms marine shell formation?",
+        "options": [
+          "ocean acidification",
+          "thermal expansion",
+          "carbon fertilization",
+          "El Nino warming"
+        ],
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "This drop in pH is called ocean acidification, and it interferes with the ability of marine life",
+        "hint": "Recall the effect of added carbon dioxide on seawater chemistry."
+      }
+    ]
+  }
+}

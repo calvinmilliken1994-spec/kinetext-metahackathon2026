@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031101938-5609b87e",
+  "analysisRef": "job-20261031101938-5609b87e/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101938-5609b87e:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Lincoln's 1863 proclamation shifted the Civil War toward freedom",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ba9526a24f17472f9d4077af6b335913",
+      "runId": "job-20261031101938-5609b87e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:20:30.841Z"
+    },
+    "seed": 754344863,
+    "headline": "Lincoln's 1863 proclamation shifted the Civil War toward freedom",
+    "keyPoints": [
+      {
+        "id": "lincoln-proclamation",
+        "point": "President Lincoln issued the Emancipation Proclamation on January 1, 1863 to free enslaved people in rebellious areas.",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "President Abraham Lincoln issued the Emancipation Proclamation on January 1, 1863"
+      },
+      {
+        "id": "initial-war-goal",
+        "point": "The North initially fought to prevent secession and preserve the Union rather than to end slavery.",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "was fought by the North to prevent the secession of the Southern states and preserve the Union"
+      },
+      {
+        "id": "preliminary-proclamation",
+        "point": "The preliminary order stated that enslaved people in states still in rebellion on January 1, 1863 would be declared free.",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "which stated that enslaved people in those states or parts of states still in rebellion as of January 1, 1863, would be declared free"
+      },
+      {
+        "id": "limited-scope",
+        "point": "The proclamation applied only to seceded states and left slavery untouched in loyal border states.",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+      },
+      {
+        "id": "military-impact",
+        "point": "Federal advances after the proclamation expanded freedom and Black men joined the Union Army and Navy as liberators.",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "emancipation-proclamation",
+        "term": "Emancipation Proclamation",
+        "gloss": "presidential proclamation that declared freedom for enslaved people in rebellious areas",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "President Abraham Lincoln issued the Emancipation Proclamation on January 1, 1863"
+      },
+      {
+        "id": "secession",
+        "term": "secession",
+        "gloss": "withdrawal of Southern states from the Union to preserve their interests",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "was fought by the North to prevent the secession of the Southern states and preserve the Union"
+      },
+      {
+        "id": "border-states",
+        "term": "border states",
+        "gloss": "loyal slaveholding states that stayed in the Union where slavery remained untouched",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states."
+      },
+      {
+        "id": "military-measure",
+        "term": "military measure",
+        "gloss": "wartime action justified as a military measure to weaken the rebellion",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "was a military measure and came just a few days after"
+      },
+      {
+        "id": "confederacy",
+        "term": "Confederacy",
+        "gloss": "group of seceded Southern states that formed the Confederacy in rebellion",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "to keep England and France from giving political recognition and military aid to the Confederacy"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031101938-5609b87e:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101938-5609b87e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: black-service-total (Q-06).",
+      "revision": 1
+    }
+  ]
+}

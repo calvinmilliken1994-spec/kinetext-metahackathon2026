@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From compression to power stroke",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the mechanical order described from compression through ignition to power stroke",
+    "steps": [
+      {
+        "id": "mixture-compressed",
+        "label": "Mixture compressed for ignition",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "At the end of the compression stroke the fuel/air mixture has been compressed into the combustion chamber",
+        "orderHint": "Mixture is ready before valves close"
+      },
+      {
+        "id": "valves-closed",
+        "label": "Valves and contact close",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The intake valve and exhaust valve are closed and the electrical contact is closed.",
+        "orderHint": ""
+      },
+      {
+        "id": "contact-opens",
+        "label": "Contact opens to begin combustion",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion process begins by opening the electrical contact through the action of the ignition cam and springs.",
+        "orderHint": ""
+      },
+      {
+        "id": "spark-ignites",
+        "label": "Spark ignites mixture",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "As the contact moves away from the plug, a spark is produced which ignites the mixture.",
+        "orderHint": ""
+      },
+      {
+        "id": "constant-volume-combustion",
+        "label": "Rapid combustion at constant volume",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion proceeds so quickly that we can consider the piston to be motionless and the volume of the combustion chamber to be a constant.",
+        "orderHint": "Volume stays constant while heat releases"
+      },
+      {
+        "id": "stage-four-power",
+        "label": "Combustion ends and power stroke begins",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The end of the combustion process is designated Stage 4 of the engine cycle and is the beginning of the power stroke.",
+        "orderHint": "Marks the start of useful work"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102439-7be7a74e:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c9386f02c9f743f7ba94e190da2c5cf9",
+    "usage": {
+      "promptTokens": 3130,
+      "completionTokens": 5647,
+      "reasoningTokens": 5255,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40645,
+    "estCostUSD": 0.02791225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102439-7be7a74e:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From compression to power stroke",
+    "sources": [
+      {
+        "id": "nasa-grc-combustion-process",
+        "title": "Combustion Process — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/combustion-process/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "52579f531d16a59a0faaa30000970771b2ce5fd24f478dbaa9459442fb522e4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c9386f02c9f743f7ba94e190da2c5cf9",
+      "runId": "job-20261031102439-7be7a74e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:26:07.207Z"
+    },
+    "seed": 985065057,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows the mechanical order described from compression through ignition to power stroke",
+    "steps": [
+      {
+        "id": "mixture-compressed",
+        "label": "Mixture compressed for ignition",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "At the end of the compression stroke the fuel/air mixture has been compressed into the combustion chamber",
+        "orderHint": "Mixture is ready before valves close"
+      },
+      {
+        "id": "valves-closed",
+        "label": "Valves and contact close",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The intake valve and exhaust valve are closed and the electrical contact is closed.",
+        "orderHint": ""
+      },
+      {
+        "id": "contact-opens",
+        "label": "Contact opens to begin combustion",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion process begins by opening the electrical contact through the action of the ignition cam and springs.",
+        "orderHint": ""
+      },
+      {
+        "id": "spark-ignites",
+        "label": "Spark ignites mixture",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "As the contact moves away from the plug, a spark is produced which ignites the mixture.",
+        "orderHint": ""
+      },
+      {
+        "id": "constant-volume-combustion",
+        "label": "Rapid combustion at constant volume",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The combustion proceeds so quickly that we can consider the piston to be motionless and the volume of the combustion chamber to be a constant.",
+        "orderHint": "Volume stays constant while heat releases"
+      },
+      {
+        "id": "stage-four-power",
+        "label": "Combustion ends and power stroke begins",
+        "sourceId": "nasa-grc-combustion-process",
+        "quote": "The end of the combustion process is designated Stage 4 of the engine cycle and is the beginning of the power stroke.",
+        "orderHint": "Marks the start of useful work"
+      }
+    ]
+  }
+}

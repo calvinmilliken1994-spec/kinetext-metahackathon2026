@@ -1,0 +1,191 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How federal impeachment moves from charges to verdict",
+    "orderBasis": "numbered",
+    "cyclic": false,
+    "orderNote": "Follow the numbered order shown on the page",
+    "steps": [
+      {
+        "id": "house-brings-charges",
+        "label": "House introduces impeachment charges",
+        "sourceId": "usagov-impeachment",
+        "quote": "1. The House of Representatives brings articles (charges) of impeachment against an official.",
+        "orderHint": ""
+      },
+      {
+        "id": "house-votes-to-impeach",
+        "label": "House adopts articles by majority vote",
+        "sourceId": "usagov-impeachment",
+        "quote": "2. If the House adopts the articles by a simple majority vote, the official has been impeached.",
+        "orderHint": ""
+      },
+      {
+        "id": "senate-holds-trial",
+        "label": "Senate holds impeachment trial",
+        "sourceId": "usagov-impeachment",
+        "quote": "3. The Senate holds an impeachment trial. In the case of a president, the U.S. Supreme Court chief justice presides.",
+        "orderHint": ""
+      },
+      {
+        "id": "removal-if-guilty",
+        "label": "Removed from office after guilty verdict",
+        "sourceId": "usagov-impeachment",
+        "quote": "4. If found guilty, the official is removed from office.",
+        "orderHint": ""
+      },
+      {
+        "id": "continuation-if-acquitted",
+        "label": "Continues serving when not found guilty",
+        "sourceId": "usagov-impeachment",
+        "quote": "5. If they are not found guilty, they may continue to serve in office.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110504-d58e579a:sequence-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"numbered\" holds: every quote carries an ascending order signal (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "sequence-v1: no weakening — every one of the 3 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e443714b1d5e4fbe922d77fb50fb2eca",
+    "usage": {
+      "promptTokens": 4164,
+      "completionTokens": 1470,
+      "reasoningTokens": 1157,
+      "cachedTokens": 0
+    },
+    "latencyMs": 7827,
+    "estCostUSD": 0.0114525,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110504-d58e579a:sequence-v1:r2",
+    "componentId": "sequence-v1",
+    "title": "How federal impeachment moves from charges to verdict",
+    "sources": [
+      {
+        "id": "usagov-impeachment",
+        "title": "How federal impeachment works — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/impeachment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How federal impeachment works'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "e2ad6fbbadad11e3751966452191cdcf57c63d5a5c31609f144004e3226733de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e443714b1d5e4fbe922d77fb50fb2eca",
+      "runId": "job-20261031110504-d58e579a",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:07:16.002Z"
+    },
+    "seed": 1302495744,
+    "orderBasis": "numbered",
+    "cyclic": false,
+    "orderNote": "Follow the numbered order shown on the page",
+    "steps": [
+      {
+        "id": "house-brings-charges",
+        "label": "House introduces impeachment charges",
+        "sourceId": "usagov-impeachment",
+        "quote": "1. The House of Representatives brings articles (charges) of impeachment against an official.",
+        "orderHint": ""
+      },
+      {
+        "id": "house-votes-to-impeach",
+        "label": "House adopts articles by majority vote",
+        "sourceId": "usagov-impeachment",
+        "quote": "2. If the House adopts the articles by a simple majority vote, the official has been impeached.",
+        "orderHint": ""
+      },
+      {
+        "id": "senate-holds-trial",
+        "label": "Senate holds impeachment trial",
+        "sourceId": "usagov-impeachment",
+        "quote": "3. The Senate holds an impeachment trial. In the case of a president, the U.S. Supreme Court chief justice presides.",
+        "orderHint": ""
+      },
+      {
+        "id": "removal-if-guilty",
+        "label": "Removed from office after guilty verdict",
+        "sourceId": "usagov-impeachment",
+        "quote": "4. If found guilty, the official is removed from office.",
+        "orderHint": ""
+      },
+      {
+        "id": "continuation-if-acquitted",
+        "label": "Continues serving when not found guilty",
+        "sourceId": "usagov-impeachment",
+        "quote": "5. If they are not found guilty, they may continue to serve in office.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031103059-cc532c13",
+  "analysisRef": "job-20261031103059-cc532c13/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103059-cc532c13:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How cosine and other functions link angle values to side ratios",
+    "sources": [
+      {
+        "id": "nasa-grc-idea-of-functions",
+        "title": "Idea of Functions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/idea-of-functions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "6fce3423e0f40551beee636574cc686090a85588891583ee35762c32af992108"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "27008c1f363f49c384d926a37e303601",
+      "runId": "job-20261031103059-cc532c13",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:32:06.977Z"
+    },
+    "seed": 10797049,
+    "headline": "How cosine and other functions link angle values to side ratios",
+    "keyPoints": [
+      {
+        "id": "function-definition",
+        "point": "Students learn a function means the value of one variable depends uniquely on another variable.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "the value of one variable in a problem depends uniquely on the value of another variable in the problem."
+      },
+      {
+        "id": "exponential-logarithmic",
+        "point": "Students learn exponential function relates a variable to how many times another variable is used as a multiplier.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The exponential function relates a variable to the number of times another variable is used as a multiplier"
+      },
+      {
+        "id": "trigonometric-ratio",
+        "point": "Students learn trigonometric functions are defined by ratio of sides that depends only on angle, not single side length.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The trigonometric functions are defined in terms of the ratio of the length of the sides of a right triangle"
+      },
+      {
+        "id": "cosine-invariance",
+        "point": "Students learn scaling a right triangle by 2 or 3 keeps cosine as x divided by y after simplifying.",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the red triangle, the cosine of “b” is equal to 2x divided by 2y."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "function",
+        "term": "function",
+        "gloss": "mathematical concept where one variable depends uniquely on another variable",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "An important mathematical concept is the idea of function"
+      },
+      {
+        "id": "cosine",
+        "term": "cosine",
+        "gloss": "trigonometric ratio of adjacent side to hypotenuse for a given angle in a right triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "For the black triangle, the cosine of “b” is equal to x divided by y."
+      },
+      {
+        "id": "hypotenuse",
+        "term": "hypotenuse",
+        "gloss": "longest side of a right triangle opposite the right angle, labeled h in the example",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The black triangle is the smallest triangle and has a hypotenuse “h” of length “y” and an adjacent side “a” equal to “x”."
+      },
+      {
+        "id": "sine",
+        "term": "sine",
+        "gloss": "trigonometric function that relates sides and angles of a triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle."
+      },
+      {
+        "id": "tangent",
+        "term": "tangent",
+        "gloss": "trigonometric function that relates sides and angles of a triangle",
+        "sourceId": "nasa-grc-idea-of-functions",
+        "quote": "The trigonometric functions sine, cosine, and tangent relate the various sides and angles of a triangle."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031103059-cc532c13:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031103059-cc532c13:formula-explorer-v1:r3",
+      "status": "failed",
+      "reason": "FE-08: the page formula line could not be parsed with the calculator grammar (the quote contains no \"=\" formula line) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula could not be checked with our ",
+      "revision": 3
+    }
+  ]
+}

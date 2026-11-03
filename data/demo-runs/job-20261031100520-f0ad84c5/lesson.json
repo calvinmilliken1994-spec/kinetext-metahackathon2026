@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031100520-f0ad84c5",
+  "analysisRef": "job-20261031100520-f0ad84c5/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100520-f0ad84c5:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How open market operations implement monetary policy and guide the federal funds rate",
+    "sources": [
+      {
+        "id": "federalreserve-open-market-operations",
+        "title": "Open Market Operations — Board of Governors of the Federal Reserve System, Monetary Policy",
+        "locator": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Board of Governors of the Federal Reserve System, 'Open Market Operations'. Credit: Board of Governors of the Federal Reserve System. Per the Board's website Disclaimer, 'Unless otherwise indicated, information on Board's website is in the public domain and may be copied and distributed without permission. Please cite to the Board as the source of the information.' The Board of Governors of the Federal Reserve System has not reviewed, approved or endorsed this activity.",
+        "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "93b4e240c5e442cebbaf74d6ab03bac4",
+      "runId": "job-20261031100520-f0ad84c5",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:05:56.368Z"
+    },
+    "seed": 2003000589,
+    "headline": "How open market operations implement monetary policy and guide the federal funds rate",
+    "keyPoints": [
+      {
+        "id": "omo-definition",
+        "point": "Open market operations are the purchase and sale of securities to implement monetary policy.",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "the purchase and sale of securities in the open market by a central bank--are a key tool used by the Federal Reserve"
+      },
+      {
+        "id": "federal-funds-rate",
+        "point": "The federal funds rate is the interest rate at which depository institutions lend reserve balances overnight to each other.",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "the federal funds rate--the interest rate at which depository institutions lend reserve balances to other depository institutions overnight"
+      },
+      {
+        "id": "expansion-2008-2014",
+        "point": "From 2008 through 2014 the Federal Reserve expanded holdings of longer term securities to put downward pressure on longer term interest rates.",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "From the end of 2008 through October 2014, the Federal Reserve greatly expanded its holding of longer-term securities through open market purchases"
+      },
+      {
+        "id": "standing-repo-ceiling",
+        "point": "Standing repo operations limit upward pressure and provide a ceiling on rates to support monetary policy implementation.",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "SRP operations limit upward pressure and help provide a ceiling on rates to support the monetary policy implementation"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "open-market-operations",
+        "term": "Open market operations",
+        "gloss": "purchase and sale of securities by a central bank to implement monetary policy",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Open market operations (OMOs)--the purchase and sale of securities in the open market by a central bank"
+      },
+      {
+        "id": "federal-funds-rate-term",
+        "term": "federal funds rate",
+        "gloss": "interest rate for overnight lending of reserve balances between depository institutions",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "the federal funds rate--the interest rate at which depository institutions lend reserve balances"
+      },
+      {
+        "id": "reserve-balances",
+        "term": "reserve balances",
+        "gloss": "supply of funds that depository institutions hold and can lend overnight",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "adjust the supply of reserve balances so as to keep the federal funds rate"
+      },
+      {
+        "id": "overnight-reverse-repurchase",
+        "term": "overnight reverse repurchase agreements",
+        "gloss": "supplementary policy tool used to help control the federal funds rate and keep it in target range",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "overnight reverse repurchase agreements (ON RRPs)--a type of OMO--as a supplementary policy tool"
+      },
+      {
+        "id": "standing-repo",
+        "term": "standing repo",
+        "gloss": "operations against eligible securities that provide a ceiling on rates",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Federal Reserve has conducted domestic standing repo (SRP) operations against eligible securities"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100520-f0ad84c5:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031100520-f0ad84c5:data-table-v1:r3",
+      "status": "failed",
+      "reason": "DT-01, DT-02, DT-04: rows[0].values[0].quote: quote \"25\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].values[1].quote: quote \"0\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compac",
+      "revision": 3
+    }
+  ]
+}

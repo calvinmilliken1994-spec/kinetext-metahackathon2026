@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Quicksort running time and variants",
+    "cards": [
+      {
+        "id": "worst-case-time",
+        "stem": "What running time does the source give for quicksort in the worst case?",
+        "options": [
+          "Θ(n²)",
+          "linear time",
+          "logarithmic time",
+          "constant time"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "hint": "Recall the bound stated for the worst case."
+      },
+      {
+        "id": "good-pivot-variant",
+        "stem": "What worst case bound does the source say a variant can achieve when always picking good pivots?",
+        "options": [
+          "O(n log n)",
+          "linear time",
+          "quadratic time",
+          "constant time"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time.",
+        "hint": "Think about the bound linked to always picking good pivots."
+      },
+      {
+        "id": "variant-aspects",
+        "stem": "Which aspect is listed as varying among quicksort variants?",
+        "options": [
+          "to select the pivot",
+          "to change the language",
+          "to avoid sorting",
+          "to copy the array"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions",
+        "hint": "Recall what variants differ in choosing."
+      },
+      {
+        "id": "pivot-definition",
+        "stem": "What does the definition say is picked from the array to start quicksort?",
+        "options": [
+          "Pick an element from the array (the pivot)",
+          "choose a random file from disk",
+          "take the first sorted run",
+          "select external storage"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "hint": "Remember the first step of the definition."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105249-476085b9:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c817860aa5054602a0d1314efa066bca",
+    "usage": {
+      "promptTokens": 2854,
+      "completionTokens": 10320,
+      "reasoningTokens": 9918,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52612,
+    "estCostUSD": 0.0474275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105249-476085b9:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Quicksort running time and variants",
+    "sources": [
+      {
+        "id": "nist-dads-quicksort",
+        "title": "quicksort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/quicksort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'quicksort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "75f753d28767d46e64ab224b9e5b19559f5944a5a78bba8b9148153a28656364"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c817860aa5054602a0d1314efa066bca",
+      "runId": "job-20261031105249-476085b9",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:54:38.712Z"
+    },
+    "seed": 537025912,
+    "cards": [
+      {
+        "id": "worst-case-time",
+        "stem": "What running time does the source give for quicksort in the worst case?",
+        "options": [
+          "Θ(n²)",
+          "linear time",
+          "logarithmic time",
+          "constant time"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Quicksort has running time Θ(n²) in the worst case, but it is typically O(n log n).",
+        "hint": "Recall the bound stated for the worst case."
+      },
+      {
+        "id": "good-pivot-variant",
+        "stem": "What worst case bound does the source say a variant can achieve when always picking good pivots?",
+        "options": [
+          "O(n log n)",
+          "linear time",
+          "quadratic time",
+          "constant time"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Select can be used to always pick good pivots, thus giving a variant with O(n log n) worst-case running time.",
+        "hint": "Think about the bound linked to always picking good pivots."
+      },
+      {
+        "id": "variant-aspects",
+        "stem": "Which aspect is listed as varying among quicksort variants?",
+        "options": [
+          "to select the pivot",
+          "to change the language",
+          "to avoid sorting",
+          "to copy the array"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "to select the pivot, to partition the array, to stop the recursion or switch to another algorithm for small partitions",
+        "hint": "Recall what variants differ in choosing."
+      },
+      {
+        "id": "pivot-definition",
+        "stem": "What does the definition say is picked from the array to start quicksort?",
+        "options": [
+          "Pick an element from the array (the pivot)",
+          "choose a random file from disk",
+          "take the first sorted run",
+          "select external storage"
+        ],
+        "sourceId": "nist-dads-quicksort",
+        "quote": "Pick an element from the array (the pivot), partition the remaining elements into those greater than and less than this pivot",
+        "hint": "Remember the first step of the definition."
+      }
+    ]
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nara-lee-resolution-job-20261031153804-539302d0",
+  "title": "The Lee Resolution: From Proposal to Confederation",
+  "learningObjectives": [
+    "Explain how support for independence led to Richard Henry Lee proposing that the colonies be free and independent states.",
+    "Identify the three-part purpose of the Lee Resolution and the concurrent committees created to carry it out.",
+    "Describe the sequence of votes and delayed approvals from June 1776 through November 1777."
+  ],
+  "sources": [
+    {
+      "id": "nara-lee-resolution",
+      "title": "Lee Resolution (1776) — National Archives, Milestone Documents (agency-written introduction)",
+      "locator": "https://www.archives.gov/milestone-documents/lee-resolution",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Lee Resolution (1776)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+      "sha256": "a18b4131b1c5223c9b0685aed8fa77a746537b2af6e2084d892549e8808ce9e3"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp1",
+      "text": "The Lee Resolution proposed independence, foreign alliances, and a plan for confederation, prompting Congress to create three concurrent committees to address each part.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The delegates to Congress adopted strict rules of secrecy to protect the cause of American liberty and their own lives."
+        }
+      ]
+    },
+    {
+      "id": "exp2",
+      "text": "Delegates met under secrecy in Philadelphia, debated Lee's proposal, recorded the votes of twelve colonies, and later approved separate plans for treaties and confederation.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "Its second meeting convened in Philadelphia in 1775."
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right."
+        }
+      ]
+    },
+    {
+      "id": "exp3",
+      "text": "Approval of the related plans unfolded over more than a year, with the treaty plan acted on months after the Declaration and the confederation plan much later.",
+      "evidence": [
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "The plan for making treaties was not approved until September of 1776;"
+        },
+        {
+          "sourceId": "nara-lee-resolution",
+          "quote": "the plan of confederation was delayed until November of 1777."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "timeline-v1",
+    "events": [
+      {
+        "id": "e1",
+        "label": "Second Continental Congress convenes in Philadelphia",
+        "year": 1775,
+        "month": 0,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "Its second meeting convened in Philadelphia in 1775."
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The delegates to Congress adopted strict rules of secrecy to protect the cause of American liberty and their own lives."
+          }
+        ]
+      },
+      {
+        "id": "e2",
+        "label": "Lee introduces resolution for independence",
+        "year": 1776,
+        "month": 6,
+        "day": 7,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "On June 7, 1776, Richard Henry Lee of Virginia, introduced this resolution in the Second Continental Congress"
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The Lee Resolution contained three parts: a declaration of independence, a call to form foreign alliances, and \"a plan for confederation.\""
+          }
+        ]
+      },
+      {
+        "id": "e3",
+        "label": "Congress appoints three concurrent committees",
+        "year": 1776,
+        "month": 6,
+        "day": 11,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "On June 11, 1776, the Congress appointed three concurrent committees in response to the Lee Resolution"
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "\"prepare and digest the form of a confederation.\""
+          }
+        ]
+      },
+      {
+        "id": "e5",
+        "label": "New York Convention upholds independence",
+        "year": 1776,
+        "month": 7,
+        "day": 9,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "New York cast no vote until the newly elected New York Convention upheld the Declaration of Independence on July 9, 1776."
+          },
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The document seen here shows the vote on the Lee Resolution — the affirmative votes of 12 colonies are listed at the right."
+          }
+        ]
+      },
+      {
+        "id": "e6",
+        "label": "Plan for making treaties approved",
+        "year": 1776,
+        "month": 9,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "The plan for making treaties was not approved until September of 1776;"
+          }
+        ]
+      },
+      {
+        "id": "e7",
+        "label": "Plan of confederation delayed",
+        "year": 1777,
+        "month": 11,
+        "day": 0,
+        "evidence": [
+          {
+            "sourceId": "nara-lee-resolution",
+            "quote": "the plan of confederation was delayed until November of 1777."
+          }
+        ]
+      }
+    ],
+    "scenario": {
+      "subjectLabel": "Lee Resolution and Independence",
+      "settingLabel": "Second Continental Congress, 1775-1777"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "Lee introduction precedes committee appointment",
+      "earlierEventId": "e2",
+      "laterEventId": "e3"
+    },
+    {
+      "name": "Committee appointment precedes deferred vote",
+      "earlierEventId": "e3",
+      "laterEventId": "e5"
+    },
+    {
+      "name": "New York vote precedes treaty plan",
+      "earlierEventId": "e5",
+      "laterEventId": "e6"
+    },
+    {
+      "name": "Treaty plan precedes confederation plan",
+      "earlierEventId": "e6",
+      "laterEventId": "e7"
+    }
+  ],
+  "predictions": [
+    {
+      "id": "p1",
+      "prompt": "Which happened first: Second Continental Congress convening in Philadelphia or Lee introducing his resolution?",
+      "earlierEventId": "e1",
+      "laterEventId": "e2"
+    },
+    {
+      "id": "p2",
+      "prompt": "Which happened first: deferral of the Lee Resolution vote or New York Convention upholding independence?",
+      "earlierEventId": "e3",
+      "laterEventId": "e5"
+    },
+    {
+      "id": "p3",
+      "prompt": "Which happened first: approval of the treaty plan or delay of the confederation plan?",
+      "earlierEventId": "e6",
+      "laterEventId": "e7"
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "0a4ec5bf28a54b89b800969ca50a4313",
+    "runId": "job-20261031153804-539302d0",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T15:40:59.279Z",
+    "revision": 2,
+    "repairOf": 1
+  }
+}

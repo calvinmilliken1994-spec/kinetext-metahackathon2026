@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How SI base units build on fixed constants",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Units appear in page order each later definition builds on earlier constants.",
+    "steps": [
+      {
+        "id": "step-1-second",
+        "label": "Establish the second from cesium frequency",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency",
+        "orderHint": "Second is defined first as the time base."
+      },
+      {
+        "id": "step-2-meter",
+        "label": "Define the meter using speed of light",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1",
+        "orderHint": "Meter uses the already defined second."
+      },
+      {
+        "id": "step-3-kilogram",
+        "label": "Define the kilogram using Planck constant",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s",
+        "orderHint": "Kilogram builds on meter and second."
+      },
+      {
+        "id": "step-4-ampere",
+        "label": "Define the ampere using elementary charge",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C",
+        "orderHint": "Ampere builds on the second."
+      },
+      {
+        "id": "step-5-kelvin",
+        "label": "Define the kelvin using Boltzmann constant",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kelvin is defined by taking the fixed numerical value of the Boltzmann constant k to be 1.380 649 ×10^−23 when expressed in the unit J K^−1",
+        "orderHint": "Kelvin builds on kilogram, meter and second."
+      },
+      {
+        "id": "step-6-dependency",
+        "label": "Kilogram meter and second together",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "where the kilogram, meter and second are defined in terms of h, c and ∆νCs.",
+        "orderHint": "Later units reference the first three units and constants."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105332-a4d69158:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "1978b890d9244aa58c373e02193f1d23",
+    "usage": {
+      "promptTokens": 3192,
+      "completionTokens": 7771,
+      "reasoningTokens": 7264,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44078,
+    "estCostUSD": 0.03701675,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105332-a4d69158:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How SI base units build on fixed constants",
+    "sources": [
+      {
+        "id": "nist-si-base-unit-definitions",
+        "title": "Definitions of SI Base Units — NIST, SI Redefinition",
+        "locator": "https://www.nist.gov/si-redefinition/definitions-si-base-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, SI Redefinition, 'Definitions of SI Base Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "cb4b3a449af325e676ebf2069948e47aa6c8d58a0463a26e8f0d5a207fbafc9c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1978b890d9244aa58c373e02193f1d23",
+      "runId": "job-20261031105332-a4d69158",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:55:05.835Z"
+    },
+    "seed": 117889417,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Units appear in page order each later definition builds on earlier constants.",
+    "steps": [
+      {
+        "id": "step-1-second",
+        "label": "Establish the second from cesium frequency",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency",
+        "orderHint": "Second is defined first as the time base."
+      },
+      {
+        "id": "step-2-meter",
+        "label": "Define the meter using speed of light",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1",
+        "orderHint": "Meter uses the already defined second."
+      },
+      {
+        "id": "step-3-kilogram",
+        "label": "Define the kilogram using Planck constant",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s",
+        "orderHint": "Kilogram builds on meter and second."
+      },
+      {
+        "id": "step-4-ampere",
+        "label": "Define the ampere using elementary charge",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C",
+        "orderHint": "Ampere builds on the second."
+      },
+      {
+        "id": "step-5-kelvin",
+        "label": "Define the kelvin using Boltzmann constant",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kelvin is defined by taking the fixed numerical value of the Boltzmann constant k to be 1.380 649 ×10^−23 when expressed in the unit J K^−1",
+        "orderHint": "Kelvin builds on kilogram, meter and second."
+      },
+      {
+        "id": "step-6-dependency",
+        "label": "Kilogram meter and second together",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "where the kilogram, meter and second are defined in terms of h, c and ∆νCs.",
+        "orderHint": "Later units reference the first three units and constants."
+      }
+    ]
+  }
+}

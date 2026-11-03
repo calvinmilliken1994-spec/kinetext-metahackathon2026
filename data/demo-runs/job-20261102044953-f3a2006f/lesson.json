@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261102044953-f3a2006f",
+  "analysisRef": "job-20261102044953-f3a2006f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261102044953-f3a2006f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Volcano hazards that threaten lives, property and climate",
+    "sources": [
+      {
+        "id": "usgs-volcano-hazards",
+        "title": "What Are Volcano Hazards? — U.S. Geological Survey Fact Sheet 002-97 (revised March 2008)",
+        "locator": "https://pubs.usgs.gov/fs/fs002-97/old%20html%20files/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey Fact Sheet 002-97, 'What Are Volcano Hazards?' (revised March 2008), by Bobbie Myers, Steven R. Brantley, Peter Stauffer, and James W. Hendley II; graphics by Bobbie Myers, Sara Boore, and Susan Mayfield. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "ab12208bf12992727711ca9e3334f16cb5af2f4287bb669e5b7a34f8c45e1af8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a19a98-5005-76a9-98d3-4151b44f795b",
+      "runId": "job-20261102044953-f3a2006f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-02T04:50:35.796Z"
+    },
+    "seed": 4254186200,
+    "headline": "Volcano hazards that threaten lives, property and climate",
+    "keyPoints": [
+      {
+        "id": "explosive-eruptions-climate",
+        "point": "Students learn that large explosive eruptions can endanger distant people and affect global climate.",
+        "quote": "Large explosive eruptions can endanger people and property hundreds of miles away and even affect global climate.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "eruption-columns-ash",
+        "point": "Students learn how eruption columns grow rapidly and form clouds that threaten aircraft.",
+        "quote": "Eruption columns can grow rapidly and reach more than 12 miles above a volcano in less than 30 minutes, forming an eruption cloud.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "pyroclastic-flows-heat",
+        "point": "Students learn that pyroclastic flows are extremely hot and move fast enough to destroy everything in their path.",
+        "quote": "These pyroclastic flows can be as hot as 1,500°F and move at speeds of 100 to 150 miles per hour.",
+        "sourceId": "usgs-volcano-hazards"
+      },
+      {
+        "id": "lahars-mudflows",
+        "point": "Students learn that lahars are mud and water flows that can occur even when a volcano is quiet.",
+        "quote": "Mudflows or debris flows composed mostly of volcanic materials on the flanks of a volcano are called lahars.",
+        "sourceId": "usgs-volcano-hazards"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Solid and molten rock fragments blasted from an eruption",
+        "id": "tephra",
+        "quote": "An explosive eruption blasts solid and molten rock fragments (tephra) and volcanic gases into the air with tremendous force.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "tephra"
+      },
+      {
+        "gloss": "Molten rock that pours onto the surface to form flows",
+        "id": "lava",
+        "quote": "Molten rock (magma) that pours or oozes onto the Earth’s surface is called lava and forms lava flows.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "lava"
+      },
+      {
+        "gloss": "Flows of mud and volcanic debris that rush down valleys",
+        "id": "lahars",
+        "quote": "Mudflows or debris flows composed mostly of volcanic materials on the flanks of a volcano are called lahars.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "lahars"
+      },
+      {
+        "gloss": "Small openings where gases reach the surface",
+        "id": "fumaroles",
+        "quote": "Even when a volcano is not erupting, cracks in the ground allow gases to reach the surface through small openings called fumaroles.",
+        "sourceId": "usgs-volcano-hazards",
+        "term": "fumaroles"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261102044953-f3a2006f:label-diagram-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261102044953-f3a2006f:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How an amendment moves from proposal to ratification",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "proposal-by-congress",
+        "label": "Congress proposes amendment",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Constitution provides that an amendment may be proposed either by the Congress with a two-thirds majority vote",
+        "orderHint": ""
+      },
+      {
+        "id": "joint-resolution-prepared",
+        "label": "Proposal offered as joint resolution",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution.",
+        "orderHint": ""
+      },
+      {
+        "id": "archivist-notifies-governors",
+        "label": "Archivist notifies governors",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor",
+        "orderHint": ""
+      },
+      {
+        "id": "states-return-ratification",
+        "label": "States return ratification records",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "When a State ratifies a proposed amendment, it sends the Archivist an original or certified copy of the State action",
+        "orderHint": ""
+      },
+      {
+        "id": "documents-examined",
+        "label": "Officials examine ratification documents",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The OFR examines ratification documents for facial legal sufficiency and an authenticating signature.",
+        "orderHint": ""
+      },
+      {
+        "id": "amendment-adopted",
+        "label": "Amendment becomes part of Constitution",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States).",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101554-f4ba758e:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "486e4325b79148f88714a7544e2b9c43",
+    "usage": {
+      "promptTokens": 3318,
+      "completionTokens": 8367,
+      "reasoningTokens": 7991,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38782,
+    "estCostUSD": 0.03970725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101554-f4ba758e:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How an amendment moves from proposal to ratification",
+    "sources": [
+      {
+        "id": "nara-constitutional-amendment-process",
+        "title": "Constitutional Amendment Process — National Archives, Office of the Federal Register",
+        "locator": "https://www.archives.gov/federal-register/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Office of the Federal Register, 'Constitutional Amendment Process'. Per NARA's Privacy and Use Policies, 'Works of the U.S. Government that have been produced by the National Archives and Records Administration are in the public domain and may be copied and distributed without permission. These works are available for worldwide use and reuse under the terms of the Creative Commons CC0 1.0 Universal license.' The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "5777ce95a0692bd6c516da858e21712c8ca966bb8b257c991968e31b13e8b53f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "486e4325b79148f88714a7544e2b9c43",
+      "runId": "job-20261031101554-f4ba758e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:17:31.161Z"
+    },
+    "seed": 3744896955,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "proposal-by-congress",
+        "label": "Congress proposes amendment",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Constitution provides that an amendment may be proposed either by the Congress with a two-thirds majority vote",
+        "orderHint": ""
+      },
+      {
+        "id": "joint-resolution-prepared",
+        "label": "Proposal offered as joint resolution",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Congress proposes an amendment in the form of a joint resolution.",
+        "orderHint": ""
+      },
+      {
+        "id": "archivist-notifies-governors",
+        "label": "Archivist notifies governors",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The Archivist submits the proposed amendment to the States for their consideration by sending a letter of notification to each Governor",
+        "orderHint": ""
+      },
+      {
+        "id": "states-return-ratification",
+        "label": "States return ratification records",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "When a State ratifies a proposed amendment, it sends the Archivist an original or certified copy of the State action",
+        "orderHint": ""
+      },
+      {
+        "id": "documents-examined",
+        "label": "Officials examine ratification documents",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "The OFR examines ratification documents for facial legal sufficiency and an authenticating signature.",
+        "orderHint": ""
+      },
+      {
+        "id": "amendment-adopted",
+        "label": "Amendment becomes part of Constitution",
+        "sourceId": "nara-constitutional-amendment-process",
+        "quote": "A proposed amendment becomes part of the Constitution as soon as it is ratified by three-fourths of the States (38 of 50 States).",
+        "orderHint": ""
+      }
+    ]
+  }
+}

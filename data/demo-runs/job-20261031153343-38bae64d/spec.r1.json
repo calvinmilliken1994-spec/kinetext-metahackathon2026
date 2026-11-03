@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "investorgov-what-is-compound-interest-job-20261031153343-38bae64",
+  "title": "Compound interest - monthly compounding growth over time",
+  "learningObjectives": [
+    "Explain that compound interest is interest earned on both the initial amount and previously earned interest.",
+    "Calculate how a $100 deposit at 5% per year grows to $105 after one year and $110.25 after two years because interest is earned on prior interest.",
+    "Describe how saving $730 and investing at 5% grows to $931.69 after five years and $3,155.02 after 30 years."
+  ],
+  "sources": [
+    {
+      "id": "investorgov-what-is-compound-interest",
+      "title": "What is compound interest? — Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy)",
+      "locator": "https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: Investor.gov, U.S. Securities and Exchange Commission (Office of Investor Education and Advocacy), 'What is compound interest?'. Investor.gov is an SEC website and its privacy policy refers users to SEC.gov policy; per the SEC 'Website Dissemination' policy, 'Information presented on sec.gov is considered public information and may be copied or further distributed by users of the web site without the SEC's permission. Please consider appropriate citation to the SEC as the source.' The page's own disclaimer reads: 'The Office of Investor Education and Advocacy has provided this information as a service to investors. It is neither a legal interpretation nor a statement of SEC policy.' The U.S. Securities and Exchange Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "d13f49be2c935e2a5982c1304925d5598d996864a13d60a7614e9e3505480649"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-definition",
+      "text": "Compound interest means earnings in one period generate additional earnings later because it is interest earned on interest.",
+      "evidence": [
+        {
+          "sourceId": "investorgov-what-is-compound-interest",
+          "quote": "Compound interest is the interest you earn on interest."
+        }
+      ]
+    },
+    {
+      "id": "exp-short-term",
+      "text": "A $100 deposit earning 5% once per year grows to $105 after one year and to $110.25 after two years because the second year includes $0.25 of interest on the first year's $5.",
+      "evidence": [
+        {
+          "sourceId": "investorgov-what-is-compound-interest",
+          "quote": "if you have $100 and it earns 5% interest each year, you'll have $105 at the end of the first year."
+        },
+        {
+          "sourceId": "investorgov-what-is-compound-interest",
+          "quote": "At the end of the second year, you'll have $110.25."
+        }
+      ]
+    },
+    {
+      "id": "exp-long-term",
+      "text": "The power of compounding over long periods is shown when $730 saved and invested at 5% becomes $931.69 after five years and $3,155.02 after 30 years.",
+      "evidence": [
+        {
+          "sourceId": "investorgov-what-is-compound-interest",
+          "quote": "If you give up pizza and save the $730 for the year, then invest it, earning 5% interest, after five years, you'll have how much? [The correct answer is $931.69.]"
+        },
+        {
+          "sourceId": "investorgov-what-is-compound-interest",
+          "quote": "How much will you have after 30 years? [The correct answer is $3,155.02.]"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "compound-interest-v1",
+    "equation": "A=P*(1+r/(100*n))^(n*t)",
+    "principalUSD": {
+      "unit": "USD",
+      "min": 50,
+      "max": 1000,
+      "default": 100
+    },
+    "annualRatePercent": {
+      "unit": "%",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "compoundsPerYear": {
+      "unit": "per year",
+      "min": 1,
+      "max": 365,
+      "default": 12
+    },
+    "years": {
+      "unit": "years",
+      "min": 1,
+      "max": 40,
+      "default": 10
+    },
+    "scenario": {
+      "objectLabel": "Savings account",
+      "settingLabel": "Monthly compounding at 5% for 10 years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "edge - zero percent keeps principal",
+      "principalUSD": 100,
+      "annualRatePercent": 0,
+      "compoundsPerYear": 1,
+      "years": 10,
+      "expectedAmountUSD": 100,
+      "tolerance": 0.01
+    },
+    {
+      "name": "edge - zero years keeps principal",
+      "principalUSD": 500,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 12,
+      "years": 0,
+      "expectedAmountUSD": 500,
+      "tolerance": 0.01
+    },
+    {
+      "name": "one year annual compounding",
+      "principalUSD": 100,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 1,
+      "expectedAmountUSD": 105,
+      "tolerance": 0.01
+    },
+    {
+      "name": "two years annual compounding",
+      "principalUSD": 100,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 2,
+      "expectedAmountUSD": 110.25,
+      "tolerance": 0.01
+    },
+    {
+      "name": "pizza saving five years",
+      "principalUSD": 730,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 5,
+      "expectedAmountUSD": 931.69,
+      "tolerance": 0.01
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-opening-monthly-10y",
+      "prompt": "Predict the amount after 10 years for $100 at 5% compounded monthly.",
+      "principalUSD": 100,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 12,
+      "years": 10,
+      "expectedAmountUSD": 164.7,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-pizza-5y",
+      "prompt": "Predict the amount after 5 years for $730 at 5% compounded yearly.",
+      "principalUSD": 730,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 5,
+      "expectedAmountUSD": 931.69,
+      "tolerance": 0.01
+    },
+    {
+      "id": "pred-pizza-30y",
+      "prompt": "Predict the amount after 30 years for $730 at 5% compounded yearly.",
+      "principalUSD": 730,
+      "annualRatePercent": 5,
+      "compoundsPerYear": 1,
+      "years": 30,
+      "expectedAmountUSD": 3155.02,
+      "tolerance": 0.01
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3860ff285dbd4c258938a737053f8236",
+    "runId": "job-20261031153343-38bae64d",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T15:35:36.002Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

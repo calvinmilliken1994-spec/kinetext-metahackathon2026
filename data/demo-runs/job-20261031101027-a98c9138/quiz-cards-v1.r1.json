@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Reviewing genes alleles and inheritance",
+    "cards": [
+      {
+        "id": "what-are-alleles",
+        "stem": "What term describes forms of the same gene with small differences in DNA bases?",
+        "options": [
+          "alleles",
+          "base pairs",
+          "chromosomes",
+          "genomes"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Forms of the same gene with small differences in their sequence of DNA bases are called alleles.",
+        "hint": ""
+      },
+      {
+        "id": "copies-per-person",
+        "stem": "How many copies of each gene does a person typically have?",
+        "options": [
+          "two copies",
+          "single copy",
+          "three copies",
+          "four copies"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Typically, people have two copies of each gene, one inherited from each parent.",
+        "hint": ""
+      },
+      {
+        "id": "noncoding-gene-role",
+        "stem": "What do many genes that do not code for proteins do instead?",
+        "options": [
+          "help control other genes",
+          "make lipids for storage",
+          "build cell walls",
+          "carry oxygen in blood"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "However, many genes do not code for proteins, instead they help control other genes.",
+        "hint": ""
+      },
+      {
+        "id": "genes-composition",
+        "stem": "What material are genes made of?",
+        "options": [
+          "DNA",
+          "protein",
+          "lipid",
+          "carbohydrate"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Genes are made up of DNA.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101027-a98c9138:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b51808f367f94c02a48a755617fb9b7d",
+    "usage": {
+      "promptTokens": 2819,
+      "completionTokens": 5302,
+      "reasoningTokens": 4997,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32025,
+    "estCostUSD": 0.02605725,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101027-a98c9138:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Reviewing genes alleles and inheritance",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-gene",
+        "title": "What is a gene? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/gene/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "f16d75671a5537177f5299f8a7b9f6e06b33d24b58f687a97864b87686bea6c4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b51808f367f94c02a48a755617fb9b7d",
+      "runId": "job-20261031101027-a98c9138",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:46.190Z"
+    },
+    "seed": 338060289,
+    "cards": [
+      {
+        "id": "what-are-alleles",
+        "stem": "What term describes forms of the same gene with small differences in DNA bases?",
+        "options": [
+          "alleles",
+          "base pairs",
+          "chromosomes",
+          "genomes"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Forms of the same gene with small differences in their sequence of DNA bases are called alleles.",
+        "hint": ""
+      },
+      {
+        "id": "copies-per-person",
+        "stem": "How many copies of each gene does a person typically have?",
+        "options": [
+          "two copies",
+          "single copy",
+          "three copies",
+          "four copies"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Typically, people have two copies of each gene, one inherited from each parent.",
+        "hint": ""
+      },
+      {
+        "id": "noncoding-gene-role",
+        "stem": "What do many genes that do not code for proteins do instead?",
+        "options": [
+          "help control other genes",
+          "make lipids for storage",
+          "build cell walls",
+          "carry oxygen in blood"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "However, many genes do not code for proteins, instead they help control other genes.",
+        "hint": ""
+      },
+      {
+        "id": "genes-composition",
+        "stem": "What material are genes made of?",
+        "options": [
+          "DNA",
+          "protein",
+          "lipid",
+          "carbohydrate"
+        ],
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Genes are made up of DNA.",
+        "hint": ""
+      }
+    ]
+  }
+}

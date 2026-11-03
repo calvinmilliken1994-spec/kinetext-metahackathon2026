@@ -1,0 +1,514 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Federal funds rate target changes read from the printed history",
+    "labelHeader": "Date",
+    "columns": [
+      {
+        "header": "Increase",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Increase"
+      },
+      {
+        "header": "Decrease",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Decrease"
+      },
+      {
+        "header": "Level",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Level (%)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "July 27",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "July 27 | 25 | 0 | 5.25-5.50",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "July 27 | 25 | 0 | 5.25-5.50"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "July 27 | 25 | 0 | 5.25-5.50"
+          },
+          {
+            "value": "5.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "5.25-5.50"
+          }
+        ]
+      },
+      {
+        "label": "September 19",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 19 | 0 | 50 | 4.75-5.00",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 19 | 0 | 50 | 4.75-5.00"
+          },
+          {
+            "value": "50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 19 | 0 | 50 | 4.75-5.00"
+          },
+          {
+            "value": "5.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.75-5.00"
+          }
+        ]
+      },
+      {
+        "label": "December 19",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 19 | 0 | 25 | 4.25-4.50",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 19 | 0 | 25 | 4.25-4.50"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 19 | 0 | 25 | 4.25-4.50"
+          },
+          {
+            "value": "4.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.25-4.50"
+          }
+        ]
+      },
+      {
+        "label": "September 18",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 18 | 0 | 25 | 4.00-4.25",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 18 | 0 | 25 | 4.00-4.25"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 18 | 0 | 25 | 4.00-4.25"
+          },
+          {
+            "value": "4.25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.00-4.25"
+          }
+        ]
+      },
+      {
+        "label": "December 11",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 11 | 0 | 25 | 3.50-3.75",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 11 | 0 | 25 | 3.50-3.75"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 11 | 0 | 25 | 3.50-3.75"
+          },
+          {
+            "value": "3.75",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.50-3.75"
+          }
+        ]
+      },
+      {
+        "label": "September 17",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 17 | 25 | 0 | 3.75-4.00",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 17 | 25 | 0 | 3.75-4.00"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 17 | 25 | 0 | 3.75-4.00"
+          },
+          {
+            "value": "4.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.75-4.00"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-level-july-2023",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-decrease",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "lookup-increase-sept-2026",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031100520-f0ad84c5:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 27 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].values[2]: the value \"5.50\" is not a whole printed token of its quote \"5.25-5.50\" — the quote prints \"5.25-5.50\" there; copy the complete value as printed, including commas, $ and %; rows[1].values[2]: the value \"5.00\" is not a whole printed token of its quote \"4.75-5.00\" — the quote prints \"4.75-5.00\" there; copy the complete value as printed, including commas, $ and %; rows[2].values[2]: the value \"4.50\" is not a whole printed token of its quote \"4.25-4.50\" — the quote prints \"4.25-4.50\" there; copy the complete value as printed, including commas, $ and %; rows[3].values[2]: the value \"4.25\" is not a whole printed token of its quote \"4.00-4.25\" — the quote prints \"4.00-4.25\" there; copy the complete value as printed, including commas, $ and %; rows[4].values[2]: the value \"3.75\" is not a whole printed token of its quote \"3.50-3.75\" — the quote prints \"3.50-3.75\" there; copy the complete value as printed, including commas, $ and %; rows[5].values[2]: the value \"4.00\" is not a whole printed token of its quote \"3.75-4.00\" — the quote prints \"3.75-4.00\" there; copy the complete value as printed, including commas, $ and %",
+        "path": "/rows/0/values/2/value",
+        "affected": [
+          "/rows/0/values/2/value",
+          "/rows/0/values/2/quote",
+          "/rows/1/values/2/value",
+          "/rows/1/values/2/quote",
+          "/rows/2/values/2/value",
+          "/rows/2/values/2/quote",
+          "/rows/3/values/2/value",
+          "/rows/3/values/2/quote",
+          "/rows/4/values/2/value",
+          "/rows/4/values/2/quote",
+          "/rows/5/values/2/value",
+          "/rows/5/values/2/quote"
+        ]
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 3 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-level-july-2023\" (lookup) → rows[0] \"5.50\"; \"largest-decrease\" (largest) → rows[1] \"50\"; \"lookup-increase-sept-2026\" (lookup) → rows[5] \"25\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"Decrease\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 24 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "d13b6a1fb3f840dea94592f748f9314a",
+    "usage": {
+      "promptTokens": 9309,
+      "completionTokens": 6091,
+      "reasoningTokens": 5021,
+      "cachedTokens": 0
+    },
+    "latencyMs": 41371,
+    "estCostUSD": 0.037523,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100520-f0ad84c5:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Federal funds rate target changes read from the printed history",
+    "sources": [
+      {
+        "id": "federalreserve-open-market-operations",
+        "title": "Open Market Operations — Board of Governors of the Federal Reserve System, Monetary Policy",
+        "locator": "https://www.federalreserve.gov/monetarypolicy/openmarket.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Board of Governors of the Federal Reserve System, 'Open Market Operations'. Credit: Board of Governors of the Federal Reserve System. Per the Board's website Disclaimer, 'Unless otherwise indicated, information on Board's website is in the public domain and may be copied and distributed without permission. Please cite to the Board as the source of the information.' The Board of Governors of the Federal Reserve System has not reviewed, approved or endorsed this activity.",
+        "sha256": "7020d09b4ed3b1a3698aae3a5d3119fe66680cd1536a6ba8b88387521ffa6724"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "d13b6a1fb3f840dea94592f748f9314a",
+      "runId": "job-20261031100520-f0ad84c5",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:07:24.871Z"
+    },
+    "seed": 1742007406,
+    "labelHeader": "Date",
+    "columns": [
+      {
+        "header": "Increase",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Increase"
+      },
+      {
+        "header": "Decrease",
+        "unit": "basis points",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Decrease"
+      },
+      {
+        "header": "Level",
+        "unit": "%",
+        "numeric": true,
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "Level (%)"
+      }
+    ],
+    "rows": [
+      {
+        "label": "July 27",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "July 27 | 25 | 0 | 5.25-5.50",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "July 27 | 25 | 0 | 5.25-5.50"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "July 27 | 25 | 0 | 5.25-5.50"
+          },
+          {
+            "value": "5.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "5.25-5.50"
+          }
+        ]
+      },
+      {
+        "label": "September 19",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 19 | 0 | 50 | 4.75-5.00",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 19 | 0 | 50 | 4.75-5.00"
+          },
+          {
+            "value": "50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 19 | 0 | 50 | 4.75-5.00"
+          },
+          {
+            "value": "5.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.75-5.00"
+          }
+        ]
+      },
+      {
+        "label": "December 19",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 19 | 0 | 25 | 4.25-4.50",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 19 | 0 | 25 | 4.25-4.50"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 19 | 0 | 25 | 4.25-4.50"
+          },
+          {
+            "value": "4.50",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.25-4.50"
+          }
+        ]
+      },
+      {
+        "label": "September 18",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 18 | 0 | 25 | 4.00-4.25",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 18 | 0 | 25 | 4.00-4.25"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 18 | 0 | 25 | 4.00-4.25"
+          },
+          {
+            "value": "4.25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "4.00-4.25"
+          }
+        ]
+      },
+      {
+        "label": "December 11",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "December 11 | 0 | 25 | 3.50-3.75",
+        "values": [
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 11 | 0 | 25 | 3.50-3.75"
+          },
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "December 11 | 0 | 25 | 3.50-3.75"
+          },
+          {
+            "value": "3.75",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.50-3.75"
+          }
+        ]
+      },
+      {
+        "label": "September 17",
+        "sourceId": "federalreserve-open-market-operations",
+        "quote": "September 17 | 25 | 0 | 3.75-4.00",
+        "values": [
+          {
+            "value": "25",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 17 | 25 | 0 | 3.75-4.00"
+          },
+          {
+            "value": "0",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "September 17 | 25 | 0 | 3.75-4.00"
+          },
+          {
+            "value": "4.00",
+            "sourceId": "federalreserve-open-market-operations",
+            "quote": "3.75-4.00"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-level-july-2023",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-decrease",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "lookup-increase-sept-2026",
+        "kind": "lookup",
+        "rowIndex": 5,
+        "columnIndex": 0
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

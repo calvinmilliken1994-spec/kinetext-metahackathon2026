@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nrc-backgrounder-plutonium-job-20261031110028-70b68094",
+  "title": "Plutonium Sample Half-Life Starter Activity from Backgrounder on Plutonium",
+  "learningObjectives": [
+    "Explain that half-life is the time required for half of a radioactive sample to lose its radioactivity.",
+    "Compare how different plutonium isotopes decay at different rates and how shorter half-lives mean faster decay.",
+    "Use A = A0*(1/2)^(t/T) to predict the amount of a plutonium sample remaining after a given time."
+  ],
+  "sources": [
+    {
+      "id": "nrc-backgrounder-plutonium",
+      "title": "Backgrounder on Plutonium — U.S. Nuclear Regulatory Commission",
+      "locator": "https://www.nrc.gov/regulations-legislation/fact-sheets-brochures/backgrounder-on-plutonium",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Nuclear Regulatory Commission, 'Backgrounder on Plutonium', Fact Sheets & Brochures. NRC's website constitutes a U.S. Government Work under federal copyright law and is not subject to copyright. The U.S. Nuclear Regulatory Commission has not reviewed, approved or endorsed this activity.",
+      "sha256": "03700e48439f4a60c4b8ff3676122131acf7c23ff26eaacb5700f29a06768737"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "plutonium-half-life-definition",
+      "text": "Plutonium is a radioactive element that transforms as it decays. The half-life concept describes how quickly the amount decreases, which can be modeled with an exponential decay equation.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Plutonium is a radioactive metallic element with the atomic number 94."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "The different isotopes have different “half-lives” – the time it takes to lose half of its radioactivity."
+        }
+      ]
+    },
+    {
+      "id": "plutonium-isotope-comparison",
+      "text": "Different plutonium isotopes have different half-lives. A comparison of two isotopes shows one decays much more slowly than the other, and materials with shorter half-lives decay more quickly.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Pu-239 has a half-life of 24,100 years and Pu-241’s half-life is 14.4 years."
+        },
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Substances with shorter half-lives decay more quickly than those with longer half-lives, so they emit more energetic radioactivity."
+        }
+      ]
+    },
+    {
+      "id": "plutonium-decay-products",
+      "text": "As plutonium decays it changes into other isotopes or elements, many of which are still radioactive, illustrating why the remaining amount follows the half-life curve rather than disappearing instantly.",
+      "evidence": [
+        {
+          "sourceId": "nrc-backgrounder-plutonium",
+          "quote": "Like any radioactive isotopes, plutonium isotopes transform when they decay."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 10,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 10,
+      "max": 50000,
+      "default": 24100
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 120500,
+      "default": 24100
+    },
+    "scenario": {
+      "objectLabel": "Plutonium-239 sample (grams)",
+      "settingLabel": "Half-life measured in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "one half-life remaining",
+      "initialAmount": 100,
+      "halfLife": 24100,
+      "elapsedTime": 24100,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    },
+    {
+      "name": "zero time no decay",
+      "initialAmount": 80,
+      "halfLife": 10,
+      "elapsedTime": 0,
+      "expectedRemaining": 80,
+      "tolerance": 0.1
+    },
+    {
+      "name": "remaining after half half-life",
+      "initialAmount": 100,
+      "halfLife": 20,
+      "elapsedTime": 10,
+      "expectedRemaining": 70.7107,
+      "tolerance": 0.1
+    }
+  ],
+  "predictions": [
+    {
+      "id": "opening-pu239-one-half-life",
+      "prompt": "A 100-gram plutonium-239 sample remains isolated for one half-life of 24,100 years. How much remains?",
+      "initialAmount": 100,
+      "halfLife": 24100,
+      "elapsedTime": 24100,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    },
+    {
+      "id": "pu239-two-half-lives",
+      "prompt": "The same 100-gram plutonium-239 sample is measured again after a second half-life, 48,200 years total elapsed.",
+      "initialAmount": 100,
+      "halfLife": 24100,
+      "elapsedTime": 48200,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    },
+    {
+      "id": "pu241-two-half-lives",
+      "prompt": "A 200-gram plutonium-241 sample with a 14.4-year half-life is stored for 28.8 years.",
+      "initialAmount": 200,
+      "halfLife": 14.4,
+      "elapsedTime": 28.8,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "433bbba7f51449038c65e38503205e10",
+    "runId": "job-20261031110028-70b68094",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T11:02:09.603Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

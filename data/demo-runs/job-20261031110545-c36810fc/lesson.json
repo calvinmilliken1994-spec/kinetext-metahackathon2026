@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031110545-c36810fc",
+  "analysisRef": "job-20261031110545-c36810fc/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110545-c36810fc:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Steps to register to vote through different methods",
+    "sources": [
+      {
+        "id": "usagov-register-to-vote",
+        "title": "How to register to vote — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/register-to-vote",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How to register to vote'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "f8d5a15bf1bc22c4b181555f4a66df77abf7286a87030044ebbba345d0817cb3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b27501e94751471588de45bd25aff5ba",
+      "runId": "job-20261031110545-c36810fc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:06:46.819Z"
+    },
+    "seed": 153489439,
+    "headline": "Steps to register to vote through different methods",
+    "keyPoints": [
+      {
+        "id": "vote-in-federal-state-local",
+        "point": "Students learn that eligible people can vote in federal, state and local elections after registering.",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Learn how to register so you can vote in federal, state, and local elections."
+      },
+      {
+        "id": "select-state-or-territory",
+        "point": "Students learn that voters select a state or territory to find instructions for the registration process.",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Select your state or territory."
+      },
+      {
+        "id": "options-online-mail-inperson",
+        "point": "Students learn that citizens can register in person at a local election office as well as online or by mail.",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office"
+      },
+      {
+        "id": "documents-vary-by-state",
+        "point": "Students learn that required documents to register vary by state and may include a license or other proof.",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The required documents you need to register vary by state."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "absentee-ballot",
+        "term": "absentee ballot",
+        "gloss": "Ballot requested by a voter who cannot vote in person",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The Federal Voting Assistance Program lets you register to vote and request an absentee ballot if you are a:"
+      },
+      {
+        "id": "national-mail-voter-registration-form",
+        "term": "National Mail Voter Registration Form",
+        "gloss": "Form used to register by mail that can be printed and signed",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Download the National Mail Voter Registration Form."
+      },
+      {
+        "id": "federal-voting-assistance-program",
+        "term": "Federal Voting Assistance Program",
+        "gloss": "Program that assists voters living abroad or serving in the military",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "The Federal Voting Assistance Program lets you register to vote and request an absentee ballot if you are a:"
+      },
+      {
+        "id": "election-office",
+        "term": "election office",
+        "gloss": "Local office that handles election administration and voter records",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "In person at your local election office"
+      },
+      {
+        "id": "public-assistance-offices",
+        "term": "public assistance offices",
+        "gloss": "Offices that provide support services and help with registration",
+        "sourceId": "usagov-register-to-vote",
+        "quote": "Contact state and county public assistance offices such as SNAP/food stamp or TANF offices."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110545-c36810fc:sequence-v1:r1",
+      "status": "passed",
+      "reason": "2 steps were left out because they could not be verified against the page: register-online (SEQ-01), register-by-mail (SEQ-01).",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031110545-c36810fc:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

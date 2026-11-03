@@ -1,0 +1,189 @@
+{
+  "gen": {
+    "schemaVersion": "compare-table-v1",
+    "title": "Quicksort and bubble sort growth comparison",
+    "attributes": [
+      "Complexity class",
+      "sourceId: to to to in json json json to"
+    ],
+    "rows": [
+      {
+        "entity": "quicksort",
+        "values": [
+          {
+            "value": "O(n log n) on average",
+            "sourceId": "nist-dads-big-o-notation",
+            "quote": "For instance, quicksort, which is O(n log n) on average, running on a small desktop computer can beat bubble sort"
+          },
+          {
+            "value": "20,000,000 steps on average",
+            "sourceId": "nist-dads-big-o-notation",
+            "quote": "To sort 1,000,000 numbers, the quicksort takes 20,000,000 steps on average"
+          }
+        ]
+      },
+      {
+        "entity": "bubble sort",
+        "values": [
+          {
+            "value": "O(n²)",
+            "sourceId": "nist-dads-big-o-notation",
+            "quote": "running on a small desktop computer can beat bubble sort, which is O(n²), running on a supercomputer"
+          },
+          {
+            "value": "1,000,000,000,000 steps",
+            "sourceId": "nist-dads-big-o-notation",
+            "quote": "while the bubble sort takes 1,000,000,000,000 steps!"
+          }
+        ]
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104832-008d8e12:compare-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every compare-table text length is within the frozen limits and every row and column name uses page words, never an id"
+      },
+      {
+        "id": "CT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cell value occurs in its quote and every row entity occurs in the quote or the same source paragraph (cell-in-quote; paragraph-level entity attribution is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CT-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 2 rows x 2 attributes with exactly one value per row-column slot (shape-valid)"
+      },
+      {
+        "id": "CT-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in entity names, attributes and cell values appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "CT-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no attribute column offers 3 distinct cell values, so the UI falls back to reveal-only with unverified cells blanked as \"Not stated on this page\" — by design this is not a component failure (predict-cell-valid)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "compare-table-v1: no weakening — every one of the 1 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "2bcbc12b970145219464e83c9b57e74c",
+    "usage": {
+      "promptTokens": 4424,
+      "completionTokens": 2843,
+      "reasoningTokens": 2596,
+      "cachedTokens": 0
+    },
+    "latencyMs": 17916,
+    "estCostUSD": 0.01761275,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104832-008d8e12:compare-table-v1:r2",
+    "componentId": "compare-table-v1",
+    "title": "Quicksort and bubble sort growth comparison",
+    "sources": [
+      {
+        "id": "nist-dads-big-o-notation",
+        "title": "big-O notation — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/bigOnotation.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'big-O notation'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "8a683981b6992055fcae5aa99b2f047c41df971de59a647d35e0d8825836952e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2bcbc12b970145219464e83c9b57e74c",
+      "runId": "job-20261031104832-008d8e12",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:51:24.459Z"
+    },
+    "seed": 1302300546,
+    "entities": [
+      "quicksort",
+      "bubble sort"
+    ],
+    "attributes": [
+      "Complexity class",
+      "sourceId: to to to in json json json to"
+    ],
+    "cells": [
+      {
+        "id": "cell-0-0",
+        "entityIndex": 0,
+        "attributeIndex": 0,
+        "value": "O(n log n) on average",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "For instance, quicksort, which is O(n log n) on average, running on a small desktop computer can beat bubble sort"
+      },
+      {
+        "id": "cell-0-1",
+        "entityIndex": 0,
+        "attributeIndex": 1,
+        "value": "20,000,000 steps on average",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "To sort 1,000,000 numbers, the quicksort takes 20,000,000 steps on average"
+      },
+      {
+        "id": "cell-1-0",
+        "entityIndex": 1,
+        "attributeIndex": 0,
+        "value": "O(n²)",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "running on a small desktop computer can beat bubble sort, which is O(n²), running on a supercomputer"
+      },
+      {
+        "id": "cell-1-1",
+        "entityIndex": 1,
+        "attributeIndex": 1,
+        "value": "1,000,000,000,000 steps",
+        "sourceId": "nist-dads-big-o-notation",
+        "quote": "while the bubble sort takes 1,000,000,000,000 steps!"
+      }
+    ]
+  }
+}

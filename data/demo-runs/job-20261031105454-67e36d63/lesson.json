@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031105454-67e36d63",
+  "analysisRef": "job-20261031105454-67e36d63/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105454-67e36d63:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Tracking rising atmospheric carbon dioxide from Mauna Loa to past and future climate",
+    "sources": [
+      {
+        "id": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "title": "Climate change: atmospheric carbon dioxide — NOAA Climate.gov",
+        "locator": "https://www.climate.gov/news-features/understanding-climate/climate-change-atmospheric-carbon-dioxide",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA Climate.gov, 'Climate change: atmospheric carbon dioxide'. Credit: NOAA Climate.gov. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "407ee5d0a24d391a0d9c368c628007f1d8c75de1105ea65a2948570abc7ce770"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "07a99e5ffe694ebfa1d5a11f5702874e",
+      "runId": "job-20261031105454-67e36d63",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:56:51.396Z"
+    },
+    "seed": 398163445,
+    "headline": "Tracking rising atmospheric carbon dioxide from Mauna Loa to past and future climate",
+    "keyPoints": [
+      {
+        "id": "global-average-2024-record",
+        "point": "Students learn that global average atmospheric carbon dioxide reached 422.8 ppm in 2024, setting a new record high.",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "global average atmospheric carbon dioxide was 422.8 parts per million (“ppm,” for short) in 2024, a new record high"
+      },
+      {
+        "id": "fossil-fuel-driving-rise",
+        "point": "Students learn that carbon dioxide concentrations are rising mostly because fossil fuels burned for energy release ancient carbon.",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "Carbon dioxide concentrations are rising mostly because of the fossil fuels that people have been burning for energy"
+      },
+      {
+        "id": "early-growth-rate-1960s",
+        "point": "Students learn that atmospheric carbon dioxide increased by about 0.8 ppm per year on average in the 1960s during early measurements.",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "In the 1960s, atmospheric carbon dioxide increased by about 0.8 ppm per year on average"
+      },
+      {
+        "id": "recent-acceleration-2-6",
+        "point": "Students learn that the annual increase accelerated to 2.6 ppm per year in the last decade from 2015 to 2024.",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "In the last decade (2015-2024), the annual increase has accelerated to 2.6 ppm per year"
+      },
+      {
+        "id": "ocean-acidification-impact",
+        "point": "Students learn that the drop in pH called ocean acidification interferes with marine life building shells and skeletons.",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "This drop in pH is called ocean acidification, and it interferes with the ability of marine life"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "greenhouse-gas",
+        "term": "greenhouse gas",
+        "gloss": "gas that absorbs and radiates heat and warms Earth by trapping energy",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "Carbon dioxide is Earth’s most important long-lived greenhouse gas: a gas that absorbs and radiates heat"
+      },
+      {
+        "id": "ocean-acidification",
+        "term": "ocean acidification",
+        "gloss": "drop in ocean pH that interferes with marine life ability to build shells",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "This drop in pH is called ocean acidification, and it interferes with the ability of marine life"
+      },
+      {
+        "id": "fossil-fuels",
+        "term": "fossil fuels",
+        "gloss": "fuels such as coal and oil burned for energy that contain carbon from ancient photosynthesis",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "Carbon dioxide concentrations are rising mostly because of the fossil fuels that people have been burning for energy"
+      },
+      {
+        "id": "el-ninos",
+        "term": "El Niños",
+        "gloss": "strongest warm phase linked to largest annual carbon dioxide growth and drought",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The years with the largest annual carbon dioxide growth tend to be associated with the strongest El Niños"
+      },
+      {
+        "id": "seasonal-cycle",
+        "term": "seasonal cycle",
+        "gloss": "seasonal highs and lows driven by summer vegetation growth and winter decay",
+        "sourceId": "noaa-climate-gov-atmospheric-carbon-dioxide",
+        "quote": "The seasonal cycle of highs and lows (small peaks and valleys) is driven by Northern Hemisphere summer vegetation growth"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105454-67e36d63:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031105454-67e36d63:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

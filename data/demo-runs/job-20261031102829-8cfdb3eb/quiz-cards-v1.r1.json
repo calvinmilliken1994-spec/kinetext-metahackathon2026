@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Gas laws and the ideal gas relationship",
+    "cards": [
+      {
+        "id": "card-boyles-law-name",
+        "stem": "Which name is given to the pressure and volume relationship described in the quote?",
+        "options": [
+          "Boyle’s Law",
+          "Charles and Gay-Lussac’s Law",
+          "Dalton’s Law",
+          "Avogadro’s Law"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This relationship between pressure and volume is called Boyle’s Law in honor of Robert Boyle who first observed it in 1660.",
+        "hint": "Use the name given in the quoted sentence."
+      },
+      {
+        "id": "card-gas-density-definition",
+        "stem": "What property is defined as the ratio of mass to volume?",
+        "options": [
+          "gas density",
+          "pressure",
+          "temperature",
+          "specific volume"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This allows us to define a single additional property called the gas density rho (ρ), which is the ratio of mass to volume.",
+        "hint": "Think about which property compares mass and volume."
+      },
+      {
+        "id": "card-ideal-gas-product",
+        "stem": "How is the pressure-volume product described for an ideal gas?",
+        "options": [
+          "exactly a constant",
+          "nearly constant",
+          "directly proportional",
+          "inversely proportional"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "The product of pressure and volume is exactly a constant for an ideal gas.",
+        "hint": "Compare exactly versus nearly for an ideal gas."
+      },
+      {
+        "id": "card-absolute-temperature-rule",
+        "stem": "What type of temperature must be used in the equation of state?",
+        "options": [
+          "absolute temperature",
+          "Celsius temperature",
+          "Fahrenheit temperature",
+          "relative temperature"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "Also be aware that the temperature given in the equation of state must be an absolute temperature that begins at absolute zero.",
+        "hint": "Recall which temperature scale starts at absolute zero."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102829-8cfdb3eb:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4df244708d604370810182bedb1faddb",
+    "usage": {
+      "promptTokens": 3036,
+      "completionTokens": 10045,
+      "reasoningTokens": 9645,
+      "cachedTokens": 0
+    },
+    "latencyMs": 46973,
+    "estCostUSD": 0.04648625,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102829-8cfdb3eb:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Gas laws and the ideal gas relationship",
+    "sources": [
+      {
+        "id": "nasa-grc-equation-of-state-ideal-gas",
+        "title": "Equation Of State (Ideal Gas) — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/equation-of-state-ideal-gas-2/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "1647515d09cd96cf0c68fd8c09acf13b06e089610e1a415924e53f438062e1a4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4df244708d604370810182bedb1faddb",
+      "runId": "job-20261031102829-8cfdb3eb",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:30:49.679Z"
+    },
+    "seed": 624111008,
+    "cards": [
+      {
+        "id": "card-boyles-law-name",
+        "stem": "Which name is given to the pressure and volume relationship described in the quote?",
+        "options": [
+          "Boyle’s Law",
+          "Charles and Gay-Lussac’s Law",
+          "Dalton’s Law",
+          "Avogadro’s Law"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This relationship between pressure and volume is called Boyle’s Law in honor of Robert Boyle who first observed it in 1660.",
+        "hint": "Use the name given in the quoted sentence."
+      },
+      {
+        "id": "card-gas-density-definition",
+        "stem": "What property is defined as the ratio of mass to volume?",
+        "options": [
+          "gas density",
+          "pressure",
+          "temperature",
+          "specific volume"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "This allows us to define a single additional property called the gas density rho (ρ), which is the ratio of mass to volume.",
+        "hint": "Think about which property compares mass and volume."
+      },
+      {
+        "id": "card-ideal-gas-product",
+        "stem": "How is the pressure-volume product described for an ideal gas?",
+        "options": [
+          "exactly a constant",
+          "nearly constant",
+          "directly proportional",
+          "inversely proportional"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "The product of pressure and volume is exactly a constant for an ideal gas.",
+        "hint": "Compare exactly versus nearly for an ideal gas."
+      },
+      {
+        "id": "card-absolute-temperature-rule",
+        "stem": "What type of temperature must be used in the equation of state?",
+        "options": [
+          "absolute temperature",
+          "Celsius temperature",
+          "Fahrenheit temperature",
+          "relative temperature"
+        ],
+        "sourceId": "nasa-grc-equation-of-state-ideal-gas",
+        "quote": "Also be aware that the temperature given in the equation of state must be an absolute temperature that begins at absolute zero.",
+        "hint": "Recall which temperature scale starts at absolute zero."
+      }
+    ]
+  }
+}

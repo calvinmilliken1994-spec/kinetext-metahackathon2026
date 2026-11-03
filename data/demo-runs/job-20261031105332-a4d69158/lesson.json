@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031105332-a4d69158",
+  "analysisRef": "job-20261031105332-a4d69158/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105332-a4d69158:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How seven base units are defined from fixed universal constants",
+    "sources": [
+      {
+        "id": "nist-si-base-unit-definitions",
+        "title": "Definitions of SI Base Units — NIST, SI Redefinition",
+        "locator": "https://www.nist.gov/si-redefinition/definitions-si-base-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST, SI Redefinition, 'Definitions of SI Base Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "cb4b3a449af325e676ebf2069948e47aa6c8d58a0463a26e8f0d5a207fbafc9c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "68f092d48ebc4ec08d6cb51e08535e83",
+      "runId": "job-20261031105332-a4d69158",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:54:21.752Z"
+    },
+    "seed": 1046255630,
+    "headline": "How seven base units are defined from fixed universal constants",
+    "keyPoints": [
+      {
+        "id": "second-defined",
+        "point": "Students learn the second is defined from the fixed cesium frequency value.",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency"
+      },
+      {
+        "id": "meter-defined",
+        "point": "Students learn the meter is defined by the fixed speed of light value in vacuum.",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1"
+      },
+      {
+        "id": "kilogram-defined",
+        "point": "Students learn the kilogram is defined by the fixed Planck constant value.",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s"
+      },
+      {
+        "id": "ampere-defined",
+        "point": "Students learn the ampere is defined by the fixed elementary charge value.",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "cesium-frequency",
+        "term": "cesium frequency",
+        "gloss": "fixed frequency value that defines the second",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The second is defined by taking the fixed numerical value of the cesium frequency ∆νCs, the unperturbed ground-state hyperfine transition frequency"
+      },
+      {
+        "id": "speed-of-light",
+        "term": "speed of light",
+        "gloss": "fixed speed value that defines the meter and length",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The meter is defined by taking the fixed numerical value of the speed of light in vacuum c to be 299,792,458 when expressed in the unit m s^−1"
+      },
+      {
+        "id": "planck-constant",
+        "term": "Planck constant",
+        "gloss": "fixed constant value that defines the kilogram and mass",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kilogram is defined by taking the fixed numerical value of the Planck constant h to be 6.62607015 ×10^−34 when expressed in the unit J s"
+      },
+      {
+        "id": "elementary-charge",
+        "term": "elementary charge",
+        "gloss": "fixed charge value that defines the ampere and current",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The ampere is defined by taking the fixed numerical value of the elementary charge e to be 1.602176634 × 10^−19 when expressed in the unit C"
+      },
+      {
+        "id": "boltzmann-constant",
+        "term": "Boltzmann constant",
+        "gloss": "fixed constant value that defines the kelvin and temperature",
+        "sourceId": "nist-si-base-unit-definitions",
+        "quote": "The kelvin is defined by taking the fixed numerical value of the Boltzmann constant k to be 1.380 649 ×10^−23 when expressed in the unit J K^−1"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031105332-a4d69158:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105332-a4d69158:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

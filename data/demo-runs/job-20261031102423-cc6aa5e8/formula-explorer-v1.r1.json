@@ -1,0 +1,321 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Static and dynamic pressure combining to total pressure",
+    "formulaText": "pt = ps + (rho * V^2) / 2",
+    "sourceId": "nasa-grc-bernoullis-equation",
+    "quote": "pt = ps + (rho * V^2) / 2",
+    "expression": "ps + (rho * v^2) / 2",
+    "variables": [
+      {
+        "name": "ps",
+        "pageSymbol": "ps",
+        "meaning": "static pressure",
+        "meaningQuoted": true,
+        "quote": "The equation states that the static pressure ps in the flow plus the dynamic pressure",
+        "unit": "Pa",
+        "min": 80000,
+        "max": 150000,
+        "default": 100000
+      },
+      {
+        "name": "rho",
+        "pageSymbol": "rho",
+        "meaning": "fluid density",
+        "meaningQuoted": false,
+        "quote": "one half of the density rho (ρ) times the velocity V squared",
+        "unit": "kg/m3",
+        "min": 0.5,
+        "max": 2.5,
+        "default": 1.2
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "flow velocity",
+        "meaningQuoted": false,
+        "quote": "one half of the density rho (ρ) times the velocity V squared",
+        "unit": "m/s",
+        "min": 10,
+        "max": 150,
+        "default": 50
+      }
+    ],
+    "xVariable": "v",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 100000
+          },
+          {
+            "name": "rho",
+            "value": 1.2
+          },
+          {
+            "name": "v",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 90000
+          },
+          {
+            "name": "rho",
+            "value": 1.2
+          },
+          {
+            "name": "v",
+            "value": 80
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 100000
+          },
+          {
+            "name": "rho",
+            "value": 1
+          },
+          {
+            "name": "v",
+            "value": 30
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261031102423-cc6aa5e8:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-bernoullis-equation\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"v\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"ps + (rho * V^2) / 2\" parsed from the quote with the same grammar: 23/23 finite independent comparison points agree within relative 1e-9 with no mismatch (expression-matches-page-formula)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "5edb2ea52bbe411fa75732b787221ae7",
+    "usage": {
+      "promptTokens": 4790,
+      "completionTokens": 7679,
+      "reasoningTokens": 7277,
+      "cachedTokens": 0
+    },
+    "latencyMs": 36087,
+    "estCostUSD": 0.03862325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102423-cc6aa5e8:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "Static and dynamic pressure combining to total pressure",
+    "sources": [
+      {
+        "id": "nasa-grc-bernoullis-equation",
+        "title": "Bernoulli's Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/bernoullis-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "ce3917d5b0b1392825d9f0c16d2d9b78898e119122bec3a1dd940e1d45437799"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "5edb2ea52bbe411fa75732b787221ae7",
+      "runId": "job-20261031102423-cc6aa5e8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:26:18.003Z"
+    },
+    "seed": 933220595,
+    "formulaText": "pt = ps + (rho * V^2) / 2",
+    "sourceId": "nasa-grc-bernoullis-equation",
+    "quote": "pt = ps + (rho * V^2) / 2",
+    "expression": "ps + (rho * v^2) / 2",
+    "variables": [
+      {
+        "name": "ps",
+        "pageSymbol": "ps",
+        "meaning": "static pressure",
+        "meaningQuoted": true,
+        "quote": "The equation states that the static pressure ps in the flow plus the dynamic pressure",
+        "unit": "Pa",
+        "min": 80000,
+        "max": 150000,
+        "default": 100000
+      },
+      {
+        "name": "rho",
+        "pageSymbol": "rho",
+        "meaning": "fluid density",
+        "meaningQuoted": false,
+        "quote": "one half of the density rho (ρ) times the velocity V squared",
+        "unit": "kg/m3",
+        "min": 0.5,
+        "max": 2.5,
+        "default": 1.2
+      },
+      {
+        "name": "v",
+        "pageSymbol": "V",
+        "meaning": "flow velocity",
+        "meaningQuoted": false,
+        "quote": "one half of the density rho (ρ) times the velocity V squared",
+        "unit": "m/s",
+        "min": 10,
+        "max": 150,
+        "default": 50
+      }
+    ],
+    "xVariable": "v",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 100000
+          },
+          {
+            "name": "rho",
+            "value": 1.2
+          },
+          {
+            "name": "v",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 90000
+          },
+          {
+            "name": "rho",
+            "value": 1.2
+          },
+          {
+            "name": "v",
+            "value": 80
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "ps",
+            "value": 100000
+          },
+          {
+            "name": "rho",
+            "value": 1
+          },
+          {
+            "name": "v",
+            "value": 30
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

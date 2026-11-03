@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031102111-672e0f27",
+  "analysisRef": "job-20261031102111-672e0f27/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102111-672e0f27:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How the 1803 Louisiana purchase doubled the nation and deepened divisions",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7106349e492a4537a081696678a744ea",
+      "runId": "job-20261031102111-672e0f27",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:22:18.851Z"
+    },
+    "seed": 4199155015,
+    "headline": "How the 1803 Louisiana purchase doubled the nation and deepened divisions",
+    "keyPoints": [
+      {
+        "id": "purchase-size-price",
+        "point": "Students learn the United States purchased 828,000 square miles west of the Mississippi River for $15 million.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million"
+      },
+      {
+        "id": "negotiators-authorized",
+        "point": "Students learn negotiators were authorized to pay up to $10 million for New Orleans and the Floridas before being offered Louisiana.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+      },
+      {
+        "id": "jefferson-expansion",
+        "point": "Students learn President Thomas Jefferson set aside strict constitutional doubts to expand across the continent.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the desire to expand the United States across the entire continent trumped his ideological beliefs"
+      },
+      {
+        "id": "sectional-slavery-compromises",
+        "point": "Students learn expansion exposed sectional weaknesses over slavery leading to compromises and civil war.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+      },
+      {
+        "id": "native-displacement",
+        "point": "Students learn the purchase ignored Native peoples who were later forced onto reservations and lost tribal lands.",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "Ultimately, Native people were forcibly moved on to reservations, losing vast acreage of their tribal lands"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "louisiana-purchase",
+        "term": "Louisiana Purchase",
+        "gloss": "1803 transaction that ignored Native presence while doubling the nation's size",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "In addition, the Louisiana Purchase ignored the potential impact on Native Americans."
+      },
+      {
+        "id": "new-orleans",
+        "term": "New Orleans",
+        "gloss": "Port city negotiators were originally authorized to obtain for up to $10 million",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas"
+      },
+      {
+        "id": "strict-interpreter",
+        "term": "strict interpreter",
+        "gloss": "Belief that the Constitution must be read in a strict way that limits government authority",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "President Thomas Jefferson was generally a strict interpreter of the Constitution who wondered"
+      },
+      {
+        "id": "sectional-weaknesses",
+        "term": "sectional weaknesses",
+        "gloss": "Divisions between North and South exposed by expansion over slavery",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "also exposed the sectional weaknesses between the North and South, especially related to the issue of slavery"
+      },
+      {
+        "id": "missouri-compromise",
+        "term": "Missouri Compromise",
+        "gloss": "Compromise that tried to maintain balance between free and slave states",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "(notably the Missouri Compromise and the Compromise of 1850)"
+      },
+      {
+        "id": "american-indians",
+        "term": "American Indians",
+        "gloss": "Thousands of tribal members populated the ceded lands before removal",
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "was populated with thousands of American Indians across dozens of tribes"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031102111-672e0f27:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102111-672e0f27:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

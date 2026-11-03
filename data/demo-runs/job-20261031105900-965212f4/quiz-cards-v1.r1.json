@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recall of key facts about ocean acidification",
+    "cards": [
+      {
+        "id": "card-carbonate-block",
+        "stem": "Which structure is described as built from carbonate ions?",
+        "options": [
+          "sea shells",
+          "floating ice",
+          "deep trenches"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Carbonate ions are an important building block of structures such as sea shells and coral skeletons.",
+        "hint": ""
+      },
+      {
+        "id": "card-cause-gas",
+        "stem": "What gas uptake is named as the primary cause of long term pH decline?",
+        "options": [
+          "carbon dioxide",
+          "methane",
+          "nitrogen"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "a reduction in the pH of the ocean over an extended period of time, caused primarily by uptake of carbon dioxide",
+        "hint": ""
+      },
+      {
+        "id": "card-ocean-share",
+        "stem": "About how much of the released gas does the ocean absorb?",
+        "options": [
+          "30 percent",
+          "a small trace",
+          "almost all"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere",
+        "hint": ""
+      },
+      {
+        "id": "card-calcifier-example",
+        "stem": "Which animal is listed among those that struggle to build shells when carbonate ions fall?",
+        "options": [
+          "oysters",
+          "tuna",
+          "dolphins"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "difficult for calcifying organisms such as oysters, clams, sea urchins",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105900-965212f4:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "94781d7e0d8949829d3c4e32943ddcf9",
+    "usage": {
+      "promptTokens": 2743,
+      "completionTokens": 7236,
+      "reasoningTokens": 6904,
+      "cachedTokens": 0
+    },
+    "latencyMs": 44097,
+    "estCostUSD": 0.03418175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105900-965212f4:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Recall of key facts about ocean acidification",
+    "sources": [
+      {
+        "id": "noaa-oceanservice-ocean-acidification",
+        "title": "What is Ocean Acidification? — NOAA National Ocean Service, Ocean Facts",
+        "locator": "https://oceanservice.noaa.gov/facts/acidification.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Ocean Service, Ocean Facts, 'What is Ocean Acidification?'. Credit: NOAA National Ocean Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "2fd351cd28a1bf3be2f402200128f20d39c708536b13ea27329611fbaaf63c7c"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "94781d7e0d8949829d3c4e32943ddcf9",
+      "runId": "job-20261031105900-965212f4",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:00:26.878Z"
+    },
+    "seed": 2594102145,
+    "cards": [
+      {
+        "id": "card-carbonate-block",
+        "stem": "Which structure is described as built from carbonate ions?",
+        "options": [
+          "sea shells",
+          "floating ice",
+          "deep trenches"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "Carbonate ions are an important building block of structures such as sea shells and coral skeletons.",
+        "hint": ""
+      },
+      {
+        "id": "card-cause-gas",
+        "stem": "What gas uptake is named as the primary cause of long term pH decline?",
+        "options": [
+          "carbon dioxide",
+          "methane",
+          "nitrogen"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "a reduction in the pH of the ocean over an extended period of time, caused primarily by uptake of carbon dioxide",
+        "hint": ""
+      },
+      {
+        "id": "card-ocean-share",
+        "stem": "About how much of the released gas does the ocean absorb?",
+        "options": [
+          "30 percent",
+          "a small trace",
+          "almost all"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "The ocean absorbs about 30 percent of the CO2 that is released in the atmosphere",
+        "hint": ""
+      },
+      {
+        "id": "card-calcifier-example",
+        "stem": "Which animal is listed among those that struggle to build shells when carbonate ions fall?",
+        "options": [
+          "oysters",
+          "tuna",
+          "dolphins"
+        ],
+        "sourceId": "noaa-oceanservice-ocean-acidification",
+        "quote": "difficult for calcifying organisms such as oysters, clams, sea urchins",
+        "hint": ""
+      }
+    ]
+  }
+}

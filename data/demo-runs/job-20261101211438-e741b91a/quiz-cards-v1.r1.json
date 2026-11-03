@@ -1,0 +1,251 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "DNA bases and pairing review",
+    "cards": [
+      {
+        "id": "identify-dna-base",
+        "stem": "Which chemical base is part of the DNA code?",
+        "options": [
+          "adenine (A)",
+          "uracil",
+          "inosine",
+          "xanthosine"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "hint": ""
+      },
+      {
+        "id": "pairing-rule",
+        "stem": "Which pairing correctly forms a base pair in DNA?",
+        "options": [
+          "A with T",
+          "A with C",
+          "A with G",
+          "G with T"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "hint": ""
+      },
+      {
+        "id": "replication-property",
+        "stem": "What important property lets DNA make copies of itself for new cells?",
+        "options": [
+          "replicate",
+          "mutate",
+          "dissolve",
+          "transcribe"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "An important property of DNA is that it can replicate, or make copies of itself.",
+        "hint": ""
+      },
+      {
+        "id": "nucleotide-unit",
+        "stem": "What is a base, sugar and phosphate unit called?",
+        "options": [
+          "nucleotide",
+          "amino acid",
+          "fatty acid",
+          "monosaccharide"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "Together, a base, sugar, and phosphate are called a nucleotide.",
+        "hint": ""
+      },
+      {
+        "id": "double-helix-structure",
+        "stem": "What spiral do two long strands of nucleotides form?",
+        "options": [
+          "double helix",
+          "single sheet",
+          "triple loop",
+          "branched network"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "Nucleotides are arranged in two long strands that form a spiral called a double helix.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261101211438-e741b91a:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "98c6d1608d98404b8cd15b148a03b1ac",
+    "usage": {
+      "promptTokens": 2793,
+      "completionTokens": 6582,
+      "reasoningTokens": 6183,
+      "cachedTokens": 0
+    },
+    "latencyMs": 51170,
+    "estCostUSD": 0.03146475,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101211438-e741b91a:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "DNA bases and pairing review",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "98c6d1608d98404b8cd15b148a03b1ac",
+      "runId": "job-20261101211438-e741b91a",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T21:16:55.035Z"
+    },
+    "seed": 2200892905,
+    "cards": [
+      {
+        "id": "identify-dna-base",
+        "stem": "Which chemical base is part of the DNA code?",
+        "options": [
+          "adenine (A)",
+          "uracil",
+          "inosine",
+          "xanthosine"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "hint": ""
+      },
+      {
+        "id": "pairing-rule",
+        "stem": "Which pairing correctly forms a base pair in DNA?",
+        "options": [
+          "A with T",
+          "A with C",
+          "A with G",
+          "G with T"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "hint": ""
+      },
+      {
+        "id": "replication-property",
+        "stem": "What important property lets DNA make copies of itself for new cells?",
+        "options": [
+          "replicate",
+          "mutate",
+          "dissolve",
+          "transcribe"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "An important property of DNA is that it can replicate, or make copies of itself.",
+        "hint": ""
+      },
+      {
+        "id": "nucleotide-unit",
+        "stem": "What is a base, sugar and phosphate unit called?",
+        "options": [
+          "nucleotide",
+          "amino acid",
+          "fatty acid",
+          "monosaccharide"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "Together, a base, sugar, and phosphate are called a nucleotide.",
+        "hint": ""
+      },
+      {
+        "id": "double-helix-structure",
+        "stem": "What spiral do two long strands of nucleotides form?",
+        "options": [
+          "double helix",
+          "single sheet",
+          "triple loop",
+          "branched network"
+        ],
+        "sourceId": "medlineplus-what-is-dna",
+        "quote": "Nucleotides are arranged in two long strands that form a spiral called a double helix.",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,712 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Comparing worlds by physical properties",
+    "labelHeader": "World",
+    "columns": [
+      {
+        "header": "Mass",
+        "unit": "10²⁴ kg",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+      },
+      {
+        "header": "Diameter",
+        "unit": "km",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+      },
+      {
+        "header": "Gravity",
+        "unit": "m/s²",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+      },
+      {
+        "header": "Orbital period",
+        "unit": "days",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Mercury",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "0.330",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "4879",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "3.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "88.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Venus",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "4.87",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "12,104",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "8.9",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "224.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Earth",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "5.97",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "12,756",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "9.8",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "365.2",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Mars",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "0.642",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "6792",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "3.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "687.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Jupiter",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "1898",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "142,984",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "23.1",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "4331",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Saturn",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "568",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "120,536",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "9.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "10,747",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Uranus",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "86.8",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "51,118",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "8.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "30,589",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Neptune",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "102",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "49,528",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "11.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "59,800",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-earth-mass",
+        "kind": "lookup",
+        "rowIndex": 2,
+        "columnIndex": 0
+      },
+      {
+        "id": "find-largest-diameter",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "find-smallest-gravity",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "find-longest-period",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 3
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031104201-18fd068d:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 44 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0]: the label \"Mercury\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[1]: the label \"Venus\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[2]: the label \"Earth\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[3]: the label \"Mars\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[4]: the label \"Jupiter\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[5]: the label \"Saturn\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[6]: the label \"Uranus\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row); rows[7]: the label \"Neptune\" occurs neither in its quote \"| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 189\" nor in the same source paragraph (the row must be the page's own row)",
+        "path": "/rows/0/label",
+        "affected": [
+          "/rows/0/label",
+          "/rows/0/quote",
+          "/rows/1/label",
+          "/rows/1/quote",
+          "/rows/2/label",
+          "/rows/2/quote",
+          "/rows/3/label",
+          "/rows/3/quote",
+          "/rows/4/label",
+          "/rows/4/quote",
+          "/rows/5/label",
+          "/rows/5/quote",
+          "/rows/6/label",
+          "/rows/6/quote",
+          "/rows/7/label",
+          "/rows/7/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 32 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 8 rows x 4 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "questions[2] (find-smallest-gravity): our code finds no answer for this smallest question — column 2 (\"Gravity\") has no unique smallest value (a tie, or a value that does not parse)",
+        "path": "/questions/2/kind",
+        "affected": [
+          "/questions/2/kind",
+          "/questions/2/rowIndex",
+          "/questions/2/columnIndex"
+        ]
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 0 (\"Mass\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "ed76a67cbf61421e9d4bef6b6f32089b",
+    "usage": {
+      "promptTokens": 3650,
+      "completionTokens": 13634,
+      "reasoningTokens": 9932,
+      "cachedTokens": 0
+    },
+    "latencyMs": 69774,
+    "estCostUSD": 0.062507,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031104201-18fd068d:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Comparing worlds by physical properties",
+    "sources": [
+      {
+        "id": "nasa-nssdc-planetary-fact-sheet-metric",
+        "title": "Planetary Fact Sheet - Metric — NASA Goddard Space Flight Center, NSSDCA",
+        "locator": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Goddard Space Flight Center, National Space Science Data Center (NSSDCA), 'Planetary Fact Sheet - Metric'. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "5a08a7d4b2ff163bfdb7717a8f5e6ae8cca5d767841fc9f65e833b847be959c3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ed76a67cbf61421e9d4bef6b6f32089b",
+      "runId": "job-20261031104201-18fd068d",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:44:45.894Z"
+    },
+    "seed": 203507866,
+    "labelHeader": "World",
+    "columns": [
+      {
+        "header": "Mass",
+        "unit": "10²⁴ kg",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+      },
+      {
+        "header": "Diameter",
+        "unit": "km",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+      },
+      {
+        "header": "Gravity",
+        "unit": "m/s²",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+      },
+      {
+        "header": "Orbital period",
+        "unit": "days",
+        "numeric": true,
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Mercury",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "0.330",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "4879",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "3.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "88.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Venus",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "4.87",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "12,104",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "8.9",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "224.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Earth",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "5.97",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "12,756",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "9.8",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "365.2",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Mars",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "0.642",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "6792",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "3.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "687.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Jupiter",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "1898",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "142,984",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "23.1",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "4331",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Saturn",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "568",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "120,536",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "9.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "10,747",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Uranus",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "86.8",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "51,118",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "8.7",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "30,589",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      },
+      {
+        "label": "Neptune",
+        "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+        "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |",
+        "values": [
+          {
+            "value": "102",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Mass (10^24kg) | 0.330 | 4.87 | 5.97 | 0.073 | 0.642 | 1898 | 568 | 86.8 | 102 | 0.0130 |"
+          },
+          {
+            "value": "49,528",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Diameter (km) | 4879 | 12,104 | 12,756 | 3475 | 6792 | 142,984 | 120,536 | 51,118 | 49,528 | 2376 |"
+          },
+          {
+            "value": "11.0",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Gravity (m/s^2) | 3.7 | 8.9 | 9.8 | 1.6 | 3.7 | 23.1 | 9.0 | 8.7 | 11.0 | 0.7 |"
+          },
+          {
+            "value": "59,800",
+            "sourceId": "nasa-nssdc-planetary-fact-sheet-metric",
+            "quote": "| Orbital Period (days) | 88.0 | 224.7 | 365.2 | 27.3* | 687.0 | 4331 | 10,747 | 30,589 | 59,800 | 90,560 |"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-earth-mass",
+        "kind": "lookup",
+        "rowIndex": 2,
+        "columnIndex": 0
+      },
+      {
+        "id": "find-largest-diameter",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "find-smallest-gravity",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "find-longest-period",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 3
+      }
+    ],
+    "chartColumnIndex": 0,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

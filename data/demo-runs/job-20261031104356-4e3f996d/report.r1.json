@@ -1,0 +1,18 @@
+{
+  "artifactId": "nij-hardy-weinberg-principle-job-20261031104356-4e3f996d",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /predictions/0/id must match pattern \"^[a-z0-9][a-z0-9-]{0,39}$\"; /predictions/1/id must match pattern \"^[a-z0-9][a-z0-9-]{0,39}$\"; /predictions/2/id must match pattern \"^[a-z0-9][a-z0-9-]{0,39}$\"",
+      "affected": [
+        "/predictions/0/id",
+        "/predictions/1/id",
+        "/predictions/2/id"
+      ]
+    }
+  ],
+  "publishable": false
+}

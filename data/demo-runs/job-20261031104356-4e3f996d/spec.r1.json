@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nij-hardy-weinberg-principle-job-20261031104356-4e3f996d",
+  "title": "Hardy-Weinberg heterozygote frequency for MN blood group alleles",
+  "learningObjectives": [
+    "Predict heterozygote frequency 2pq from allele frequency p in a large randomly mating population.",
+    "Explain that allele frequencies p and q = 1 - p determine expected genotype frequencies p², 2pq and q².",
+    "Interpret why heterozygote frequency is maximized at p = 0.5 and falls to zero when p approaches fixation."
+  ],
+  "sources": [
+    {
+      "id": "nij-hardy-weinberg-principle",
+      "title": "Hardy-Weinberg Principle — National Institute of Justice, Population Genetics and Statistics for Forensic Analysts",
+      "locator": "https://nij.ojp.gov/nij-hosted-online-training-courses/population-genetics-and-statistics-forensic-analysts/population-theory/hardy-weinberg-principle",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: National Institute of Justice, 'Population Genetics and Statistics for Forensic Analysts — Hardy-Weinberg Principle'. In general, NIJ's content is not copyrighted (NIJ Reuse Policy); no third-party or grantee copyright is stated on the course. The National Institute of Justice has not reviewed, approved or endorsed this activity. Opinions, findings and conclusions are those of the source authors and do not necessarily represent the official position or policies of the U.S. Department of Justice.",
+      "sha256": "db613d58d5101a939f34fed65153bc279e823153472574a035a6071032b4ce8c"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "explanation-1",
+      "text": "The Hardy-Weinberg principle predicts that allele frequencies remain constant across generations when a population is large and randomly mating and no evolutionary forces act, providing a baseline to detect change.",
+      "evidence": [
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "The Hardy-Weinberg principle states that in a large randomly breeding population, allelic frequencies will remain the same"
+        },
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "In order for a population to be considered to be in equilibrium, it must remain the same from generation to generation."
+        }
+      ]
+    },
+    {
+      "id": "explanation-2",
+      "text": "For a two-allele system frequencies are p for the first allele and q = 1 - p for the second, giving expected genotype frequencies p², 2pq and q² in the next generation.",
+      "evidence": [
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "If we let the frequency of allele M=p and the frequency of the other allele N=q, then the next generation's genotypes will occur as follows:"
+        },
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "Frequency of N = q = 1 - p = 1 - 0.547 = 0.453"
+        }
+      ]
+    },
+    {
+      "id": "explanation-3",
+      "text": "The heterozygote frequency is calculated as 2pq. With the MN blood group example the calculation illustrates how to obtain expected heterozygote proportions from p.",
+      "evidence": [
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "Frequency of MN genotype = 2pq"
+        },
+        {
+          "sourceId": "nij-hardy-weinberg-principle",
+          "quote": "MN = 2pq = 2x0.547x0.453 = 0.496, or 2478 individuals"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "hardy-weinberg-v1",
+    "equation": "2pq, q=1-p",
+    "alleleFrequencyP": {
+      "unit": "1",
+      "min": 0.05,
+      "max": 0.95,
+      "default": 0.547
+    },
+    "scenario": {
+      "objectLabel": "MN blood group alleles",
+      "settingLabel": "Large randomly mating population of Forensic Town USA."
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "maximum_heterozygosity_at_p0_5",
+      "alleleFrequencyP": 0.5,
+      "expectedHeterozygoteFrequency": 0.5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "edge_case_fixation_p0",
+      "alleleFrequencyP": 0,
+      "expectedHeterozygoteFrequency": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "edge_case_fixation_p1",
+      "alleleFrequencyP": 1,
+      "expectedHeterozygoteFrequency": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "forensic_town_main_example",
+      "alleleFrequencyP": 0.547,
+      "expectedHeterozygoteFrequency": 0.4956,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "P1",
+      "prompt": "What is the expected heterozygote frequency of MN type in the large randomly mating population?",
+      "alleleFrequencyP": 0.547,
+      "expectedHeterozygoteFrequency": 0.4956,
+      "tolerance": 0.001
+    },
+    {
+      "id": "P2",
+      "prompt": "A sub-sample shows allele M at 75% frequency. Predict the heterozygote (MN) frequency.",
+      "alleleFrequencyP": 0.75,
+      "expectedHeterozygoteFrequency": 0.375,
+      "tolerance": 0.001
+    },
+    {
+      "id": "P3",
+      "prompt": "If allele M is at 25% frequency, predict the heterozygote frequency under random mating.",
+      "alleleFrequencyP": 0.25,
+      "expectedHeterozygoteFrequency": 0.375,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b82d70e439e342048657dc4e18237ffb",
+    "runId": "job-20261031104356-4e3f996d",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:45:58.680Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

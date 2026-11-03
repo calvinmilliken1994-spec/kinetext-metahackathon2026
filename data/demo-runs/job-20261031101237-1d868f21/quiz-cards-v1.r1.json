@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Strategies, shifts and limits in the fight for voting rights",
+    "cards": [
+      {
+        "id": "limit-voting-laws",
+        "stem": "What reason does the text give for many women remaining unable to vote long into the 20th century?",
+        "options": [
+          "discriminatory state voting laws",
+          "lack of congressional passage",
+          "absence of suffrage organizations",
+          "delay in presidential support"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "Many women remained unable to vote long into the 20th century because of discriminatory state voting laws.",
+        "hint": "Look for the cause mentioned after ratification."
+      },
+      {
+        "id": "early-state-strategy",
+        "stem": "Which approach did some supporters use to win voting rights before a federal amendment?",
+        "options": [
+          "nine western states",
+          "three eastern states",
+          "twelve southern states",
+          "all New England states"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "Some pursued a strategy of passing suffrage acts in each state—nine western states adopted woman suffrage legislation by 1912.",
+        "hint": "Recall how many western states adopted legislation by 1912."
+      },
+      {
+        "id": "political-shift-1918",
+        "stem": "Whose change to support an amendment in 1918 helped shift the political balance?",
+        "options": [
+          "President Wilson",
+          "Bainbridge Colby",
+          "Susan B Anthony",
+          "state legislators"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "President Wilson changed his position to support an amendment in 1918, the political balance began to shift.",
+        "hint": "Consider the national leader who changed position in 1918."
+      },
+      {
+        "id": "ratification-threshold",
+        "stem": "What share of states had to agree for the amendment to clear its final hurdle?",
+        "options": [
+          "three-fourths of the states",
+          "two-thirds of the states",
+          "a simple majority of the states",
+          "all of the states"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "the amendment passed its final hurdle of obtaining the agreement of three-fourths of the states.",
+        "hint": "Think about the fraction required for ratification."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101237-1d868f21:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b770bb1789364a7eb6b0e609b250ee59",
+    "usage": {
+      "promptTokens": 2946,
+      "completionTokens": 7375,
+      "reasoningTokens": 6945,
+      "cachedTokens": 0
+    },
+    "latencyMs": 52420,
+    "estCostUSD": 0.03502625,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101237-1d868f21:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Strategies, shifts and limits in the fight for voting rights",
+    "sources": [
+      {
+        "id": "nara-19th-amendment",
+        "title": "19th Amendment to the U.S. Constitution: Women's Right to Vote (1920) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/19th-amendment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, '19th Amendment to the U.S. Constitution: Women's Right to Vote (1920)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "c9c5fa8ba7209052fb8e76015b935547fdda5ec295a972e802ec5f99ca24effd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b770bb1789364a7eb6b0e609b250ee59",
+      "runId": "job-20261031101237-1d868f21",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:14:52.697Z"
+    },
+    "seed": 3027629388,
+    "cards": [
+      {
+        "id": "limit-voting-laws",
+        "stem": "What reason does the text give for many women remaining unable to vote long into the 20th century?",
+        "options": [
+          "discriminatory state voting laws",
+          "lack of congressional passage",
+          "absence of suffrage organizations",
+          "delay in presidential support"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "Many women remained unable to vote long into the 20th century because of discriminatory state voting laws.",
+        "hint": "Look for the cause mentioned after ratification."
+      },
+      {
+        "id": "early-state-strategy",
+        "stem": "Which approach did some supporters use to win voting rights before a federal amendment?",
+        "options": [
+          "nine western states",
+          "three eastern states",
+          "twelve southern states",
+          "all New England states"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "Some pursued a strategy of passing suffrage acts in each state—nine western states adopted woman suffrage legislation by 1912.",
+        "hint": "Recall how many western states adopted legislation by 1912."
+      },
+      {
+        "id": "political-shift-1918",
+        "stem": "Whose change to support an amendment in 1918 helped shift the political balance?",
+        "options": [
+          "President Wilson",
+          "Bainbridge Colby",
+          "Susan B Anthony",
+          "state legislators"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "President Wilson changed his position to support an amendment in 1918, the political balance began to shift.",
+        "hint": "Consider the national leader who changed position in 1918."
+      },
+      {
+        "id": "ratification-threshold",
+        "stem": "What share of states had to agree for the amendment to clear its final hurdle?",
+        "options": [
+          "three-fourths of the states",
+          "two-thirds of the states",
+          "a simple majority of the states",
+          "all of the states"
+        ],
+        "sourceId": "nara-19th-amendment",
+        "quote": "the amendment passed its final hurdle of obtaining the agreement of three-fourths of the states.",
+        "hint": "Think about the fraction required for ratification."
+      }
+    ]
+  }
+}

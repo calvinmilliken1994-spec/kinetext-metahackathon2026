@@ -1,0 +1,246 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "biology",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "The page explains random mating as a condition for Hardy-Weinberg equilibrium and contrasts positive and negative assortative mating and their effects on homozygotes and heterozygotes in humans.",
+    "overview": {
+      "headline": "How random and assortative mating affect human genetics",
+      "keyPoints": [
+        {
+          "id": "hwe-condition",
+          "point": "A condition for Hardy-Weinberg equilibrium is random mating, which does not always occur in humans.",
+          "sourceId": "nij-random-mating",
+          "quote": "One reason that Hardy-Weinberg does not always apply to humans is that random mating, a condition of HWE (Hardy-Weinberg Equilibrium), does not occur."
+        },
+        {
+          "id": "random-mating-definition",
+          "point": "Random mating means mating is arbitrary with regard to the locus being considered.",
+          "sourceId": "nij-random-mating",
+          "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+        },
+        {
+          "id": "similar-mating-trait",
+          "point": "Humans tend to mate with similar individuals for visible traits such as height and ethnicity.",
+          "sourceId": "nij-random-mating",
+          "quote": "humans tend to mate with individuals that are similar to themselves"
+        },
+        {
+          "id": "assortative-effect",
+          "point": "Positive assortative mating increases homozygotes whereas negative assortative mating increases heterozygotes.",
+          "sourceId": "nij-random-mating",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+        },
+        {
+          "id": "random-traits-blood",
+          "point": "Humans mate randomly for blood type and short tandem repeat genotype even though they mate assortatively for physical attributes.",
+          "sourceId": "nij-random-mating",
+          "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "random-mating-term",
+          "term": "Random mating",
+          "gloss": "mating that is arbitrary with regard to the locus being considered",
+          "sourceId": "nij-random-mating",
+          "quote": "Random mating implies that mating should be arbitrary with regard to the locus being considered."
+        },
+        {
+          "id": "positive-assortative",
+          "term": "positive assortative mating",
+          "gloss": "non-random mating between similar individuals that increases homozygotes",
+          "sourceId": "nij-random-mating",
+          "quote": "This constitutes non-random, positive assortative mating."
+        },
+        {
+          "id": "negative-assortative",
+          "term": "negative assortative mating",
+          "gloss": "breeding between individuals with dissimilar genotypes",
+          "sourceId": "nij-random-mating",
+          "quote": "In contrast, negative assortative mating is breeding between individuals with dissimilar genotypes, and is more rare."
+        },
+        {
+          "id": "homozygotes-term",
+          "term": "homozygotes",
+          "gloss": "genotypes with identical alleles that show an increase after positive assortative mating",
+          "sourceId": "nij-random-mating",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+        },
+        {
+          "id": "heterozygotes-term",
+          "term": "heterozygotes",
+          "gloss": "genotypes with different alleles that show an increase after negative assortative mating",
+          "sourceId": "nij-random-mating",
+          "quote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes."
+        },
+        {
+          "id": "str-genotype",
+          "term": "short tandem repeat",
+          "gloss": "repeated DNA trait that is an example of randomly mating traits such as blood type",
+          "sourceId": "nij-random-mating",
+          "quote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sort-groups-v1",
+        "pedagogicalReason": "Sorting traits into assortative and random mating groups helps students link visible human traits to mating patterns",
+        "focusQuote": "they mate randomly with respect to other traits such as blood type and short tandem repeat (STR) genotype",
+        "focusSourceId": "nij-random-mating"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Quiz cards give quick checks of definitions and effects for random and assortative mating",
+        "focusQuote": "Positive assortative mating leads to an increase in homozygotes whereas negative assortative mating leads to an increase in heterozygotes.",
+        "focusSourceId": "nij-random-mating"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104621-5e34a769:analysis",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"biology\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 1070 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 13 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 5, keyTerms 6, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); \"according to\" counts only when it names the publisher, and \"as stated by\" / \"official\" / \"endorsed\" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 5 (3-6) and keyTerms 6 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "source-analysis-v2: no weakening — every one of the 2 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "3e8ee36dd7134cf2b68ab3a22a419692",
+    "usage": {
+      "promptTokens": 7482,
+      "completionTokens": 2875,
+      "reasoningTokens": 1990,
+      "cachedTokens": 0
+    },
+    "latencyMs": 12097,
+    "estCostUSD": 0.02157125,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

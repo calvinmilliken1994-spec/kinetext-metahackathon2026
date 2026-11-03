@@ -1,0 +1,164 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "nasa-grc-simplified-aircraft-motion-job-20261031103717-5defef4e",
+  "title": "Simplified Motion: Net Force and Acceleration in One Direction",
+  "learningObjectives": [
+    "Explain that simplified one-dimensional motion keeps one pair of opposing forces balanced while the net force in the chosen direction determines motion.",
+    "Describe how balanced forces give zero net force and constant velocity and unbalanced forces give a change in motion.",
+    "Calculate acceleration as net force divided by mass and predict the direction of acceleration from the sign of the net force."
+  ],
+  "sources": [
+    {
+      "id": "nasa-grc-simplified-aircraft-motion",
+      "title": "Simplified Aircraft Motion — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+      "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/simplified-aircraft-motion/",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+      "sha256": "21d6273d590cd157b690fe9491c4c0d202f5b35c5e5a31a8c072b37bbe89edd5"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-1",
+      "text": "Simplified motion isolates a single direction and examines one net force at a time, with other forces held in balance, allowing acceleration along that line to be found from F = m * a.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "This page shows some rules for the simplified motion of an aircraft."
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "We can compute the acceleration which the aircraft will experience from Newton’s second law of motion:"
+        }
+      ]
+    },
+    {
+      "id": "exp-2",
+      "text": "Level flight at constant speed represents balanced forces where net force is zero, so acceleration is zero and velocity does not change.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "In an ideal situation, an airplane could sustain a constant speed and level flight"
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "The net force is the difference between the opposing forces; lift minus weight, or thrust minus drag."
+        }
+      ]
+    },
+    {
+      "id": "exp-3",
+      "text": "When opposing forces become unbalanced the aircraft moves in the direction of the greater force, and the amount of acceleration equals net force divided by mass.",
+      "evidence": [
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "If the forces become unbalanced, the aircraft will move in the direction of the greater force."
+        },
+        {
+          "sourceId": "nasa-grc-simplified-aircraft-motion",
+          "quote": "Thrust > Drag = Aircraft Accelerates"
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "forces-1d-v1",
+    "equation": "a=F_net/m",
+    "massKg": {
+      "unit": "kg",
+      "min": 0.5,
+      "max": 20,
+      "default": 8
+    },
+    "netForceN": {
+      "unit": "N",
+      "min": -50,
+      "max": 50,
+      "default": 12
+    },
+    "scenario": {
+      "objectLabel": "Model aircraft",
+      "surfaceLabel": "Level flight, x-direction only"
+    },
+    "durationS": 5,
+    "stepS": 0.02,
+    "observables": [
+      "position",
+      "velocity",
+      "acceleration"
+    ]
+  },
+  "behavioralTests": [
+    {
+      "name": "Zero thrust minus drag",
+      "massKg": 5,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Forward net force",
+      "massKg": 5,
+      "netForceN": 10,
+      "expectedAccelerationMps2": 2,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Thrust exceeds drag",
+      "massKg": 8,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 1.5,
+      "tolerance": 0.001
+    },
+    {
+      "name": "Net force forward",
+      "massKg": 6,
+      "netForceN": 18,
+      "expectedAccelerationMps2": 3,
+      "tolerance": 0.001
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-0",
+      "prompt": "If weight minus lift or thrust minus drag leaves a small forward net force on the model aircraft in level flight, which way will it accelerate and at what rate?",
+      "massKg": 8,
+      "netForceN": 12,
+      "expectedAccelerationMps2": 1.5,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-1",
+      "prompt": "What acceleration results when drag exceeds thrust giving a backward net force?",
+      "massKg": 4,
+      "netForceN": -16,
+      "expectedAccelerationMps2": -4,
+      "tolerance": 0.001
+    },
+    {
+      "id": "pred-2",
+      "prompt": "What acceleration when lift balances weight and thrust balances drag so net force is zero?",
+      "massKg": 10,
+      "netForceN": 0,
+      "expectedAccelerationMps2": 0,
+      "tolerance": 0.001
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "e756b8a11a5e45bfb1c28c33d875fb9f",
+    "runId": "job-20261031103717-5defef4e",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T10:39:21.205Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

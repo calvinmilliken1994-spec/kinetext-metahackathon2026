@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "How gases behave in flow",
+    "cards": [
+      {
+        "id": "density-definition-card",
+        "stem": "How is density defined for a gas substance?",
+        "options": [
+          "mass per volume",
+          "force per area",
+          "energy per time",
+          "weight per speed"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Density is the mass per volume of a substance.",
+        "hint": "Think about what density measures"
+      },
+      {
+        "id": "low-speed-density-card",
+        "stem": "At what speed does the density of the fluid typically remain constant?",
+        "options": [
+          "less than 200 mph",
+          "about 700 mph",
+          "at cruising altitude",
+          "in a vacuum chamber"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "If the object passes at a low speed (typically less than 200 mph), the density of the fluid remains constant.",
+        "hint": "Consider low speed flow conditions"
+      },
+      {
+        "id": "boundary-layer-formation-card",
+        "stem": "What layer is created when gas molecules stick to a surface?",
+        "options": [
+          "boundary layer",
+          "shock wave",
+          "diffusion zone",
+          "pressure field"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Gas molecules stick to any surface, creating a layer of air near the surface (called a boundary layer)",
+        "hint": "Recall the effect of stickiness on shape"
+      },
+      {
+        "id": "shock-wave-speed-card",
+        "stem": "What is produced near and beyond the speed of sound?",
+        "options": [
+          "shock waves",
+          "boundary layer",
+          "diffusion",
+          "uniform flow"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Near and beyond the speed of sound (about 700 mph), shock waves are produced that affect both the lift and drag of an object.",
+        "hint": "Think about high speed compressibility effects"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102849-e50efdfc:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "85d456d9256743ecbba0ceb7423d1621",
+    "usage": {
+      "promptTokens": 3564,
+      "completionTokens": 6359,
+      "reasoningTokens": 6002,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38522,
+    "estCostUSD": 0.03148075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102849-e50efdfc:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "How gases behave in flow",
+    "sources": [
+      {
+        "id": "nasa-grc-gas-properties-definitions",
+        "title": "Gas Properties Definitions — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/gas-properties-definitions/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "d996769acf644cd6f6e0c861e1328045e77a19a762ed2807c893e7451e3a79b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "85d456d9256743ecbba0ceb7423d1621",
+      "runId": "job-20261031102849-e50efdfc",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:30:56.141Z"
+    },
+    "seed": 814043804,
+    "cards": [
+      {
+        "id": "density-definition-card",
+        "stem": "How is density defined for a gas substance?",
+        "options": [
+          "mass per volume",
+          "force per area",
+          "energy per time",
+          "weight per speed"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Density is the mass per volume of a substance.",
+        "hint": "Think about what density measures"
+      },
+      {
+        "id": "low-speed-density-card",
+        "stem": "At what speed does the density of the fluid typically remain constant?",
+        "options": [
+          "less than 200 mph",
+          "about 700 mph",
+          "at cruising altitude",
+          "in a vacuum chamber"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "If the object passes at a low speed (typically less than 200 mph), the density of the fluid remains constant.",
+        "hint": "Consider low speed flow conditions"
+      },
+      {
+        "id": "boundary-layer-formation-card",
+        "stem": "What layer is created when gas molecules stick to a surface?",
+        "options": [
+          "boundary layer",
+          "shock wave",
+          "diffusion zone",
+          "pressure field"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Gas molecules stick to any surface, creating a layer of air near the surface (called a boundary layer)",
+        "hint": "Recall the effect of stickiness on shape"
+      },
+      {
+        "id": "shock-wave-speed-card",
+        "stem": "What is produced near and beyond the speed of sound?",
+        "options": [
+          "shock waves",
+          "boundary layer",
+          "diffusion",
+          "uniform flow"
+        ],
+        "sourceId": "nasa-grc-gas-properties-definitions",
+        "quote": "Near and beyond the speed of sound (about 700 mph), shock waves are produced that affect both the lift and drag of an object.",
+        "hint": "Think about high speed compressibility effects"
+      }
+    ]
+  }
+}

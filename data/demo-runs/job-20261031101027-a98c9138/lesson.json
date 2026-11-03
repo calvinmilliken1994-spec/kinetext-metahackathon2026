@@ -1,0 +1,138 @@
+{
+  "jobId": "job-20261031101027-a98c9138",
+  "analysisRef": "job-20261031101027-a98c9138/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101027-a98c9138:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Genes as DNA units that code proteins and shape variation",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-gene",
+        "title": "What is a gene? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/gene/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "f16d75671a5537177f5299f8a7b9f6e06b33d24b58f687a97864b87686bea6c4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9edeae883e404a7ab96631e9f9c22e02",
+      "runId": "job-20261031101027-a98c9138",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:14.140Z"
+    },
+    "seed": 3184612383,
+    "headline": "Genes as DNA units that code proteins and shape variation",
+    "keyPoints": [
+      {
+        "id": "gene-basic-unit-heredity",
+        "point": "A gene functions as the basic unit of heredity and is made of DNA.",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "A gene is the basic physical and functional unit of heredity."
+      },
+      {
+        "id": "genes-control-vs-protein",
+        "point": "Many genes do not code for proteins and instead help control other genes.",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "However, many genes do not code for proteins, instead they help control other genes."
+      },
+      {
+        "id": "human-genome-protein-count",
+        "point": "Human genes vary in size and the human genome now contains about 19,900 genes that produce proteins.",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "We now know that the human genome contains about 19,900 genes used to produce proteins."
+      },
+      {
+        "id": "alleles-are-gene-forms",
+        "point": "Different alleles are forms of the same gene with small differences in DNA sequence.",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Forms of the same gene with small differences in their sequence of DNA bases are called alleles."
+      },
+      {
+        "id": "two-copies-inherited",
+        "point": "People typically inherit two copies of each gene, one copy from each parent.",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Typically, people have two copies of each gene, one inherited from each parent."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "gene",
+        "term": "gene",
+        "gloss": "basic unit of heredity that carries instructions for the body",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "A gene is the basic physical and functional unit of heredity."
+      },
+      {
+        "id": "dna",
+        "term": "DNA",
+        "gloss": "genetic material that makes up genes and encodes information",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Genes are made up of DNA."
+      },
+      {
+        "id": "proteins",
+        "term": "proteins",
+        "gloss": "molecules coded by genes that help control body functions",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "However, many genes do not code for proteins, instead they help control other genes."
+      },
+      {
+        "id": "alleles",
+        "term": "alleles",
+        "gloss": "alternate forms of a gene that differ slightly in DNA sequence",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Forms of the same gene with small differences in their sequence of DNA bases are called alleles."
+      },
+      {
+        "id": "base-pairs",
+        "term": "base pairs",
+        "gloss": "genetic building blocks that encode information in DNA",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "The information in DNA is encoded in genetic building blocks called base pairs."
+      },
+      {
+        "id": "chromosome",
+        "term": "chromosome",
+        "gloss": "structure that contains many genes in the genome",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Each chromosome contains many genes."
+      },
+      {
+        "id": "genome",
+        "term": "genome",
+        "gloss": "complete set of DNA that contains genes that produce proteins",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "We now know that the human genome contains about 19,900 genes used to produce proteins."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "concept-map-v1",
+      "specId": "job-20261031101027-a98c9138:concept-map-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101027-a98c9138:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

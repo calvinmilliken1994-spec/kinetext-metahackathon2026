@@ -1,0 +1,210 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Sorting with divide and conquer review",
+    "cards": [
+      {
+        "id": "card-specialization-kway",
+        "stem": "Which variant is listed as a specialization of this sorting method?",
+        "options": [
+          "k-way merge sort",
+          "strand sort",
+          "bitonic sort",
+          "insertion sort"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Specialization (... is a kind of me.) k-way merge sort, balanced k-way merge sort, polyphase merge sort.",
+        "hint": ""
+      },
+      {
+        "id": "card-aggregate-divide",
+        "stem": "Which approach is listed as an aggregate child used in this method?",
+        "options": [
+          "divide and conquer",
+          "greedy choice",
+          "dynamic programming",
+          "backtracking"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Aggregate child (... is a part of or used in me.) divide and conquer.",
+        "hint": ""
+      },
+      {
+        "id": "card-definition-split",
+        "stem": "How does the definition describe the first step of this sort?",
+        "options": [
+          "splits the items to be sorted into two groups",
+          "partitions around a single pivot",
+          "builds a binary heap first",
+          "scans for natural runs"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "A sort algorithm that splits the items to be sorted into two groups, recursively sorts each group, and merges them into a final, sorted sequence.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105222-c352b4a3:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "b8b7fe14032248aea249f7f3fb5881cb",
+    "usage": {
+      "promptTokens": 2777,
+      "completionTokens": 6923,
+      "reasoningTokens": 6582,
+      "cachedTokens": 0
+    },
+    "latencyMs": 34784,
+    "estCostUSD": 0.032894,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "card-runtime-theta",
+      "reason": "card failed Q-06",
+      "checks": [
+        "Q-06"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105222-c352b4a3:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Sorting with divide and conquer review",
+    "sources": [
+      {
+        "id": "nist-dads-merge-sort",
+        "title": "merge sort — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/mergesort.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'merge sort'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "88d2f5db27bedc35273a07953f6abb257479cb61e9b5a25e95adde4c55970b46"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "b8b7fe14032248aea249f7f3fb5881cb",
+      "runId": "job-20261031105222-c352b4a3",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:54:04.642Z"
+    },
+    "seed": 4259740089,
+    "cards": [
+      {
+        "id": "card-specialization-kway",
+        "stem": "Which variant is listed as a specialization of this sorting method?",
+        "options": [
+          "k-way merge sort",
+          "strand sort",
+          "bitonic sort",
+          "insertion sort"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Specialization (... is a kind of me.) k-way merge sort, balanced k-way merge sort, polyphase merge sort.",
+        "hint": ""
+      },
+      {
+        "id": "card-aggregate-divide",
+        "stem": "Which approach is listed as an aggregate child used in this method?",
+        "options": [
+          "divide and conquer",
+          "greedy choice",
+          "dynamic programming",
+          "backtracking"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "Aggregate child (... is a part of or used in me.) divide and conquer.",
+        "hint": ""
+      },
+      {
+        "id": "card-definition-split",
+        "stem": "How does the definition describe the first step of this sort?",
+        "options": [
+          "splits the items to be sorted into two groups",
+          "partitions around a single pivot",
+          "builds a binary heap first",
+          "scans for natural runs"
+        ],
+        "sourceId": "nist-dads-merge-sort",
+        "quote": "A sort algorithm that splits the items to be sorted into two groups, recursively sorts each group, and merges them into a final, sorted sequence.",
+        "hint": ""
+      }
+    ]
+  }
+}

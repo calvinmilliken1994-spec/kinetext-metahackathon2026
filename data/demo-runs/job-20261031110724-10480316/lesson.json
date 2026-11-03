@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031110724-10480316",
+  "analysisRef": "job-20261031110724-10480316/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110724-10480316:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "What a 100-year flood means and how flood probability is estimated",
+    "sources": [
+      {
+        "id": "usgs-100-year-flood",
+        "title": "The 100-Year Flood — U.S. Geological Survey, Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/100-year-flood",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'The 100-Year Flood'. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e04259ed310747089409594e3bf26519",
+      "runId": "job-20261031110724-10480316",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:08:35.029Z"
+    },
+    "seed": 4024284319,
+    "headline": "What a 100-year flood means and how flood probability is estimated",
+    "keyPoints": [
+      {
+        "id": "flood-probability",
+        "point": "A flood with a 100-year recurrence interval has a 1 percent chance of occurring in any given year.",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "In other words, a flood of that magnitude has a 1 percent chance of happening in any year."
+      },
+      {
+        "id": "recurrence-definition",
+        "point": "Recurrence interval is based on the probability that an event will be equaled or exceeded in any year.",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "The recurrence interval is based on the probability that the given event will be equaled or exceeded in any given year."
+      },
+      {
+        "id": "frequency-analysis",
+        "point": "Frequency analysis estimates the probability of rainfall and streamflow and determines recurrence intervals.",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Ten or more years of data are required to perform a frequency analysis for the determination of recurrence intervals."
+      },
+      {
+        "id": "storm-flood-mismatch",
+        "point": "A 100-year storm does not always cause a 100-year flood because rainfall distribution, soil saturation and streamflow response differ.",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Several factors can independently influence the cause-and-effect relation between rainfall and streamflow."
+      },
+      {
+        "id": "flood-level-change",
+        "point": "The 100-year flood level can change as more data are collected or when dams and development alter river flow.",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Since the 100-year flood level is statistically computed using past, existing data, as more data comes in, the level of the 100-year flood will change"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "recurrence-interval",
+        "term": "recurrence interval",
+        "gloss": "average years between floods of a given size used to describe flood probability",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "The average number of years between floods of a certain size is the recurrence interval or return period."
+      },
+      {
+        "id": "flood",
+        "term": "flood",
+        "gloss": "high streamflow that overtops river banks onto adjacent lowlands",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "A flood is any relatively high streamflow that overtops the natural or artificial banks of a river."
+      },
+      {
+        "id": "discharge",
+        "term": "Discharge",
+        "gloss": "measured volume of streamflow moving past a point in a given time",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Discharge is another term for streamflow; it is the measured volume of water that moves past a point in the river in a given amount of time."
+      },
+      {
+        "id": "floodplain",
+        "term": "floodplain",
+        "gloss": "flat lowland bordering a river that is subject to flooding when banks overtop",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "The floodplain is the relatively flat lowland that borders a river, usually dry but subject to flooding."
+      },
+      {
+        "id": "hydrograph",
+        "term": "hydrograph",
+        "gloss": "graph showing changes in discharge or river stage over time",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "A hydrograph is a graph that shows changes in discharge or river stage over time."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031110724-10480316:data-table-v1:r3",
+      "status": "failed",
+      "reason": "DT-01, DT-02: rows[0].quote: quote \"2 | 50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact equation containing \"=\"; rows[0].values[0].quote: quote \"2 | 50\" does not count as evidence: expected >= 8 normalised characters with >= 3 letters/digits, or a compact",
+      "revision": 3
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110724-10480316:sequence-v1:r1",
+      "status": "passed",
+      "reason": "3 steps were left out because they could not be verified against the page: frequency-analysis-estimate (SEQ-01), annual-chance-translation (SEQ-01), rainfall-distribution-limit (SEQ-01).",
+      "revision": 1
+    }
+  ]
+}

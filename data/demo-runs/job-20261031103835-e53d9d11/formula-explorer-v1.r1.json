@@ -1,0 +1,326 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "Relation between specific heats and gas constant",
+    "formulaText": "cp = cv + R",
+    "sourceId": "nasa-grc-specific-heat-cp-cv",
+    "quote": "cp = cv + R",
+    "expression": "cv + r",
+    "variables": [
+      {
+        "name": "cp",
+        "pageSymbol": "cp",
+        "meaning": "heat capacity at constant pressure",
+        "meaningQuoted": false,
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process.",
+        "unit": "J/kg·K",
+        "min": 800,
+        "max": 1200,
+        "default": 1005
+      },
+      {
+        "name": "cv",
+        "pageSymbol": "cv",
+        "meaning": "heat capacity at constant volume",
+        "meaningQuoted": false,
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process.",
+        "unit": "J/kg·K",
+        "min": 500,
+        "max": 1000,
+        "default": 718
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "specific gas constant",
+        "meaningQuoted": false,
+        "quote": "The equation of state of a gas relates the temperature, pressure, and volume through a gas constant R.",
+        "unit": "J/kg·K",
+        "min": 200,
+        "max": 400,
+        "default": 287
+      }
+    ],
+    "xVariable": "cv",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1005
+          },
+          {
+            "name": "cv",
+            "value": 718
+          },
+          {
+            "name": "r",
+            "value": 287
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1100
+          },
+          {
+            "name": "cv",
+            "value": 813
+          },
+          {
+            "name": "r",
+            "value": 287
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1000
+          },
+          {
+            "name": "cv",
+            "value": 700
+          },
+          {
+            "name": "r",
+            "value": 300
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261031103835-e53d9d11:formula-explorer-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"nasa-grc-specific-heat-cp-cv\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": false,
+        "message": "variable \"cp\" is declared but never used in the expression (the variable sets must be equal)",
+        "path": "/variables/0/name",
+        "affected": [
+          "/variables/0/name",
+          "/expression"
+        ]
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"cv\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the expression matches the page formula \"cv + R\" parsed from the quote with the same grammar: 23/23 finite independent comparison points agree within relative 1e-9 with no mismatch (expression-matches-page-formula)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f68ea795051747fc9dbdf31094ff65c3",
+    "usage": {
+      "promptTokens": 4045,
+      "completionTokens": 5636,
+      "reasoningTokens": 5218,
+      "cachedTokens": 0
+    },
+    "latencyMs": 29039,
+    "estCostUSD": 0.02900925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103835-e53d9d11:formula-explorer-v1:r1",
+    "componentId": "formula-explorer-v1",
+    "title": "Relation between specific heats and gas constant",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f68ea795051747fc9dbdf31094ff65c3",
+      "runId": "job-20261031103835-e53d9d11",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:40:35.688Z"
+    },
+    "seed": 2967826035,
+    "formulaText": "cp = cv + R",
+    "sourceId": "nasa-grc-specific-heat-cp-cv",
+    "quote": "cp = cv + R",
+    "expression": "cv + r",
+    "variables": [
+      {
+        "name": "cp",
+        "pageSymbol": "cp",
+        "meaning": "heat capacity at constant pressure",
+        "meaningQuoted": false,
+        "quote": "We have added a subscript “p” to the specific heat capacity to remind us that this value only applies to a constant pressure process.",
+        "unit": "J/kg·K",
+        "min": 800,
+        "max": 1200,
+        "default": 1005
+      },
+      {
+        "name": "cv",
+        "pageSymbol": "cv",
+        "meaning": "heat capacity at constant volume",
+        "meaningQuoted": false,
+        "quote": "We have added a subscript “v” to the specific heat capacity to remind us that this value only applies to a constant volume process.",
+        "unit": "J/kg·K",
+        "min": 500,
+        "max": 1000,
+        "default": 718
+      },
+      {
+        "name": "r",
+        "pageSymbol": "R",
+        "meaning": "specific gas constant",
+        "meaningQuoted": false,
+        "quote": "The equation of state of a gas relates the temperature, pressure, and volume through a gas constant R.",
+        "unit": "J/kg·K",
+        "min": 200,
+        "max": 400,
+        "default": 287
+      }
+    ],
+    "xVariable": "cv",
+    "cases": [
+      {
+        "id": "case-1",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1005
+          },
+          {
+            "name": "cv",
+            "value": 718
+          },
+          {
+            "name": "r",
+            "value": 287
+          }
+        ]
+      },
+      {
+        "id": "case-2",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1100
+          },
+          {
+            "name": "cv",
+            "value": 813
+          },
+          {
+            "name": "r",
+            "value": 287
+          }
+        ]
+      },
+      {
+        "id": "case-3",
+        "inputs": [
+          {
+            "name": "cp",
+            "value": 1000
+          },
+          {
+            "name": "cv",
+            "value": 700
+          },
+          {
+            "name": "r",
+            "value": 300
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

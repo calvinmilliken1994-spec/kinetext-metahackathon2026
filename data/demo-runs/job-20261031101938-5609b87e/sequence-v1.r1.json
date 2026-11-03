@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How the war for the union became a war for freedom",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "initial-war-aim",
+        "label": "War begins to preserve the union",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "was fought by the North to prevent the secession of the Southern states and preserve the Union",
+        "orderHint": "starts with preserving the union"
+      },
+      {
+        "id": "preliminary-warning",
+        "label": "Preliminary order warns rebellious states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "orderHint": "warning that freedom will be declared"
+      },
+      {
+        "id": "final-proclamation-declares",
+        "label": "Final proclamation declares freedom in rebelling areas",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "One hundred days later, with the rebellion unabated, President issued the Emancipation Proclamation declaring",
+        "orderHint": "final proclamation follows the warning"
+      },
+      {
+        "id": "limited-to-seceded",
+        "label": "Proclamation limited to seceded states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "orderHint": "freedom depends on military context"
+      },
+      {
+        "id": "advances-expand-freedom",
+        "label": "Union advances expand the domain of freedom",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "After January 1, 1863, every advance of federal troops expanded the domain of freedom.",
+        "orderHint": "advances spread freedom"
+      },
+      {
+        "id": "black-men-join-forces",
+        "label": "Black men accepted into union forces",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "orderHint": "new soldiers strengthen the union"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101938-5609b87e:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "816fc8c08f6149abbe175fce587752ff",
+    "usage": {
+      "promptTokens": 3034,
+      "completionTokens": 6540,
+      "reasoningTokens": 6117,
+      "cachedTokens": 0
+    },
+    "latencyMs": 53541,
+    "estCostUSD": 0.0315875,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101938-5609b87e:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How the war for the union became a war for freedom",
+    "sources": [
+      {
+        "id": "nara-emancipation-proclamation",
+        "title": "Emancipation Proclamation (1863) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/emancipation-proclamation",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Emancipation Proclamation (1863)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "0d11585e47f04bd0a12b0ded4d23595943f21a5af522811db76a93ef0486f646"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "816fc8c08f6149abbe175fce587752ff",
+      "runId": "job-20261031101938-5609b87e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:21:24.386Z"
+    },
+    "seed": 250985277,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "initial-war-aim",
+        "label": "War begins to preserve the union",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "was fought by the North to prevent the secession of the Southern states and preserve the Union",
+        "orderHint": "starts with preserving the union"
+      },
+      {
+        "id": "preliminary-warning",
+        "label": "Preliminary order warns rebellious states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "That changed on September 22, 1862, when President Lincoln issued his Preliminary Emancipation Proclamation",
+        "orderHint": "warning that freedom will be declared"
+      },
+      {
+        "id": "final-proclamation-declares",
+        "label": "Final proclamation declares freedom in rebelling areas",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "One hundred days later, with the rebellion unabated, President issued the Emancipation Proclamation declaring",
+        "orderHint": "final proclamation follows the warning"
+      },
+      {
+        "id": "limited-to-seceded",
+        "label": "Proclamation limited to seceded states",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "It applied only to states that had seceded from the Union, leaving slavery untouched in the loyal border states.",
+        "orderHint": "freedom depends on military context"
+      },
+      {
+        "id": "advances-expand-freedom",
+        "label": "Union advances expand the domain of freedom",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "After January 1, 1863, every advance of federal troops expanded the domain of freedom.",
+        "orderHint": "advances spread freedom"
+      },
+      {
+        "id": "black-men-join-forces",
+        "label": "Black men accepted into union forces",
+        "sourceId": "nara-emancipation-proclamation",
+        "quote": "Moreover, the Proclamation announced the acceptance of Black men into the Union Army and Navy, enabling the liberated to become liberators.",
+        "orderHint": "new soldiers strengthen the union"
+      }
+    ]
+  }
+}

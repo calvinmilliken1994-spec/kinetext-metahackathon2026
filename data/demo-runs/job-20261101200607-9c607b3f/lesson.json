@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261101200607-9c607b3f",
+  "analysisRef": "job-20261101200607-9c607b3f/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101200607-9c607b3f:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "DNA stores hereditary instructions in a double helix",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-dna",
+        "title": "What is DNA? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/dna/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "ee6e2bcb658439847bbb8ace196e703d81653cdf0826dae13149d08af007fb80"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a198b8-ad2c-757f-9552-d16295d813c5",
+      "runId": "job-20261101200607-9c607b3f",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T20:06:42.359Z"
+    },
+    "seed": 2987614539,
+    "headline": "DNA stores hereditary instructions in a double helix",
+    "keyPoints": [
+      {
+        "id": "dna-hereditary-material",
+        "point": "Students learn that DNA is the hereditary material in humans and other organisms.",
+        "quote": "DNA, or deoxyribonucleic acid, is the hereditary material in humans and almost all other organisms.",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "human-bases-shared",
+        "point": "Students learn that human DNA includes about 3 billion bases that are the same in all people.",
+        "quote": "Human DNA consists of about 3 billion bases, and more than 99 percent of those bases are the same in all people.",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "base-pairing-rule",
+        "point": "Students learn that DNA bases pair to form units called base pairs.",
+        "quote": "DNA bases pair up with each other, A with T and C with G, to form units called base pairs.",
+        "sourceId": "medlineplus-what-is-dna"
+      },
+      {
+        "id": "dna-replication-copies",
+        "point": "Students learn that an important property of DNA is the ability to replicate into copies.",
+        "quote": "An important property of DNA is that it can replicate, or make copies of itself.",
+        "sourceId": "medlineplus-what-is-dna"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Hereditary material present in humans and other organisms",
+        "id": "dna",
+        "quote": "DNA, or deoxyribonucleic acid, is the hereditary material in humans and almost all other organisms.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "DNA"
+      },
+      {
+        "gloss": "Chemical base that pairs with thymine in the code",
+        "id": "adenine",
+        "quote": "The information in DNA is stored as a code made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T).",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "adenine"
+      },
+      {
+        "gloss": "Combined unit of a base, sugar and phosphate",
+        "id": "nucleotide",
+        "quote": "Together, a base, sugar, and phosphate are called a nucleotide.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "nucleotide"
+      },
+      {
+        "gloss": "Spiral structure formed by two long strands",
+        "id": "double-helix",
+        "quote": "Nucleotides are arranged in two long strands that form a spiral called a double helix.",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "double helix"
+      },
+      {
+        "gloss": "Small amount of DNA found in the mitochondria",
+        "id": "mitochondrial-dna",
+        "quote": "but a small amount of DNA can also be found in the mitochondria (where it is called mitochondrial DNA or mtDNA)",
+        "sourceId": "medlineplus-what-is-dna",
+        "term": "mitochondrial DNA"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261101200607-9c607b3f:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101200607-9c607b3f:label-diagram-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

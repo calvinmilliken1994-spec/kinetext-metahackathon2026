@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "From congressional passage to final certification",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "amendment-introduced",
+        "label": "Amendment introduced in Congress",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Between 1878, when the amendment was first introduced in Congress, and August 18, 1920, when it was ratified",
+        "orderHint": ""
+      },
+      {
+        "id": "house-passes-amendment",
+        "label": "House passes amendment",
+        "sourceId": "nara-19th-amendment",
+        "quote": "On May 21, 1919, the House of Representatives passed the amendment",
+        "orderHint": "House action comes before Senate action"
+      },
+      {
+        "id": "senate-follows-house",
+        "label": "Senate follows House action",
+        "sourceId": "nara-19th-amendment",
+        "quote": "and 2 weeks later, the Senate followed",
+        "orderHint": ""
+      },
+      {
+        "id": "tennessee-final-ratification",
+        "label": "Tennessee ratifies as final state",
+        "sourceId": "nara-19th-amendment",
+        "quote": "When Tennessee became the 36th state to ratify the amendment on August 18, 1920",
+        "orderHint": ""
+      },
+      {
+        "id": "agreement-of-states-secured",
+        "label": "Agreement of states is secured",
+        "sourceId": "nara-19th-amendment",
+        "quote": "the amendment passed its final hurdle of obtaining the agreement of three-fourths of the states",
+        "orderHint": ""
+      },
+      {
+        "id": "federal-certification-completed",
+        "label": "Federal certification completed",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Secretary of State Bainbridge Colby certified the ratification on August 26, 1920",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101237-1d868f21:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "07ebcb623c764869a90ece4b83f3a197",
+    "usage": {
+      "promptTokens": 3044,
+      "completionTokens": 8321,
+      "reasoningTokens": 7950,
+      "cachedTokens": 0
+    },
+    "latencyMs": 38727,
+    "estCostUSD": 0.03916925,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101237-1d868f21:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "From congressional passage to final certification",
+    "sources": [
+      {
+        "id": "nara-19th-amendment",
+        "title": "19th Amendment to the U.S. Constitution: Women's Right to Vote (1920) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/19th-amendment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, '19th Amendment to the U.S. Constitution: Women's Right to Vote (1920)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "c9c5fa8ba7209052fb8e76015b935547fdda5ec295a972e802ec5f99ca24effd"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "07ebcb623c764869a90ece4b83f3a197",
+      "runId": "job-20261031101237-1d868f21",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:14:38.982Z"
+    },
+    "seed": 573291748,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "amendment-introduced",
+        "label": "Amendment introduced in Congress",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Between 1878, when the amendment was first introduced in Congress, and August 18, 1920, when it was ratified",
+        "orderHint": ""
+      },
+      {
+        "id": "house-passes-amendment",
+        "label": "House passes amendment",
+        "sourceId": "nara-19th-amendment",
+        "quote": "On May 21, 1919, the House of Representatives passed the amendment",
+        "orderHint": "House action comes before Senate action"
+      },
+      {
+        "id": "senate-follows-house",
+        "label": "Senate follows House action",
+        "sourceId": "nara-19th-amendment",
+        "quote": "and 2 weeks later, the Senate followed",
+        "orderHint": ""
+      },
+      {
+        "id": "tennessee-final-ratification",
+        "label": "Tennessee ratifies as final state",
+        "sourceId": "nara-19th-amendment",
+        "quote": "When Tennessee became the 36th state to ratify the amendment on August 18, 1920",
+        "orderHint": ""
+      },
+      {
+        "id": "agreement-of-states-secured",
+        "label": "Agreement of states is secured",
+        "sourceId": "nara-19th-amendment",
+        "quote": "the amendment passed its final hurdle of obtaining the agreement of three-fourths of the states",
+        "orderHint": ""
+      },
+      {
+        "id": "federal-certification-completed",
+        "label": "Federal certification completed",
+        "sourceId": "nara-19th-amendment",
+        "quote": "Secretary of State Bainbridge Colby certified the ratification on August 26, 1920",
+        "orderHint": ""
+      }
+    ]
+  }
+}

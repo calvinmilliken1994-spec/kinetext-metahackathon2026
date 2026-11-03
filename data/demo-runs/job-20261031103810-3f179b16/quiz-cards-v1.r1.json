@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Complementary angles and right triangle ratios",
+    "cards": [
+      {
+        "id": "identity-sin-cos",
+        "stem": "Which equation shows how sine and cosine relate for complementary angles?",
+        "options": [
+          "sin(c) = cos (90 – c)",
+          "sin(c) = cos (90 + c)",
+          "tan(c) = cos (90 – c)",
+          "sin(c) = sin (90 – c)"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "sin(c) = cos (90 – c)",
+        "hint": "Think about how sine of one acute angle relates to cosine of the other."
+      },
+      {
+        "id": "sine-ratio",
+        "stem": "Which ratio defines the sine of angle c in a right triangle?",
+        "options": [
+          "sin(c) = o/h",
+          "sin(c) = a/h",
+          "sin(c) = o/a",
+          "sin(c) = h/o"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "sin(c) = o/h",
+        "hint": "Recall which sides form sine, opposite and hypotenuse."
+      },
+      {
+        "id": "cosine-ratio",
+        "stem": "Which ratio defines the cosine of angle c in a right triangle?",
+        "options": [
+          "cos(c) = a/h",
+          "cos(c) = o/h",
+          "cos(c) = o/a",
+          "cos(c) = h/a"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "cos(c) = a/h",
+        "hint": "Consider which sides form cosine, adjacent and hypotenuse."
+      },
+      {
+        "id": "tangent-ratio",
+        "stem": "Which ratio defines the tangent of angle c in a right triangle?",
+        "options": [
+          "tan(c) = o/a",
+          "tan(c) = o/h",
+          "tan(c) = a/h",
+          "tan(c) = h/o"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "tan(c) = o/a",
+        "hint": "Remember tangent uses opposite and adjacent."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103810-3f179b16:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "7716ec7cd9c8425496fa7731f66cfb14",
+    "usage": {
+      "promptTokens": 3762,
+      "completionTokens": 7869,
+      "reasoningTokens": 7472,
+      "cachedTokens": 0
+    },
+    "latencyMs": 46547,
+    "estCostUSD": 0.03814575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103810-3f179b16:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Complementary angles and right triangle ratios",
+    "sources": [
+      {
+        "id": "nasa-grc-sine-cosine-tangent",
+        "title": "Sine-Cosine-Tangent — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sine-cosine-tangent/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "3f90979d8b1710fa0dbffead40968b37333b0e8dbb45f50696a604f272e181b9"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "7716ec7cd9c8425496fa7731f66cfb14",
+      "runId": "job-20261031103810-3f179b16",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:39:58.931Z"
+    },
+    "seed": 2057353216,
+    "cards": [
+      {
+        "id": "identity-sin-cos",
+        "stem": "Which equation shows how sine and cosine relate for complementary angles?",
+        "options": [
+          "sin(c) = cos (90 – c)",
+          "sin(c) = cos (90 + c)",
+          "tan(c) = cos (90 – c)",
+          "sin(c) = sin (90 – c)"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "sin(c) = cos (90 – c)",
+        "hint": "Think about how sine of one acute angle relates to cosine of the other."
+      },
+      {
+        "id": "sine-ratio",
+        "stem": "Which ratio defines the sine of angle c in a right triangle?",
+        "options": [
+          "sin(c) = o/h",
+          "sin(c) = a/h",
+          "sin(c) = o/a",
+          "sin(c) = h/o"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "sin(c) = o/h",
+        "hint": "Recall which sides form sine, opposite and hypotenuse."
+      },
+      {
+        "id": "cosine-ratio",
+        "stem": "Which ratio defines the cosine of angle c in a right triangle?",
+        "options": [
+          "cos(c) = a/h",
+          "cos(c) = o/h",
+          "cos(c) = o/a",
+          "cos(c) = h/a"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "cos(c) = a/h",
+        "hint": "Consider which sides form cosine, adjacent and hypotenuse."
+      },
+      {
+        "id": "tangent-ratio",
+        "stem": "Which ratio defines the tangent of angle c in a right triangle?",
+        "options": [
+          "tan(c) = o/a",
+          "tan(c) = o/h",
+          "tan(c) = a/h",
+          "tan(c) = h/o"
+        ],
+        "sourceId": "nasa-grc-sine-cosine-tangent",
+        "quote": "tan(c) = o/a",
+        "hint": "Remember tangent uses opposite and adjacent."
+      }
+    ]
+  }
+}

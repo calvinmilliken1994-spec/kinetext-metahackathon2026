@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261101182353-9084509b",
+  "analysisRef": "job-20261101182353-9084509b/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261101182353-9084509b:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Continuous circulation of water between Earth and atmosphere",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a1985a-f853-70bf-b4be-75062be33c30",
+      "runId": "job-20261101182353-9084509b",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-11-01T18:24:21.162Z"
+    },
+    "seed": 944013557,
+    "headline": "Continuous circulation of water between Earth and atmosphere",
+    "keyPoints": [
+      {
+        "id": "water-cycle-motion",
+        "point": "Students learn that the water cycle moves water from ground to atmosphere and back again.",
+        "quote": "At its core, the water cycle is the motion of the water from the ground to the atmosphere and back again.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "condensation-liquid",
+        "point": "Students learn that condensation changes water vapor into liquid water.",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "precipitation-forms",
+        "point": "Students learn that precipitation falls as rain, hail, snow or sleet.",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      },
+      {
+        "id": "runoff-saturated",
+        "point": "Students learn that runoff occurs when saturated ground cannot absorb excess precipitation.",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water).",
+        "sourceId": "noaa-jetstream-hydrologic-cycle"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "Change of state from liquid to gas requiring energy",
+        "id": "evaporation",
+        "quote": "Evaporation is the change of state in a substance from a liquid to a gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Evaporation"
+      },
+      {
+        "gloss": "Evaporation of water from plants through leaf openings",
+        "id": "transpiration",
+        "quote": "Transpiration is the evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Transpiration"
+      },
+      {
+        "gloss": "Process where water vapor changes into liquid water",
+        "id": "condensation",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Condensation"
+      },
+      {
+        "gloss": "Fresh water falling as rain, hail, snow or sleet",
+        "id": "precipitation",
+        "quote": "Precipitation can be in the form of rain, hail, snow, or sleet.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Precipitation"
+      },
+      {
+        "gloss": "Results of excess water forming rivers and lakes",
+        "id": "runoff",
+        "quote": "Rivers and lakes are results of runoff.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "Runoff"
+      },
+      {
+        "gloss": "Condition when air temperature equals dew point and fog forms",
+        "id": "dew-point",
+        "quote": "Foggy conditions often occur when air temperature and dew point are equal.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "term": "dew point"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261101182353-9084509b:label-diagram-v1:r3",
+      "status": "failed",
+      "reason": "LD-02, LD-11: parts[3]: the name \"Snowmelt Runoff\" does not occur as a whole phrase in its quote \"Runoff occurs when there is excessive precipitation and the \" (expected the page's own complete wording for the part, case-insensitive); parts[5]: the name \"Surface Runoff\" does not occur as a whole phrase in its quo",
+      "revision": 3
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261101182353-9084509b:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

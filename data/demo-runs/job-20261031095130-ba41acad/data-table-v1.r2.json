@@ -1,0 +1,499 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Median household income in nominal and inflation adjusted dollars",
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Median U.S. Household Income1",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Year | Median U.S. Household Income1 | Annual average index value, CPI-U U.S. city average all items index"
+      },
+      {
+        "header": "Annual average index value",
+        "unit": "index",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Annual average index value, CPI-U U.S. city average all items index | Ratio of base index value to yearly index value"
+      },
+      {
+        "header": "Constant 2010 dollars",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Table 3, Constant 2010 dollars"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2010",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent",
+        "values": [
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          },
+          {
+            "value": "218.06",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          },
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          }
+        ]
+      },
+      {
+        "label": "2013",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90",
+        "values": [
+          {
+            "value": "$53,585.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          },
+          {
+            "value": "232.96",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          },
+          {
+            "value": "$50,369.90",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          }
+        ]
+      },
+      {
+        "label": "2016",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49",
+        "values": [
+          {
+            "value": "$59,039.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          },
+          {
+            "value": "240.01",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          },
+          {
+            "value": "$53,725.49",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          }
+        ]
+      },
+      {
+        "label": "2018",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73",
+        "values": [
+          {
+            "value": "$63,179.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          },
+          {
+            "value": "251.11",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          },
+          {
+            "value": "$54,965.73",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          }
+        ]
+      },
+      {
+        "label": "2019",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55",
+        "values": [
+          {
+            "value": "$68,703.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          },
+          {
+            "value": "255.66",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          },
+          {
+            "value": "$58,397.55",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          }
+        ]
+      },
+      {
+        "label": "2021",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20",
+        "values": [
+          {
+            "value": "$70,784.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          },
+          {
+            "value": "270.97",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          },
+          {
+            "value": "$56,627.20",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-constant-2019",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-constant-income",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "lookup-cpi-2010",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031095130-ba41acad:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 27 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 18 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 3 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-constant-2019\" (lookup) → rows[4] \"$58,397.55\"; \"largest-constant-income\" (largest) → rows[4] \"$58,397.55\"; \"lookup-cpi-2010\" (lookup) → rows[0] \"218.06\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 2 (\"Constant 2010 dollars\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 29 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "59fb9f77fb04436d8578c10f1331036b",
+    "usage": {
+      "promptTokens": 10659,
+      "completionTokens": 6922,
+      "reasoningTokens": 5159,
+      "cachedTokens": 0
+    },
+    "latencyMs": 30935,
+    "estCostUSD": 0.04274225,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095130-ba41acad:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Median household income in nominal and inflation adjusted dollars",
+    "sources": [
+      {
+        "id": "bls-purchasing-power-constant-dollars",
+        "title": "Purchasing power and constant dollars — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/purchasing-power-constant-dollars.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Purchasing power and constant dollars'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "59fb9f77fb04436d8578c10f1331036b",
+      "runId": "job-20261031095130-ba41acad",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T09:55:28.183Z"
+    },
+    "seed": 2544141634,
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Median U.S. Household Income1",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Year | Median U.S. Household Income1 | Annual average index value, CPI-U U.S. city average all items index"
+      },
+      {
+        "header": "Annual average index value",
+        "unit": "index",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Annual average index value, CPI-U U.S. city average all items index | Ratio of base index value to yearly index value"
+      },
+      {
+        "header": "Constant 2010 dollars",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Table 3, Constant 2010 dollars"
+      }
+    ],
+    "rows": [
+      {
+        "label": "2010",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent",
+        "values": [
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          },
+          {
+            "value": "218.06",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          },
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2010 | $49,276.00 | 218.06 | 218.06 / 218.06 = | 1.00 | $49,276.00"
+          }
+        ]
+      },
+      {
+        "label": "2013",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90",
+        "values": [
+          {
+            "value": "$53,585.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          },
+          {
+            "value": "232.96",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          },
+          {
+            "value": "$50,369.90",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2013 | $53,585.00 | 232.96 | 218.06 / 232.96 = | 0.94 | $50,369.90"
+          }
+        ]
+      },
+      {
+        "label": "2016",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49",
+        "values": [
+          {
+            "value": "$59,039.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          },
+          {
+            "value": "240.01",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          },
+          {
+            "value": "$53,725.49",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2016 | $59,039.00 | 240.01 | 218.06 / 240.01 = | 0.91 | $53,725.49"
+          }
+        ]
+      },
+      {
+        "label": "2018",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73",
+        "values": [
+          {
+            "value": "$63,179.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          },
+          {
+            "value": "251.11",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          },
+          {
+            "value": "$54,965.73",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2018 | $63,179.00 | 251.11 | 218.06 / 251.11 = | 0.87 | $54,965.73"
+          }
+        ]
+      },
+      {
+        "label": "2019",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55",
+        "values": [
+          {
+            "value": "$68,703.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          },
+          {
+            "value": "255.66",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          },
+          {
+            "value": "$58,397.55",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2019 | $68,703.00 | 255.66 | 218.06 / 255.66 = | 0.85 | $58,397.55"
+          }
+        ]
+      },
+      {
+        "label": "2021",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20",
+        "values": [
+          {
+            "value": "$70,784.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          },
+          {
+            "value": "270.97",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          },
+          {
+            "value": "$56,627.20",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "2021 | $70,784.00 | 270.97 | 218.06 / 270.97 = | 0.80 | $56,627.20"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-constant-2019",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-constant-income",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "lookup-cpi-2010",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

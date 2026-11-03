@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Steps to derive the specific heat relation for gases",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order presented on the page from enthalpy to final relation.",
+    "steps": [
+      {
+        "id": "introduce-goal",
+        "label": "Introduce derivation goal for gases",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "On this page we derive some equations which relate the heat capacity of a gas to the gas constant used in the equation of state.",
+        "orderHint": "Arrange the steps in the order they appear in the derivation."
+      },
+      {
+        "id": "define-enthalpy",
+        "label": "Define specific enthalpy relation",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "h = e + p * v",
+        "orderHint": "Identify the starting definition used in the derivation."
+      },
+      {
+        "id": "constant-pressure-heat",
+        "label": "Express constant pressure heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = cp * Delta T",
+        "orderHint": "Recall how enthalpy change is expressed for constant pressure."
+      },
+      {
+        "id": "equation-state-pressure",
+        "label": "Apply equation of state at constant pressure",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "p * Delta v = R * Delta T",
+        "orderHint": "Connect pressure volume change to temperature change."
+      },
+      {
+        "id": "constant-volume-energy",
+        "label": "Express constant volume internal energy change",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta e = cv * Delta T",
+        "orderHint": "Recall the expression for internal energy change at constant volume."
+      },
+      {
+        "id": "combine-relation",
+        "label": "Combine terms to relate heat capacities",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "orderHint": "Combine the previous relations to obtain the final result."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031103835-e53d9d11:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4786923255fa4b888f46bbc1a0b691dd",
+    "usage": {
+      "promptTokens": 3565,
+      "completionTokens": 4644,
+      "reasoningTokens": 4245,
+      "cachedTokens": 0
+    },
+    "latencyMs": 32614,
+    "estCostUSD": 0.02419325,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031103835-e53d9d11:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Steps to derive the specific heat relation for gases",
+    "sources": [
+      {
+        "id": "nasa-grc-specific-heat-cp-cv",
+        "title": "Specific Heat – Cp & Cv — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-heat-cp-cv/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9df5f948a44c3fd060dd74c26ccaa8247cb311d0b0d618ceaafaf6382ba4d1b8"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4786923255fa4b888f46bbc1a0b691dd",
+      "runId": "job-20261031103835-e53d9d11",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:40:39.238Z"
+    },
+    "seed": 674007911,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Steps follow the order presented on the page from enthalpy to final relation.",
+    "steps": [
+      {
+        "id": "introduce-goal",
+        "label": "Introduce derivation goal for gases",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "On this page we derive some equations which relate the heat capacity of a gas to the gas constant used in the equation of state.",
+        "orderHint": "Arrange the steps in the order they appear in the derivation."
+      },
+      {
+        "id": "define-enthalpy",
+        "label": "Define specific enthalpy relation",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "h = e + p * v",
+        "orderHint": "Identify the starting definition used in the derivation."
+      },
+      {
+        "id": "constant-pressure-heat",
+        "label": "Express constant pressure heat transfer",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta h = cp * Delta T",
+        "orderHint": "Recall how enthalpy change is expressed for constant pressure."
+      },
+      {
+        "id": "equation-state-pressure",
+        "label": "Apply equation of state at constant pressure",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "p * Delta v = R * Delta T",
+        "orderHint": "Connect pressure volume change to temperature change."
+      },
+      {
+        "id": "constant-volume-energy",
+        "label": "Express constant volume internal energy change",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "Delta e = cv * Delta T",
+        "orderHint": "Recall the expression for internal energy change at constant volume."
+      },
+      {
+        "id": "combine-relation",
+        "label": "Combine terms to relate heat capacities",
+        "sourceId": "nasa-grc-specific-heat-cp-cv",
+        "quote": "cp = cv + R",
+        "orderHint": "Combine the previous relations to obtain the final result."
+      }
+    ]
+  }
+}

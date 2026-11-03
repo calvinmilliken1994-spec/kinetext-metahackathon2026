@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Quick check on SI structure and values",
+    "cards": [
+      {
+        "id": "prefixes-count",
+        "stem": "How many prefixes are currently recognized for use?",
+        "options": [
+          "Twenty-four",
+          "7",
+          "22"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "Twenty-four prefixes ranging from 10^30 to 10^−30, are currently recognized for use.",
+        "hint": ""
+      },
+      {
+        "id": "value-definition",
+        "stem": "How is the value of a physical quantity expressed?",
+        "options": [
+          "product of a number and a unit",
+          "sum of a proton charge and a constant",
+          "practical technique for realization"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "The value of a physical quantity is the quantitative expression of a particular physical quantity as the product of a number and a unit",
+        "hint": ""
+      },
+      {
+        "id": "defining-constants",
+        "stem": "What foundation does the SI rest on?",
+        "options": [
+          "seven (7) defining constants",
+          "22 derived units with special names",
+          "Twenty-four prefixes"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants",
+        "hint": ""
+      },
+      {
+        "id": "core-set-size",
+        "stem": "Which group forms the core set of SI units?",
+        "options": [
+          "twenty-nine units",
+          "169 m",
+          "10^30"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units.",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105442-5f80212e:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "995ea9470aa2427e86086d5dfc04c706",
+    "usage": {
+      "promptTokens": 3464,
+      "completionTokens": 6472,
+      "reasoningTokens": 6168,
+      "cachedTokens": 0
+    },
+    "latencyMs": 37600,
+    "estCostUSD": 0.031836,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105442-5f80212e:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Quick check on SI structure and values",
+    "sources": [
+      {
+        "id": "nist-si-units",
+        "title": "SI Units — NIST Office of Weights and Measures, Metric (SI) Program",
+        "locator": "https://www.nist.gov/pml/owm/metric-si/si-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Office of Weights and Measures, Metric (SI) Program, 'SI Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "c43e5958aca8c142d4a9c1d75b0294b983d04a0e787bee139b20bfd1f75f21a3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "995ea9470aa2427e86086d5dfc04c706",
+      "runId": "job-20261031105442-5f80212e",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:57:03.067Z"
+    },
+    "seed": 1543183716,
+    "cards": [
+      {
+        "id": "prefixes-count",
+        "stem": "How many prefixes are currently recognized for use?",
+        "options": [
+          "Twenty-four",
+          "7",
+          "22"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "Twenty-four prefixes ranging from 10^30 to 10^−30, are currently recognized for use.",
+        "hint": ""
+      },
+      {
+        "id": "value-definition",
+        "stem": "How is the value of a physical quantity expressed?",
+        "options": [
+          "product of a number and a unit",
+          "sum of a proton charge and a constant",
+          "practical technique for realization"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "The value of a physical quantity is the quantitative expression of a particular physical quantity as the product of a number and a unit",
+        "hint": ""
+      },
+      {
+        "id": "defining-constants",
+        "stem": "What foundation does the SI rest on?",
+        "options": [
+          "seven (7) defining constants",
+          "22 derived units with special names",
+          "Twenty-four prefixes"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants",
+        "hint": ""
+      },
+      {
+        "id": "core-set-size",
+        "stem": "Which group forms the core set of SI units?",
+        "options": [
+          "twenty-nine units",
+          "169 m",
+          "10^30"
+        ],
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units.",
+        "hint": ""
+      }
+    ]
+  }
+}

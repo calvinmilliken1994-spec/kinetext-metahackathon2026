@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Checking transcription and translation vocabulary",
+    "cards": [
+      {
+        "id": "card-codon-definition",
+        "stem": "What is the name for a sequence of three nucleotides that codes for one amino acid?",
+        "options": [
+          "codon",
+          "ribosome",
+          "nucleus"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Each sequence of three nucleotides, called a codon, usually codes for one particular amino acid.",
+        "hint": ""
+      },
+      {
+        "id": "card-ribosome-reader",
+        "stem": "Which specialized complex reads the sequence of messenger RNA nucleotides?",
+        "options": [
+          "ribosome",
+          "codon",
+          "nucleus"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "The mRNA interacts with a specialized complex called a ribosome, which \"reads\" the sequence of mRNA nucleotides.",
+        "hint": ""
+      },
+      {
+        "id": "card-translation-location",
+        "stem": "Where does translation take place in the cell?",
+        "options": [
+          "cytoplasm",
+          "nucleus",
+          "codon"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm.",
+        "hint": ""
+      },
+      {
+        "id": "card-mrna-carrier",
+        "stem": "Which molecule carries information from DNA out of the nucleus to make a protein?",
+        "options": [
+          "messenger RNA",
+          "transfer RNA",
+          "ribosome"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "is called messenger RNA (mRNA) because it carries the information",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100925-4f1bf635:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "a33441f6b4b341cd9c7bb9d642020ff0",
+    "usage": {
+      "promptTokens": 2600,
+      "completionTokens": 8382,
+      "reasoningTokens": 8081,
+      "cachedTokens": 0
+    },
+    "latencyMs": 46299,
+    "estCostUSD": 0.0388735,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100925-4f1bf635:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Checking transcription and translation vocabulary",
+    "sources": [
+      {
+        "id": "medlineplus-protein-production",
+        "title": "How do genes direct the production of proteins? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/howgeneswork/makingprotein/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "c477ae45c51062d816f0a0359713d0ba6c996d2278003e7209e3b7b222b0639b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a33441f6b4b341cd9c7bb9d642020ff0",
+      "runId": "job-20261031100925-4f1bf635",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:10:57.858Z"
+    },
+    "seed": 3505590173,
+    "cards": [
+      {
+        "id": "card-codon-definition",
+        "stem": "What is the name for a sequence of three nucleotides that codes for one amino acid?",
+        "options": [
+          "codon",
+          "ribosome",
+          "nucleus"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Each sequence of three nucleotides, called a codon, usually codes for one particular amino acid.",
+        "hint": ""
+      },
+      {
+        "id": "card-ribosome-reader",
+        "stem": "Which specialized complex reads the sequence of messenger RNA nucleotides?",
+        "options": [
+          "ribosome",
+          "codon",
+          "nucleus"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "The mRNA interacts with a specialized complex called a ribosome, which \"reads\" the sequence of mRNA nucleotides.",
+        "hint": ""
+      },
+      {
+        "id": "card-translation-location",
+        "stem": "Where does translation take place in the cell?",
+        "options": [
+          "cytoplasm",
+          "nucleus",
+          "codon"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm.",
+        "hint": ""
+      },
+      {
+        "id": "card-mrna-carrier",
+        "stem": "Which molecule carries information from DNA out of the nucleus to make a protein?",
+        "options": [
+          "messenger RNA",
+          "transfer RNA",
+          "ribosome"
+        ],
+        "sourceId": "medlineplus-protein-production",
+        "quote": "is called messenger RNA (mRNA) because it carries the information",
+        "hint": ""
+      }
+    ]
+  }
+}

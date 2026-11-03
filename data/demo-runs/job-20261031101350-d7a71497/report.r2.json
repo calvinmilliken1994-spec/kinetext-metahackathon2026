@@ -1,0 +1,22 @@
+{
+  "artifactId": "nara-articles-of-confederation-job-20261031101350-d7a71497",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": false,
+      "message": "spec failed schema.full: /simulation/events must NOT have fewer than 5 items",
+      "affected": [
+        "/simulation/events"
+      ]
+    },
+    {
+      "id": "repair.no-weakening",
+      "kind": "semantic",
+      "passed": false,
+      "message": "repair weakened the spec: event count dropped to 4, expected >= 5 (a timeline repair must fix the failing checks without changing the engine, adding events, dropping the event count below 5, removing or rewriting an event that passed its date checks on the baseline, or changing a case pair that was strictly ordered on the baseline; only an item that failed the recomputed baseline checks, or the exact fields where a finding's affected paths intersect the recomputed baseline failures, may change)"
+    }
+  ],
+  "publishable": false
+}

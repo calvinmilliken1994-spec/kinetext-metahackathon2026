@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031101354-3e1508db",
+  "analysisRef": "job-20261031101354-3e1508db/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101354-3e1508db:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How proposals became the bill of rights and later amendments",
+    "sources": [
+      {
+        "id": "nara-bill-of-rights",
+        "title": "Bill of Rights (1791) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/bill-of-rights",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Bill of Rights (1791)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4a36b13e4682b41a3b938737553b5a5f3e509f35af3132cd2420de67f016531"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "a58f36af3dea4780aa5810d2350cf7c8",
+      "runId": "job-20261031101354-3e1508db",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:14:56.798Z"
+    },
+    "seed": 3569954922,
+    "headline": "How proposals became the bill of rights and later amendments",
+    "keyPoints": [
+      {
+        "id": "amendments-proposed",
+        "point": "Students learn that 12 amendments were originally proposed and 10 were ratified to become the Bill of Rights in 1791.",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "rights-defined",
+        "point": "Students learn that the amendments defined citizens' rights in relation to the newly established government.",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They defined citizens' rights in relation to the newly established government under the Constitution."
+      },
+      {
+        "id": "tyranny-charge",
+        "point": "Students learn that opponents repeatedly charged that the Constitution would open the way to tyranny by the central government.",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government."
+      },
+      {
+        "id": "articles-ratified",
+        "point": "Students learn that Articles 3 to 12 were ratified on December 15, 1791 by three-fourths of the state legislatures to constitute the first 10 amendments.",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments of the Constitution,"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "bill-of-rights",
+        "term": "Bill of Rights",
+        "gloss": "First 10 amendments ratified to protect rights and define limits on government",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Although 12 amendments were originally proposed, the 10 that were ratified became the Bill of Rights in 1791."
+      },
+      {
+        "id": "constitution-term",
+        "term": "Constitution",
+        "gloss": "Written plan for the newly established government that defines citizen relations",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "They defined citizens' rights in relation to the newly established government under the Constitution."
+      },
+      {
+        "id": "tyranny-term",
+        "term": "tyranny",
+        "gloss": "Abuse of power by a central government feared as tyranny by opponents",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "its opponents repeatedly charged that the Constitution as drafted would open the way to tyranny by the central government."
+      },
+      {
+        "id": "ratified-term",
+        "term": "ratified",
+        "gloss": "Formally approved by state legislatures after being ratified by the required share",
+        "sourceId": "nara-bill-of-rights",
+        "quote": "Articles 3 to 12, ratified December 15, 1791, by three-fourths of the state legislatures, constitute the first 10 amendments of the Constitution,"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031101354-3e1508db:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101354-3e1508db:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

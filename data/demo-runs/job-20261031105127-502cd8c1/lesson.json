@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031105127-502cd8c1",
+  "analysisRef": "job-20261031105127-502cd8c1/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105127-502cd8c1:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Hash tables map keys to array positions with collision handling",
+    "sources": [
+      {
+        "id": "nist-dads-hash-table",
+        "title": "hash table — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/hashtab.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'hash table'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "a4af72aded8e18f670421243f39c32d314f524160bba1353a10d0271dc6e8e31"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "ad5315e7551845dbbc3099134264d83c",
+      "runId": "job-20261031105127-502cd8c1",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:52:19.013Z"
+    },
+    "seed": 2025832923,
+    "headline": "Hash tables map keys to array positions with collision handling",
+    "keyPoints": [
+      {
+        "id": "mapping-keys-to-positions",
+        "point": "Students learn that a hash table maps keys to array positions using hash functions.",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+      },
+      {
+        "id": "collision-definition",
+        "point": "Students learn that a collision occurs when keys of different items map to the same position.",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Having the keys of more than one item map to the same position is called a collision."
+      },
+      {
+        "id": "resolution-schemes",
+        "point": "Students learn that collision resolution schemes include open addressing, chaining, and a special overflow area.",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+      },
+      {
+        "id": "perfect-hashing-tradeoff",
+        "point": "Students learn that perfect hashing avoids collisions but can be time-consuming to create.",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Perfect hashing avoids collisions, but may be time-consuming to create."
+      },
+      {
+        "id": "constant-time-condition",
+        "point": "Students learn that hash table operations may be constant time if the table is big enough or grows.",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Complexity depends on the hash function and collision resolution scheme, but may be constant (Θ(1)) if the table is big enough or grows."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-dictionary",
+        "term": "dictionary",
+        "gloss": "Collection where keys are mapped to values using array positions",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+      },
+      {
+        "id": "term-collision",
+        "term": "collision",
+        "gloss": "Case where two items map to the same position in the table",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Having the keys of more than one item map to the same position is called a collision."
+      },
+      {
+        "id": "term-hash-functions",
+        "term": "hash functions",
+        "gloss": "Functions that map keys to array positions for direct access",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "A dictionary in which keys are mapped to array positions by hash functions."
+      },
+      {
+        "id": "term-open-addressing",
+        "term": "open addressing",
+        "gloss": "Collision resolution that keeps items inside the main table by probing",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+      },
+      {
+        "id": "term-chaining",
+        "term": "chaining",
+        "gloss": "Collision resolution that chains colliding items together in linked lists",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "There are many collision resolution schemes, but they may be divided into open addressing, chaining, and keeping one special overflow area."
+      },
+      {
+        "id": "term-perfect-hashing",
+        "term": "Perfect hashing",
+        "gloss": "Method that avoids collisions but may be time-consuming to build",
+        "sourceId": "nist-dads-hash-table",
+        "quote": "Perfect hashing avoids collisions, but may be time-consuming to create."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105127-502cd8c1:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: card-dictionary-mapping (Q-02, Q-05).",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031105127-502cd8c1:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

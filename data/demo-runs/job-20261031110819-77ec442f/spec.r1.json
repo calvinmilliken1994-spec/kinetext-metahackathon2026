@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "0.3.0",
+  "id": "usgs-fossils-numeric-time-scale-job-20261031110819-77ec442f",
+  "title": "Radioactive Decay and Half-Life - Dating Rocks and Fossils",
+  "learningObjectives": [
+    "Explain that half-life is the time for one-half of parent atoms to decay to daughter atoms at a constant rate.",
+    "Use the decay equation N = N0 × (1/2)^(t/T) to calculate remaining parent material and estimate ages of geologic materials."
+  ],
+  "sources": [
+    {
+      "id": "usgs-fossils-numeric-time-scale",
+      "title": "Fossils, Rocks, and Time: The Numeric Time Scale — U.S. Geological Survey",
+      "locator": "https://pubs.usgs.gov/gip/fossils/numeric.html",
+      "license": "US-Gov-Work",
+      "attribution": "Source material: U.S. Geological Survey, 'Fossils, Rocks, and Time: The Numeric Time Scale' (1997). Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+      "sha256": "d6ba577d359485d9ea0ae92e97f294d27bb3a67e23758783067591896f570f2d"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "exp-half-life-definition",
+      "text": "Radioactive decay occurs at a constant rate defined by half-life, the time needed for half of the parent atoms to become daughter atoms.",
+      "evidence": [
+        {
+          "sourceId": "usgs-fossils-numeric-time-scale",
+          "quote": "The half-life of a radioactive isotope is the length of time required for exactly one-half of the parent atoms to decay to daughter atoms."
+        }
+      ]
+    }
+  ],
+  "simulation": {
+    "engine": "half-life-v1",
+    "equation": "N=N0*(1/2)^(t/T)",
+    "initialAmount": {
+      "unit": "1",
+      "min": 100,
+      "max": 1000,
+      "default": 100
+    },
+    "halfLife": {
+      "unit": "time",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    "elapsedTime": {
+      "unit": "time",
+      "min": 0,
+      "max": 25,
+      "default": 5
+    },
+    "scenario": {
+      "objectLabel": "Radioactive parent sample (grams)",
+      "settingLabel": "Half-life measured in years"
+    }
+  },
+  "behavioralTests": [
+    {
+      "name": "no decay at t=0",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 0,
+      "expectedRemaining": 100,
+      "tolerance": 0.05
+    },
+    {
+      "name": "one half-life remains half",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.05
+    },
+    {
+      "name": "two half-lives remain quarter",
+      "initialAmount": 80,
+      "halfLife": 2,
+      "elapsedTime": 4,
+      "expectedRemaining": 20,
+      "tolerance": 0.05
+    },
+    {
+      "name": "fractional half-lives",
+      "initialAmount": 1000,
+      "halfLife": 10,
+      "elapsedTime": 15,
+      "expectedRemaining": 353.5534,
+      "tolerance": 0.1
+    }
+  ],
+  "predictions": [
+    {
+      "id": "pred-1",
+      "prompt": "A 100-gram sample of parent isotope with a 5-year half-life after 5 years",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 5,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    },
+    {
+      "id": "pred-2",
+      "prompt": "A 200-gram sample with a 4-year half-life after 8 years (two half-lives)",
+      "initialAmount": 200,
+      "halfLife": 4,
+      "elapsedTime": 8,
+      "expectedRemaining": 50,
+      "tolerance": 0.1
+    },
+    {
+      "id": "pred-3",
+      "prompt": "A 100-gram sample with a 5-year half-life after 10 years (two half-lives)",
+      "initialAmount": 100,
+      "halfLife": 5,
+      "elapsedTime": 10,
+      "expectedRemaining": 25,
+      "tolerance": 0.05
+    }
+  ],
+  "execution": {
+    "maxWallTimeMs": 2000,
+    "maxRepairAttempts": 2,
+    "network": false,
+    "generatedCodeAllowed": false
+  },
+  "provenance": {
+    "provider": "meta",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "af19f3aeeda34144a27379c445558354",
+    "runId": "job-20261031110819-77ec442f",
+    "promptVersion": "v10",
+    "generatedAt": "2026-10-31T11:10:03.123Z",
+    "revision": 1,
+    "repairOf": null
+  }
+}

@@ -1,0 +1,323 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Standard deduction amounts by filing status for 2025 and 2026",
+    "labelHeader": "Filing status",
+    "columns": [
+      {
+        "header": "TY 2025 Under OBBB",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+      },
+      {
+        "header": "TY 2026 Under OBBB",
+        "unit": "",
+        "numeric": true,
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "TY 2026 Under OBBB | $16,100 | $32,200 | $24,150"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Single; married filing separately",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly; Surviving Spouses | Heads of Households",
+        "values": [
+          {
+            "value": "$15,750",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+          },
+          {
+            "value": "$16,100",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2026 Under OBBB | $16,100 | $32,200 | $24,150"
+          }
+        ]
+      },
+      {
+        "label": "Married filing jointly; surviving spouses",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly; Surviving Spouses | Heads of Households",
+        "values": [
+          {
+            "value": "$31,500",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+          },
+          {
+            "value": "$32,200",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly."
+          }
+        ]
+      },
+      {
+        "label": "Heads of households",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "and for heads of households, the standard deduction will be $24,150.",
+        "values": [
+          {
+            "value": "$23,625",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "and for heads of households, the standard deduction is $23,625."
+          },
+          {
+            "value": "$24,150",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "and for heads of households, the standard deduction will be $24,150."
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-single-2026",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-2026",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "smallest-2025",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031100746-032ca0d8:data-table-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every column header occurs in its column quote and every row label occurs in its row quote or the same source paragraph (headers-and-labels-in-quote)"
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 cell value(s) occur in their own quote exactly as the page prints them, as whole tokens — never a crop of a longer number (values-in-quote)"
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 3 rows x 2 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-single-2026\" (lookup) → rows[0] \"$16,100\"; \"largest-2026\" (largest) → rows[1] \"$32,200\"; \"smallest-2025\" (smallest) → rows[0] \"$16,100\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 1 (\"TY 2026 Under OBBB\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "data-table-v1: no weakening — every one of the 5 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "67c899e724e741e9b8f170a16bcf2921",
+    "usage": {
+      "promptTokens": 6770,
+      "completionTokens": 6829,
+      "reasoningTokens": 6173,
+      "cachedTokens": 0
+    },
+    "latencyMs": 41150,
+    "estCostUSD": 0.03748575,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100746-032ca0d8:data-table-v1:r2",
+    "componentId": "data-table-v1",
+    "title": "Standard deduction amounts by filing status for 2025 and 2026",
+    "sources": [
+      {
+        "id": "irs-tax-inflation-adjustments-2026",
+        "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+        "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+        "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "67c899e724e741e9b8f170a16bcf2921",
+      "runId": "job-20261031100746-032ca0d8",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:10:26.197Z"
+    },
+    "seed": 735122185,
+    "labelHeader": "Filing status",
+    "columns": [
+      {
+        "header": "TY 2025 Under OBBB",
+        "unit": "",
+        "numeric": false,
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+      },
+      {
+        "header": "TY 2026 Under OBBB",
+        "unit": "",
+        "numeric": true,
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "TY 2026 Under OBBB | $16,100 | $32,200 | $24,150"
+      }
+    ],
+    "rows": [
+      {
+        "label": "Single; married filing separately",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly; Surviving Spouses | Heads of Households",
+        "values": [
+          {
+            "value": "$15,750",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+          },
+          {
+            "value": "$16,100",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2026 Under OBBB | $16,100 | $32,200 | $24,150"
+          }
+        ]
+      },
+      {
+        "label": "Married filing jointly; surviving spouses",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Standard deduction | Single; Married Filing Separately | Married Filing Jointly; Surviving Spouses | Heads of Households",
+        "values": [
+          {
+            "value": "$31,500",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "TY 2025 Under OBBB | $15,750 | $31,500 | $23,625"
+          },
+          {
+            "value": "$32,200",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly."
+          }
+        ]
+      },
+      {
+        "label": "Heads of households",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "and for heads of households, the standard deduction will be $24,150.",
+        "values": [
+          {
+            "value": "$23,625",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "and for heads of households, the standard deduction is $23,625."
+          },
+          {
+            "value": "$24,150",
+            "sourceId": "irs-tax-inflation-adjustments-2026",
+            "quote": "and for heads of households, the standard deduction will be $24,150."
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-single-2026",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      },
+      {
+        "id": "largest-2026",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      },
+      {
+        "id": "smallest-2025",
+        "kind": "smallest",
+        "rowIndex": -1,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 1,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

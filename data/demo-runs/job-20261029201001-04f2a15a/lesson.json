@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261029201001-04f2a15a",
+  "analysisRef": "job-20261029201001-04f2a15a/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261029201001-04f2a15a:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Wright flight fundamentals from physics to controllable aircraft",
+    "sources": [
+      {
+        "id": "nasa-grc-re-living-the-wright-way",
+        "title": "Guide to Reliving the Wright Way — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/re-living-the-wright-way/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "c7d0a44cd306a87e59d38d81850a825080de38231c0242f7086f5336a80c94c2"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "muse-spark-1.3",
+      "returnedModel": "muse-spark-1.3",
+      "responseId": "chatcmpl-01a18949-51f9-73c0-9378-1779725ea1cf",
+      "runId": "job-20261029201001-04f2a15a",
+      "promptVersion": "s6-v3",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-29T20:10:46.272Z"
+    },
+    "seed": 2241125329,
+    "headline": "Wright flight fundamentals from physics to controllable aircraft",
+    "keyPoints": [
+      {
+        "id": "wright-spirit-access",
+        "point": "Spirit of Wright journey uses aeronautics technology to provide access to space",
+        "quote": "In the spirit of the Wright Brothers, NASA is using aeronautics technology to provide access to space.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "wright-way-basics",
+        "point": "Wright Way shows basic math and physics behind invention of airplane",
+        "quote": "The Wright Way will show you the basic math and physics that led to the invention of the airplane by the Wright Brothers.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "elevator-front",
+        "point": "Elevators are found at front of Wright aircraft",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      },
+      {
+        "id": "lift-weight-goal",
+        "point": "Simulation seeks flight conditions where aircraft lift exceeds aircraft weight",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way"
+      }
+    ],
+    "keyTerms": [
+      {
+        "gloss": "movable wings at front of aircraft for control",
+        "id": "elevators",
+        "quote": "At the front of all of the Wright brothers’ aircraft one finds the elevators.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "elevators"
+      },
+      {
+        "gloss": "upward force that must exceed aircraft weight for flight",
+        "id": "lift-force",
+        "quote": "The objective of this simulation is to find the flight conditions that produce an aircraft lift greater than the aircraft weight.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "lift"
+      },
+      {
+        "gloss": "simulation modeled on Wright testing device for airflow",
+        "id": "wind-tunnel",
+        "quote": "This simulation works exactly the same way that the Wright Brother’s 1901 wind tunnel worked.",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "wind tunnel"
+      },
+      {
+        "gloss": "turning effect described as moments in fundamentals list",
+        "id": "torque-moments",
+        "quote": "Torque (Moments)",
+        "sourceId": "nasa-grc-re-living-the-wright-way",
+        "term": "Torque"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261029201001-04f2a15a:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261029201001-04f2a15a:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "civics",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers the census every 10 years on April 1 in years ending in zero, constitutional mandate in Article I and Title 13, first census in 1790 with 3,929,625 people and 105 seats among 15 states, growth to 435 seats in 1913, apportionment and redistricting uses, and 72 year confidentiality rule.",
+    "overview": {
+      "headline": "How the ten year census shapes House seats and district lines",
+      "keyPoints": [
+        {
+          "id": "census-timing",
+          "point": "The census is conducted every ten years on April 1 in years ending in zero.",
+          "sourceId": "census-about-decennial-census",
+          "quote": "The U.S. Census Bureau conducts the census in years ending in zero, on Census Day, which is April 1."
+        },
+        {
+          "id": "census-apportionment-use",
+          "point": "Census data are used to apportion House seats among the states based on population.",
+          "sourceId": "census-about-decennial-census",
+          "quote": "The data collected by the decennial census are used to apportion the number of seats each state has in the U.S. House of Representatives."
+        },
+        {
+          "id": "constitution-enumeration",
+          "point": "The Constitution directs that an enumeration be taken every ten years.",
+          "sourceId": "census-about-decennial-census",
+          "quote": "The Constitution of the United States, Article I, Sections 2 and 9, directs that a census or enumeration be taken."
+        },
+        {
+          "id": "redistricting-after-census",
+          "point": "Redistricting occurs after each census when state officials redraw congressional district boundaries.",
+          "sourceId": "census-about-decennial-census",
+          "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census."
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "apportionment",
+          "term": "apportionment",
+          "gloss": "dividing House seats among the states based on population figures",
+          "sourceId": "census-about-decennial-census",
+          "quote": "Apportionment is the process of dividing the seats in the House of Representatives among the 50 states based on the population figures collected during the decennial census."
+        },
+        {
+          "id": "redistricting",
+          "term": "redistricting",
+          "gloss": "process where state officials redraw district boundaries after population shifts",
+          "sourceId": "census-about-decennial-census",
+          "quote": "Redistricting is when state officials redraw the boundaries of the congressional and state legislative districts in their states after each census."
+        },
+        {
+          "id": "enumeration",
+          "term": "enumeration",
+          "gloss": "official count of the population directed by the Constitution",
+          "sourceId": "census-about-decennial-census",
+          "quote": "The Constitution of the United States, Article I, Sections 2 and 9, directs that a census or enumeration be taken."
+        },
+        {
+          "id": "decennial-census",
+          "term": "decennial census",
+          "gloss": "census conducted every ten years to apportion seats based on collected population data",
+          "sourceId": "census-about-decennial-census",
+          "quote": "The data collected by the decennial census are used to apportion the number of seats each state has in the U.S. House of Representatives."
+        },
+        {
+          "id": "title-13",
+          "term": "Title 13",
+          "gloss": "federal law that requires congressional notification of census subjects years in advance",
+          "sourceId": "census-about-decennial-census",
+          "quote": "Title 13 requires the Census Bureau to notify Congress of the planned subjects for the census no later than three years before that census"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "sequence-v1",
+        "pedagogicalReason": "Shows the ordered steps from notification deadlines to census day to apportionment to redistricting in taught order",
+        "focusQuote": "Every 10 years, the U.S. Census Bureau conducts a census to determine the number of people living in the United States.",
+        "focusSourceId": "census-about-decennial-census"
+      },
+      {
+        "componentId": "compare-table-v1",
+        "pedagogicalReason": "Contrasts the two post census processes that divide seats among states and redraw district lines",
+        "focusQuote": "Apportionment is the process of dividing the seats in the House of Representatives among the 50 states based on the population figures collected during the decennial census.",
+        "focusSourceId": "census-about-decennial-census"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095514-fcc537eb:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"civics\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3272 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[0] (apportionment): quote \"Apportionment is the process of dividing the seats in the Ho\" is 173 characters, expected <= 150; componentPlan[1] (compare-table-v1): quote \"Apportionment is the process of dividing the seats in the Ho\" is 173 characters, expected <= 150 (expected verbatim quotes of 1-150 characters that appear in the cited source)",
+        "path": "/overview/keyTerms/0/quote",
+        "affected": [
+          "/overview/keyTerms/0/quote",
+          "/componentPlan/1/focusQuote"
+        ]
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": false,
+        "message": "keyTerms[0].quote is 173 characters, expected 1-150; componentPlan[1].focusQuote is 173 characters, expected 1-150",
+        "path": "/overview/keyTerms/0/quote",
+        "affected": [
+          "/overview/keyTerms/0/quote",
+          "/componentPlan/1/focusQuote"
+        ]
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 0 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /overview/keyTerms/2/gloss: \"official count of the population directed by the Constitutio\" (token \"official\") (R-SUB-4: never name the publisher in generated strings — not by full name, not by acronym, not via \"according to\"; never use \"as stated by\" / \"official\" / \"endorsed\" wording)",
+        "path": "/overview/keyTerms/2/gloss",
+        "affected": [
+          "/overview/keyTerms/2/gloss"
+        ]
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": false,
+        "message": "keyTerms[0] (apportionment): quote \"Apportionment is the process of dividing the seats in the Ho\" is 173 characters, expected <= 150 (expected verbatim quotes of 1-150 characters from the cited source)",
+        "path": "/overview/keyTerms/0/quote",
+        "affected": [
+          "/overview/keyTerms/0/quote"
+        ]
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "publisher claim found at /keyTerms/2/gloss: \"official count of the population directed by the Constitutio\" (token \"official\") (expected no publisher naming in generated text)",
+        "path": "/overview/keyTerms/2/gloss",
+        "affected": [
+          "/overview/keyTerms/2/gloss"
+        ]
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 4 (3-6) and keyTerms 5 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "338a27312d7f41deb3dc25ad802f2888",
+    "usage": {
+      "promptTokens": 4929,
+      "completionTokens": 10494,
+      "reasoningTokens": 9594,
+      "cachedTokens": 0
+    },
+    "latencyMs": 63528,
+    "estCostUSD": 0.05076075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

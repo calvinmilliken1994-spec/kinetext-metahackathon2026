@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031105442-5f80212e",
+  "analysisRef": "job-20261031105442-5f80212e/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105442-5f80212e:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How the SI defines and organizes measurement units",
+    "sources": [
+      {
+        "id": "nist-si-units",
+        "title": "SI Units — NIST Office of Weights and Measures, Metric (SI) Program",
+        "locator": "https://www.nist.gov/pml/owm/metric-si/si-units",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Office of Weights and Measures, Metric (SI) Program, 'SI Units'. Credit: NIST. Per the NIST Copyrights & Disclaimers, 'NIST web pages are provided as a public service by the National Institute of Standards and Technology (NIST). With the exception of material marked as copyrighted, information presented on NIST sites are considered public information and may be distributed or copied. Use of appropriate byline/photo/image credits is requested.' The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "c43e5958aca8c142d4a9c1d75b0294b983d04a0e787bee139b20bfd1f75f21a3"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "16e634744d3448d58337e4aecff759aa",
+      "runId": "job-20261031105442-5f80212e",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:56:25.438Z"
+    },
+    "seed": 3991325665,
+    "headline": "How the SI defines and organizes measurement units",
+    "keyPoints": [
+      {
+        "id": "defining-constants",
+        "point": "The SI rests on seven defining constants including the Planck constant and the speed of light in vacuum.",
+        "sourceId": "nist-si-units",
+        "quote": "The SI rests on a foundation of seven (7) defining constants"
+      },
+      {
+        "id": "base-derived-relationship",
+        "point": "The SI contains 7 base units that define 22 derived units with special names and symbols.",
+        "sourceId": "nist-si-units",
+        "quote": "The SI is made up of 7 base units that define the 22 derived units with special names and symbols"
+      },
+      {
+        "id": "core-si-set",
+        "point": "The base units and derived units with special names form a core set of twenty-nine SI units.",
+        "sourceId": "nist-si-units",
+        "quote": "Together the base units and derived units with special names (twenty-nine units) form the core set of SI units."
+      },
+      {
+        "id": "value-example",
+        "point": "The value of a physical quantity is expressed as the product of a number and a unit, such as a height of 169 m.",
+        "sourceId": "nist-si-units",
+        "quote": "the value of the height hW of the Washington Monument is hW = 169 m"
+      },
+      {
+        "id": "prefix-range",
+        "point": "Twenty-four prefixes ranging from 10^30 to 10^−30 modify unit magnitude.",
+        "sourceId": "nist-si-units",
+        "quote": "Twenty-four prefixes ranging from 10^30 to 10^−30, are currently recognized for use."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "mole",
+        "term": "mole",
+        "gloss": "SI base unit for amount of substance",
+        "sourceId": "nist-si-units",
+        "quote": "Amount of substance - mole (mol)"
+      },
+      {
+        "id": "meter",
+        "term": "meter",
+        "gloss": "SI base unit for Length measurement",
+        "sourceId": "nist-si-units",
+        "quote": "Length - meter (m)"
+      },
+      {
+        "id": "physical-quantity",
+        "term": "physical quantity",
+        "gloss": "quantity used in mathematical equations of science",
+        "sourceId": "nist-si-units",
+        "quote": "A physical quantity is a quantity that can be used in the mathematical equations of science and technology."
+      },
+      {
+        "id": "unit",
+        "term": "unit",
+        "gloss": "particular physical quantity adopted by convention to express value",
+        "sourceId": "nist-si-units",
+        "quote": "A unit is a particular physical quantity, defined and adopted by convention"
+      },
+      {
+        "id": "value",
+        "term": "value",
+        "gloss": "quantitative expression of a physical quantity as product of number and unit",
+        "sourceId": "nist-si-units",
+        "quote": "The value of a physical quantity is the quantitative expression of a particular physical quantity as the product of a number and a unit"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031105442-5f80212e:sort-groups-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105442-5f80212e:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,551 @@
+{
+  "gen": {
+    "schemaVersion": "data-table-v1",
+    "title": "Median household income in nominal and inflation adjusted dollars",
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Median income, nominal",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+      },
+      {
+        "header": "CPI-U annual average index",
+        "unit": "index",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+      },
+      {
+        "header": "Median income, constant 2010 dollars",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+      }
+    ],
+    "rows": [
+      {
+        "label": "2010",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent",
+        "values": [
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          },
+          {
+            "value": "218.06",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          },
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "Constant dollars"
+          }
+        ]
+      },
+      {
+        "label": "2013",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation.",
+        "values": [
+          {
+            "value": "$53,585.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars."
+          },
+          {
+            "value": "232.96",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+          },
+          {
+            "value": "$50,369.90",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          }
+        ]
+      },
+      {
+        "label": "2016",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "An example conversion to constant 2010 dollars is shown in table 3.",
+        "values": [
+          {
+            "value": "$59,039.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+          },
+          {
+            "value": "240.01",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation."
+          },
+          {
+            "value": "$53,725.49",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          }
+        ]
+      },
+      {
+        "label": "2018",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars.",
+        "values": [
+          {
+            "value": "$63,179.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+          },
+          {
+            "value": "251.11",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "Constant dollars"
+          },
+          {
+            "value": "$54,965.73",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          }
+        ]
+      },
+      {
+        "label": "2019",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below.",
+        "values": [
+          {
+            "value": "$68,703.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          },
+          {
+            "value": "255.66",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          },
+          {
+            "value": "$58,397.55",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+          }
+        ]
+      },
+      {
+        "label": "2021",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Constant dollars",
+        "values": [
+          {
+            "value": "$70,784.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars."
+          },
+          {
+            "value": "270.97",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          },
+          {
+            "value": "$56,627.20",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-constant-2019",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-constant-income",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "lookup-cpi-2010",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  },
+  "report": {
+    "artifactId": "job-20261031095130-ba41acad:data-table-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every data-table title, header, unit, label, value length and question id shape is within the frozen limits"
+      },
+      {
+        "id": "DT-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 27 column, row and cell quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "DT-02",
+        "kind": "grounding",
+        "passed": false,
+        "message": "columns[0]: the header \"Median income, nominal\" does not occur in its quote \"An example conversion to constant 2010 dollars is shown in t\" (the column quote must contain the header as the page prints it); columns[1]: the header \"CPI-U annual average index\" does not occur in its quote \"The purchasing power of a dollar in 2022 was about 92.6 perc\" (the column quote must contain the header as the page prints it); columns[2]: the header \"Median income, constant 2010 dollars\" does not occur in its quote \"This is done by multiplying each dollar amount by a ratio of\" (the column quote must contain the header as the page prints it); rows[1]: the label \"2013\" occurs neither in its quote \"This means that the purchasing power of the dollar declined \" nor in the same source paragraph (the row must be the page's own row); rows[2]: the label \"2016\" occurs neither in its quote \"An example conversion to constant 2010 dollars is shown in t\" nor in the same source paragraph (the row must be the page's own row); rows[3]: the label \"2018\" occurs neither in its quote \"it is frequently necessary to convert current or nominal dol\" nor in the same source paragraph (the row must be the page's own row); rows[4]: the label \"2019\" occurs neither in its quote \"This is done by multiplying each dollar amount by a ratio of\" nor in the same source paragraph (the row must be the page's own row); rows[5]: the label \"2021\" occurs neither in its quote \"Constant dollars\" nor in the same source paragraph (the row must be the page's own row)",
+        "path": "/columns/0/header",
+        "affected": [
+          "/columns/0/header",
+          "/columns/0/quote",
+          "/columns/1/header",
+          "/columns/1/quote",
+          "/columns/2/header",
+          "/columns/2/quote",
+          "/rows/1/label",
+          "/rows/1/quote",
+          "/rows/2/label",
+          "/rows/2/quote",
+          "/rows/3/label",
+          "/rows/3/quote",
+          "/rows/4/label",
+          "/rows/4/quote",
+          "/rows/5/label",
+          "/rows/5/quote"
+        ]
+      },
+      {
+        "id": "DT-03",
+        "kind": "grounding",
+        "passed": false,
+        "message": "rows[0].values[0]: the value \"$49,276.00\" does not occur in its quote \"while the nominal U.S. median household income rose from $49\" at all; rows[0].values[1]: the value \"218.06\" does not occur in its quote \"multiply the dollar amount by the ratio of the CPI-U U.S. ci\" at all; rows[0].values[2]: the value \"$49,276.00\" does not occur in its quote \"Constant dollars\" at all; rows[1].values[0]: the value \"$53,585.00\" does not occur in its quote \"it is frequently necessary to convert current or nominal dol\" at all; rows[1].values[1]: the value \"232.96\" does not occur in its quote \"The purchasing power of a dollar in 2022 was about 92.6 perc\" at all; rows[1].values[2]: the value \"$50,369.90\" does not occur in its quote \"This is done by multiplying each dollar amount by a ratio of\" at all; rows[2].values[0]: the value \"$59,039.00\" does not occur in its quote \"An example conversion to constant 2010 dollars is shown in t\" at all; rows[2].values[1]: the value \"240.01\" does not occur in its quote \"This means that the purchasing power of the dollar declined \" at all; rows[2].values[2]: the value \"$53,725.49\" does not occur in its quote \"while the nominal U.S. median household income rose from $49\" at all; rows[3].values[0]: the value \"$63,179.00\" does not occur in its quote \"The purchasing power of a dollar in 2022 was about 92.6 perc\" at all; rows[3].values[1]: the value \"251.11\" does not occur in its quote \"Constant dollars\" at all; rows[3].values[2]: the value \"$54,965.73\" does not occur in its quote \"multiply the dollar amount by the ratio of the CPI-U U.S. ci\" at all; rows[4].values[0]: the value \"$68,703.00\" does not occur in its quote \"This is done by multiplying each dollar amount by a ratio of\" at all; rows[4].values[1]: the value \"255.66\" does not occur in its quote \"while the nominal U.S. median household income rose from $49\" at all; rows[4].values[2]: the value \"$58,397.55\" does not occur in its quote \"An example conversion to constant 2010 dollars is shown in t\" at all; rows[5].values[0]: the value \"$70,784.00\" does not occur in its quote \"it is frequently necessary to convert current or nominal dol\" at all; rows[5].values[1]: the value \"270.97\" does not occur in its quote \"This is done by multiplying each dollar amount by a ratio of\" at all; rows[5].values[2]: the value \"$56,627.20\" does not occur in its quote \"multiply the dollar amount by the ratio of the CPI-U U.S. ci\" at all",
+        "path": "/rows/0/values/0/value",
+        "affected": [
+          "/rows/0/values/0/value",
+          "/rows/0/values/0/quote",
+          "/rows/0/values/1/value",
+          "/rows/0/values/1/quote",
+          "/rows/0/values/2/value",
+          "/rows/0/values/2/quote",
+          "/rows/1/values/0/value",
+          "/rows/1/values/0/quote",
+          "/rows/1/values/1/value",
+          "/rows/1/values/1/quote",
+          "/rows/1/values/2/value",
+          "/rows/1/values/2/quote",
+          "/rows/2/values/0/value",
+          "/rows/2/values/0/quote",
+          "/rows/2/values/1/value",
+          "/rows/2/values/1/quote",
+          "/rows/2/values/2/value",
+          "/rows/2/values/2/quote",
+          "/rows/3/values/0/value",
+          "/rows/3/values/0/quote",
+          "/rows/3/values/1/value",
+          "/rows/3/values/1/quote",
+          "/rows/3/values/2/value",
+          "/rows/3/values/2/quote",
+          "/rows/4/values/0/value",
+          "/rows/4/values/0/quote",
+          "/rows/4/values/1/value",
+          "/rows/4/values/1/quote",
+          "/rows/4/values/2/value",
+          "/rows/4/values/2/quote",
+          "/rows/5/values/0/value",
+          "/rows/5/values/0/quote",
+          "/rows/5/values/1/value",
+          "/rows/5/values/1/quote",
+          "/rows/5/values/2/value",
+          "/rows/5/values/2/quote"
+        ]
+      },
+      {
+        "id": "DT-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the table shape is valid: 6 rows x 3 value columns with exactly one value per slot, every numeric column parses with parseTableNumber, and the row labels are distinct (shape-valid)"
+      },
+      {
+        "id": "DT-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "our code answers every question from the table itself: \"lookup-constant-2019\" (lookup) → rows[4] \"$58,397.55\"; \"largest-constant-income\" (largest) → rows[4] \"$58,397.55\"; \"lookup-cpi-2010\" (lookup) → rows[0] \"218.06\" (questions-valid)"
+      },
+      {
+        "id": "DT-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the chart draws the numeric column 2 (\"Median income, constant 2010 dollars\") (chart-valid)"
+      },
+      {
+        "id": "DT-07",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the progressive-rate calculator is off and its sentinels are intact (brackets-valid)"
+      },
+      {
+        "id": "DT-08",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title, the label header, the column headers and units and the row labels appears on the cited page (N-01); cell values are bound to their quotes as printed by DT-03 (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f1726a34756743febea3d2dfa502646d",
+    "usage": {
+      "promptTokens": 4323,
+      "completionTokens": 13195,
+      "reasoningTokens": 11746,
+      "cachedTokens": 0
+    },
+    "latencyMs": 77516,
+    "estCostUSD": 0.0614825,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095130-ba41acad:data-table-v1:r1",
+    "componentId": "data-table-v1",
+    "title": "Median household income in nominal and inflation adjusted dollars",
+    "sources": [
+      {
+        "id": "bls-purchasing-power-constant-dollars",
+        "title": "Purchasing power and constant dollars — U.S. Bureau of Labor Statistics, Consumer Price Index factsheet",
+        "locator": "https://www.bls.gov/cpi/factsheets/purchasing-power-constant-dollars.htm",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Bureau of Labor Statistics, Consumer Price Index, 'Purchasing power and constant dollars'. Credit: U.S. Bureau of Labor Statistics. Per the BLS Linking and Copyright Information, 'The Bureau of Labor Statistics (BLS) is a Federal government agency and everything that we publish, both in hard copy and electronically, is in the public domain, except for previously copyrighted photographs and illustrations. You are free to use our public domain material without specific permission, although we do ask that you cite the Bureau of Labor Statistics as the source.' The U.S. Bureau of Labor Statistics has not reviewed, approved or endorsed this activity.",
+        "sha256": "d70cd76c4b9043e17e99ce430e45904d64b1055c247edaae37dff23e7898f04f"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f1726a34756743febea3d2dfa502646d",
+      "runId": "job-20261031095130-ba41acad",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:54:57.237Z"
+    },
+    "seed": 2544141634,
+    "labelHeader": "Year",
+    "columns": [
+      {
+        "header": "Median income, nominal",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+      },
+      {
+        "header": "CPI-U annual average index",
+        "unit": "index",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+      },
+      {
+        "header": "Median income, constant 2010 dollars",
+        "unit": "dollars",
+        "numeric": true,
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+      }
+    ],
+    "rows": [
+      {
+        "label": "2010",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent",
+        "values": [
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          },
+          {
+            "value": "218.06",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          },
+          {
+            "value": "$49,276.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "Constant dollars"
+          }
+        ]
+      },
+      {
+        "label": "2013",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation.",
+        "values": [
+          {
+            "value": "$53,585.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars."
+          },
+          {
+            "value": "232.96",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+          },
+          {
+            "value": "$50,369.90",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          }
+        ]
+      },
+      {
+        "label": "2016",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "An example conversion to constant 2010 dollars is shown in table 3.",
+        "values": [
+          {
+            "value": "$59,039.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+          },
+          {
+            "value": "240.01",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This means that the purchasing power of the dollar declined about 7.4 percent between 2021 and 2022 because of inflation."
+          },
+          {
+            "value": "$53,725.49",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          }
+        ]
+      },
+      {
+        "label": "2018",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars.",
+        "values": [
+          {
+            "value": "$63,179.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "The purchasing power of a dollar in 2022 was about 92.6 percent of the purchasing power of a dollar in 2021."
+          },
+          {
+            "value": "251.11",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "Constant dollars"
+          },
+          {
+            "value": "$54,965.73",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          }
+        ]
+      },
+      {
+        "label": "2019",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below.",
+        "values": [
+          {
+            "value": "$68,703.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          },
+          {
+            "value": "255.66",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "while the nominal U.S. median household income rose from $49,276 to $70,784 from 2010 to 2021, an increase of 43.6 percent"
+          },
+          {
+            "value": "$58,397.55",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "An example conversion to constant 2010 dollars is shown in table 3."
+          }
+        ]
+      },
+      {
+        "label": "2021",
+        "sourceId": "bls-purchasing-power-constant-dollars",
+        "quote": "Constant dollars",
+        "values": [
+          {
+            "value": "$70,784.00",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "it is frequently necessary to convert current or nominal dollars into constant or real dollars."
+          },
+          {
+            "value": "270.97",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "This is done by multiplying each dollar amount by a ratio of price indexes, using one year as the base, as shown below."
+          },
+          {
+            "value": "$56,627.20",
+            "sourceId": "bls-purchasing-power-constant-dollars",
+            "quote": "multiply the dollar amount by the ratio of the CPI-U U.S. city average all items index values for December 2022 and December 2021"
+          }
+        ]
+      }
+    ],
+    "questions": [
+      {
+        "id": "lookup-constant-2019",
+        "kind": "lookup",
+        "rowIndex": 4,
+        "columnIndex": 2
+      },
+      {
+        "id": "largest-constant-income",
+        "kind": "largest",
+        "rowIndex": -1,
+        "columnIndex": 2
+      },
+      {
+        "id": "lookup-cpi-2010",
+        "kind": "lookup",
+        "rowIndex": 0,
+        "columnIndex": 1
+      }
+    ],
+    "chartColumnIndex": 2,
+    "brackets": {
+      "enabled": false,
+      "rateColumnIndex": -1,
+      "overColumnIndex": -1,
+      "exampleIncome": 0
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "artifactId": "nasa-grc-speed-of-sound-job-20261031103922-8ad67e8b",
+  "revision": 1,
+  "checks": [
+    {
+      "id": "schema.full",
+      "kind": "schema",
+      "passed": true,
+      "message": "spec matches activity-spec.full.speed-of-sound-v1.json (draft-07)"
+    },
+    {
+      "id": "semantic.range.gamma",
+      "kind": "semantic",
+      "passed": true,
+      "message": "gamma min=1.01 < max=1.69 with default=1.4 inside the range"
+    },
+    {
+      "id": "semantic.range.gasConstantJPerKgK",
+      "kind": "semantic",
+      "passed": false,
+      "message": "simulation.gasConstantJPerKgK.min (287) must be < simulation.gasConstantJPerKgK.max (287)",
+      "path": "/simulation/gasConstantJPerKgK",
+      "affected": [
+        "/simulation/gasConstantJPerKgK/min",
+        "/simulation/gasConstantJPerKgK/max"
+      ]
+    },
+    {
+      "id": "semantic.range.temperatureK",
+      "kind": "semantic",
+      "passed": true,
+      "message": "temperatureK min=250 < max=310 with default=288.15 inside the range"
+    },
+    {
+      "id": "semantic.unique-ids",
+      "kind": "semantic",
+      "passed": true,
+      "message": "explanation ids, prediction ids and behavioral test names are unique"
+    },
+    {
+      "id": "refs.sources",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all references resolve: 1 spec source(s), 1 cited sourceId(s)"
+    },
+    {
+      "id": "refs.sha256",
+      "kind": "grounding",
+      "passed": true,
+      "message": "sha256 verified for 1 source(s): stored hash and recomputed text hash both match the spec"
+    },
+    {
+      "id": "grounding.quotes",
+      "kind": "grounding",
+      "passed": true,
+      "message": "all 4 evidence quote(s) count as evidence (>= 8 normalised characters with >= 3 letters/digits, or a compact \"=\" equation with >= 3) and all 4 resolvable quote(s) appear in their source text after whitespace normalisation; every explanation has >= 1 counted quote"
+    },
+    {
+      "id": "behavior.tests",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 2 behavioral test(s) match a=sqrt(gamma*R*T) within tolerance"
+    },
+    {
+      "id": "behavior.predictions",
+      "kind": "behavioral",
+      "passed": true,
+      "message": "all 3 prediction(s) match a=sqrt(gamma*R*T) within tolerance"
+    },
+    {
+      "id": "semantic.tolerance",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every case tolerance is <= maxTolerance('speed-of-sound-v1', computed) across 2 behavioral test(s) and 3 prediction(s)"
+    },
+    {
+      "id": "semantic.predictions-in-range",
+      "kind": "semantic",
+      "passed": false,
+      "message": "prediction \"prediction-2\": gasConstantJPerKgK 400 outside slider range [287, 287]; prediction \"prediction-3\": temperatureK 320 outside slider range [250, 310] (expected every prediction to be reachable with the sliders)",
+      "path": "/predictions",
+      "affected": [
+        "/predictions/1/gasConstantJPerKgK",
+        "/predictions/2/temperatureK"
+      ]
+    },
+    {
+      "id": "semantic.opening-case",
+      "kind": "semantic",
+      "passed": true,
+      "message": "every slider default equals the first prediction (\"prediction-1\")'s input within 1e-9 relative, so the activity opens on its first case"
+    },
+    {
+      "id": "policy.no-publisher-attribution",
+      "kind": "semantic",
+      "passed": false,
+      "message": "publisher attribution found at /title: \"Speed of Sound Interactive — NASA Glenn Research Center, Beg\" (expected no mention of NASA / \"National Aeronautics and Space Administration\" anywhere, and no \"according to / endorsed by / approved by / official conclusion|position of\" wording naming a source or authority — a capitalised word or \"the source/publisher/agency/author/text\" within 40 characters — in generated display fields; NASA's AI-use guidance forbids attributing generated output to NASA)",
+      "path": "/title",
+      "affected": [
+        "/title"
+      ]
+    },
+    {
+      "id": "scope.prose-unverified",
+      "kind": "semantic",
+      "passed": true,
+      "message": "Explanation prose is AI-generated; quotes, numbers and ranges are machine-checked, the wording needs teacher review."
+    }
+  ],
+  "publishable": false
+}

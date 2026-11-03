@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031101452-7d18d0fa",
+  "analysisRef": "job-20261031101452-7d18d0fa/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101452-7d18d0fa:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Secret convention that created a new American government",
+    "sources": [
+      {
+        "id": "nara-constitution",
+        "title": "Constitution of the United States (1787) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/constitution",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Constitution of the United States (1787)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "a14175b009333bebd61eaff70e3393928a8f0dbd0ae00027067c07b15d176db4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "07f472a0495b49c9a1716171965ef7c9",
+      "runId": "job-20261031101452-7d18d0fa",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:15:54.472Z"
+    },
+    "seed": 921658240,
+    "headline": "Secret convention that created a new American government",
+    "keyPoints": [
+      {
+        "id": "secret-drafting",
+        "point": "Students learn that delegates drafted the constitution in secret during the summer of 1787.",
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787"
+      },
+      {
+        "id": "convention-convened",
+        "point": "Students learn that the Federal Convention convened in Philadelphia on May 14, 1787 to revise the Articles of Confederation.",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation"
+      },
+      {
+        "id": "quorum-delay",
+        "point": "Students learn that members adjourned daily until a quorum of seven states was obtained on May 25.",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25"
+      },
+      {
+        "id": "new-frame-decision",
+        "point": "Students learn that the convention decided to draft an entirely new frame of government rather than amend the Articles.",
+        "sourceId": "nara-constitution",
+        "quote": "rather than amend the existing Articles, the Convention would draft an entirely new frame of government"
+      },
+      {
+        "id": "chief-debates",
+        "point": "Students learn that chief debates concerned power of the central government and representation in Congress.",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "constitutional-convention",
+        "term": "Constitutional Convention",
+        "gloss": "Meeting of delegates who drafted the constitution in secret during the summer",
+        "sourceId": "nara-constitution",
+        "quote": "Drafted in secret by delegates to the Constitutional Convention during the summer of 1787"
+      },
+      {
+        "id": "federal-convention",
+        "term": "Federal Convention",
+        "gloss": "Gathering that convened in Philadelphia to revise the Articles of Confederation",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787"
+      },
+      {
+        "id": "quorum",
+        "term": "quorum",
+        "gloss": "Minimum number of states needed for members to conduct business on a given day",
+        "sourceId": "nara-constitution",
+        "quote": "the members adjourned from day to day until a quorum of seven states was obtained on May 25"
+      },
+      {
+        "id": "articles-of-confederation",
+        "term": "Articles of Confederation",
+        "gloss": "Earlier plan of government the convention met to revise in Philadelphia",
+        "sourceId": "nara-constitution",
+        "quote": "The Federal Convention convened in the State House (Independence Hall) in Philadelphia on May 14, 1787, to revise the Articles of Confederation"
+      },
+      {
+        "id": "central-government",
+        "term": "central government",
+        "gloss": "National authority whose power was debated by delegates",
+        "sourceId": "nara-constitution",
+        "quote": "Among the chief points at issue were how much power to allow the central government"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031101452-7d18d0fa:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031101452-7d18d0fa:quiz-cards-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

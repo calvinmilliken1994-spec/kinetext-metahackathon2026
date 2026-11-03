@@ -1,0 +1,199 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How genes use transcription and translation to make proteins",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "genes-contain-instructions",
+        "label": "Genes contain instructions for proteins",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Most genes contain the information needed to make functional molecules called proteins.",
+        "orderHint": ""
+      },
+      {
+        "id": "expression-two-steps",
+        "label": "Gene expression has two main steps",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "It consists of two major steps: transcription and translation.",
+        "orderHint": ""
+      },
+      {
+        "id": "transcription-in-nucleus",
+        "label": "Transcription copies DNA to RNA in nucleus",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "During the process of transcription, the information stored in a gene's DNA is passed to a similar molecule called RNA",
+        "orderHint": ""
+      },
+      {
+        "id": "mrna-carries-message",
+        "label": "Messenger RNA carries message to cytoplasm",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "is called messenger RNA (mRNA) because it carries the information, or message, from the DNA out of the nucleus into the cytoplasm.",
+        "orderHint": ""
+      },
+      {
+        "id": "translation-in-cytoplasm",
+        "label": "Translation builds protein at ribosome in cytoplasm",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm.",
+        "orderHint": ""
+      },
+      {
+        "id": "assembly-until-stop",
+        "label": "Protein assembly stops at stop codon",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Protein assembly continues until the ribosome encounters a “stop” codon (a sequence of three nucleotides that does not code for an amino acid).",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031100925-4f1bf635:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 6 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 6 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "6d40642cf41b4fa2bc7737a699dbd6be",
+    "usage": {
+      "promptTokens": 2674,
+      "completionTokens": 7682,
+      "reasoningTokens": 7318,
+      "cachedTokens": 0
+    },
+    "latencyMs": 40762,
+    "estCostUSD": 0.035991,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100925-4f1bf635:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How genes use transcription and translation to make proteins",
+    "sources": [
+      {
+        "id": "medlineplus-protein-production",
+        "title": "How do genes direct the production of proteins? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/howgeneswork/makingprotein/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "c477ae45c51062d816f0a0359713d0ba6c996d2278003e7209e3b7b222b0639b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "6d40642cf41b4fa2bc7737a699dbd6be",
+      "runId": "job-20261031100925-4f1bf635",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:10:52.296Z"
+    },
+    "seed": 864312586,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "",
+    "steps": [
+      {
+        "id": "genes-contain-instructions",
+        "label": "Genes contain instructions for proteins",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Most genes contain the information needed to make functional molecules called proteins.",
+        "orderHint": ""
+      },
+      {
+        "id": "expression-two-steps",
+        "label": "Gene expression has two main steps",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "It consists of two major steps: transcription and translation.",
+        "orderHint": ""
+      },
+      {
+        "id": "transcription-in-nucleus",
+        "label": "Transcription copies DNA to RNA in nucleus",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "During the process of transcription, the information stored in a gene's DNA is passed to a similar molecule called RNA",
+        "orderHint": ""
+      },
+      {
+        "id": "mrna-carries-message",
+        "label": "Messenger RNA carries message to cytoplasm",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "is called messenger RNA (mRNA) because it carries the information, or message, from the DNA out of the nucleus into the cytoplasm.",
+        "orderHint": ""
+      },
+      {
+        "id": "translation-in-cytoplasm",
+        "label": "Translation builds protein at ribosome in cytoplasm",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Translation, the second step in getting from a gene to a protein, takes place in the cytoplasm.",
+        "orderHint": ""
+      },
+      {
+        "id": "assembly-until-stop",
+        "label": "Protein assembly stops at stop codon",
+        "sourceId": "medlineplus-protein-production",
+        "quote": "Protein assembly continues until the ribosome encounters a “stop” codon (a sequence of three nucleotides that does not code for an amino acid).",
+        "orderHint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261031102609-763ed001",
+  "analysisRef": "job-20261031102609-763ed001/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102609-763ed001:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Understanding drag and how the drag equation combines flow conditions and shape",
+    "sources": [
+      {
+        "id": "nasa-grc-drag-equation",
+        "title": "Drag Equation — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9462a6186d8b00e0dbf2618e4a6701edc9448614e144af1f4bc0b53b59f6ceed"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "1c937ec6812846eb9ec198c737fdae12",
+      "runId": "job-20261031102609-763ed001",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:26:55.473Z"
+    },
+    "seed": 3394712664,
+    "headline": "Understanding drag and how the drag equation combines flow conditions and shape",
+    "keyPoints": [
+      {
+        "id": "drag-dependence",
+        "point": "Drag depends on air density and the square of velocity along with viscosity, compressibility, size, shape and inclination.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity, the air’s viscosity and compressibility, the size and shape of the body"
+      },
+      {
+        "id": "drag-equation",
+        "point": "The drag equation relates drag to drag coefficient, density, velocity squared and reference area.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "drag D is equal to the drag coefficient Cd times the density rho (ρ) times half of the velocity V squared times the reference area A"
+      },
+      {
+        "id": "drag-components",
+        "point": "The drag coefficient bundles form drag, skin friction drag, wave drag and induced drag into a single value.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The drag coefficient given above includes form drag, skin friction drag, wave drag, and induced drag components."
+      },
+      {
+        "id": "experimental-determination",
+        "point": "Drag coefficients are determined experimentally in a wind tunnel for given air conditions and shape.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag coefficients are almost always determined experimentally using a wind tunnel."
+      },
+      {
+        "id": "reference-area-choice",
+        "point": "The reference area can be total surface area, frontal area or wing area and changes the coefficient value while drag stays the same.",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "If we think of drag as being caused by friction between the air and the body, a logical choice would be the total surface area of the body."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "term-drag",
+        "term": "drag",
+        "gloss": "aerodynamic force opposing motion that depends on density, velocity, viscosity and shape",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Drag depends on the density of the air, the square of the velocity, the air’s viscosity and compressibility"
+      },
+      {
+        "id": "term-drag-coefficient",
+        "term": "drag coefficient",
+        "gloss": "single variable that collects complex effects of shape, inclination and viscosity into the drag equation",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "For drag, this variable is called the drag coefficient, designated “Cd.”"
+      },
+      {
+        "id": "term-reference-area",
+        "term": "reference area",
+        "gloss": "chosen area that characterizes size dependence in the drag and lift force equations",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "Notice that the area (A) given in the drag equation is given as a reference area."
+      },
+      {
+        "id": "term-density",
+        "term": "density",
+        "gloss": "mass per volume of air designated by the Greek letter rho in the equation",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "In the equation given above, the density is designated by the letter rho (ρ)."
+      },
+      {
+        "id": "term-dynamic-pressure",
+        "term": "dynamic pressure",
+        "gloss": "combined term of density times velocity squared divided by two that appears in Bernoulli pressure equation",
+        "sourceId": "nasa-grc-drag-equation",
+        "quote": "The combination of terms “density times the square of the velocity divided by two” is called the dynamic pressure"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031102609-763ed001:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031102609-763ed001:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Recall the Louisiana Purchase facts",
+    "cards": [
+      {
+        "id": "purchase-size",
+        "stem": "How much land did the United States obtain in the 1803 transaction with France?",
+        "options": [
+          "828,000 square miles",
+          "the port of New Orleans alone",
+          "a narrow coastal strip",
+          "land east of the Appalachians"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": ""
+      },
+      {
+        "id": "agreed-price",
+        "stem": "What price did the American negotiators agree to pay for Louisiana?",
+        "options": [
+          "$15 million",
+          "up to $10 million",
+          "For roughly 4 cents an acre",
+          "to occupy a land of unimaginable riches"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the American negotiators swiftly agreed to a price of $15 million",
+        "hint": ""
+      },
+      {
+        "id": "negotiators",
+        "stem": "Who was authorized to negotiate the purchase from France?",
+        "options": [
+          "Robert Livingston and James Monroe",
+          "Thomas Jefferson",
+          "Napoleon",
+          "thousands of American Indians"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": ""
+      },
+      {
+        "id": "offered-territory",
+        "stem": "What were the American negotiators offered beyond their original instructions?",
+        "options": [
+          "the entire territory of Louisiana",
+          "the port of New Orleans and the Floridas",
+          "828,000 square miles west of the river",
+          "a land of unimaginable riches"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "hint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031102111-672e0f27:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "c399236200034958b25b06a4b26381a4",
+    "usage": {
+      "promptTokens": 2972,
+      "completionTokens": 7560,
+      "reasoningTokens": 7160,
+      "cachedTokens": 0
+    },
+    "latencyMs": 54811,
+    "estCostUSD": 0.035845,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102111-672e0f27:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Recall the Louisiana Purchase facts",
+    "sources": [
+      {
+        "id": "nara-louisiana-purchase-treaty",
+        "title": "Louisiana Purchase Treaty (1803) — National Archives, Milestone Documents (agency-written introduction)",
+        "locator": "https://www.archives.gov/milestone-documents/louisiana-purchase-treaty",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: National Archives and Records Administration, Milestone Documents, 'Louisiana Purchase Treaty (1803)' — agency-written introduction and background only. Works of the U.S. Government produced by the National Archives and Records Administration are in the public domain. The National Archives and Records Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "6da19e2b0134ca81169b3c5b0a0461ae48243446219561e760b32cb2ed7cce4b"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "c399236200034958b25b06a4b26381a4",
+      "runId": "job-20261031102111-672e0f27",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:23:13.667Z"
+    },
+    "seed": 2195672381,
+    "cards": [
+      {
+        "id": "purchase-size",
+        "stem": "How much land did the United States obtain in the 1803 transaction with France?",
+        "options": [
+          "828,000 square miles",
+          "the port of New Orleans alone",
+          "a narrow coastal strip",
+          "land east of the Appalachians"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the United States purchased 828,000 square miles of land west of the Mississippi River for $15 million",
+        "hint": ""
+      },
+      {
+        "id": "agreed-price",
+        "stem": "What price did the American negotiators agree to pay for Louisiana?",
+        "options": [
+          "$15 million",
+          "up to $10 million",
+          "For roughly 4 cents an acre",
+          "to occupy a land of unimaginable riches"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "the American negotiators swiftly agreed to a price of $15 million",
+        "hint": ""
+      },
+      {
+        "id": "negotiators",
+        "stem": "Who was authorized to negotiate the purchase from France?",
+        "options": [
+          "Robert Livingston and James Monroe",
+          "Thomas Jefferson",
+          "Napoleon",
+          "thousands of American Indians"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "negotiators Robert Livingston and James Monroe were authorized to pay France up to $10 million solely for the port of New Orleans and the Floridas",
+        "hint": ""
+      },
+      {
+        "id": "offered-territory",
+        "stem": "What were the American negotiators offered beyond their original instructions?",
+        "options": [
+          "the entire territory of Louisiana",
+          "the port of New Orleans and the Floridas",
+          "828,000 square miles west of the river",
+          "a land of unimaginable riches"
+        ],
+        "sourceId": "nara-louisiana-purchase-treaty",
+        "quote": "when they were offered the entire territory of Louisiana – an area larger than Great Britain, France, Germany, Italy, Spain, and Portugal combined",
+        "hint": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "jobId": "job-20261031101734-fca565b7",
+  "sourceId": "nara-electoral-college-key-dates",
+  "status": "succeeded",
+  "purpose": "test-live",
+  "createdAt": "2026-10-31T10:17:34.640Z",
+  "flow": "lesson",
+  "model": "muse-spark-open",
+  "provider": "modal",
+  "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+  "totalCostUSD": 0.199485,
+  "reservedUnknownUSD": 0,
+  "engine": "timeline-v1",
+  "revisions": 2,
+  "repairs": [
+    {
+      "revision": 2,
+      "repairOf": 1,
+      "targeted": [
+        "timeline.date-grounded"
+      ],
+      "fixed": [
+        "timeline.date-grounded"
+      ],
+      "remaining": [],
+      "publishable": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "analysisRepairs": [
+    {
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "fixed": [
+        "A-05",
+        "A-07",
+        "OV-01"
+      ],
+      "remaining": [],
+      "passed": true
+    }
+  ],
+  "sourceKind": "library",
+  "owner": {
+    "pid": 45604,
+    "startedAt": "2026-10-31T10:17:34.640Z"
+  },
+  "lesson": {
+    "overviewReady": true,
+    "componentsPlanned": 2,
+    "componentsPublished": 2,
+    "componentsFailed": 0,
+    "partialPublish": false
+  },
+  "componentRepairs": [
+    {
+      "componentId": "threshold-v1",
+      "attempt": 1,
+      "revision": 2,
+      "targeted": [
+        "TH-03"
+      ],
+      "fixed": [
+        "TH-03"
+      ],
+      "remaining": [],
+      "passed": true,
+      "afterInjectedFault": false
+    }
+  ],
+  "specId": "nara-electoral-college-key-dates-job-20261031101734-fca565b7",
+  "publishable": true,
+  "checksPassed": 12,
+  "checksTotal": 12,
+  "publishedRevision": 2,
+  "finishedAt": "2026-10-31T10:19:41.432Z"
+}

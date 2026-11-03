@@ -1,0 +1,227 @@
+{
+  "analysis": {
+    "analysisVersion": 2,
+    "subject": "computing",
+    "usable": true,
+    "declineCode": "",
+    "declineSummary": "",
+    "pageCoverage": "Page covers purpose and voluntary nature of framework for trustworthy AI, collaborative development process, resource center and profiles for generative AI and critical infrastructure, plus prior documents and translations",
+    "overview": {
+      "headline": "Voluntary framework for managing trustworthy AI risks",
+      "keyPoints": [
+        {
+          "id": "voluntary-use",
+          "point": "Students learn that the framework is intended for voluntary use to improve trustworthiness across design, development, use, and evaluation.",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "The NIST AI Risk Management Framework (AI RMF) is intended for voluntary use and to improve the ability to incorporate trustworthiness considerations"
+        },
+        {
+          "id": "risk-management-purpose",
+          "point": "Students learn that the framework helps manage risks to individuals, organizations, and society associated with artificial intelligence.",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "framework to better manage risks to individuals, organizations, and society associated with artificial intelligence (AI)"
+        },
+        {
+          "id": "collaborative-development",
+          "point": "Students learn that the framework was developed through a consensus-driven, open, transparent, and collaborative process including public input.",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "developed through a consensus-driven, open, transparent, and collaborative process that included a Request for Information"
+        },
+        {
+          "id": "generative-ai-profile",
+          "point": "Students learn that a generative AI profile helps organizations identify unique risks and proposes actions aligned to their goals.",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "The profile can help organizations identify unique risks posed by generative AI and proposes actions for generative AI risk management"
+        }
+      ],
+      "keyTerms": [
+        {
+          "id": "trustworthiness",
+          "term": "trustworthiness",
+          "gloss": "Ability to incorporate reliable behavior that supports trust in design and evaluation",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "to improve the ability to incorporate trustworthiness considerations into the design, development, use, and evaluation"
+        },
+        {
+          "id": "generative-ai",
+          "term": "generative AI",
+          "gloss": "Systems that create new content and bring unique risks needing specific management actions",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "unique risks posed by generative AI and proposes actions for generative AI risk management that best aligns"
+        },
+        {
+          "id": "critical-infrastructure",
+          "term": "critical infrastructure",
+          "gloss": "Systems and operators whose reliable function is vital and who consider specific risk practices",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "AI RMF Profile on Trustworthy AI in Critical Infrastructure. The profile will guide critical infrastructure operators"
+        },
+        {
+          "id": "artificial-intelligence",
+          "term": "artificial intelligence",
+          "gloss": "Computer systems that perform tasks associated with intelligent behavior and carry societal risks",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "framework to better manage risks to individuals, organizations, and society associated with artificial intelligence (AI)"
+        },
+        {
+          "id": "voluntary-use-term",
+          "term": "voluntary use",
+          "gloss": "Optional adoption intended to improve ability to add trustworthiness considerations",
+          "sourceId": "nist-ai-risk-management-framework",
+          "quote": "The NIST AI Risk Management Framework (AI RMF) is intended for voluntary use and to improve the ability to incorporate trustworthiness considerations"
+        }
+      ]
+    },
+    "componentPlan": [
+      {
+        "componentId": "timeline-v1",
+        "pedagogicalReason": "Students place framework milestones in chronological order to see how collaborative development shaped the voluntary guidance over time",
+        "focusQuote": "Released on January 26, 2023, the Framework was developed through a consensus-driven, open, transparent, and collaborative process",
+        "focusSourceId": "nist-ai-risk-management-framework"
+      },
+      {
+        "componentId": "quiz-cards-v1",
+        "pedagogicalReason": "Students recall core purposes and profiles of the framework through checkable facts that reinforce trustworthy AI practices",
+        "focusQuote": "The NIST AI Risk Management Framework (AI RMF) is intended for voluntary use and to improve the ability to incorporate trustworthiness considerations",
+        "focusSourceId": "nist-ai-risk-management-framework"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031104747-a1c62a13:analysis",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.analysis-v2",
+        "kind": "schema",
+        "passed": true,
+        "message": "analysis matches source-analysis-v2.gen.json"
+      },
+      {
+        "id": "A-01",
+        "kind": "semantic",
+        "passed": true,
+        "message": "analysisVersion is 2"
+      },
+      {
+        "id": "A-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "A-02 mirrors-agree is retired (v2 has no legacy mirror fields); the id is reserved and always passes"
+      },
+      {
+        "id": "A-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "subject \"computing\" is valid (subject-valid)"
+      },
+      {
+        "id": "A-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "decline fields are consistent with usable=true (source text 3068 normalised characters, stub threshold 300) (decline-integrity)"
+      },
+      {
+        "id": "A-05",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 11 overview and plan quote(s) appear verbatim in their cited source after whitespace normalisation (overview-quotes-verbatim)"
+      },
+      {
+        "id": "A-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every cited sourceId resolves to a provided source document (quote-sourceids)"
+      },
+      {
+        "id": "A-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every count and text length is in the §1.3 range (keyPoints 4, keyTerms 5, componentPlan 2; ids match ^[a-z0-9][a-z0-9-]{0,39}$) (counts-in-range)"
+      },
+      {
+        "id": "A-08",
+        "kind": "semantic",
+        "passed": true,
+        "message": "componentPlan obeys the machine-checkable plan rules (2 entries, 1 premium, distinct families and focusQuote regions); R-PLAN-2 (appliesWhen fit), R-PLAN-7 (teaching order) and R-PLAN-9 (2-4-variable formula) need model judgement or the component spec and are not re-checked here (plan-rules)"
+      },
+      {
+        "id": "A-09",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no generated field names a publisher (full name or name acronym from the sources' own title/attribution metadata); \"according to\" counts only when it names the publisher, and \"as stated by\" / \"official\" / \"endorsed\" wording is always a claim; quotes are verbatim source text and exempt (no-publisher-claim)"
+      },
+      {
+        "id": "A-10",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number stated in AI-written analysis text appears on the cited page or in the same quote (N-01) (ai-numbers-checkable)"
+      },
+      {
+        "id": "A-11",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every AI-written field is plain text: no \"<\"/\">\", backticks, control characters, URLs or markdown heading/link/emphasis patterns (quotes and formula/equation fields are exempt) (plain-text)"
+      },
+      {
+        "id": "OV-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 9 overview quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "OV-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every key term appears in its own quote or in the source sentence containing the quote (term-in-quote)"
+      },
+      {
+        "id": "OV-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no AI-written overview field names a publisher token from the sources' own metadata or uses the frozen generic attribution phrases; quotes are exempt (no-publisher-text)"
+      },
+      {
+        "id": "OV-04",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in AI-written overview text appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "OV-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "keyPoints 4 (3-6) and keyTerms 5 (3-8) are within the frozen counts; repair is by retry only (counts-valid)"
+      },
+      {
+        "id": "OV-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every key point shares >= 2 and every gloss >= 1 distinct content word (>= 4 letters, frozen stoplist) with its own quote (point-quote-overlap)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "25469bfde08c48cb837d70108ed660da",
+    "usage": {
+      "promptTokens": 4881,
+      "completionTokens": 21333,
+      "reasoningTokens": 20546,
+      "cachedTokens": 0
+    },
+    "latencyMs": 119911,
+    "estCostUSD": 0.0967665,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  }
+}

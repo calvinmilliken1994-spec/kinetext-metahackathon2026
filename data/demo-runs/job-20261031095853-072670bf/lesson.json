@@ -1,0 +1,111 @@
+{
+  "jobId": "job-20261031095853-072670bf",
+  "analysisRef": "job-20261031095853-072670bf/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095853-072670bf:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "How daily interest accrues and payments apply to card balances",
+    "sources": [
+      {
+        "id": "cfpb-credit-card-interest-calculation",
+        "title": "How does my credit card company calculate the amount of interest I owe? — Consumer Financial Protection Bureau, Ask CFPB",
+        "locator": "https://www.consumerfinance.gov/ask-cfpb/how-does-my-credit-card-company-calculate-the-amount-of-interest-i-owe-en-51/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Consumer Financial Protection Bureau, Ask CFPB, 'How does my credit card company calculate the amount of interest I owe?'. Information created by the CFPB is in the public domain. The Consumer Financial Protection Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "1d5dbef610660615ac5db9d0b780497b890eb934df9e556f60d3b5900893fa3e"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "2561d94fc5a84386b639d9e261f076dd",
+      "runId": "job-20261031095853-072670bf",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:59:37.197Z"
+    },
+    "seed": 812752347,
+    "headline": "How daily interest accrues and payments apply to card balances",
+    "keyPoints": [
+      {
+        "id": "daily-calculation",
+        "point": "Students learn that issuers calculate interest daily using the average daily balance.",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "Many credit card companies calculate the interest you owe daily, based on your average daily account balance."
+      },
+      {
+        "id": "periodic-rate",
+        "point": "Students learn that the interest charged each day is called the daily periodic rate.",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "The interest charged daily is called the daily periodic rate."
+      },
+      {
+        "id": "grace-period-rule",
+        "point": "Students learn that a grace period lets cardholders avoid interest on purchases by paying the full balance by the due date.",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "If your card has a grace period, you can avoid paying interest on purchases if you pay off your balance in full by the due date each month."
+      },
+      {
+        "id": "payment-allocation",
+        "point": "Students learn that payments above the minimum go first to the balance with the highest interest rate and then to other balances in descending order.",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "the card issuer must generally apply the amount you pay over the minimum first to the balance with the highest interest rate"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "average-balance",
+        "term": "average daily account balance",
+        "gloss": "average of daily balances used to calculate interest owed",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "Many credit card companies calculate the interest you owe daily, based on your average daily account balance."
+      },
+      {
+        "id": "daily-rate",
+        "term": "daily periodic rate",
+        "gloss": "interest charged each day based on the periodic rate",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "The interest charged daily is called the daily periodic rate."
+      },
+      {
+        "id": "grace-period",
+        "term": "grace period",
+        "gloss": "time to pay balance in full and avoid interest on purchases",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "If your card has a grace period, you can avoid paying interest on purchases if you pay off your balance in full by the due date each month."
+      },
+      {
+        "id": "apr-category",
+        "term": "APR",
+        "gloss": "rate shown on statement for each balance category",
+        "sourceId": "cfpb-credit-card-interest-calculation",
+        "quote": "Your statement must show each category with a different APR and the amount of the balance that falls in each category."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031095853-072670bf:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031095853-072670bf:compare-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031102634-53863c17",
+  "analysisRef": "job-20261031102634-53863c17/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031102634-53863c17:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Three zone standard atmosphere model linking temperature and pressure to altitude",
+    "sources": [
+      {
+        "id": "nasa-grc-earth-atmosphere-equation-english",
+        "title": "Earth Atmosphere Equation – English — NASA Glenn Research Center, Beginner's Guide to Aeronautics",
+        "locator": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-english/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NASA Glenn Research Center, Beginner's Guide to Aeronautics. NASA content is generally not subject to copyright in the United States. Used under the NASA Images and Media Usage Guidelines; NASA has not reviewed, approved or endorsed this activity.",
+        "sha256": "27cabc2c092bc294e05f921ebe3f7e6c73775f3986f7aed07bf86ba89fff17f5"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f8505a96b1254cd98a72de52fff53039",
+      "runId": "job-20261031102634-53863c17",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:27:26.238Z"
+    },
+    "seed": 1166506892,
+    "headline": "Three zone standard atmosphere model linking temperature and pressure to altitude",
+    "keyPoints": [
+      {
+        "id": "temperature-altitude",
+        "point": "Students learn that air temperature is highest near the surface and decreases as altitude increases.",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Thus the air temperature is highest near the surface and decreases as altitude increases."
+      },
+      {
+        "id": "pressure-altitude",
+        "point": "Students learn that air pressure decreases as altitude increases because less air remains above.",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "Therefore, air pressure decreases as we increase altitude."
+      },
+      {
+        "id": "density-state",
+        "point": "Students learn that air density depends on temperature and pressure through the equation of state.",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+      },
+      {
+        "id": "three-zone-model",
+        "point": "Students learn that the standard atmosphere model has three zones with different temperature and pressure curve fits.",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The model has three zones with separate curve fits for the troposphere, the lower stratosphere, and the upper stratosphere."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "troposphere",
+        "term": "troposphere",
+        "gloss": "Lowest zone extending from the surface where temperature decreases with height",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The troposphere runs from the surface of the Earth to 36,152 feet."
+      },
+      {
+        "id": "lapse-rate",
+        "term": "lapse rate",
+        "gloss": "Rate of temperature decrease with altitude in the lower atmosphere",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The rate of temperature decrease is called the lapse rate."
+      },
+      {
+        "id": "lower-stratosphere",
+        "term": "lower stratosphere",
+        "gloss": "Middle stratosphere zone where temperature remains constant while pressure falls",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The lower stratosphere runs from 36,152 feet to 82,345 feet."
+      },
+      {
+        "id": "upper-stratosphere",
+        "term": "upper stratosphere",
+        "gloss": "Highest model zone where temperature increases slightly with altitude",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The upper stratosphere model is used for altitudes above 82,345 feet."
+      },
+      {
+        "id": "equation-of-state",
+        "term": "equation of state",
+        "gloss": "Relation linking density and temperature and pressure to derive density from measured values",
+        "sourceId": "nasa-grc-earth-atmosphere-equation-english",
+        "quote": "The air density depends on both the temperature and the pressure through the equation of state and also decreases with increasing altitude."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031102634-53863c17:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "formula-explorer-v1",
+      "specId": "job-20261031102634-53863c17:formula-explorer-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

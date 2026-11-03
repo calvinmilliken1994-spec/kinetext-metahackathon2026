@@ -1,0 +1,196 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "Computing apportionment by equal proportions",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow page order from automatic seats to final tally",
+    "steps": [
+      {
+        "id": "initial-automatic-seat",
+        "label": "Each state receives its automatic seat",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Each of the 50 states is given one seat out of the current total of 435.",
+        "orderHint": ""
+      },
+      {
+        "id": "state-multiplier-formula",
+        "label": "Determine multiplier with geometric mean formula",
+        "sourceId": "census-computing-apportionment",
+        "quote": "1 divided by the square root of n(n-1)",
+        "orderHint": ""
+      },
+      {
+        "id": "calculate-priority-values",
+        "label": "Calculate priority values from population totals",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The resulting numbers are the priority values.",
+        "orderHint": ""
+      },
+      {
+        "id": "rank-assign-seats",
+        "label": "Rank priority values and assign remaining seats",
+        "sourceId": "census-computing-apportionment",
+        "quote": "the next step is to rank and assign seat numbers to the resulting priority values starting with seat 51, until all 435 seats have been assigned",
+        "orderHint": ""
+      },
+      {
+        "id": "tally-state-totals",
+        "label": "Tally final seat totals for each state",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Next, tally the number of seats for each state to arrive at the total number of seats in the House of Representatives apportioned to each state.",
+        "orderHint": ""
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031095603-40b65657:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 5 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 5 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "76eaee63cbf94b77a55c03ba0e7b590b",
+    "usage": {
+      "promptTokens": 3232,
+      "completionTokens": 7299,
+      "reasoningTokens": 6917,
+      "cachedTokens": 0
+    },
+    "latencyMs": 33783,
+    "estCostUSD": 0.03506075,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "define-priority",
+      "reason": "step failed SEQ-03",
+      "checks": [
+        "SEQ-03"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031095603-40b65657:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "Computing apportionment by equal proportions",
+    "sources": [
+      {
+        "id": "census-computing-apportionment",
+        "title": "Computing Apportionment — U.S. Census Bureau, Congressional Apportionment",
+        "locator": "https://www.census.gov/topics/public-sector/congressional-apportionment/about/computing.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Census Bureau, Congressional Apportionment, 'Computing Apportionment'. Credit: U.S. Census Bureau. Per Census Bureau policy DS027 (Research Transparency and Public Access), 'Data/works created by Census Bureau employees generally are not subject to copyright protection within the United States'; the embedded quotation of Article 1, Section 2 of the U.S. Constitution is in the public domain by age. The U.S. Census Bureau has not reviewed, approved or endorsed this activity.",
+        "sha256": "aebb6d0187c5e1990d7aded30e76276837744417fba607704f46e82a7db34bf0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "76eaee63cbf94b77a55c03ba0e7b590b",
+      "runId": "job-20261031095603-40b65657",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T09:58:11.152Z"
+    },
+    "seed": 3462756761,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follow page order from automatic seats to final tally",
+    "steps": [
+      {
+        "id": "initial-automatic-seat",
+        "label": "Each state receives its automatic seat",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Each of the 50 states is given one seat out of the current total of 435.",
+        "orderHint": ""
+      },
+      {
+        "id": "state-multiplier-formula",
+        "label": "Determine multiplier with geometric mean formula",
+        "sourceId": "census-computing-apportionment",
+        "quote": "1 divided by the square root of n(n-1)",
+        "orderHint": ""
+      },
+      {
+        "id": "calculate-priority-values",
+        "label": "Calculate priority values from population totals",
+        "sourceId": "census-computing-apportionment",
+        "quote": "The resulting numbers are the priority values.",
+        "orderHint": ""
+      },
+      {
+        "id": "rank-assign-seats",
+        "label": "Rank priority values and assign remaining seats",
+        "sourceId": "census-computing-apportionment",
+        "quote": "the next step is to rank and assign seat numbers to the resulting priority values starting with seat 51, until all 435 seats have been assigned",
+        "orderHint": ""
+      },
+      {
+        "id": "tally-state-totals",
+        "label": "Tally final seat totals for each state",
+        "sourceId": "census-computing-apportionment",
+        "quote": "Next, tally the number of seats for each state to arrive at the total number of seats in the House of Representatives apportioned to each state.",
+        "orderHint": ""
+      }
+    ]
+  }
+}

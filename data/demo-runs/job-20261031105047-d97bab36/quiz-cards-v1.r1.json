@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": "Checking binary search understanding",
+    "cards": [
+      {
+        "id": "binary-search-method",
+        "stem": "What action defines binary search on a sorted array?",
+        "options": [
+          "dividing the search interval in half",
+          "scanning each element sequentially",
+          "building a hash table for keys"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half.",
+        "hint": "Think about how the interval changes each step."
+      },
+      {
+        "id": "binary-search-runtime",
+        "stem": "What is the run time of binary search?",
+        "options": [
+          "O(ln n)",
+          "O(n)",
+          "O(n log n)"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Run time is O(ln n).",
+        "hint": "Consider how halving changes growth."
+      },
+      {
+        "id": "midpoint-overflow",
+        "stem": "When does the usual midpoint formula overflow?",
+        "options": [
+          "close to the largest expressible integer",
+          "when the interval is empty",
+          "for sorted array inputs only"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "This overflows if high and low are close to the largest expressible integer.",
+        "hint": "Think about limits of integer representation."
+      },
+      {
+        "id": "linked-list-comparisons",
+        "stem": "How many comparisons does binary search use on an ordered linked list?",
+        "options": [
+          "O(log n) comparisons",
+          "O(n) comparisons",
+          "O(n log n) comparisons"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "It makes O(n) traversals, as does linear search, but it only performs O(log n) comparisons.",
+        "hint": "Compare traversals versus comparisons."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031105047-d97bab36:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "fec002d50eb74910aca0beba6a893e8b",
+    "usage": {
+      "promptTokens": 2662,
+      "completionTokens": 7978,
+      "reasoningTokens": 7651,
+      "cachedTokens": 0
+    },
+    "latencyMs": 39090,
+    "estCostUSD": 0.037234,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105047-d97bab36:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": "Checking binary search understanding",
+    "sources": [
+      {
+        "id": "nist-dads-binary-search",
+        "title": "binary search — NIST Dictionary of Algorithms and Data Structures",
+        "locator": "https://xlinux.nist.gov/dads/HTML/binarySearch.html",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NIST Dictionary of Algorithms and Data Structures (Paul E. Black, ed.), 'binary search'. Per the dictionary's Citation and Credit Notice, 'Many of the definitions, as well as the site itself, were originally developed at the National Institute of Standards and Technology by employees of the Federal Government in the course of their official duties. Pursuant to title 17 Section 105 of the United States Code these are not subject to copyright protection and are in the public domain.' Courtesy: NIST Dictionary of Algorithms and Data Structures. The National Institute of Standards and Technology has not reviewed, approved or endorsed this activity.",
+        "sha256": "61d27dc69db770ce1bfe2d15276cf22cb9e6e33120855967d41d6615ce692b53"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "fec002d50eb74910aca0beba6a893e8b",
+      "runId": "job-20261031105047-d97bab36",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:52:03.456Z"
+    },
+    "seed": 74043807,
+    "cards": [
+      {
+        "id": "binary-search-method",
+        "stem": "What action defines binary search on a sorted array?",
+        "options": [
+          "dividing the search interval in half",
+          "scanning each element sequentially",
+          "building a hash table for keys"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Search a sorted array by repeatedly dividing the search interval in half.",
+        "hint": "Think about how the interval changes each step."
+      },
+      {
+        "id": "binary-search-runtime",
+        "stem": "What is the run time of binary search?",
+        "options": [
+          "O(ln n)",
+          "O(n)",
+          "O(n log n)"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "Run time is O(ln n).",
+        "hint": "Consider how halving changes growth."
+      },
+      {
+        "id": "midpoint-overflow",
+        "stem": "When does the usual midpoint formula overflow?",
+        "options": [
+          "close to the largest expressible integer",
+          "when the interval is empty",
+          "for sorted array inputs only"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "This overflows if high and low are close to the largest expressible integer.",
+        "hint": "Think about limits of integer representation."
+      },
+      {
+        "id": "linked-list-comparisons",
+        "stem": "How many comparisons does binary search use on an ordered linked list?",
+        "options": [
+          "O(log n) comparisons",
+          "O(n) comparisons",
+          "O(n log n) comparisons"
+        ],
+        "sourceId": "nist-dads-binary-search",
+        "quote": "It makes O(n) traversals, as does linear search, but it only performs O(log n) comparisons.",
+        "hint": "Compare traversals versus comparisons."
+      }
+    ]
+  }
+}

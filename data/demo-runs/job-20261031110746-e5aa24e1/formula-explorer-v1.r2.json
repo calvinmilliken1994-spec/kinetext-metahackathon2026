@@ -1,0 +1,340 @@
+{
+  "gen": {
+    "schemaVersion": "formula-explorer-v1",
+    "title": "How fault properties control seismic moment",
+    "formulaText": "Moment (MO) = rigidity x area x slip",
+    "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+    "quote": "Moment (MO) = rigidity x area x slip",
+    "expression": "rigidity*area*slip",
+    "variables": [
+      {
+        "name": "rigidity",
+        "pageSymbol": "rigidity",
+        "meaning": "rock strength along fault",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "pascal",
+        "min": 20000000000,
+        "max": 50000000000,
+        "default": 30000000000
+      },
+      {
+        "name": "area",
+        "pageSymbol": "area",
+        "meaning": "fault area that slipped",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "square meter",
+        "min": 100000000,
+        "max": 1000000000000,
+        "default": 10000000000
+      },
+      {
+        "name": "slip",
+        "pageSymbol": "slip",
+        "meaning": "fault movement distance",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "meter",
+        "min": 0.5,
+        "max": 10,
+        "default": 2
+      }
+    ],
+    "xVariable": "slip",
+    "cases": [
+      {
+        "id": "moderate-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 10000000000
+          },
+          {
+            "name": "slip",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "id": "small-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 5000000000
+          },
+          {
+            "name": "slip",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "large-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 50000000000
+          },
+          {
+            "name": "slip",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  },
+  "report": {
+    "artifactId": "job-20261031110746-e5aa24e1:formula-explorer-v1:r2",
+    "revision": 2,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every formula-explorer case id and title shape is within the frozen limits"
+      },
+      {
+        "id": "FE-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "the formula quote (1 quote) appears verbatim in source \"usgs-earthquake-magnitude-energy-intensity\" and formulaText occurs inside the quote after normalisation, with no mathematical token cut at the quote edges (formula-quoted)"
+      },
+      {
+        "id": "FE-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "expression parses in the frozen grammar (<= 120 chars, AST <= 50 nodes, no \"**\", no implicit multiplication) and its variable set equals the declared set (expression-parses)"
+      },
+      {
+        "id": "FE-03",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 variables are declared with valid unique non-reserved names, exact page symbols, grounded quotes (top-level sourceId) and xVariable \"slip\" is one of them (variables-declared)"
+      },
+      {
+        "id": "FE-04",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "all 3 case(s) carry exactly the declared variables with finite in-range inputs and every recomputed output is finite (the system sets the outputs) (cases-recomputed)"
+      },
+      {
+        "id": "FE-05",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "hasSourceExample=false with the empty sourceExample shape (sourceExample-check)"
+      },
+      {
+        "id": "FE-06",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every slider range is sane (finite, min < max, default inside, positive-range ratio <= 1000000) and no literal exponent exceeds 100 (ranges-sane)"
+      },
+      {
+        "id": "FE-07",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in the title and variable meanings appears on the page or in the same quote (N-01); units and formula fields are notation and exempt (numbers-checkable)"
+      },
+      {
+        "id": "FE-08",
+        "kind": "behavioral",
+        "passed": false,
+        "message": "the page formula line could not be parsed with the calculator grammar (the complete formula line does not parse in the frozen grammar (unknown name \"rigidityxareaxslip\" (not a declared variable, function or constant))) and there is no verified FE-05 source example to ground the expression; an unparseable page formula publishes ONLY with a verified source example. The formula could not be checked with our calculator.",
+        "path": "/expression",
+        "affected": [
+          "/expression",
+          "/quote",
+          "/formulaText",
+          "/hasSourceExample",
+          "/sourceExample/quote",
+          "/sourceExample/resultNumber",
+          "/sourceExample/tolerance",
+          "/variables/0/pageSymbol",
+          "/variables/1/pageSymbol",
+          "/variables/2/pageSymbol"
+        ]
+      },
+      {
+        "id": "repair.no-weakening",
+        "kind": "semantic",
+        "passed": true,
+        "message": "formula-explorer-v1: no weakening — every one of the 0 changed field(s) sits under the affected paths recomputed from revision 1, item counts and ids are stable, and no tolerance increased"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "421b88df34c84d16bfa34a074403cb84",
+    "usage": {
+      "promptTokens": 7058,
+      "completionTokens": 4061,
+      "reasoningTokens": 3589,
+      "cachedTokens": 0
+    },
+    "latencyMs": 22988,
+    "estCostUSD": 0.02608175,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110746-e5aa24e1:formula-explorer-v1:r2",
+    "componentId": "formula-explorer-v1",
+    "title": "How fault properties control seismic moment",
+    "sources": [
+      {
+        "id": "usgs-earthquake-magnitude-energy-intensity",
+        "title": "Earthquake Magnitude, Energy Release, and Shaking Intensity — USGS Earthquake Hazards Program",
+        "locator": "https://www.usgs.gov/programs/earthquake-hazards/earthquake-magnitude-energy-release-and-shaking-intensity",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Earthquake Hazards Program, 'Earthquake Magnitude, Energy Release, and Shaking Intensity'. Credit: U.S. Geological Survey. USGS-authored data and information are in the U.S. Public Domain. The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "eff8fa887798c0f7a22ac2d03c1526697c587ed24cb2b9d6b06f58640476f068"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "421b88df34c84d16bfa34a074403cb84",
+      "runId": "job-20261031110746-e5aa24e1",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T11:10:46.648Z"
+    },
+    "seed": 303433388,
+    "formulaText": "Moment (MO) = rigidity x area x slip",
+    "sourceId": "usgs-earthquake-magnitude-energy-intensity",
+    "quote": "Moment (MO) = rigidity x area x slip",
+    "expression": "rigidity*area*slip",
+    "variables": [
+      {
+        "name": "rigidity",
+        "pageSymbol": "rigidity",
+        "meaning": "rock strength along fault",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "pascal",
+        "min": 20000000000,
+        "max": 50000000000,
+        "default": 30000000000
+      },
+      {
+        "name": "area",
+        "pageSymbol": "area",
+        "meaning": "fault area that slipped",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "square meter",
+        "min": 100000000,
+        "max": 1000000000000,
+        "default": 10000000000
+      },
+      {
+        "name": "slip",
+        "pageSymbol": "slip",
+        "meaning": "fault movement distance",
+        "meaningQuoted": false,
+        "quote": "where rigidity is the strength of the rock along the fault, area is the area of the fault that slipped, and slip is the distance the fault moved.",
+        "unit": "meter",
+        "min": 0.5,
+        "max": 10,
+        "default": 2
+      }
+    ],
+    "xVariable": "slip",
+    "cases": [
+      {
+        "id": "moderate-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 10000000000
+          },
+          {
+            "name": "slip",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "id": "small-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 5000000000
+          },
+          {
+            "name": "slip",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "id": "large-rupture",
+        "inputs": [
+          {
+            "name": "rigidity",
+            "value": 30000000000
+          },
+          {
+            "name": "area",
+            "value": 50000000000
+          },
+          {
+            "name": "slip",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "sourceExample": {
+      "quote": "",
+      "resultNumber": 0,
+      "tolerance": 0
+    },
+    "hasSourceExample": false
+  }
+}

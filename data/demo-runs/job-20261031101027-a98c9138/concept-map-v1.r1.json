@@ -1,0 +1,204 @@
+{
+  "gen": {
+    "schemaVersion": "concept-map-v1",
+    "title": "Gene organization and function",
+    "nodes": [
+      {
+        "id": "gene",
+        "label": "Gene"
+      },
+      {
+        "id": "dna",
+        "label": "DNA"
+      },
+      {
+        "id": "chromosome",
+        "label": "Chromosome"
+      },
+      {
+        "id": "proteins",
+        "label": "Proteins"
+      }
+    ],
+    "links": [
+      {
+        "id": "link1",
+        "fromId": "dna",
+        "toId": "gene",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Genes are made up of DNA."
+      },
+      {
+        "id": "link2",
+        "fromId": "gene",
+        "toId": "chromosome",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Each chromosome contains many genes."
+      },
+      {
+        "id": "link3",
+        "fromId": "gene",
+        "toId": "proteins",
+        "relation": "causes",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Some genes act as instructions to make molecules called proteins, which are needed for the body to function."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031101027-a98c9138:concept-map-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every concept-map id pattern, id uniqueness and label shape is within the frozen limits"
+      },
+      {
+        "id": "CM-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 3 link quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "CM-02",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every link has one endpoint label in its quote and the other in the quote or the same source paragraph (endpoints-in-quote; paragraph-level co-mention without a stated link is the design-disclosed false accept — quotes are visible)"
+      },
+      {
+        "id": "CM-03",
+        "kind": "semantic",
+        "passed": false,
+        "message": "links[0] (link1): the relation \"is part of\" is not grounded — neither the relation phrase nor one of its trigger words (part of, parts of, member of, includes, include, including, ...) occurs in the quote or its source sentence (relation-in-quote)",
+        "path": "/links/0/relation",
+        "affected": [
+          "/links/0/relation",
+          "/links/0/quote"
+        ]
+      },
+      {
+        "id": "CM-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "the map is connected over all 4 nodes with no self-loops or duplicate links (graph-connected)"
+      },
+      {
+        "id": "CM-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "nodes 4 (4-8) and links 3 (3-10) are within the frozen counts (counts-valid)"
+      },
+      {
+        "id": "CM-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in node labels and the title appears on a provided page (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": false
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "f8520c9a7275499e999a096f5e3395a3",
+    "usage": {
+      "promptTokens": 2799,
+      "completionTokens": 6612,
+      "reasoningTokens": 6405,
+      "cachedTokens": 0
+    },
+    "latencyMs": 35005,
+    "estCostUSD": 0.03159975,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031101027-a98c9138:concept-map-v1:r1",
+    "componentId": "concept-map-v1",
+    "title": "Gene organization and function",
+    "sources": [
+      {
+        "id": "medlineplus-what-is-a-gene",
+        "title": "What is a gene? — MedlinePlus Genetics, Help Me Understand Genetics",
+        "locator": "https://medlineplus.gov/genetics/understanding/basics/gene/",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: MedlinePlus Genetics, 'Help Me Understand Genetics', U.S. National Library of Medicine. Courtesy of MedlinePlus from the National Library of Medicine. MedlinePlus's 'Linking to and Using Content from MedlinePlus' policy states that works produced by the federal government are not copyrighted under U.S. law and lists the Help Me Understand Genetics handbook among MedlinePlus's public-domain areas; MedlinePlus has not reviewed, approved or endorsed this activity.",
+        "sha256": "f16d75671a5537177f5299f8a7b9f6e06b33d24b58f687a97864b87686bea6c4"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "f8520c9a7275499e999a096f5e3395a3",
+      "runId": "job-20261031101027-a98c9138",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:11:49.149Z"
+    },
+    "seed": 620152408,
+    "nodes": [
+      {
+        "id": "gene",
+        "label": "Gene"
+      },
+      {
+        "id": "dna",
+        "label": "DNA"
+      },
+      {
+        "id": "chromosome",
+        "label": "Chromosome"
+      },
+      {
+        "id": "proteins",
+        "label": "Proteins"
+      }
+    ],
+    "links": [
+      {
+        "id": "link1",
+        "fromId": "dna",
+        "toId": "gene",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Genes are made up of DNA."
+      },
+      {
+        "id": "link2",
+        "fromId": "gene",
+        "toId": "chromosome",
+        "relation": "is part of",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Each chromosome contains many genes."
+      },
+      {
+        "id": "link3",
+        "fromId": "gene",
+        "toId": "proteins",
+        "relation": "causes",
+        "sourceId": "medlineplus-what-is-a-gene",
+        "quote": "Some genes act as instructions to make molecules called proteins, which are needed for the body to function."
+      }
+    ]
+  }
+}

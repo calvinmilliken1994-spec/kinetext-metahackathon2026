@@ -1,0 +1,198 @@
+{
+  "gen": {
+    "schemaVersion": "sequence-v1",
+    "title": "How flood probability is estimated and why storms and floods differ",
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from data collection through probability to storm versus flood factors",
+    "steps": [
+      {
+        "id": "historical-data-basis",
+        "label": "Gather historical rainfall and stage records",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "according to historical data about rainfall and stream stage, the probability of Soandso River reaching a stage of 20 feet is once in 100 years.",
+        "orderHint": "Start with what long records tell us"
+      },
+      {
+        "id": "recurrence-interval-definition",
+        "label": "Define recurrence interval by exceedance chance",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "The recurrence interval is based on the probability that the given event will be equaled or exceeded in any given year.",
+        "orderHint": "Link probability to interval"
+      },
+      {
+        "id": "years-of-record-required",
+        "label": "Use sufficient years of record",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Ten or more years of data are required to perform a frequency analysis for the determination of recurrence intervals.",
+        "orderHint": "Note how much data is needed"
+      },
+      {
+        "id": "soil-saturation-runoff",
+        "label": "Account for soil saturation before storm",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Soil saturation before the storm: Existing conditions prior to the storm can influence the amount of stormwater runoff into the stream system.",
+        "orderHint": "Consider ground conditions before rain"
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110724-10480316:sequence-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every sequence text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "SEQ-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 step quote(s) appear verbatim in their cited source after whitespace normalisation (quotes-verbatim)"
+      },
+      {
+        "id": "SEQ-03",
+        "kind": "behavioral",
+        "passed": true,
+        "message": "the stated order basis \"page-order\" holds: quote start offsets strictly ascend in array order (computed by our code; this proves an order signal, not scientific correctness) (order-basis-holds)"
+      },
+      {
+        "id": "SEQ-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every step has a distinct label after normalisation (distinct-steps)"
+      },
+      {
+        "id": "SEQ-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "steps count 4 is within 4-8; repair is by retry only (count-valid)"
+      },
+      {
+        "id": "SEQ-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in labels, order hints and notes appears on the cited page or in the same quote (N-01) (numbers-checkable)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "9540261230e94f61ba5ffb9a0761c0cc",
+    "usage": {
+      "promptTokens": 4590,
+      "completionTokens": 13188,
+      "reasoningTokens": 12672,
+      "cachedTokens": 0
+    },
+    "latencyMs": 74109,
+    "estCostUSD": 0.0617865,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "pruned": true,
+  "dropped": [
+    {
+      "index": 1,
+      "id": "frequency-analysis-estimate",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    },
+    {
+      "index": 4,
+      "id": "annual-chance-translation",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    },
+    {
+      "index": 5,
+      "id": "rainfall-distribution-limit",
+      "reason": "step failed SEQ-01",
+      "checks": [
+        "SEQ-01"
+      ]
+    }
+  ],
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110724-10480316:sequence-v1:r1",
+    "componentId": "sequence-v1",
+    "title": "How flood probability is estimated and why storms and floods differ",
+    "sources": [
+      {
+        "id": "usgs-100-year-flood",
+        "title": "The 100-Year Flood — U.S. Geological Survey, Water Science School",
+        "locator": "https://www.usgs.gov/water-science-school/science/100-year-flood",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: U.S. Geological Survey, Water Science School, 'The 100-Year Flood'. Credit: U.S. Geological Survey. Per the USGS Copyrights and Credits policy, 'USGS-authored or produced data and information are considered to be in the U.S. Public Domain.' The U.S. Geological Survey has not reviewed, approved or endorsed this activity.",
+        "sha256": "55ac21c4f23e9155fc6ab2b5683e09e743f9a49916222bca885041d1277199da"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9540261230e94f61ba5ffb9a0761c0cc",
+      "runId": "job-20261031110724-10480316",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:09:49.174Z"
+    },
+    "seed": 3277236656,
+    "orderBasis": "page-order",
+    "cyclic": false,
+    "orderNote": "Follows page order from data collection through probability to storm versus flood factors",
+    "steps": [
+      {
+        "id": "historical-data-basis",
+        "label": "Gather historical rainfall and stage records",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "according to historical data about rainfall and stream stage, the probability of Soandso River reaching a stage of 20 feet is once in 100 years.",
+        "orderHint": "Start with what long records tell us"
+      },
+      {
+        "id": "recurrence-interval-definition",
+        "label": "Define recurrence interval by exceedance chance",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "The recurrence interval is based on the probability that the given event will be equaled or exceeded in any given year.",
+        "orderHint": "Link probability to interval"
+      },
+      {
+        "id": "years-of-record-required",
+        "label": "Use sufficient years of record",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Ten or more years of data are required to perform a frequency analysis for the determination of recurrence intervals.",
+        "orderHint": "Note how much data is needed"
+      },
+      {
+        "id": "soil-saturation-runoff",
+        "label": "Account for soil saturation before storm",
+        "sourceId": "usgs-100-year-flood",
+        "quote": "Soil saturation before the storm: Existing conditions prior to the storm can influence the amount of stormwater runoff into the stream system.",
+        "orderHint": "Consider ground conditions before rain"
+      }
+    ]
+  }
+}

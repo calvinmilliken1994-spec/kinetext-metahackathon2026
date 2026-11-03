@@ -1,0 +1,118 @@
+{
+  "jobId": "job-20261031100746-032ca0d8",
+  "analysisRef": "job-20261031100746-032ca0d8/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031100746-032ca0d8:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Federal tax inflation adjustments for 2026 filing season",
+    "sources": [
+      {
+        "id": "irs-tax-inflation-adjustments-2026",
+        "title": "IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill — Internal Revenue Service, IRS Newsroom",
+        "locator": "https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: Internal Revenue Service, IRS Newsroom, 'IRS releases tax inflation adjustments for tax year 2026, including amendments from the One, Big, Beautiful Bill' (IR-2025-103). Credit: Internal Revenue Service. Per the IRS 'Use of content from IRS.gov' policy, 'Content on this website that was created or maintained by federal employees in the course of their duties is not subject to copyright and may be freely copied. Credit is requested.' The Internal Revenue Service has not reviewed, approved or endorsed this activity.",
+        "sha256": "13b2f585e7b6efe64e1ee4d954562f657b4f78bec5b0d6feafe1204e687ed9b0"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "86b1699cca6847de931b7b0657342ac6",
+      "runId": "job-20261031100746-032ca0d8",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T10:08:42.919Z"
+    },
+    "seed": 2430563320,
+    "headline": "Federal tax inflation adjustments for 2026 filing season",
+    "keyPoints": [
+      {
+        "id": "standard-deduction-2026",
+        "point": "Students learn the 2026 standard deduction increases to $32,200 for married couples filing jointly and to $16,100 for single filers.",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly."
+      },
+      {
+        "id": "top-marginal-rate",
+        "point": "Students learn the top tax rate remains 37% for single taxpayers with incomes greater than $640,600 in 2026.",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600"
+      },
+      {
+        "id": "estate-exclusion-2026",
+        "point": "Students learn the estate basic exclusion rises to $15,000,000 for decedents in 2026, up from $13,990,000 in 2025.",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Estates of decedents who die during 2026 have a basic exclusion amount of $15,000,000, up from a total of $13,990,000"
+      },
+      {
+        "id": "eitc-maximum-2026",
+        "point": "Students learn the 2026 earned income credit maximum is $8,231 for taxpayers with three qualifying children, up from $8,046 in 2025.",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231 for qualifying taxpayers who have three or more qualifying children,"
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "standard-deduction",
+        "term": "standard deduction",
+        "gloss": "dollar amount that reduces taxable income and varies by filing status with standard deduction levels",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "For tax year 2026, the standard deduction increases to $32,200 for married couples filing jointly."
+      },
+      {
+        "id": "marginal-rates",
+        "term": "Marginal Rates",
+        "gloss": "tax rate brackets that apply to income above thresholds for single taxpayers and joint filers",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Marginal Rates: For tax year 2026, the top tax rate remains 37% for individual single taxpayers with incomes greater than $640,600"
+      },
+      {
+        "id": "alternative-minimum-tax",
+        "term": "Alternative Minimum Tax",
+        "gloss": "exemption amount that provides an alternative minimum calculation and phases out for unmarried individuals",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Alternative Minimum Tax Exemption Amounts. For tax year 2026, the exemption amount for unmarried individuals is $90,100"
+      },
+      {
+        "id": "estate-tax-credits",
+        "term": "Estate Tax Credits",
+        "gloss": "credit exclusion that shelters decedent estates up to the basic exclusion amount for estates",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "Estate Tax Credits. Estates of decedents who die during 2026 have a basic exclusion amount of $15,000,000, up from a total of $13,990,000"
+      },
+      {
+        "id": "earned-income-tax-credit",
+        "term": "Earned Income Tax Credit",
+        "gloss": "refundable credit for qualifying taxpayers with earned income and qualifying children",
+        "sourceId": "irs-tax-inflation-adjustments-2026",
+        "quote": "The tax year 2026 maximum Earned Income Tax Credit (EITC) amount is $8,231 for qualifying taxpayers who have three or more qualifying children,"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "data-table-v1",
+      "specId": "job-20261031100746-032ca0d8:data-table-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031100746-032ca0d8:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

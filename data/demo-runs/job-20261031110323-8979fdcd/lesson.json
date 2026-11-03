@@ -1,0 +1,131 @@
+{
+  "jobId": "job-20261031110323-8979fdcd",
+  "analysisRef": "job-20261031110323-8979fdcd/analysis-v2.r1.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110323-8979fdcd:overview-v1:r1",
+    "componentId": "overview-v1",
+    "title": "Federal power is divided among three branches with checks and balances",
+    "sources": [
+      {
+        "id": "usagov-branches-of-government",
+        "title": "Branches of the U.S. government — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/branches-of-government",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'Branches of the U.S. government'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "ae307d5c1f332d7d6c2b5d22721b7a7e2d4334785f551008b702cf03e1a9fd41"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "9d963962757944388d24cf7aca6616de",
+      "runId": "job-20261031110323-8979fdcd",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:04:14.982Z"
+    },
+    "seed": 1982374074,
+    "headline": "Federal power is divided among three branches with checks and balances",
+    "keyPoints": [
+      {
+        "id": "constitution-divides",
+        "point": "The Constitution divides the federal government into legislative, judicial and executive branches.",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The Constitution of the United States divides the federal government into three branches:"
+      },
+      {
+        "id": "legislative-membership",
+        "point": "The legislative branch is made up of Congress including the Senate and House of Representatives.",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The legislative branch is made up of Congress:"
+      },
+      {
+        "id": "judicial-membership",
+        "point": "The judicial branch includes the Supreme Court and other federal courts that interpret laws and decide constitutional issues.",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The judicial branch includes the Supreme Court and other federal courts."
+      },
+      {
+        "id": "executive-role",
+        "point": "The executive branch is led by the president as head of state, leader of the executive branch and commander in chief of armed forces.",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president is the head of state, leader of the executive branch, and commander in chief of the United States armed forces."
+      },
+      {
+        "id": "checks-balances",
+        "point": "The system of checks and balances lets each branch respond to actions of the other branches.",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "legislative-branch-term",
+        "term": "legislative branch",
+        "gloss": "branch that drafts proposed laws and confirms nominations for federal agencies",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The legislative branch is made up of Congress:"
+      },
+      {
+        "id": "judicial-branch-term",
+        "term": "judicial branch",
+        "gloss": "branch that includes the Supreme Court and other federal courts to review laws",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The judicial branch includes the Supreme Court and other federal courts."
+      },
+      {
+        "id": "executive-branch-term",
+        "term": "executive branch",
+        "gloss": "branch led by the president that serves as commander in chief of armed forces",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president is the head of state, leader of the executive branch, and commander in chief of the United States armed forces."
+      },
+      {
+        "id": "checks-balances-term",
+        "term": "checks and balances",
+        "gloss": "system where each branch can respond to actions of other branches to limit power",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The ability of each branch to respond to the actions of the other branches is the system of checks and balances."
+      },
+      {
+        "id": "veto-term",
+        "term": "veto",
+        "gloss": "presidential power to reject legislation created by Congress",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The president can veto legislation created by Congress."
+      },
+      {
+        "id": "constitution-term",
+        "term": "Constitution",
+        "gloss": "document that divides the federal government into three branches",
+        "sourceId": "usagov-branches-of-government",
+        "quote": "The Constitution of the United States divides the federal government into three branches:"
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "compare-table-v1",
+      "specId": "job-20261031110323-8979fdcd:compare-table-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261031110323-8979fdcd:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

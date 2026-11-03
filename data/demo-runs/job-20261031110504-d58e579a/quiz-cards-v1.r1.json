@@ -1,0 +1,217 @@
+{
+  "gen": {
+    "schemaVersion": "quiz-cards-v1",
+    "title": ":.",
+    "cards": [
+      {
+        "id": "eight-guilty-removed",
+        "stem": "How many impeached officials were found guilty and removed from office?",
+        "options": [
+          "only eight officials were found guilty by the Senate and removed from office",
+          "were acquitted by the Senate",
+          "resigned before trial"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "Of those who were impeached, only eight officials were found guilty by the Senate and removed from office.",
+        "hint": "Check the sentence about being found guilty and removed."
+      },
+      {
+        "id": "total-impeachments-count",
+        "stem": "How many impeachments have been recorded despite many proceedings being started?",
+        "options": [
+          "only 21 impeachments",
+          "only eight impeachments",
+          "only 60 impeachments"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "The House has initiated impeachment proceedings more than 60 times. But there have been only 21 impeachments.",
+        "hint": "Look for the count of actual impeachments versus proceedings."
+      },
+      {
+        "id": "all-were-judges",
+        "stem": "Which officials were all of those found guilty and removed?",
+        "options": [
+          "federal judges",
+          "three presidents",
+          "one cabinet secretary"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "All eight were federal judges.",
+        "hint": "See which office holders make up the entire guilty and removed group."
+      },
+      {
+        "id": "presidents-remained-outcome",
+        "stem": "What happened to the three presidents impeached by the House after their Senate trials?",
+        "options": [
+          "remained in office",
+          "were removed from office",
+          "resigned in 1974"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "Presidents Johnson, Clinton, and Trump remained in office following acquittals by the Senate on all charges.",
+        "hint": "Find the result for Johnson, Clinton and Trump after acquittals."
+      }
+    ]
+  },
+  "report": {
+    "artifactId": "job-20261031110504-d58e579a:quiz-cards-v1:r1",
+    "revision": 1,
+    "checks": [
+      {
+        "id": "schema.gen",
+        "kind": "schema",
+        "passed": true,
+        "message": "every quiz text length, id pattern and id uniqueness is within the frozen limits"
+      },
+      {
+        "id": "Q-01",
+        "kind": "grounding",
+        "passed": true,
+        "message": "all 4 card quote(s) appear verbatim in their cited source after whitespace normalisation (quote-verbatim)"
+      },
+      {
+        "id": "Q-02",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card's correct answer options[0] occurs in its quote after normalisation, with any numbers matching as whole signed numbers (answer-in-quote)"
+      },
+      {
+        "id": "Q-03",
+        "kind": "semantic",
+        "passed": true,
+        "message": "every card has distinct options after normalisation, with no two options spelling the same number (options-distinct)"
+      },
+      {
+        "id": "Q-04",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no stem contains its own correct answer (stem-no-answer-leak)"
+      },
+      {
+        "id": "Q-05",
+        "kind": "semantic",
+        "passed": true,
+        "message": "exactly one option per card matches the quote (one-correct)"
+      },
+      {
+        "id": "Q-06",
+        "kind": "grounding",
+        "passed": true,
+        "message": "every number in stems, options and hints appears on the cited page or in the same quote as that whole signed number (N-01) (numbers-checkable)"
+      },
+      {
+        "id": "Q-07",
+        "kind": "semantic",
+        "passed": true,
+        "message": "no distractor occurs in its card quote (distractors-not-in-quote)"
+      }
+    ],
+    "publishable": true
+  },
+  "receipt": {
+    "purpose": "test-live",
+    "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "responseId": "4d6cd681226b4bde8f6a2826648f7d6d",
+    "usage": {
+      "promptTokens": 2725,
+      "completionTokens": 8550,
+      "reasoningTokens": 8163,
+      "cachedTokens": 0
+    },
+    "latencyMs": 45948,
+    "estCostUSD": 0.03974375,
+    "reservedUnknownUSD": 0,
+    "finishReason": "stop",
+    "attempts": 1,
+    "costBasis": "usage",
+    "provider": "modal",
+    "model": "muse-spark-open",
+    "providerModel": "meta-models/Muse-Spark-Open-816B-A42B",
+    "cachedUnknown": true
+  },
+  "spec": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031110504-d58e579a:quiz-cards-v1:r1",
+    "componentId": "quiz-cards-v1",
+    "title": ":.",
+    "sources": [
+      {
+        "id": "usagov-impeachment",
+        "title": "How federal impeachment works — USA.gov (U.S. General Services Administration)",
+        "locator": "https://www.usa.gov/impeachment",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: USA.gov, 'How federal impeachment works'. USA.gov is an official website of the U.S. General Services Administration; per the GSA website policies, 'Most material on our site is free of copyright and may be copied and distributed without permission. Works produced by federal government employees in the course of their employment are generally not protected by copyright and are in the public domain in the U.S.' The U.S. General Services Administration has not reviewed, approved or endorsed this activity.",
+        "sha256": "e2ad6fbbadad11e3751966452191cdcf57c63d5a5c31609f144004e3226733de"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "4d6cd681226b4bde8f6a2826648f7d6d",
+      "runId": "job-20261031110504-d58e579a",
+      "promptVersion": "s6-v10",
+      "revision": 1,
+      "repairOf": null,
+      "generatedAt": "2026-10-31T11:07:20.161Z"
+    },
+    "seed": 1427837770,
+    "cards": [
+      {
+        "id": "eight-guilty-removed",
+        "stem": "How many impeached officials were found guilty and removed from office?",
+        "options": [
+          "only eight officials were found guilty by the Senate and removed from office",
+          "were acquitted by the Senate",
+          "resigned before trial"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "Of those who were impeached, only eight officials were found guilty by the Senate and removed from office.",
+        "hint": "Check the sentence about being found guilty and removed."
+      },
+      {
+        "id": "total-impeachments-count",
+        "stem": "How many impeachments have been recorded despite many proceedings being started?",
+        "options": [
+          "only 21 impeachments",
+          "only eight impeachments",
+          "only 60 impeachments"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "The House has initiated impeachment proceedings more than 60 times. But there have been only 21 impeachments.",
+        "hint": "Look for the count of actual impeachments versus proceedings."
+      },
+      {
+        "id": "all-were-judges",
+        "stem": "Which officials were all of those found guilty and removed?",
+        "options": [
+          "federal judges",
+          "three presidents",
+          "one cabinet secretary"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "All eight were federal judges.",
+        "hint": "See which office holders make up the entire guilty and removed group."
+      },
+      {
+        "id": "presidents-remained-outcome",
+        "stem": "What happened to the three presidents impeached by the House after their Senate trials?",
+        "options": [
+          "remained in office",
+          "were removed from office",
+          "resigned in 1974"
+        ],
+        "sourceId": "usagov-impeachment",
+        "quote": "Presidents Johnson, Clinton, and Trump remained in office following acquittals by the Senate on all charges.",
+        "hint": "Find the result for Johnson, Clinton and Trump after acquittals."
+      }
+    ]
+  }
+}

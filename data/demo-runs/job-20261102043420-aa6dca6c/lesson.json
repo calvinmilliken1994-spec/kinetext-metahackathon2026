@@ -1,0 +1,124 @@
+{
+  "jobId": "job-20261102043420-aa6dca6c",
+  "analysisRef": "job-20261102043420-aa6dca6c/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261102043420-aa6dca6c:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "How water circulates between ground and atmosphere through key processes",
+    "sources": [
+      {
+        "id": "noaa-jetstream-hydrologic-cycle",
+        "title": "The Hydrologic Cycle — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/atmosphere/hydro",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'The Hydrologic Cycle'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "03cf335151841e953503b179c2b883ccfb8a9e47f4c740dcfa8c65ef05ff1e03"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "e43f73033c614f4ba262117e3764f2b8",
+      "runId": "job-20261102043420-aa6dca6c",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-11-02T04:35:08.843Z"
+    },
+    "seed": 1570656311,
+    "headline": "How water circulates between ground and atmosphere through key processes",
+    "keyPoints": [
+      {
+        "id": "continuous-circulation",
+        "point": "Students learn that the hydrologic cycle involves continuous circulation of water between ground and atmosphere.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "The hydrologic cycle involves the continuous circulation of water in the Earth-Atmosphere system."
+      },
+      {
+        "id": "evaporation-energy",
+        "point": "Students learn that evaporation requires energy to change liquid water into gas.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "For evaporation to take place, energy is required."
+      },
+      {
+        "id": "transpiration-plants",
+        "point": "Students learn that transpiration is evaporation of water from plants through stomata.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Transpiration is the evaporation of water from plants through stomata."
+      },
+      {
+        "id": "condensation-liquid",
+        "point": "Students learn that condensation changes water vapor into liquid and appears as clouds or dew.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Condensation is the process whereby water vapor is changed into a liquid state."
+      },
+      {
+        "id": "runoff-restart",
+        "point": "Students learn that runoff collects in rivers and lakes and evaporation of that water begins the hydrologic cycle over again.",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Evaporation of this runoff into the atmosphere begins the hydrologic cycle over again."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "evaporation",
+        "term": "evaporation",
+        "gloss": "change of state from liquid to gas that requires energy to occur",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "For evaporation to take place, energy is required."
+      },
+      {
+        "id": "transpiration",
+        "term": "transpiration",
+        "gloss": "evaporation of water from plants through leaf openings called stomata",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "In most plants, transpiration is a passive process largely controlled by the humidity of the atmosphere and the moisture content of the soil."
+      },
+      {
+        "id": "condensation",
+        "term": "condensation",
+        "gloss": "process where water vapor changes into liquid forming clouds or dew",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "water vapor has a higher energy level than that of liquid water, when condensation occurs,"
+      },
+      {
+        "id": "precipitation",
+        "term": "precipitation",
+        "gloss": "water that falls to earth when condensation particles grow too large to stay aloft",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Runoff occurs when there is excessive precipitation and the ground is saturated (cannot absorb any more water)."
+      },
+      {
+        "id": "runoff",
+        "term": "runoff",
+        "gloss": "excess water that cannot be absorbed by saturated ground and flows into rivers and lakes",
+        "sourceId": "noaa-jetstream-hydrologic-cycle",
+        "quote": "Rivers and lakes are results of runoff."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "label-diagram-v1",
+      "specId": "job-20261102043420-aa6dca6c:label-diagram-v1:r2",
+      "status": "passed",
+      "reason": "",
+      "revision": 2
+    },
+    {
+      "componentId": "sequence-v1",
+      "specId": "job-20261102043420-aa6dca6c:sequence-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    }
+  ]
+}

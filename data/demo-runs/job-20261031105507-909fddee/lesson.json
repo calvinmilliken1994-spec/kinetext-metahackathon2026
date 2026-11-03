@@ -1,0 +1,125 @@
+{
+  "jobId": "job-20261031105507-909fddee",
+  "analysisRef": "job-20261031105507-909fddee/analysis-v2.r2.json",
+  "overview": {
+    "schemaVersion": "0.6.0",
+    "id": "job-20261031105507-909fddee:overview-v1:r2",
+    "componentId": "overview-v1",
+    "title": "World climate zones grouped by temperature, precipitation and latitude",
+    "sources": [
+      {
+        "id": "noaa-jetstream-climate-zones",
+        "title": "Climate Zones — NOAA National Weather Service, JetStream",
+        "locator": "https://www.noaa.gov/jetstream/global/climate-zones",
+        "license": "US-Gov-Work",
+        "attribution": "Source material: NOAA National Weather Service, JetStream, 'Climate Zones'. Credit: NOAA National Weather Service. NOAA's Education and Outreach FAQ states 'Nearly all of NOAA content, including images, videos, data products, educational materials, and more, is in the public domain and can be used without express permission', requires credit to NOAA and the NOAA program, and requires that any edits, including those made with a generative AI program, be made clear; the AI-generated lesson carrying this material is labelled as AI-generated in the product. NOAA has not reviewed, approved or endorsed this activity.",
+        "sha256": "9e8263f9fb048729c92d00c7603e536c248951e07afdff0ba85b66b6fcbff04d"
+      }
+    ],
+    "execution": {
+      "maxWallTimeMs": 2000,
+      "maxRepairAttempts": 2,
+      "network": false,
+      "generatedCodeAllowed": false
+    },
+    "provenance": {
+      "provider": "meta",
+      "requestedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "returnedModel": "meta-models/Muse-Spark-Open-816B-A42B",
+      "responseId": "cab9c66fa0774fc385677675cb70a731",
+      "runId": "job-20261031105507-909fddee",
+      "promptVersion": "s6-v10",
+      "revision": 2,
+      "repairOf": 1,
+      "generatedAt": "2026-10-31T10:56:05.829Z"
+    },
+    "seed": 619678535,
+    "headline": "World climate zones grouped by temperature, precipitation and latitude",
+    "keyPoints": [
+      {
+        "id": "climate-definition",
+        "point": "Students learn that climate is the average weather measured over 30 year intervals influenced by tilt and distribution.",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The climate is the reoccurring average weather found in any particular place, measured over 30 year intervals."
+      },
+      {
+        "id": "tropical-thresholds",
+        "point": "Tropical climates have all months with average temperatures greater than 64°F and annual precipitation greater than 59 inches.",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "In these climates, all months have average temperatures greater than 64°F (18°C) and annual precipitation greater than 59\"."
+      },
+      {
+        "id": "dry-feature",
+        "point": "Dry climates are defined where potential evaporation and transpiration exceed precipitation and conditions are very dry.",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "potential evaporation and transpiration exceed precipitation"
+      },
+      {
+        "id": "polar-characteristics",
+        "point": "Polar climates have year-round cold temperatures and the warmest month stays below 50°F on northern coasts and Greenland and Antarctica.",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C)."
+      }
+    ],
+    "keyTerms": [
+      {
+        "id": "climate",
+        "term": "climate",
+        "gloss": "long term average weather for a place measured over 30 year intervals",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "The climate is the reoccurring average weather found in any particular place, measured over 30 year intervals."
+      },
+      {
+        "id": "tropical-climates",
+        "term": "tropical climates",
+        "gloss": "moist zone near the equator that extends north and south where every month stays warm",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Moist tropical climates extend north and south from the equator to about 15° to 25° latitude."
+      },
+      {
+        "id": "dry-climates",
+        "term": "Dry Climates",
+        "gloss": "Climates where evaporation exceeds precipitation and conditions are very dry",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "B - Dry Climates"
+      },
+      {
+        "id": "polar-climates",
+        "term": "Polar climates",
+        "gloss": "cold temperatures with warmest month below 50°F and year round cold on northern coasts",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Polar climates have year-round cold temperatures, with the warmest month less than 50°F (10°C)."
+      },
+      {
+        "id": "highland-climates",
+        "term": "Highland climates",
+        "gloss": "mountainous zone where rapid elevation changes cause rapid climatic changes over short distances",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "Highland climates occur in mountainous terrain where rapid elevation changes cause rapid climatic changes over short distances."
+      },
+      {
+        "id": "mid-latitude-cyclone",
+        "term": "mid-latitude cyclone",
+        "gloss": "main winter weather feature that brings storms in mid-latitude regions",
+        "sourceId": "noaa-jetstream-climate-zones",
+        "quote": "During the winter, the main weather feature is the mid-latitude cyclone."
+      }
+    ]
+  },
+  "components": [
+    {
+      "componentId": "sort-groups-v1",
+      "specId": "job-20261031105507-909fddee:sort-groups-v1:r1",
+      "status": "passed",
+      "reason": "",
+      "revision": 1
+    },
+    {
+      "componentId": "quiz-cards-v1",
+      "specId": "job-20261031105507-909fddee:quiz-cards-v1:r1",
+      "status": "passed",
+      "reason": "1 card was left out because they could not be verified against the page: dry-moisture-balance (Q-01).",
+      "revision": 1
+    }
+  ]
+}
