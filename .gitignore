@@ -77,6 +77,6 @@ worktrees/
 # Master project prompt: internal model/subscription setup (private by user decision)
 docs/MASTER_PROMPT.md
 
-# impeccable design-skill working files (critique snapshots, live-server state)
+# Design-check tool working files (local snapshots, never part of the app)
 .impeccable/
 apps/web/.impeccable/
