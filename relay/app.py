@@ -29,13 +29,16 @@ image = (
 app = modal.App(APP_NAME, image=image)
 state = modal.Dict.from_name(STATE_NAME, create_if_missing=True)
 secret = modal.Secret.from_name(SECRET_NAME)
+# Optional Discord pings (DISCORD_WEBHOOK_URL), kept apart so the main Secret never has to be rewritten:
+#   modal secret create mki-relay-discord --from-json <file with {"DISCORD_WEBHOOK_URL": "..."}>
+discord = modal.Secret.from_name("mki-relay-discord")
 
 
 # One container only (REQUIRED): the lock that serialises the spentUSD read-modify-write and the rate limiter live in this
 # process; spend itself is durable in the Dict (estimate persisted before forwarding), but nothing fences a second
 # container. Do not raise max_containers without adding cross-process locking. Up to 8 requests in flight (async I/O).
 # timeout > the 600 s upstream timeout; Modal answers callers with a 303 to a result URL after 150 s of waiting.
-@app.function(max_containers=1, timeout=900, secrets=[secret])
+@app.function(max_containers=1, timeout=900, secrets=[secret, discord])
 @modal.concurrent(max_inputs=8)
 @modal.asgi_app(label=APP_NAME)
 def web():

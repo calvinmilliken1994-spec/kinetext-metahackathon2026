@@ -62,6 +62,16 @@ RATE_LIMIT_FAILURES = 10
 RATE_LIMIT_WINDOW_S = 60.0
 _MAX_TRACKED_IPS = 5000
 
+# Discord pings (optional, DISCORD_WEBHOOK_URL): posted in the background so a slow or broken Discord never touches a
+# judge's request. Messages carry the event, the model and the budget; never a code, an address or a mention.
+NOTIFY_TIMEOUT_S = 5.0
+NOTIFY_MAX_PENDING = 20
+ACCESS_PING_EVERY_S = 3600.0  # one "access granted" per visitor per hour (the app re-checks the code every few minutes)
+BUILD_QUIET_S = 300.0  # a chat call after five quiet minutes counts as a new live build
+BUDGET_ALERTS_USD = (10.0, 25.0, 40.0)
+MODEL_LABELS = {CHAT_MODEL: "Muse Spark 1.3", OPEN_MODEL: "Muse Spark Open"}
+_WEBHOOK_RE = re.compile(r"^https://(?:discord\.com|discordapp\.com)/api/webhooks/\d+/[A-Za-z0-9_-]+$")
+
 
 class Store(Protocol):
     """The slice of `modal.Dict` the relay uses (a plain object with get/put works in tests)."""
@@ -120,6 +130,7 @@ class Settings:
     body_read_timeout_s: float = BODY_READ_TIMEOUT_S
     rate_limit_failures: int = RATE_LIMIT_FAILURES
     rate_limit_window_s: float = RATE_LIMIT_WINDOW_S
+    discord_webhook_url: str = field(default="", repr=False)
     clock: Callable[[], float] = field(default=time.monotonic, repr=False, compare=False)
 
     def __repr__(self) -> str:  # never print secrets, even by accident
@@ -136,6 +147,8 @@ class Settings:
                             ("MODAL_PROXY_SECRET", self.modal_secret)]:
             if not value:
                 raise ValueError(f"{name} is missing")
+        if self.discord_webhook_url and not _WEBHOOK_RE.match(self.discord_webhook_url):
+            raise ValueError("DISCORD_WEBHOOK_URL must be a https://discord.com/api/webhooks/... URL")
 
     @classmethod
     def from_env(cls, env: Mapping[str, str]) -> "Settings":
@@ -179,6 +192,7 @@ class Settings:
             modal_secret=secret,
             modal_base_url=_clean_base_url("MODAL_BASE_URL", base),
             cap_usd=cap,
+            discord_webhook_url=env.get("DISCORD_WEBHOOK_URL", "").strip(),
         )
         settings.validate()
         return settings
@@ -391,10 +405,77 @@ class _Relay:
         self._unsettled = 0.0  # charges the store has not (yet) accepted: carried into the next successful write
         self._ledger_lock = asyncio.Lock()  # serialises the read-modify-write of spentUSD within this process
         self._secrets = sorted(
-            {x.encode("utf-8") for x in (settings.meta_api_key, settings.modal_key, settings.modal_secret) if x},
+            {
+                x.encode("utf-8")
+                for x in (settings.meta_api_key, settings.modal_key, settings.modal_secret, settings.discord_webhook_url)
+                if x
+            },
             key=len,
             reverse=True,
         )
+        self._notify_client: httpx.AsyncClient | None = None
+        self._notify_tasks: set[asyncio.Task] = set()
+        self._access_pinged: dict[bytes, float] = {}  # sha256(client address) -> last ping; the address is never sent
+        self._last_chat_at: float | None = None
+        self._spent_seen: float | None = None  # spend at the last budget check; thresholds below it never ping
+        self._used_up_pinged = False
+
+    # ---- Discord pings (fire and forget)
+
+    def _notify(self, text: str) -> None:
+        if not self.s.discord_webhook_url or len(self._notify_tasks) >= NOTIFY_MAX_PENDING:
+            return
+        try:
+            task = asyncio.get_running_loop().create_task(self._post_notify(text))
+        except RuntimeError:
+            return
+        self._notify_tasks.add(task)
+        task.add_done_callback(self._notify_tasks.discard)
+
+    async def _post_notify(self, text: str) -> None:
+        if self._notify_client is None:
+            self._notify_client = httpx.AsyncClient(
+                transport=self.transport, timeout=httpx.Timeout(NOTIFY_TIMEOUT_S), follow_redirects=False
+            )
+        payload = {"username": "Kinetext relay", "content": text, "allowed_mentions": {"parse": []}}
+        try:
+            res = await self._notify_client.post(self.s.discord_webhook_url, json=payload)
+            if res.status_code >= 300:
+                log.warning("notify failed status=%s", res.status_code)
+        except Exception:
+            log.warning("notify failed")  # never the URL: it is a credential
+
+    def _left(self) -> str:
+        return f"${max(0.0, self.s.cap_usd - self.spent):.2f} of ${self.s.cap_usd:.2f} left"
+
+    def _ping_access(self, request: Request) -> None:
+        ip = request.client.host if request.client else "unknown"
+        key = hashlib.sha256(ip.encode("utf-8", "replace")).digest()
+        now = self.s.clock()
+        last = self._access_pinged.get(key)
+        if last is not None and now - last < ACCESS_PING_EVERY_S:
+            return
+        if len(self._access_pinged) >= _MAX_TRACKED_IPS:
+            self._access_pinged.clear()
+        self._access_pinged[key] = now
+        self._notify(f"Kinetext: someone unlocked live builds with the judge access code. Budget: {self._left()}.")
+
+    def _ping_chat(self, route: _Route) -> None:
+        now = self.s.clock()
+        quiet = self._last_chat_at is None or now - self._last_chat_at >= BUILD_QUIET_S
+        self._last_chat_at = now
+        if quiet:
+            label = MODEL_LABELS.get(route.model, route.model)
+            self._notify(f"Kinetext: a live build started on {label}. Budget: {self._left()}.")
+
+    def _ping_budget(self) -> None:
+        before, now_spent = self._spent_seen, self.spent
+        self._spent_seen = now_spent if before is None else max(before, now_spent)
+        if before is None:
+            return
+        for mark in BUDGET_ALERTS_USD:
+            if before < mark <= now_spent:
+                self._notify(f"Kinetext relay: ${mark:.0f} of the ${self.s.cap_usd:.2f} judge budget is spent ({self._left()}).")
 
     # ---- auth and rate limit
 
@@ -458,6 +539,8 @@ class _Relay:
             log.warning("state read failed")
             return None
         self.spent = spent
+        if self._spent_seen is None:
+            self._spent_seen = spent
         return enabled
 
     async def _enabled_now(self) -> bool:
@@ -529,9 +612,14 @@ class _Relay:
         return self._client
 
     async def aclose(self) -> None:
+        for task in list(self._notify_tasks):
+            task.cancel()
         client, self._client = self._client, None
         if client is not None:
             await client.aclose()
+        notify, self._notify_client = self._notify_client, None
+        if notify is not None:
+            await notify.aclose()
 
     # ---- routes
 
@@ -545,6 +633,7 @@ class _Relay:
             enabled = await self._state()
             spent = self.spent if enabled is not None else self.s.cap_usd  # unreadable state reads as fully spent
             ctx.status = 200
+            self._ping_access(request)
             return JSONResponse(
                 {
                     "ok": True,
@@ -609,6 +698,9 @@ class _Relay:
         # Charge the estimate durably BEFORE forwarding: a crash or restart from here on leaves it charged.
         admitted = await self._admit(estimate)
         if admitted == "spent":
+            if not self._used_up_pinged:
+                self._used_up_pinged = True
+                self._notify("Kinetext relay: the judge budget is used up. Live builds now answer 'budget spent'.")
             return _error(ctx, 402, "RELAY_BUDGET_SPENT", "The relay budget is spent.")
         if admitted != "ok":  # the ledger could not be read or written: nothing is forwarded, nothing is charged
             return _error(ctx, 503, "RELAY_PAUSED", "The relay is paused.")
@@ -617,6 +709,9 @@ class _Relay:
         if not await asyncio.shield(self._enabled_now()):
             await asyncio.shield(self._adjust(-estimate))
             return _error(ctx, 503, "RELAY_PAUSED", "The relay is paused.")
+
+        if route.kind == "chat":
+            self._ping_chat(route)
 
         if route.upstream == "meta":
             url = self.s.meta_base_url.rstrip("/") + route.path
@@ -645,6 +740,9 @@ class _Relay:
             # The estimate is already in the ledger; settle only the difference (0 when the rules charge the estimate).
             ctx.charged = charge
             await asyncio.shield(self._adjust(charge - estimate))
+            if route.kind == "chat":
+                self._last_chat_at = self.s.clock()  # a long call keeps the build "active" until it ends
+            self._ping_budget()
         return response
 
     @staticmethod

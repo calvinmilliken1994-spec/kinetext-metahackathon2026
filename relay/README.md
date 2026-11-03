@@ -98,6 +98,22 @@ variable, never the value).
 `pause`/`resume`/`report` need the Secret to exist first, because `modal run` resolves the app's Secret. `report` starts a
 tiny remote function only to read `CAP_USD` from the Secret.
 
+## Discord pings (optional)
+
+When the Secret `mki-relay-discord` holds `DISCORD_WEBHOOK_URL`, the relay posts a short message to that channel:
+
+- **Access granted:** a valid code checked the budget (`GET /v1/status`). At most once per visitor per hour.
+- **Live build started:** a chat call after five quiet minutes, with the model (Muse Spark 1.3 or Muse Spark Open).
+- **Budget:** when $10, $25 and $40 of the cap are spent, and once when it is used up.
+
+Posts run in the background with a 5 s timeout, so a slow or broken Discord never delays or fails a judge's request.
+Messages carry no code, client address or mention; the webhook URL is treated as a credential (redacted, never logged).
+
+```bash
+modal secret create mki-relay-discord --from-json <file with {"DISCORD_WEBHOOK_URL": "..."}>
+modal deploy relay/app.py
+```
+
 ## Long requests and Modal's 303
 
 Modal web functions wait at most 150 s per HTTP request. A slower call (Spark Open lessons can take minutes) is answered
