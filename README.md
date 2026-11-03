@@ -5,6 +5,12 @@ Muse Spark writes the lesson, SAM 3.1 confirms the parts of a diagram, and deter
 number and formula before anything is shown. Solo entry (Indie Developer) to the Meta Global AI Developer Hackathon
 2026 (Cerebral Valley), track **Build for Your World**.
 
+## Demo video (3 minutes)
+
+<p align="center"><a href="https://www.youtube.com/watch?v=S7ebeKDd-x8"><img src="https://i.ytimg.com/vi/S7ebeKDd-x8/maxresdefault.jpg" alt="Watch the Kinetext demo on YouTube" width="720"></a></p>
+
+<p align="center"><a href="https://www.youtube.com/watch?v=S7ebeKDd-x8"><b>Watch on YouTube</b></a>: a real live build on Muse Spark 1.3, including a check that failed and Muse's own repair.</p>
+
 ## Run the demo (judges)
 
 ### 1. You need
