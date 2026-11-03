@@ -18,6 +18,7 @@ import { glowStyle, patchFills, regionDrawing,
 import type { CheckResult, LabelMask, LabelSlot, PartView, PctBox, Placements, SlotFit, SlotState } from '../lib/labelDiagramView.ts';
 import { aiLabel } from '../lib/displayText.ts';
 import { figureCredit } from '../lib/presentation.ts';
+import { teacherFigureCaption } from '../lib/teacherFigure.ts';
 import { linkKey } from '../lib/linking.ts';
 import type { CiteProps } from './Explanations.tsx';
 import { Linked } from './Linked.tsx';
@@ -327,7 +328,7 @@ function Figure({ spec, views, slots, masks, named, slotState, labelsShown, mark
       </div>
       {caption && (
         <figcaption className="ld-figcaption">
-          {fig.caption.trim() !== '' && <span className="ld-caption">{fig.caption.trim()}</span>}
+          {teacherFigureCaption(fig) !== '' && <span className="ld-caption">{teacherFigureCaption(fig)}</span>}
           {credit !== '' && <span className="ld-credit">{credit}</span>}
         </figcaption>
       )}

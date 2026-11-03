@@ -132,7 +132,7 @@ async function startup(): Promise<void> {
       const clientV2: MetaClient | null = relay === undefined ? buildMetaApiClient(limits.maxInputTokensV2) : null;
       startJob = (
         sourceId: string,
-        jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge' },
+        jobOpts?: { demoFault?: DemoFault; model?: ModelChoice; flow?: JobFlow; access?: 'judge'; figureId?: string },
       ) => {
         const model: ModelChoice = jobOpts?.model ?? 'muse-spark-1.3';
         const flow: JobFlow = jobOpts?.flow ?? 'lesson';
@@ -174,6 +174,8 @@ async function startup(): Promise<void> {
           demoFault: jobOpts?.demoFault,
           // Stage 10: a job started under a judge access session is tagged in its job record.
           ...(jobOpts?.access === 'judge' ? { access: 'judge' as const } : {}),
+          // Teacher diagram (beta): the teacher figure the API checked belongs to this user source.
+          ...(jobOpts?.figureId !== undefined ? { figureId: jobOpts.figureId } : {}),
           // Stage 8b: SAM 3.1 segmentation for label-diagram-v1 revisions runs on the
           // Meta API key and the job's spending ledger (USD 0.0025 per image, reserved
           // and reconciled like every model call). The key is read from the environment

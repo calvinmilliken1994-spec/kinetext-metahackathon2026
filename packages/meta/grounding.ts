@@ -66,8 +66,9 @@ export interface GroundingBox {
  * Untrusted text (a model-written part name, a stored printed label) becomes one plain phrase: control characters
  * and runs of spaces collapse to one space, straight quotes and backticks become a typographic apostrophe (so the
  * text cannot close the quoted object phrase), and it is cut at 80 characters. Empty text becomes `fallback`.
+ * Exported for the teacher-figure label reading (figure-labels.ts), which passes Muse's transcriptions through it.
  */
-function phrase(text: string, fallback: string): string {
+export function phrase(text: string, fallback: string): string {
   const cleaned = text
     .replace(/[\u0000-\u001f\u007f\u0085\u2028\u2029]+/g, ' ')
     .replace(/["'`]/g, '\u2019')

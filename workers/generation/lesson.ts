@@ -57,6 +57,14 @@ import {
   groundingUnions,
 } from '../../packages/meta/grounding.ts';
 import type { GroundingBox } from '../../packages/meta/grounding.ts';
+import {
+  FIGURE_LABELS_MAX_OUTPUT_TOKENS,
+  FIGURE_LABELS_SCHEMA,
+  FIGURE_LABELS_SCHEMA_NAME,
+  buildFigureLabelsPrompt,
+  figureLabelsMethod,
+  figureLabelsToBoxes,
+} from '../../packages/meta/figure-labels.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
@@ -125,7 +133,16 @@ import type {
   LabelPartGen,
   PlanComponentId,
 } from '../../packages/contracts/kit.ts';
-import { loadFigureLabelBoxes, loadFigurePartLabelGroups, loadFigurePrintedLabels, listFigures, loadFigure } from '../../packages/sources/figures.ts';
+import {
+  FIGURES_DIR,
+  figureDirFor,
+  loadFigureLabelBoxes,
+  loadFigureLabelsFile,
+  loadFigurePartLabelGroups,
+  loadFigurePrintedLabels,
+  listFigures,
+  loadFigure,
+} from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
 import { sha256 } from '../../packages/sources/index.ts';
 import { applyLessonDemoFault, lessonFaultTarget, lessonIntendedChecks } from './demo-faults.ts';
@@ -138,6 +155,7 @@ import {
   receiptFields,
   reservedUnknownOf,
   roundCost,
+  writeJsonAtomic,
 } from './job-support.ts';
 import type { JobStatus, JobSummary } from './jobs.ts';
 
@@ -180,8 +198,9 @@ export interface ComponentRepairRecord {
 
 /** The contracts' Stage union extended with the frozen lesson stages ('segment' is the
  *  Stage 8b SAM 3.1 segmentation step of a label-diagram-v1 revision; 'locate' is the Stage 10c
- *  marker for the end of that revision's Muse grounding call, emitted between segment started and succeeded). */
-export type LessonStage = Stage | 'overview' | 'component' | 'segment' | 'locate';
+ *  marker for the end of that revision's Muse grounding call, emitted between segment started and succeeded;
+ *  'labels' is the teacher-diagram step where Muse reads a teacher figure's printed labels, before the analysis). */
+export type LessonStage = Stage | 'overview' | 'component' | 'segment' | 'locate' | 'labels';
 /** Repair events target the analysis, the v1 spec loop, or one lesson component. */
 export type LessonRepairTarget = 'analysis' | 'spec' | 'component';
 
@@ -247,6 +266,13 @@ export interface LessonContext {
   demoFault?: DemoFault;
   /** Stage 8b: SAM 3.1 segmentation deps; required only when the plan carries label-diagram-v1. */
   sam?: SamSegmentDeps;
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): the teacher figure (`uf-` id) uploaded with this job's user
+   * source. Its printed labels are read by Muse before the analysis and it then replaces the library figure list.
+   */
+  figureId?: string;
+  /** The teacher-figure store (`<storageDir>/user-figures`); `uf-` ids resolve here through figureDirFor. */
+  userFiguresDir?: string;
   /** The mutable job summary (flow 'lesson'; lesson counts kept current for the list view). */
   summary: JobSummary;
   emit(stage: LessonStage, status: StageStatus, extra?: LessonEventExtra): void;
@@ -440,8 +466,8 @@ export function placeLabelParts(
  * (0..1000 grid, edges inclusive). A SAM mask can include printed words (the rain mask covers "Precipitation"), and
  * the nearest ink to a centroid is then a letter. Exported for tests.
  */
-export function printedTextAvoider(meta: FigureMeta, gen: LabelDiagramGen): (x: number, y: number) => boolean {
-  const stored = meta.labelBoxes ?? safeStoredLabelBoxes(meta.id);
+export function printedTextAvoider(meta: FigureMeta, gen: LabelDiagramGen, dir: URL = FIGURES_DIR): (x: number, y: number) => boolean {
+  const stored = meta.labelBoxes ?? safeStoredLabelBoxes(meta.id, dir);
   const own = (Array.isArray(gen?.parts) ? gen.parts : [])
     .filter(p => [p.labelX1, p.labelY1, p.labelX2, p.labelY2].every(v => typeof v === 'number' && Number.isFinite(v)))
     .filter(p => ![p.labelX1, p.labelY1, p.labelX2, p.labelY2].every(v => v === 0))
@@ -455,9 +481,9 @@ export function printedTextAvoider(meta: FigureMeta, gen: LabelDiagramGen): (x: 
     );
   };
 }
-function safeStoredLabelBoxes(figureId: string): { x1: number; y1: number; x2: number; y2: number }[] {
+function safeStoredLabelBoxes(figureId: string, dir: URL): { x1: number; y1: number; x2: number; y2: number }[] {
   try {
-    return loadFigureLabelBoxes(figureId);
+    return loadFigureLabelBoxes(figureId, dir);
   } catch {
     return [];
   }
@@ -740,9 +766,12 @@ export function pageNamedPrintedLabels(labels: readonly string[], pageTexts: rea
   return out;
 }
 
-/** Stage 8b flow step 5: the system-owned figure reference of the published spec. */
-export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
-  const partLabelGroups = meta.partLabelGroups ?? loadFigurePartLabelGroups(meta.id);
+/**
+ * Stage 8b flow step 5: the system-owned figure reference of the published spec. `dir` is where the figure is stored
+ * (figureDirFor: the library, or the teacher-figure store for a `uf-` id); a teacher figure's ref says so (`provided`).
+ */
+export function labelFigureRefOf(meta: FigureMeta, dir: URL = FIGURES_DIR): LabelFigureRef {
+  const partLabelGroups = meta.partLabelGroups ?? loadFigurePartLabelGroups(meta.id, dir);
   return {
     id: meta.id,
     width: meta.width,
@@ -751,8 +780,9 @@ export function labelFigureRefOf(meta: FigureMeta): LabelFigureRef {
     credit: meta.credit,
     license: meta.license,
     labelsInImage: meta.labelsInImage,
-    labelBoxes: loadFigureLabelBoxes(meta.id),
+    labelBoxes: loadFigureLabelBoxes(meta.id, dir),
     ...(partLabelGroups !== undefined ? { partLabelGroups } : {}),
+    ...(meta.provided === 'teacher' ? { provided: 'teacher' as const } : {}),
   };
 }
 
@@ -927,6 +957,10 @@ export const SEGMENTATION_FAILED_REASON = 'The system could not segment the figu
  * figures at all, so a stray plan fails here or in A-08 honestly).
  */
 export const FIGURE_UNAVAILABLE_REASON = 'The figure this part needs could not be loaded, so it was left out.';
+/** Teacher diagram (beta): `labels failed` detail when the uploaded figure cannot be loaded (missing or changed bytes). */
+export const TEACHER_FIGURE_UNLOADABLE = 'The diagram could not be loaded, so the lesson was built without it.';
+/** Teacher diagram (beta): `labels failed` detail when Muse's label reading failed (any error, wrong shape, no labels). */
+export const TEACHER_FIGURE_LABELS_FAILED = "Muse could not read the diagram's labels, so the lesson was built without it.";
 
 /**
  * BUG-006: recognise the client's OUTPUT_TRUNCATED MetaError — a PAID, settled call whose
@@ -1172,11 +1206,112 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   // At most the first 3 figures in listed order (listFigures sorts by id) travel through
   // analysis, generation, validation and publish.
   const jobModel: ModelChoice = isModelChoice(summary.model) ? summary.model : 'muse-spark-1.3';
+  // Teacher diagram (beta): every figure lookup by id resolves its directory here, so a `uf-` id reads the teacher
+  // store and every other id the library, and the rest of the flow is the same for both. jobs.ts always passes the
+  // store; the fallback (`<storageDir>/user-figures`, runDir being `<storageDir>/runs/<jobId>`) only serves direct
+  // runLesson callers.
+  const userFiguresDir: string = ctx.userFiguresDir ?? join(ctx.runDir, '..', '..', 'user-figures');
+  const figDir = (id: string): URL => figureDirFor(id, userFiguresDir);
+  /** A figure with its stored printed-label boxes and curated part-label groups (read back from labels.json). */
+  const withStoredLabels = (f: FigureMeta): FigureMeta => {
+    const partLabelGroups = loadFigurePartLabelGroups(f.id, figDir(f.id));
+    return { ...f, labelBoxes: loadFigureLabelBoxes(f.id, figDir(f.id)), ...(partLabelGroups !== undefined ? { partLabelGroups } : {}) };
+  };
   // Stage 8b (lead): each figure carries its stored printed-label boxes so LD-04 (and the repair guard's recompute) can reject points on printed words.
-  const jobFigures: FigureMeta[] = listFigures(source.id).slice(0, 3).map(f => {
-    const partLabelGroups = loadFigurePartLabelGroups(f.id);
-    return { ...f, labelBoxes: loadFigureLabelBoxes(f.id), ...(partLabelGroups !== undefined ? { partLabelGroups } : {}) };
-  });
+  // Teacher diagram (beta): a job with a figureId uses that one figure instead (or none when its labels cannot be read).
+  const jobFigures: FigureMeta[] =
+    ctx.figureId !== undefined ? await teacherFigures(ctx.figureId) : listFigures(source.id).slice(0, 3).map(withStoredLabels);
+
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md section 3): Muse reads the printed labels of the teacher's
+   * figure (the job OCR and the lead did once per library figure), so the label-diagram flow below runs unchanged.
+   * ONE call through the job's own client, accounted exactly like groundLabelParts (receipt on success, the error's
+   * settled amounts on failure, both BEFORE any fallible write). The result is stored as `<id>.labels.json` beside the
+   * figure and reused by every later job of that figure. Any failure builds the lesson without the figure, never fails
+   * the job. Events: `labels` started, then succeeded or failed with a plain detail sentence.
+   */
+  async function teacherFigures(figureId: string): Promise<FigureMeta[]> {
+    const dir = figDir(figureId);
+    ctx.emit('labels', 'started', { figureId });
+    let figure: { meta: FigureMeta; bytes: Uint8Array };
+    try {
+      figure = loadFigure(figureId, dir); // sha256-verified
+      // The API only accepts a figure of the job's own source; a mismatch here is a store break, never trusted.
+      if (figure.meta.id !== figureId || figure.meta.sourceId !== source.id) throw new Error('FIGURE_NOT_FOUND');
+    } catch {
+      ctx.emit('labels', 'failed', { figureId, detail: TEACHER_FIGURE_UNLOADABLE });
+      return [];
+    }
+    const stored = loadFigureLabelsFile(figureId, dir);
+    if (stored !== null && stored.boxes.length > 0) {
+      ctx.emit('labels', 'succeeded', { figureId, detail: 'Printed labels read earlier' });
+      return [withStoredLabels(figure.meta)];
+    }
+    const failed = (extra: LessonEventExtra, record: Record<string, unknown>): FigureMeta[] => {
+      ctx.writeJson('figure-labels.json', { ok: false, figureId, ...record });
+      ctx.emit('labels', 'failed', { ...extra, figureId, detail: TEACHER_FIGURE_LABELS_FAILED });
+      return [];
+    };
+    let data: unknown;
+    let read: MetaReceipt;
+    try {
+      const res = await ctx.client.complete<unknown>({
+        purpose: ctx.purpose,
+        schemaName: FIGURE_LABELS_SCHEMA_NAME,
+        jsonSchema: FIGURE_LABELS_SCHEMA,
+        messages: [
+          {
+            role: 'user',
+            content: buildFigureLabelsPrompt(),
+            images: [{ url: groundingImageUrl(figure.meta.mime, Buffer.from(figure.bytes).toString('base64')) }],
+          },
+        ],
+        maxOutputTokens: FIGURE_LABELS_MAX_OUTPUT_TOKENS,
+        signal: ctx.signal,
+      });
+      data = res.data;
+      read = res.receipt;
+    } catch (err: unknown) {
+      // Accounted HERE, at this call's own catch boundary, through the ONE accumulator (S6R-07).
+      const charge = errorCharge(err);
+      ctx.account(charge.chargedUSD, charge.unknownUSD);
+      const { detail: _code, ...extra } = charge.extra;
+      return failed(extra, { code: charge.code, chargedUSD: charge.chargedUSD, unknownUSD: charge.unknownUSD });
+    }
+    // The call returned: its receipt is accounted once, before anything below can run.
+    ctx.accountReceipt(read);
+    const unknownUSD = reservedUnknownOf(read.reservedUnknownUSD);
+    const labels = figureLabelsToBoxes(data, figure.meta.width, figure.meta.height);
+    if (labels === null || labels.labels === 0) {
+      // Paid for, unusable: the wrong shape, or no printed text Muse could place.
+      return failed(receiptFields(read), {
+        code: labels === null ? 'OUTPUT_INVALID' : 'NO_LABELS',
+        chargedUSD: read.estCostUSD,
+        unknownUSD,
+        receipt: read,
+      });
+    }
+    try {
+      writeJsonAtomic(join(userFiguresDir, `${figureId}.labels.json`), {
+        figureId,
+        imageSha256: figure.meta.sha256,
+        width: figure.meta.width,
+        height: figure.meta.height,
+        method: figureLabelsMethod(read.returnedModel, ctx.jobId, ctx.now()),
+        boxes: labels.boxes,
+        partLabelGroups: labels.partLabelGroups,
+      });
+    } catch {
+      return failed(receiptFields(read), { code: 'INTERNAL', chargedUSD: read.estCostUSD, unknownUSD, receipt: read });
+    }
+    ctx.writeJson('figure-labels.json', { ok: true, figureId, labels: labels.labels, nameParts: labels.nameParts, receipt: read });
+    ctx.emit('labels', 'succeeded', {
+      ...receiptFields(read),
+      figureId,
+      detail: `Muse read ${labels.labels} printed labels (${labels.nameParts} name parts)`,
+    });
+    return [withStoredLabels(figure.meta)];
+  }
 
   // --- Call 1: analysis v2 (same-call overview + component plan) -------------
   ctx.emit('analyze', 'started');
@@ -1596,7 +1731,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
   /** The printed label text each part's label box claims on the figure's stored boxes (null when it claims none). */
   function claimedPrintedTexts(parts: readonly LabelPartGen[], meta: FigureMeta): (string | null)[] {
     try {
-      const fig: FigureMeta = { ...meta, labelBoxes: meta.labelBoxes ?? loadFigureLabelBoxes(meta.id) };
+      const fig: FigureMeta = { ...meta, labelBoxes: meta.labelBoxes ?? loadFigureLabelBoxes(meta.id, figDir(meta.id)) };
       const units = printedUnits(fig);
       return parts.map(part => {
         const claimed = claimedPrintedUnits([part], fig, units);
@@ -1877,7 +2012,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     }
     const regions = boxesToRegions(boxes, parts, grounding.grounds);
     // Stage 8c Addendum B: the numbers sit on the ink of SAM's confirmed mask and the areas on Muse's grounding union.
-    const placement = placeLabelParts(gen, boxes, regions, grounding.unions, width, height, printedTextAvoider(figure.meta, gen));
+    const placement = placeLabelParts(gen, boxes, regions, grounding.unions, width, height, printedTextAvoider(figure.meta, gen, figDir(figure.meta.id)));
     const sure = regions.filter(
       r => typeof r.confidence === 'number' && r.confidence >= KIT_LIMITS.labelDiagram.minRegionConfidence,
     ).length;
@@ -1922,12 +2057,12 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
       const first = jobFigures[0];
       if (first !== undefined) {
         try {
-          const loaded = loadFigure(first.id);
+          const loaded = loadFigure(first.id, figDir(first.id));
           labelFigure = loaded;
           // Stage 8c: the lead-curated printed labels (one string per part label group), narrowed to the ones the page
           // text names (the LD-10 rule), so Muse is never told to cover a label the page never mentions. Absent when none.
           const printedLabels = pageNamedPrintedLabels(
-            loadFigurePrintedLabels(loaded.meta.id),
+            loadFigurePrintedLabels(loaded.meta.id, figDir(loaded.meta.id)),
             sources.map(s => s.text),
           );
           labelImage = {
@@ -1946,7 +2081,7 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
     const labelSpecData = (gen: AnyKitGen, regions: LabelRegion[]): { figure: LabelFigureRef; regions: LabelRegion[] } => {
       const gd = gen as LabelDiagramGen;
       const meta = jobFigures.find(f => f.id === gd.figureId) ?? (labelFigure as { meta: FigureMeta }).meta;
-      return { figure: labelFigureRefOf(meta), regions };
+      return { figure: labelFigureRefOf(meta, figDir(meta.id)), regions };
     };
     /**
      * The revision report the worker persists/publishes for label-diagram-v1: the full

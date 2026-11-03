@@ -6,9 +6,9 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { validateKitComponent } from '../../packages/validation/kit/index.ts';
 import { NOT_RETROACTIVE_CHECK_IDS, retroactiveFailedIds } from '../../packages/validation/not-retroactive.ts';
-import { listFigures, loadFigureLabelBoxes } from '../../packages/sources/figures.ts';
+import { figureDirFor, listFigures, loadFigureLabelBoxes } from '../../packages/sources/figures.ts';
 import type { FigureMeta } from '../../packages/sources/figures.ts';
-import { loadSource, loadUserSource, userSourcesDirOf } from '../../packages/sources/index.ts';
+import { loadSource, loadUserSource, userFiguresDirOf, userSourcesDirOf } from '../../packages/sources/index.ts';
 import type { SourceDocument } from '../../packages/contracts/index.ts';
 import { orderLabelPartsByPage } from './label-order.ts';
 
@@ -23,11 +23,16 @@ export const RECHECKED_COMPONENTS: ReadonlySet<string> = new Set([
 export interface Recheck { publishable: boolean; failedChecks: string[]; review?: { id: string; reason: string } }
 
 interface RecheckJob {
-  summary: { jobId: string; sourceId: string; status: string; provider?: string; sourceKind?: string };
+  summary: { jobId: string; sourceId: string; status: string; provider?: string; sourceKind?: string; figureId?: string };
   lesson?: unknown;
 }
 
-interface RecheckOptions { sourcesDir?: URL; userSourcesDir?: string }
+interface RecheckOptions {
+  sourcesDir?: URL;
+  userSourcesDir?: string;
+  /** Teacher diagram (beta): the teacher-figure store; defaults to `<storageDir>/user-figures`. */
+  userFiguresDir?: string;
+}
 
 // Finished runs never change, so one result per job/component/revision is cached.
 const cache = new Map<string, Recheck | null>();
@@ -40,7 +45,16 @@ function loadDocs(storageDir: string, job: RecheckJob, opts: RecheckOptions): So
   return [loadSource(id, opts.sourcesDir)];
 }
 
-function figuresFor(sourceId: string): FigureMeta[] {
+/**
+ * The figure list the job's label diagram was validated with: the library figures of the source, or (teacher diagram,
+ * beta) the one teacher figure the job was built with, read from the teacher store through figureDirFor.
+ */
+function figuresFor(storageDir: string, job: RecheckJob, opts: RecheckOptions): FigureMeta[] {
+  const { sourceId, figureId } = job.summary;
+  if (typeof figureId === 'string' && job.summary.sourceKind === 'user') {
+    const dir = figureDirFor(figureId, opts.userFiguresDir ?? userFiguresDirOf(storageDir));
+    return listFigures(sourceId, dir).filter(f => f.id === figureId).map(f => ({ ...f, labelBoxes: loadFigureLabelBoxes(f.id, dir) }));
+  }
   return listFigures(sourceId).slice(0, 3).map(f => ({ ...f, labelBoxes: loadFigureLabelBoxes(f.id) }));
 }
 
@@ -55,7 +69,7 @@ function recheckOne(storageDir: string, job: RecheckJob, componentId: string, re
       if (art.gen !== undefined) {
         const docs = loadDocs(storageDir, job, opts);
         const extra = componentId === 'label-diagram-v1'
-          ? { figures: figuresFor(job.summary.sourceId), storedWithoutAreas: true, ...(Array.isArray(art.regions) ? { labelRegions: art.regions } : {}) }
+          ? { figures: figuresFor(storageDir, job, opts), storedWithoutAreas: true, ...(Array.isArray(art.regions) ? { labelRegions: art.regions } : {}) }
           : {};
         const report = validateKitComponent(componentId, art.gen, docs, { revision, ...extra } as Parameters<typeof validateKitComponent>[3]);
         // LD-10/LD-11 (Stage 8c) are not retroactive: stored parts were never asked for areas, full label

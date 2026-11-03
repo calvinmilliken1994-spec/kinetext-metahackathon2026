@@ -13,6 +13,7 @@ import { formatCostUSD } from './jobs.ts';
 import { componentLabel } from './lesson.ts';
 import { lessonCheckName } from './lessonJob.ts';
 import { resolveJobModel } from './models.ts';
+import { LABELS_OP_TEXT } from './teacherFigure.ts';
 
 interface Ev {
   seq: number; stage: string; status: string; at: string; t: number;
@@ -281,9 +282,16 @@ export interface StripState {
   partsLeftOut: number;
   /** The job ended in failure (not a declined page, which finishes normally with nothing planned). */
   failed: boolean;
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): where Muse's reading of the diagram's printed labels stands,
+   * null on a job without a diagram. 'failed': the lesson is built without the diagram.
+   */
+  labels: 'reading' | 'read' | 'failed' | null;
+  /** How long Muse took to read the labels (recorded latency), once read. */
+  labelsMs: number | null;
 }
 
-const MUSE_STAGES = new Set(['analyze', 'component', 'repair']);
+const MUSE_STAGES = new Set(['labels', 'analyze', 'component', 'repair']);
 
 function planOrder(detail: JobDetail): PlanComponentId[] {
   const order: PlanComponentId[] = [];
@@ -296,6 +304,12 @@ export function liveStrip(detail: JobDetail): StripState {
   const running = detail.summary.status === 'running';
   const model = resolveJobModel(detail.summary).name;
   const ops: LiveOp[] = [];
+  // Teacher diagram (beta): one Muse call reads the diagram's printed labels before the page is read.
+  const labelEvs = evs.filter((e) => e.stage === 'labels');
+  const lStart = labelEvs.find((e) => e.status === 'started');
+  const lEnd = labelEvs.find((e) => e.status !== 'started');
+  if (running && lStart !== undefined && lEnd === undefined) ops.push({ key: 'labels', actor: 'muse', text: LABELS_OP_TEXT, startMs: lStart.t });
+  const labels: StripState['labels'] = labelEvs.length === 0 ? null : lEnd === undefined ? (running ? 'reading' : 'failed') : lEnd.status === 'succeeded' ? 'read' : 'failed';
   const analyze = evs.filter((e) => e.stage === 'analyze');
   const aStart = analyze.find((e) => e.status === 'started');
   if (running && aStart !== undefined && !analyze.some((e) => e.status !== 'started')) ops.push({ key: 'analyze', actor: 'muse', text: 'Reading the page and planning the lesson', startMs: aStart.t });
@@ -319,7 +333,8 @@ export function liveStrip(detail: JobDetail): StripState {
       ops.push({ key: `${id}:${open.key}`, actor, text, startMs: open.startMs });
     }
   }
-  const museCalls = evs.filter((e) => MUSE_STAGES.has(e.stage) && e.status !== 'started' && num(e.latencyMs) !== null).length;
+  // A reused reading of the labels ("Printed labels read earlier") made no call, so it is not counted.
+  const museCalls = evs.filter((e) => MUSE_STAGES.has(e.stage) && e.status !== 'started' && num(e.latencyMs) !== null && !(e.stage === 'labels' && labelsReused(e.detail))).length;
   const samCalls = evs.filter((e) => e.stage === 'segment' && e.status !== 'started').length;
   const sum = evs.reduce((a, e) => a + (num(e.estCostUSD) ?? 0), 0);
   const recorded = num(detail.summary.totalCostUSD);
@@ -332,8 +347,18 @@ export function liveStrip(detail: JobDetail): StripState {
     partsPassed: components.filter((c) => c.status === 'passed').length,
     partsLeftOut: components.filter((c) => c.status === 'failed').length,
     failed: detail.summary.status === 'failed',
+    labels,
+    labelsMs: labels === 'read' && lEnd !== undefined && !labelsReused(lEnd.detail) ? num(lEnd.latencyMs) ?? (lStart === undefined ? null : lEnd.t - lStart.t) : null,
   };
 }
+
+/** The worker reused the labels it read for this image before (no call, no cost). */
+export function labelsReused(detail: string | undefined): boolean {
+  return /\bread earlier\b/i.test(detail ?? '');
+}
+
+/** The strip's fact when Muse could not read the teacher's diagram (the worker went on without it). */
+const LABELS_LEFT_OUT = 'built without the diagram';
 
 const calls = (n: number, who: string): string => `${n} ${who} ${n === 1 ? 'call' : 'calls'}`;
 
@@ -344,6 +369,8 @@ const calls = (n: number, who: string): string => `${n} ${who} ${n === 1 ? 'call
 export function progressFacts(s: StripState): string[] {
   const out: string[] = [s.museCalls === 0 ? 'No call finished yet' : `${calls(s.museCalls, s.model)} done`];
   if (s.samCalls > 0) out.push(calls(s.samCalls, 'SAM 3.1'));
+  if (s.labels === 'read') out.push(s.labelsMs === null ? 'diagram labels read' : `diagram labels read in ${formatSeconds(s.labelsMs)}`);
+  if (s.labels === 'failed') out.push(LABELS_LEFT_OUT);
   if (s.partsPlanned > 0) out.push(`${s.partsPassed} of ${s.partsPlanned} ${s.partsPlanned === 1 ? 'part' : 'parts'} checked`);
   return out;
 }
@@ -363,6 +390,7 @@ export function closingBeat(s: StripState): { headline: string; facts: string[];
     if (s.partsPassed === s.partsPlanned) facts.push(s.partsPlanned === 1 ? 'the part was checked' : 'every part checked');
     else facts.push(`${s.partsPassed} of ${s.partsPlanned} parts checked`, ...(s.partsLeftOut > 0 ? [`${s.partsLeftOut} left out`] : []));
   }
+  if (s.labels === 'failed') facts.push(LABELS_LEFT_OUT);
   if (s.costUSD !== null) facts.push(`${formatCostUSD(s.costUSD)} est.`);
   return { headline, facts, ready };
 }

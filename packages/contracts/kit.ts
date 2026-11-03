@@ -548,6 +548,11 @@ export interface LabelFigureRef {
   labelBoxes?: { x1: number; y1: number; x2: number; y2: number; text?: string; group?: number }[];
   /** Stage 8c: lead-curated label groups that name drawn parts; LD-10 is skipped when absent. */
   partLabelGroups?: number[];
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): 'teacher' when the figure was uploaded by the teacher with
+   * their own source and its printed labels were read by Muse (not checked by a person). Absent on library figures.
+   */
+  provided?: 'teacher';
 }
 export interface LabelRegion {
   partId: string;

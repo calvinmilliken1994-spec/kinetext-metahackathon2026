@@ -40,7 +40,9 @@ import type { MetaProvider, ModelChoice } from '../../packages/meta/pricing.ts';
 import {
   loadSource,
   loadUserSource,
+  userFiguresDirOf,
   userSourcesDirOf,
+  USER_FIGURE_ID_PATTERN,
   USER_SOURCE_ID_PATTERN,
 } from '../../packages/sources/index.ts';
 import { repairFindings, validateSpec } from '../../packages/validation/validate.ts';
@@ -233,6 +235,11 @@ export interface JobSummary {
   owner?: JobOwner;
   /** Stage 10: 'judge' when started under a judge access session (absent otherwise). */
   access?: 'judge';
+  /**
+   * Teacher diagram (beta, docs/specs/TEACHER-FIGURE.md): the teacher figure (`uf-` id) sent with the build, recorded
+   * from the first write. Absent on every job without one.
+   */
+  figureId?: string;
 }
 
 /** Per-job resource budgets wired from config/resource-limits.json (TASK-009 R-11). */
@@ -277,6 +284,13 @@ export interface JobDeps {
    * the cost of judge-tagged jobs against the judge budget.
    */
   access?: 'judge';
+  /**
+   * Teacher diagram (beta): a teacher figure of THIS user source (`uf-` id; the API checked it exists and belongs to
+   * the source). Lesson flow only: Muse reads its printed labels before the analysis and it is the job's one figure.
+   */
+  figureId?: string;
+  /** The teacher-figure store; defaults to `<storageDir>/user-figures`. */
+  userFiguresDir?: string;
   now?: () => Date;
   newJobId?: () => string;
   limits?: JobLimits;
@@ -541,6 +555,10 @@ export function startJob(
   if (deps.demoFault !== undefined && !(DEMO_FAULTS as readonly string[]).includes(deps.demoFault)) {
     throw new Error('DEMO_FAULT_INVALID');
   }
+  // Teacher diagram (beta): only a teacher figure, only with a teacher source (the API refuses both with 400 first).
+  if (deps.figureId !== undefined && (!USER_FIGURE_ID_PATTERN.test(deps.figureId) || !USER_SOURCE_ID_PATTERN.test(sourceId))) {
+    throw new Error('FIGURE_ID_INVALID');
+  }
   // S5-06: the absolute ≤2 repair bound fails closed at this boundary — an
   // invalid limit is never silently replaced with the default.
   const requestedRepairs: number | undefined = deps.limits?.maxRepairAttempts;
@@ -605,6 +623,9 @@ export function startJob(
   };
   if (deps.access === 'judge') {
     summary.access = 'judge'; // Stage 10: tagged from the first write; the key is absent for every other job
+  }
+  if (deps.figureId !== undefined) {
+    summary.figureId = deps.figureId; // Teacher diagram (beta): recorded from the first write; absent otherwise
   }
   if (flow === 'lesson') {
     summary.lesson = {
@@ -827,6 +848,9 @@ async function runJob(
       // Stage 8b: SAM 3.1 segmentation deps (absent for callers that never plan
       // label-diagram-v1; the lesson flow then fails only that component).
       ...(deps.sam !== undefined ? { sam: deps.sam } : {}),
+      // Teacher diagram (beta): the teacher figure and its store (every uf- lookup resolves there).
+      ...(summary.figureId !== undefined ? { figureId: summary.figureId } : {}),
+      userFiguresDir: deps.userFiguresDir ?? userFiguresDirOf(deps.storageDir),
       summary,
       emit,
       accountReceipt,

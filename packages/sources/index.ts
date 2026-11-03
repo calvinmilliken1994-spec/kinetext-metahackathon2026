@@ -114,6 +114,26 @@ export function userSourcesDirOf(storageDir: string): string {
   return join(storageDir, 'user-sources');
 }
 
+/* ------------------------------------------------------------------ */
+/* Teacher figures (docs/specs/TEACHER-FIGURE.md section 1)              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Teacher figure ids are system-derived: `uf-` + the first 12 hex chars of sha256(sourceId + ":" + imageSha256), so the
+ * same image for the same source is always the same id and a figure can never be claimed by another source.
+ */
+export const USER_FIGURE_ID_PATTERN = /^uf-[0-9a-f]{12}$/;
+
+/** The teacher-figure store for a given job/API storage directory (next to the user-source store). */
+export function userFiguresDirOf(storageDir: string): string {
+  return join(storageDir, 'user-figures');
+}
+
+/** Deterministic id of an uploaded image for one teacher source. */
+export function userFigureId(sourceId: string, imageSha256: string): string {
+  return `uf-${sha256(`${sourceId}:${imageSha256}`).slice(0, 12)}`;
+}
+
 /** Deterministic id for a pasted text (hash of the NORMALISED form). */
 export function userSourceId(text: string): string {
   return `user-${sha256(normalizeUserText(text)).slice(0, 12)}`;
@@ -149,7 +169,8 @@ export function loadUserSource(id: string, dir: string): SourceDocument {
   };
 }
 
-function writeAtomic(path: string, data: string): void {
+/** Temp file in the same directory, then rename: a reader never sees a half-written file. */
+export function writeAtomic(path: string, data: string | Uint8Array): void {
   const tmpPath = `${path}.${process.pid}.${randomUUID().slice(0, 8)}.tmp`;
   writeFileSync(tmpPath, data);
   renameSync(tmpPath, path);
