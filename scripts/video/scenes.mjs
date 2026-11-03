@@ -108,7 +108,7 @@ export const SCENES = [
     ],
   },
   {
-    title: 'Live build (screen-only, voiced afterwards)', scriptSecs: 60, firstLine: LINES.s3,
+    title: 'Live build (read each paragraph as the strip reaches its step)', scriptSecs: 60, firstLine: LINES.s3,
     steps: [
       ensure('[data-testid="new-lesson-page"]', '/?view=new&welcome=0&tour=0'),
       { wait: '[data-testid="new-lesson-page"]' },

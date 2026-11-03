@@ -355,8 +355,36 @@ class Driver {
     console.log(`  shot ${file}`);
   }
 
+  // F8 arrives two ways: the in-page listener (only while Chrome has keyboard focus) and a global key watcher (any
+  // window: Calvin's first live take stalled at scene 3 because focus had moved to Tella's notes). One press can come
+  // through both, so presses within 800 ms count once.
   waitF8() {
-    return new Promise((done) => { const off = this.cdp.on('Runtime.bindingCalled', (p) => { if (p.name === '__vdF8') { off(); done(); } }); });
+    return new Promise((done) => {
+      const fire = () => {
+        const now = Date.now();
+        if (now - (this.lastF8 ?? 0) < 800) return;
+        this.lastF8 = now;
+        offPage(); this.f8Waiters.delete(fire);
+        console.log(`    F8 received (${new Date().toTimeString().slice(0, 8)}).`);
+        done();
+      };
+      const offPage = this.cdp.on('Runtime.bindingCalled', (p) => { if (p.name === '__vdF8') fire(); });
+      this.f8Waiters.add(fire);
+    });
+  }
+
+  /** Watch F8 system-wide (GetAsyncKeyState polled from PowerShell), so the trigger works whichever window has focus. */
+  startGlobalF8() {
+    this.f8Waiters = new Set();
+    const ps = `Add-Type -Name K -Namespace V -MemberDefinition '[DllImport("user32.dll")] public static extern short GetAsyncKeyState(int k);';
+$down = $false
+while ($true) { $d = ([V.K]::GetAsyncKeyState(0x77) -band 0x8000) -ne 0; if ($d -and -not $down) { [Console]::Out.WriteLine('F8'); [Console]::Out.Flush() }; $down = $d; Start-Sleep -Milliseconds 25 }`;
+    const child = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', ps], { stdio: ['ignore', 'pipe', 'inherit'], windowsHide: true });
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', (s) => { if (s.includes('F8')) for (const w of [...this.f8Waiters]) w(); });
+    child.on('error', (e) => console.warn(`  WARNING: global F8 watcher failed (${e.message}); F8 works only while the app window has focus.`));
+    this.f8Child = child;
+    process.on('exit', () => { try { child.kill(); } catch { /* already gone */ } });
   }
 
   /** Run one step. Returns 'stop' when a dry run ends the scene here. */
@@ -414,6 +442,7 @@ async function main() {
   const timings = [];
   try {
     await d.setup();
+    if (!opts.auto) d.startGlobalF8();
     for (const n of opts.scenes) timings.push(await d.scene(n));
   } catch (e) {
     console.error(`\nFAILED: ${e.message}`);
@@ -424,6 +453,7 @@ async function main() {
       writeFileSync(join(opts.shots, `timings-${opts.scenes.join('-')}.json`), JSON.stringify({ dry: opts.dry, job: d.ctx.job, timings, blocked: d.blocked }, null, 2));
     }
     if (opts.dry) console.log(`\nWrites blocked by the dry guard: ${d.blocked.length === 0 ? 'none' : d.blocked.join('; ')}`);
+    d.f8Child?.kill();
     cdp.close();
     if (opts.close) await browserClose();
   }
