@@ -63,7 +63,11 @@ function overlay() {
   const install = () => {
     const style = document.createElement('style');
     // The OS cursor is hidden over the page: only the scripted arrow is ever on screen.
+    // Calvin, 3 Nov: for the recording the app's window frame fills the screen (a maximised window: no desktop gap,
+    // corners or shadow; title bar and footer stay). Video-only: the app itself keeps its floating window.
     style.textContent = `html, html * { cursor: none !important; }
+      .desktop { padding: 0 !important; }
+      .app-window { max-width: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
       #__vd-cursor { position: fixed; left: 0; top: 0; z-index: 2147483647; pointer-events: none; width: 30px; height: 30px;
         transform: translate(var(--vd-x, 1500px), var(--vd-y, 820px));
         transition: transform var(--vd-ms, 450ms) cubic-bezier(.45, 0, .55, 1); }

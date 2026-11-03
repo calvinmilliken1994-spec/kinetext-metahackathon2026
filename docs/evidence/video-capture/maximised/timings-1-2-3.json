@@ -1,0 +1,25 @@
+{
+  "dry": true,
+  "job": null,
+  "timings": [
+    {
+      "scene": 1,
+      "title": "Before and after (Welcome montage)",
+      "seconds": 15.3,
+      "scriptSeconds": 14
+    },
+    {
+      "scene": 2,
+      "title": "What it does (montage, then New lesson)",
+      "seconds": 17.9,
+      "scriptSeconds": 16
+    },
+    {
+      "scene": 3,
+      "title": "Live build (read each paragraph as the strip reaches its step)",
+      "seconds": 4.3,
+      "scriptSeconds": 60
+    }
+  ],
+  "blocked": []
+}
