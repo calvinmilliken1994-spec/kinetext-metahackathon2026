@@ -142,7 +142,7 @@ Live events, artifacts and costs are stored per job under `storage/runs/` (gitig
 
 ## Trust and honesty
 
-- **Deterministic checks, not vibes.** Every evidence quote must appear verbatim (whitespace-normalised)
+- **Deterministic checks.** Every evidence quote must appear verbatim (whitespace-normalised)
   in the stored page text; every expected number is recomputed by the tested engine; every formula
   expression is parsed and evaluated by our own safe parser (no `eval`, no `Function`); every chemical
   equation is balanced exactly. Schema validity alone never passes the gate.
