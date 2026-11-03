@@ -63,7 +63,7 @@ shelf.
 
 **Voiceover:**
 > Every lesson says "Needs review" until a teacher reads each part and publishes it. Published lessons go on the
-> shelf: ten so far, across nine subjects.
+> shelf: ten so far, across eight subjects.
 
 ## 6. Two Meta models, measured (2:15 to 2:45)
 
@@ -80,7 +80,7 @@ shelf.
 
 **Voiceover:**
 > Judges get an access code that runs live builds on my credits, or you can explore read-only with every recorded
-> lesson. ⟨App name⟩: make knowledge interactive.
+> lesson. Kinetext: make knowledge interactive.
 
 ---
 

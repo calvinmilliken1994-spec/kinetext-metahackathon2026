@@ -1,0 +1,20 @@
+[1]
+Hi, I'm Calvin. I built this on my own during the hackathon. Before October 27th, this repo held a setup scaffold and no product. Everything you're about to see was built between October 27th and November 4th.
+
+[2]
+It's for teachers. Pick a licensed page, or paste your own, and Meta's models turn it into a short lesson with interactive parts. Each part is tied to the sentence it came from and checked against the page. These are lessons it built earlier.
+
+[3]  [press F8, stay quiet until Lesson ready; voiced later]
+(voiced later over the sped-up build)
+
+[4]
+Students drag each name onto its number, and nothing is marked until they check. Checks and run details shows every check behind the lesson, and when Muse revised a part, which check failed, what it changed, and the figure before and after.
+
+[5]
+Every lesson says "Needs review" until a teacher reads each part and publishes it. Published lessons go on the shelf: ten so far, across eight subjects.
+
+[6]
+It runs on two Meta models: Muse Spark 1.3 on Meta's API, and Muse Spark Open, the open-weight model, served on Modal. I built 194 lessons with each. Spark 1.3 made a working lesson 189 times, Spark Open 178. Muse's own repairs rescued 45 parts on Spark 1.3 and 70 on Spark Open.
+
+[7]
+Judges get an access code that runs live builds on my credits, or you can explore read-only with every recorded lesson. Kinetext: make knowledge interactive.
