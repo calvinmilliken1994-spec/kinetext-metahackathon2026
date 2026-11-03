@@ -69,8 +69,8 @@ const LINES = {
   s4c: 'and when Muse revised a part, which check failed, what it changed, and the figure before and after.',
   s5a: 'Every lesson says "Needs review" until a teacher reads each part and publishes it.',
   s5b: 'Published lessons go on the shelf: ten so far, across nine subjects.',
-  s6a: 'It runs on two Meta models: Muse Spark 1.3 on Meta\'s API, and Muse Spark Open, the open-weight model, served on Modal.',
-  s6b: 'I built 194 lessons with each. Spark 1.3 made a working lesson 189 times, Spark Open 178.',
+  s6a: 'It runs on three Meta models: Muse Spark 1.3 on Meta\'s API, Muse Spark Open, the open-weight model, served on Modal, and SAM 3.1 for the diagrams.',
+  s6b: 'I built 194 lessons with each Muse model. Spark 1.3 made a working lesson 189 times, Spark Open 178.',
   s6c: 'Muse\'s own repairs rescued 45 parts on Spark 1.3 and 70 on Spark Open.',
   s7a: 'Judges get an access code that runs live builds on my credits,',
   s7b: 'or you can explore read-only with every recorded lesson.',
@@ -191,7 +191,7 @@ export const SCENES = [
     ],
   },
   {
-    title: 'Two Meta models, measured (Results)', scriptSecs: 30, firstLine: LINES.s6a,
+    title: 'Three Meta models, measured (Results)', scriptSecs: 30, firstLine: LINES.s6a,
     steps: [
       { click: nav('results') },
       { wait: '#results-headline' },
