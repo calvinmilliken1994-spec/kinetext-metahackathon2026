@@ -4,6 +4,12 @@
   "allParts": 21,
   "okBoxes": 53,
   "allBoxes": 172,
+  "meanAreaRatio": 1.87,
+  "matchedBoxes": 154,
+  "partAreaRatio": 1.43,
+  "crossLabelOverlaps": 19,
+  "anyPixelCrossOverlaps": 33,
+  "duplicateBoxes": 0,
   "rows": [
     {
       "id": "medlineplus-dna-structure-1",
@@ -11,6 +17,10 @@
       "museLabels": 7,
       "partBoxesCovered": "5/6",
       "allBoxesCovered": "5/6",
+      "meanAreaRatio": 1.35,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
       "misses": [
         "PART Sugar phosphate backbone 92%"
       ]
@@ -21,6 +31,13 @@
       "museLabels": 11,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "2/11",
+      "meanAreaRatio": 1.75,
+      "crossLabelOverlaps": [
+        "mRNA -> undefined",
+        "Protein -> Ribosome"
+      ],
+      "anyPixelCrossOverlaps": 2,
+      "duplicateBoxes": 0,
       "misses": [
         "Nucleus 82%",
         "DNA 71%",
@@ -39,6 +56,10 @@
       "museLabels": 24,
       "partBoxesCovered": "1/4",
       "allBoxesCovered": "5/12",
+      "meanAreaRatio": 1.45,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
       "misses": [
         "PART Horizontal Stabilizer 96%",
         "Elevator 95%",
@@ -55,6 +76,16 @@
       "museLabels": 14,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "11/25",
+      "meanAreaRatio": 2.76,
+      "crossLabelOverlaps": [
+        "Weight > Lift -> Lift",
+        "Plane Falls -> Plane",
+        "Drag > Thrust -> Weight",
+        "Plane Slows -> Plane",
+        "Plane Accelerates -> Accelerates"
+      ],
+      "anyPixelCrossOverlaps": 6,
+      "duplicateBoxes": 0,
       "misses": [
         "Lift 84%",
         "Drag 23%",
@@ -78,6 +109,13 @@
       "museLabels": 17,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "4/19",
+      "meanAreaRatio": 1.55,
+      "crossLabelOverlaps": [
+        "Viscous = ’Sticky’ -> Viscous = \"Sticky\"",
+        "Diffusion = Random Motion -> Diffusion = Random Motion"
+      ],
+      "anyPixelCrossOverlaps": 2,
+      "duplicateBoxes": 0,
       "misses": [
         "Large 86%",
         "Scale 95%",
@@ -102,6 +140,13 @@
       "museLabels": 18,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "1/19",
+      "meanAreaRatio": 1.25,
+      "crossLabelOverlaps": [
+        "h = Change in Height -> h = Change in Height",
+        "D = Drag -> L = Lift"
+      ],
+      "anyPixelCrossOverlaps": 7,
+      "duplicateBoxes": 0,
       "misses": [
         "a 81%",
         "h = Change in Height 31%",
@@ -129,6 +174,19 @@
       "museLabels": 29,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "8/42",
+      "meanAreaRatio": 2.46,
+      "crossLabelOverlaps": [
+        "Pressure = p3 -> Pressure = p3",
+        "Volume = V3 -> Pressure = p3",
+        "Temperature = T4 -> Pressure = p4",
+        "Intake - Closed -> – Closed",
+        "Electrical - Closed -> Intake",
+        "Exhaust - Closed -> – Closed",
+        "Electrical - Opened -> Intake",
+        "Exhaust - Closed -> Electrical"
+      ],
+      "anyPixelCrossOverlaps": 13,
+      "duplicateBoxes": 0,
       "misses": [
         "Fuel/Air – Medium 64%",
         "Pressure 76%",
@@ -172,6 +230,10 @@
       "museLabels": 3,
       "partBoxesCovered": "0/0",
       "allBoxesCovered": "0/0",
+      "meanAreaRatio": null,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
       "misses": []
     },
     {
@@ -180,6 +242,10 @@
       "museLabels": 6,
       "partBoxesCovered": "2/5",
       "allBoxesCovered": "2/6",
+      "meanAreaRatio": 1.4,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
       "misses": [
         "PART Condensation 58%",
         "Snowmelt Runoff 85%",
@@ -193,6 +259,10 @@
       "museLabels": 29,
       "partBoxesCovered": "4/6",
       "allBoxesCovered": "15/32",
+      "meanAreaRatio": 1.39,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 3,
+      "duplicateBoxes": 0,
       "misses": [
         "Vent 28%",
         "Fumaroles 68%",

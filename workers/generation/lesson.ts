@@ -65,6 +65,8 @@ import {
   figureLabelsMethod,
   figureLabelsToBoxes,
 } from '../../packages/meta/figure-labels.ts';
+import type { FigureLabelBoxPlacement, ReadLabelBox } from '../../packages/meta/figure-labels.ts';
+import { snapLabelBoxes } from '../../packages/meta/figure-label-refine.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { generateSpec, repairSpec } from '../../packages/meta/pipeline.ts';
 import type { TimelineSourceAnalysis } from '../../packages/meta/pipeline.ts';
@@ -766,6 +768,52 @@ export function pageNamedPrintedLabels(labels: readonly string[], pageTexts: rea
   return out;
 }
 
+/** Teacher diagram (beta): at most this many of Muse's names_part labels become part labels (the library curates ~5). */
+export const TEACHER_FIGURE_PART_LABELS_MAX = 6;
+
+/**
+ * Teacher diagram (beta): cap Muse's part labels. Muse may mark every printed word as a part name (20 on one live
+ * diagram, and generating that part timed out), while a label diagram needs a handful. Keeps at most `max` groups of
+ * `partLabelGroups`: first those whose label text the page names (pageWordingOfLabel, the LD-10 rule), in Muse's
+ * order, then the rest in Muse's order. Returned ascending (Muse's order: groups are numbered as Muse listed them).
+ * A group's text is the text on its first line box. Exported for tests.
+ */
+export function capPartLabelGroups(
+  boxes: readonly { text?: string; group: number }[],
+  partLabelGroups: readonly number[],
+  pageTexts: readonly string[],
+  max: number = TEACHER_FIGURE_PART_LABELS_MAX,
+): number[] {
+  const textOf = (g: number): string => boxes.find(b => b.group === g && b.text !== undefined)?.text ?? '';
+  const ordered = [...new Set(partLabelGroups)].sort((a, b) => a - b);
+  const named = ordered.filter(g => pageWordingOfLabel(textOf(g), pageTexts) !== null);
+  const rest = ordered.filter(g => !named.includes(g));
+  return [...named, ...rest].slice(0, Math.max(0, max)).sort((a, b) => a - b);
+}
+
+/**
+ * Teacher diagram (beta): where the stored printed-label boxes go. A PNG's boxes are snapped onto the printed text
+ * (packages/meta/figure-label-refine.ts); a JPEG's stay as Muse placed them, and so do a PNG's that cannot be decoded.
+ * Never throws: any failure keeps Muse's boxes. Exported for tests.
+ */
+export function placeTeacherLabelBoxes<T extends ReadLabelBox>(
+  boxes: readonly T[],
+  mime: string,
+  bytes: Uint8Array,
+  width: number,
+  height: number,
+): { boxes: T[]; placement: FigureLabelBoxPlacement; moved: number } {
+  if (mime !== 'image/png') return { boxes: [...boxes], placement: 'jpeg-not-snapped', moved: 0 };
+  try {
+    const snapped = snapLabelBoxes(boxes, bytes, width, height);
+    return snapped.decoded
+      ? { boxes: snapped.boxes, placement: 'snapped', moved: snapped.moved }
+      : { boxes: [...boxes], placement: 'png-not-decodable', moved: 0 };
+  } catch {
+    return { boxes: [...boxes], placement: 'png-not-decodable', moved: 0 };
+  }
+}
+
 /**
  * Stage 8b flow step 5: the system-owned figure reference of the published spec. `dir` is where the figure is stored
  * (figureDirFor: the library, or the teacher-figure store for a `uf-` id); a teacher figure's ref says so (`provided`).
@@ -1291,20 +1339,34 @@ export async function runLesson(ctx: LessonContext): Promise<JobSummary> {
         receipt: read,
       });
     }
+    // The covers must hide every pixel of a word: on a PNG (every web upload is re-encoded as PNG) Muse's boxes are
+    // snapped onto the printed text with the image's own pixels; a JPEG keeps them as read. The method line says which.
+    const placed = placeTeacherLabelBoxes(labels.boxes, figure.meta.mime, figure.bytes, figure.meta.width, figure.meta.height);
+    // At most TEACHER_FIGURE_PART_LABELS_MAX part labels, the page-named ones first (a long part list timed out live).
+    const partLabelGroups = capPartLabelGroups(labels.boxes, labels.partLabelGroups, sources.map(s => s.text));
     try {
       writeJsonAtomic(join(userFiguresDir, `${figureId}.labels.json`), {
         figureId,
         imageSha256: figure.meta.sha256,
         width: figure.meta.width,
         height: figure.meta.height,
-        method: figureLabelsMethod(read.returnedModel, ctx.jobId, ctx.now()),
-        boxes: labels.boxes,
-        partLabelGroups: labels.partLabelGroups,
+        method: figureLabelsMethod(read.returnedModel, ctx.jobId, ctx.now(), placed.placement),
+        boxes: placed.boxes,
+        partLabelGroups,
       });
     } catch {
       return failed(receiptFields(read), { code: 'INTERNAL', chargedUSD: read.estCostUSD, unknownUSD, receipt: read });
     }
-    ctx.writeJson('figure-labels.json', { ok: true, figureId, labels: labels.labels, nameParts: labels.nameParts, receipt: read });
+    ctx.writeJson('figure-labels.json', {
+      ok: true,
+      figureId,
+      labels: labels.labels,
+      nameParts: labels.nameParts,
+      partLabels: partLabelGroups.length,
+      boxPlacement: placed.placement,
+      boxesMoved: placed.moved,
+      receipt: read,
+    });
     ctx.emit('labels', 'succeeded', {
       ...receiptFields(read),
       figureId,

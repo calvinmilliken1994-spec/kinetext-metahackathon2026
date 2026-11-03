@@ -14,7 +14,8 @@ import type { JobStageEvent, JobSummary } from './jobs.ts';
 import { roundCost } from './job-support.ts';
 import { MetaError } from '../../packages/meta/client.ts';
 import type { ChatMessage, CompleteRequest, MetaClient } from '../../packages/meta/client.ts';
-import { buildFigureLabelsPrompt, FIGURE_LABELS_SCHEMA } from '../../packages/meta/figure-labels.ts';
+import { buildFigureLabelsPrompt, FIGURE_LABELS_SCHEMA, figureLabelsToBoxes } from '../../packages/meta/figure-labels.ts';
+import { capPartLabelGroups, placeTeacherLabelBoxes, TEACHER_FIGURE_PART_LABELS_MAX } from './lesson.ts';
 import type { Ledger } from '../../packages/meta/ledger.ts';
 import { loadFigure } from '../../packages/sources/figures.ts';
 import { loadSource, loadUserSourceMeta, saveUserSource, userFiguresDirOf, userSourcesDirOf } from '../../packages/sources/index.ts';
@@ -210,8 +211,11 @@ interface Store {
   figuresDir: string;
 }
 
-/** A temp storage dir holding the DNA page as a teacher source and the DNA figure bytes as its teacher diagram. */
-function teacherStore(): Store {
+/** The same DNA figure as a lossless PNG (the eval copy of the library JPEG's pixels): what every web upload is. */
+const DNA_PNG = readFileSync(new URL('../../docs/evidence/figure-labels-eval/png/medlineplus-dna-structure-1.png', import.meta.url));
+
+/** A temp storage dir holding the DNA page as a teacher source and the DNA figure (JPEG, or its PNG copy) as its diagram. */
+function teacherStore(asPng = false): Store {
   const storageDir = mkdtempSync(join(tmpdir(), 'tf-worker-'));
   const text = normalizeUserText(loadSource(DNA).text);
   const { id: sourceId } = saveUserSource(
@@ -220,7 +224,9 @@ function teacherStore(): Store {
   );
   const figuresDir = userFiguresDirOf(storageDir);
   const { figureId } = saveUserFigure(
-    { mime: 'image/jpeg', bytes: libFigure.bytes, width: W, height: H, caption: 'DNA structure' },
+    asPng
+      ? { mime: 'image/png', bytes: DNA_PNG, width: W, height: H, caption: 'DNA structure' }
+      : { mime: 'image/jpeg', bytes: libFigure.bytes, width: W, height: H, caption: 'DNA structure' },
     loadUserSourceMeta(sourceId, userSourcesDirOf(storageDir)),
     figuresDir,
   );
@@ -348,7 +354,7 @@ test('teacher figure: ONE figure_labels call before the analysis, labels.json wr
   assert.equal(file.imageSha256, libFigure.meta.sha256);
   assert.equal(file.width, W);
   assert.equal(file.height, H);
-  assert.equal(file.method, 'Muse Spark printed-label reading (muse-spark-1.3, tf-ok, 2026-11-03); beta, not checked by a person');
+  assert.equal(file.method, 'Muse Spark printed-label reading (muse-spark-1.3, tf-ok, 2026-11-03); beta, not checked by a person; boxes as Muse placed them (JPEG, not snapped)');
   assert.equal(file.boxes.length, 7, 'six labels, the backbone on two lines');
   assert.deepEqual(file.partLabelGroups, [0, 1, 2, 3, 4, 5]);
   assert.deepEqual(file.boxes.filter((b: any) => b.text !== undefined).map((b: any) => b.text), ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar phosphate backbone']);
@@ -359,6 +365,9 @@ test('teacher figure: ONE figure_labels call before the analysis, labels.json wr
   });
   assert.equal(r.record.ok, true);
   assert.equal(r.record.labels, 6);
+  assert.equal(r.record.partLabels, 6);
+  assert.equal(r.record.boxPlacement, 'jpeg-not-snapped', 'a JPEG upload is never snapped');
+  assert.equal(r.record.boxesMoved, 0);
 
   // the analysis lists the teacher figure; the generation call carries its image and the page-named printed labels
   assert.match(analysisText(r), new RegExp(`- ${figureId} — DNA structure — labelsInImage: true`));
@@ -504,4 +513,121 @@ test('teacher figure: the worker boundary refuses a malformed figureId and a fig
   const client = { complete: async () => { throw new Error('never'); } } as unknown as MetaClient;
   assert.throws(() => startJob('user-0123456789ab', { client, storageDir, purpose: 'test-live', flow: 'lesson', figureId: 'not-a-figure' }), /FIGURE_ID_INVALID/);
   assert.throws(() => startJob(DNA, { client, storageDir, purpose: 'test-live', flow: 'lesson', figureId: 'uf-0123456789ab' }), /FIGURE_ID_INVALID/);
+});
+
+/* ------------------------------------------------------------------ */
+/* PNG uploads: Muse's boxes snapped onto the printed text; part cap      */
+/* ------------------------------------------------------------------ */
+
+/** Share of a library box's pixels inside the union of the stored boxes (the eval's coverage measure). */
+function coverage(b: { x1: number; y1: number; x2: number; y2: number }, boxes: { x1: number; y1: number; x2: number; y2: number }[]): number {
+  let n = 0, inside = 0;
+  for (let y = b.y1; y < b.y2; y++) {
+    for (let x = b.x1; x < b.x2; x++) {
+      n++;
+      if (boxes.some(m => m.x1 <= x && x < m.x2 && m.y1 <= y && y < m.y2)) inside++;
+    }
+  }
+  return n === 0 ? 1 : inside / n;
+}
+
+/** dnaLabelsAnswer with every line box moved by (dx, dy) grid units, the way Muse sometimes misplaces boxes. */
+function shiftedDnaAnswer(dx: number, dy: number): ReturnType<typeof dnaLabelsAnswer> {
+  const a = dnaLabelsAnswer();
+  for (const l of a.labels) {
+    for (const b of l.bbox) {
+      b.x_min += dx;
+      b.x_max += dx;
+      b.y_min += dy;
+      b.y_max += dy;
+    }
+  }
+  return a;
+}
+
+test('teacher figure (PNG): Muse boxes shifted off the words are snapped back onto the printed text before labels.json is written', async () => {
+  const store = teacherStore(true);
+  const { sourceId, figureId, figuresDir } = store;
+  // about 35 px right and 6 px down on the 600 px image: the stored covers would miss the start of every word
+  const answer = shiftedDnaAnswer(58, 10);
+  const r = await run(store, sourceId, 'tf-png', {
+    figureId,
+    labels: () => ({ data: answer }),
+    analysis: retarget(dnaAnalysis, sourceId, figureId),
+    gen: retarget(goldenLabelGen, sourceId, figureId),
+  });
+  assert.equal(r.labels[1]!.status, 'succeeded');
+  const file = JSON.parse(readFileSync(join(figuresDir, `${figureId}.labels.json`), 'utf8'));
+  assert.equal(
+    file.method,
+    'Muse Spark printed-label reading (muse-spark-1.3, tf-png, 2026-11-03); beta, not checked by a person; boxes snapped to the printed text',
+  );
+  assert.equal(file.boxes.length, 7);
+  assert.deepEqual(
+    file.boxes.map((b: any) => b.text ?? null),
+    ['Base pairs', 'Thymine', 'Adenine', 'Guanine', 'Cytosine', 'Sugar phosphate backbone', null],
+    'text and order kept',
+  );
+  // the single-line labels: missed before the snap, fully covered after it
+  const unsnapped = figureLabelsToBoxes(answer, W, H)!.boxes;
+  const singles = libLabels.boxes.filter(b => b.text !== undefined && b.text !== 'Sugar phosphate backbone');
+  assert.equal(singles.length, 5);
+  for (const b of singles) {
+    assert.ok(coverage(b, unsnapped) < 0.98, `${b.text} is missed before the snap`);
+    assert.ok(coverage(b, file.boxes) >= 0.98, `${b.text} covered after the snap: ${coverage(b, file.boxes).toFixed(3)}`);
+  }
+  assert.equal(r.record.boxPlacement, 'snapped');
+  assert.ok(r.record.boxesMoved >= 5, String(r.record.boxesMoved));
+  // the job reads the stored (snapped) boxes back for the rest of the flow
+  if (r.r1 !== undefined) assert.deepEqual(r.r1.spec.figure.labelBoxes, file.boxes);
+});
+
+test('placeTeacherLabelBoxes: PNG snapped; a JPEG, an undecodable PNG or a size mismatch keep the boxes as read', () => {
+  const boxes = [{ x1: 1, y1: 2, x2: 30, y2: 20, text: 'Wing', group: 0 }];
+  assert.deepEqual(placeTeacherLabelBoxes(boxes, 'image/jpeg', libFigure.bytes, W, H), { boxes, placement: 'jpeg-not-snapped', moved: 0 });
+  assert.deepEqual(placeTeacherLabelBoxes(boxes, 'image/png', new Uint8Array([1, 2, 3]), W, H), { boxes, placement: 'png-not-decodable', moved: 0 });
+  assert.deepEqual(placeTeacherLabelBoxes(boxes, 'image/png', DNA_PNG, W + 1, H), { boxes, placement: 'png-not-decodable', moved: 0 });
+  assert.equal(placeTeacherLabelBoxes(boxes, 'image/png', DNA_PNG, W, H).placement, 'snapped');
+});
+
+test('capPartLabelGroups: at most 6, page-named labels first (Muse order), then the rest in Muse order, ascending', () => {
+  const boxes = ['Gizmo', 'Wing', 'Thing', 'Jet Engine', 'Flaps', 'Rudder', 'Widget', 'Fuselage', 'Spoiler', 'Tail'].map((text, group) => ({ text, group }));
+  const page = ['The wing and the fuselage carry the jet engines; the rudder and the flaps steer. A spoiler dumps lift.'];
+  // page names: Wing(1), Jet Engine(3, plural), Flaps(4), Rudder(5), Fuselage(7), Spoiler(8) -> exactly six
+  assert.deepEqual(capPartLabelGroups(boxes, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], page), [1, 3, 4, 5, 7, 8]);
+  // fewer page-named than 6: filled from the others in Muse order
+  assert.deepEqual(capPartLabelGroups(boxes, [0, 1, 2, 6, 9, 3, 4], ['wing only']), [0, 1, 2, 3, 4, 6]);
+  // 6 or fewer: all kept; a line box without text is ignored for the text; duplicates collapse
+  assert.deepEqual(capPartLabelGroups([...boxes, { group: 1 }], [9, 1, 1, 0], page), [0, 1, 9]);
+  assert.deepEqual(capPartLabelGroups(boxes, [], page), []);
+  // "Surface Runoff" on a page that only says "runoff" counts as page-named (pageWordingOfLabel's last-word rule)
+  assert.deepEqual(
+    capPartLabelGroups([{ text: 'A', group: 0 }, { text: 'Surface Runoff', group: 1 }], [0, 1], ['rain becomes runoff'], 1),
+    [1],
+  );
+  assert.equal(TEACHER_FIGURE_PART_LABELS_MAX, 6);
+});
+
+test('teacher figure: at most 6 part labels are stored, the ones the page names first', async () => {
+  const store = teacherStore(true);
+  const { sourceId, figureId, figuresDir } = store;
+  // Muse marks 9 labels as part names: three the page never mentions come FIRST in its list, then the six DNA labels
+  const answer = dnaLabelsAnswer();
+  const extra = ['Zorblax', 'Quindle', 'Frabnitz'].map((text, i) => ({
+    text,
+    names_part: true,
+    bbox: [{ x_min: 20, y_min: 20 + i * 40, x_max: 140, y_max: 45 + i * 40 }],
+  }));
+  answer.labels = [...extra, ...answer.labels];
+  const r = await run(store, sourceId, 'tf-cap', {
+    figureId,
+    labels: () => ({ data: answer }),
+    analysis: retarget(dnaAnalysis, sourceId, figureId),
+    gen: retarget(goldenLabelGen, sourceId, figureId),
+  });
+  const file = JSON.parse(readFileSync(join(figuresDir, `${figureId}.labels.json`), 'utf8'));
+  assert.deepEqual(file.partLabelGroups, [3, 4, 5, 6, 7, 8], 'the six page-named DNA labels, not the three unnamed labels listed first');
+  assert.equal(r.record.nameParts, 9, 'what Muse said');
+  assert.equal(r.record.partLabels, 6, 'what was kept');
+  assert.equal(r.labels[1]!.detail, 'Muse read 9 printed labels (9 name parts)');
 });

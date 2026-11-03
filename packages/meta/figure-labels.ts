@@ -156,7 +156,23 @@ export function figureLabelsToBoxes(data: unknown, width: number, height: number
   return { boxes, partLabelGroups, labels: group, nameParts: partLabelGroups.length };
 }
 
-/** The `method` line of a Muse-read labels.json: who read it, in which job and when, and that no person checked it. */
-export function figureLabelsMethod(returnedModel: string, jobId: string, at: Date): string {
-  return `Muse Spark printed-label reading (${returnedModel}, ${jobId}, ${at.toISOString().slice(0, 10)}); beta, not checked by a person`;
+/**
+ * How the stored boxes were placed after Muse's reading (figure-label-refine.ts): snapped onto the printed text of a
+ * PNG, or left where Muse put them (a JPEG upload is never snapped; a PNG the decoder cannot read is left as read).
+ */
+export type FigureLabelBoxPlacement = 'snapped' | 'jpeg-not-snapped' | 'png-not-decodable';
+
+const PLACEMENT_NOTE: Record<FigureLabelBoxPlacement, string> = {
+  snapped: '; boxes snapped to the printed text',
+  'jpeg-not-snapped': '; boxes as Muse placed them (JPEG, not snapped)',
+  'png-not-decodable': '; boxes as Muse placed them (PNG not decodable, not snapped)',
+};
+
+/**
+ * The `method` line of a Muse-read labels.json: who read it, in which job and when, that no person checked it, and
+ * (when given) how the boxes were placed.
+ */
+export function figureLabelsMethod(returnedModel: string, jobId: string, at: Date, placement?: FigureLabelBoxPlacement): string {
+  const base = `Muse Spark printed-label reading (${returnedModel}, ${jobId}, ${at.toISOString().slice(0, 10)}); beta, not checked by a person`;
+  return placement === undefined ? base : base + PLACEMENT_NOTE[placement];
 }

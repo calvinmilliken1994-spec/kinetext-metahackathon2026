@@ -139,6 +139,22 @@ Implemented as frozen above; the points below are what the spec left open, or th
 - **Serve time:** only `recheck.ts` loads figures (label-order, sam-used and review do not). A user job with a
   `figureId` rechecks against that one teacher figure from the teacher store; `enrichLabelBoxes` resolves through
   `figureDirFor`. `scripts/recheck-stored.ts` (outside the backend paths) still lists library figures only.
+- **Boxes snapped to the printed text (added 3 Nov).** Muse's boxes were often shifted 20-45 px or a little short, so a
+  cover could show part of a word. Before `<id>.labels.json` is written, a PNG figure's boxes go through
+  `snapLabelBoxes` (`packages/meta/figure-label-refine.ts`, decoder `packages/meta/png-decode.ts`, node:zlib only):
+  each box moves (Muse's size, at most +/-60% of its width / 60 px sideways, +/-50% of its height) to the letter-like
+  ink nearby, is trimmed/grown to that line's lettering and re-padded with the same 30%-of-line-height rule; drawn
+  lines, edges, bars and another label's text are never taken; no lettering in reach keeps the box. A JPEG figure is
+  not snapped. `method` gains `; boxes snapped to the printed text`, `; boxes as Muse placed them (JPEG, not
+  snapped)` or `; boxes as Muse placed them (PNG not decodable, not snapped)`; `figure-labels.json` gains
+  `boxPlacement`, `boxesMoved`, `partLabels`. Offline eval on the 10 library figures (docs/evidence/figure-labels-eval):
+  part boxes fully covered 12/21 -> 20/21, all text boxes 53/172 -> 117/172, part-cover area x1.43 -> x1.29 of the OCR
+  box. Pure helper `placeTeacherLabelBoxes` (lesson.ts, exported for tests).
+- **At most 6 part labels (added 3 Nov).** A live build timed out generating the diagram part after Muse marked 20
+  labels as part names (the library curates about 5). `partLabelGroups` keeps at most `TEACHER_FIGURE_PART_LABELS_MAX`
+  = 6 of Muse's `names_part` groups: first those whose text the source page names (`pageWordingOfLabel`, the LD-10
+  rule, over the job's source text), in Muse's order, then the rest in Muse's order; stored ascending
+  (`capPartLabelGroups`, lesson.ts). The `labels succeeded` detail still says how many Muse marked.
 
 ## As built (web)
 

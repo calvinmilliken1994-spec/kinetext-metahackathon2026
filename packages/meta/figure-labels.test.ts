@@ -161,3 +161,11 @@ test('figureLabelsMethod names the model, the job and the date, and says beta an
     'Muse Spark printed-label reading (muse-spark-1.3, job-1, 2026-11-03); beta, not checked by a person',
   );
 });
+
+test('figureLabelsMethod adds how the boxes were placed (snapped on a PNG, as read on a JPEG or an undecodable PNG)', () => {
+  const at = new Date('2026-11-03T12:00:00Z');
+  const base = 'Muse Spark printed-label reading (muse-spark-1.3, job-1, 2026-11-03); beta, not checked by a person';
+  assert.equal(figureLabelsMethod('muse-spark-1.3', 'job-1', at, 'snapped'), `${base}; boxes snapped to the printed text`);
+  assert.equal(figureLabelsMethod('muse-spark-1.3', 'job-1', at, 'jpeg-not-snapped'), `${base}; boxes as Muse placed them (JPEG, not snapped)`);
+  assert.equal(figureLabelsMethod('muse-spark-1.3', 'job-1', at, 'png-not-decodable'), `${base}; boxes as Muse placed them (PNG not decodable, not snapped)`);
+});

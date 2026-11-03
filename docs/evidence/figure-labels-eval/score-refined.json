@@ -1,0 +1,220 @@
+{
+  "refine": true,
+  "okParts": 20,
+  "allParts": 21,
+  "okBoxes": 117,
+  "allBoxes": 172,
+  "meanAreaRatio": 1.93,
+  "matchedBoxes": 154,
+  "partAreaRatio": 1.29,
+  "crossLabelOverlaps": 16,
+  "anyPixelCrossOverlaps": 26,
+  "duplicateBoxes": 5,
+  "rows": [
+    {
+      "id": "medlineplus-dna-structure-1",
+      "mime": "image/jpeg",
+      "museLabels": 7,
+      "partBoxesCovered": "5/6",
+      "allBoxesCovered": "5/6",
+      "meanAreaRatio": 1.21,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
+      "misses": [
+        "PART Sugar phosphate backbone 85%"
+      ]
+    },
+    {
+      "id": "medlineplus-protein-production-1",
+      "mime": "image/jpeg",
+      "museLabels": 11,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "11/11",
+      "meanAreaRatio": 1.61,
+      "crossLabelOverlaps": [
+        "mRNA -> undefined"
+      ],
+      "anyPixelCrossOverlaps": 2,
+      "duplicateBoxes": 0,
+      "misses": []
+    },
+    {
+      "id": "nasa-grc-airplane-parts-1",
+      "mime": "image/jpeg",
+      "museLabels": 24,
+      "partBoxesCovered": "4/4",
+      "allBoxesCovered": "11/12",
+      "meanAreaRatio": 1.34,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
+      "misses": [
+        "Cockpit 21%"
+      ]
+    },
+    {
+      "id": "nasa-grc-forces-of-flight-1",
+      "mime": "image/jpeg",
+      "museLabels": 14,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "16/25",
+      "meanAreaRatio": 2.69,
+      "crossLabelOverlaps": [
+        "Drag > Thrust -> Weight",
+        "Plane Slows -> Plane"
+      ],
+      "anyPixelCrossOverlaps": 3,
+      "duplicateBoxes": 1,
+      "misses": [
+        "Weight 75%",
+        "Lift 87%",
+        "Falls 72%",
+        "Drag 96%",
+        "Accelerates 0%",
+        "Thrust 0%",
+        "Drag 0%",
+        "Plane 0%",
+        "> 0%"
+      ]
+    },
+    {
+      "id": "nasa-grc-gas-properties-1",
+      "mime": "image/jpeg",
+      "museLabels": 17,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "10/19",
+      "meanAreaRatio": 1.44,
+      "crossLabelOverlaps": [
+        "Viscous = ’Sticky’ -> Viscous = \"Sticky\""
+      ],
+      "anyPixelCrossOverlaps": 2,
+      "duplicateBoxes": 1,
+      "misses": [
+        "Large 88%",
+        "Macro 71%",
+        "Density 10%",
+        "Mass 0%",
+        "Momentum 86%",
+        "Temperature 6%",
+        "Viscous = \"Sticky\" 33%",
+        "Diffusion = Random Motion 0%",
+        "= Angular Momentum 91%"
+      ]
+    },
+    {
+      "id": "nasa-grc-glide-trajectory-1",
+      "mime": "image/jpeg",
+      "museLabels": 18,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "14/19",
+      "meanAreaRatio": 2.35,
+      "crossLabelOverlaps": [
+        "tan(a) = h -> h",
+        "D = Drag -> L = Lift",
+        "L = Lift -> D = Drag"
+      ],
+      "anyPixelCrossOverlaps": 4,
+      "duplicateBoxes": 1,
+      "misses": [
+        "h = Change in Height 66%",
+        "h 91%",
+        "a = Glide Angle 91%",
+        "d 0%",
+        "h 58%"
+      ]
+    },
+    {
+      "id": "nasa-grc-wright-engine-combustion-1",
+      "mime": "image/jpeg",
+      "museLabels": 29,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "18/42",
+      "meanAreaRatio": 2.55,
+      "crossLabelOverlaps": [
+        "Pressure = p3 -> Pressure = p3",
+        "Temperature = T4 -> Pressure = p4",
+        "Intake - Closed -> – Closed",
+        "Electrical - Closed -> Intake",
+        "Exhaust - Closed -> Electrical",
+        "Electrical - Opened -> Intake",
+        "Exhaust - Closed -> Electrical"
+      ],
+      "anyPixelCrossOverlaps": 12,
+      "duplicateBoxes": 2,
+      "misses": [
+        "Intake 87%",
+        "Stage 89%",
+        "Begin – 77%",
+        "– Closed 18%",
+        "Volume = V3 5%",
+        "Exhaust 67%",
+        "– Closed 0%",
+        "Valve 35%",
+        "Heat from 51%",
+        "= Q 12%",
+        "Stage 85%",
+        "Fuel/Air – High Pressure 5%",
+        "Pressure = p4 84%",
+        "– Opened 95%",
+        "Temperature = T4 0%",
+        "Contact 95%",
+        "Volume = V4 9%",
+        "Exhaust 0%",
+        "– Closed 0%",
+        "Valve 12%",
+        "Specific Heat constant volume = Cv 76%",
+        "Temperature and pressure increased due 5%",
+        "p4 = p3(T4 / T3) 0%",
+        "to heat release 0%"
+      ]
+    },
+    {
+      "id": "noaa-global-circulation-cells-1",
+      "mime": "image/jpeg",
+      "museLabels": 3,
+      "partBoxesCovered": "0/0",
+      "allBoxesCovered": "0/0",
+      "meanAreaRatio": null,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
+      "misses": []
+    },
+    {
+      "id": "noaa-hydrologic-cycle-1",
+      "mime": "image/jpeg",
+      "museLabels": 6,
+      "partBoxesCovered": "5/5",
+      "allBoxesCovered": "5/6",
+      "meanAreaRatio": 1.4,
+      "crossLabelOverlaps": [],
+      "anyPixelCrossOverlaps": 0,
+      "duplicateBoxes": 0,
+      "misses": [
+        "Snowmelt Runoff 97%"
+      ]
+    },
+    {
+      "id": "usgs-volcano-hazards-1",
+      "mime": "image/png",
+      "museLabels": 29,
+      "partBoxesCovered": "6/6",
+      "allBoxesCovered": "27/32",
+      "meanAreaRatio": 1.25,
+      "crossLabelOverlaps": [
+        "Rhyolite -> Dacite",
+        "Dacite -> Rhyolite"
+      ],
+      "anyPixelCrossOverlaps": 3,
+      "duplicateBoxes": 0,
+      "misses": [
+        "Lava Dome Collapse 95%",
+        "68 0%",
+        "63 0%",
+        "53 0%",
+        "0 0%"
+      ]
+    }
+  ]
+}
