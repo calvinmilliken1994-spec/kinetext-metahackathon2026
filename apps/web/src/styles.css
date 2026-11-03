@@ -234,21 +234,18 @@ input, textarea { caret-color: var(--accent-text); }
  * Desktop backdrop + app window
  * ============================================================================================================== */
 .desktop {
-  /* The window floats inside the viewport: it always fits both dimensions, and the gap around it grows with the
-     viewport (about 3% of each side, never under ~10 px or over ~64 px), so it reads as an app window on a desktop. */
-  --float-x: clamp(10px, 3vw, 64px);
-  --float-y: clamp(10px, 3.2vh, 48px);
+  /* Calvin, 3 Nov: the window fills the viewport like a maximised app (no desktop gap, corners or shadow). The float
+     tokens stay (at 0) because other rules size against them. */
+  --float-x: 0px;
+  --float-y: 0px;
   height: 100vh; height: 100dvh; width: 100%; padding: var(--float-y) var(--float-x); display: grid; min-height: 0; min-width: 0;
   background: var(--desktop-bg); background-color: var(--chrome);
 }
 .app-window {
   position: relative;
   width: 100%; height: 100%; min-height: 0; min-width: 0; margin: 0 auto;
-  /* Scale with the viewport in both directions; only ultra-wide screens (wider than ~2.2:1) get extra side space. */
-  max-width: calc((100dvh - 2 * var(--float-y)) * 2.2);
   display: grid; grid-template-rows: 40px minmax(0, 1fr) 30px;
-  background: var(--chrome); border: 1px solid var(--window-line); border-radius: var(--r-l);
-  box-shadow: var(--window-shadow); overflow: hidden;
+  background: var(--chrome); overflow: hidden;
 }
 
 /* title bar */
@@ -998,10 +995,8 @@ kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; 
   .activity-panel { padding: 0 4px 32px; }
 }
 
-/* small screens: a narrower floating margin and smaller corner radius; no traffic lights */
+/* small screens: no traffic lights */
 @media (max-width: 900px) {
-  .desktop { --float-x: clamp(6px, 2vw, 14px); --float-y: clamp(6px, 2vh, 14px); }
-  .app-window { border-radius: var(--r); max-width: none; }
   .traffic { display: none; }
   .titlebar { grid-template-columns: minmax(0, 1fr) auto; padding: 0 8px 0 14px; }
   .titlebar-title { grid-column: 1; }
